@@ -26,6 +26,19 @@ class Donor(object):
                 self.donor = record[0]
                 self.load_donation_list()    
         
+    def update_amount_in_list(self, old_amount, new_amount):
+        """ update first instance of old amount with new amount """
+
+        i = 0
+        while i < len(self.amount_list):
+            if self.amount_list[i] == old_amount:
+                self.amount_list[i] = new_amount
+            i += 1
+
+    def delete_amount_from_list(self, amount):
+        """ delete first instance of amount in list """
+
+        self.amount_list.remove(amount)
 
     @property
     def donation_total(self):
