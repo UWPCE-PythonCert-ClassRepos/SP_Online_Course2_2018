@@ -9,7 +9,7 @@ from login_database import get_credentials
 
 def run_example():
 
-    # First, clear the entire database, so we can start over
+    # First, clear the entire database, so we can start overx
 
     credentials = login_database.get_credentials('neo4j_cloud')
 
