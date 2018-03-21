@@ -2,7 +2,6 @@
     mongodb example
 """
 
-import pymongo
 import pprint
 
 """"
