@@ -7,6 +7,7 @@ import configparser
 from pathlib import Path
 import pymongo
 
+
 def get_credentials(instance_name):
     """
         database credentials stored outside of git with .gitignore
