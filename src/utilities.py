@@ -1,3 +1,14 @@
+"""
+    log = src.utilities.configure_logger('default', 'logs/nosql_dev.log')
+    log.debug('debug message!')
+    log.info('info message!')
+    log.error('error message')
+    log.critical('critical message')
+    log.warning('warning message')
+
+"""
+
+
 import logging
 import logging.config
 
