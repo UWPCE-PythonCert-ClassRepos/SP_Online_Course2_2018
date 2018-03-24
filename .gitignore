@@ -106,3 +106,5 @@ ENV/
 .config/
 
 prof/
+.pytest_cache/
+.idea/
