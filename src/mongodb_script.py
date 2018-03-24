@@ -8,16 +8,16 @@ import pprint
 from login_database import login_mongodb_cloud
 from login_database import get_credentials
 """
-import login_database
+import src.login_database
 
 
 def run_example(furniture_items):
     """
 
     """
-    credentials = login_database.get_credentials('mongodb_cloud')
+    credentials = src.login_database.get_credentials('mongodb_cloud')
 
-    with login_database.login_mongodb_cloud(credentials) as client:
+    with src.login_database.login_mongodb_cloud(credentials) as client:
         #        logger.info('We are going to use a database called dev')
         #        logger.info('If it doesnt exist mongodb creates it')
         db = client['dev']

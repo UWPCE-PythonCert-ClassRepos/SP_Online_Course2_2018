@@ -4,15 +4,15 @@
 
 import neo4j
 
-from login_database import login_neo4j_cloud
-from login_database import get_credentials
+from src.login_database import login_neo4j_cloud
+from src.login_database import get_credentials
 
 
 def run_example():
 
-    # First, clear the entire database, so we can start overx
+    # First, clear the entire database, so we can start over
 
-    credentials = login_database.get_credentials('neo4j_cloud')
+    credentials = src.login_database.get_credentials('neo4j_cloud')
 
     print("Running clear_all")
 
