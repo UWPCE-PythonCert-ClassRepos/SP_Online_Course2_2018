@@ -3,6 +3,17 @@
     pip install pytest-cov
     py.test -l --pylint --cov tests --showlocals --tb=auto --junitxml=results.xml
 
+log = src.utilities.configure_logger('default', 'logs/nosql_dev.log')
+log.debug('debug message!')
+log.info('info message!')
+log.error('error message')
+log.critical('critical message')
+log.warning('warning message')
+
+log.info("printing from source module")
+
+
+
 """
 
 import logging

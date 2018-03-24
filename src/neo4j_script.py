@@ -7,6 +7,7 @@ import neo4j
 from login_database import login_neo4j_cloud
 from login_database import get_credentials
 
+
 def run_example():
 
     # First, clear the entire database, so we can start overx
@@ -32,10 +33,13 @@ def run_example():
                             ('Nancy', 'Cooper'),
                             ('Alice', 'Cooper'),
                             ('Fred', 'Barnes'),
+
+
                             ('Mary', 'Evans'),
                             ('Marie', 'Curie'),
                             ]:
-            cyph = "CREATE (n:Person {first_name:'%s', last_name: '%s'})" % (first, last)
+            cyph = "CREATE (n:Person {first_name:'%s', last_name: '%s'})" % (
+                first, last)
             session.run(cyph)
 
         print("\nHere are all of people in the DB now:")
@@ -96,4 +100,3 @@ def run_example():
         for rec in result:
             for f in rec.values():
                 print(f['first_name'], f['last_name'])
-

@@ -10,6 +10,7 @@ from login_database import get_credentials
 """
 import login_database
 
+
 def run_example(furniture_items):
     """
 
@@ -17,8 +18,8 @@ def run_example(furniture_items):
     credentials = login_database.get_credentials('mongodb_cloud')
 
     with login_database.login_mongodb_cloud(credentials) as client:
-#        logger.info('We are going to use a database called dev')
-#        logger.info('If it doesnt exist mongodb creates it')
+        #        logger.info('We are going to use a database called dev')
+        #        logger.info('If it doesnt exist mongodb creates it')
         db = client['dev']
 
 #        logger.info('And in that database use a collection called furniture')
@@ -58,7 +59,7 @@ def run_example(furniture_items):
 #        db.drop_collection('furniture')
 
         # needed?
-        #client.close()
+        # client.close()
 #    logger.info('This should fail - if not try with explicit close')
     query = {'description': 'Plastic'}
     results = furniture.find_one(query)

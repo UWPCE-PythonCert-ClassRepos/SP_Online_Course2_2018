@@ -35,8 +35,9 @@ def run_example():
             r.delete('andy')
             logger.info(f'r.delete means andy is now: {email}')
 
-            logger.info('Step 6: Redis can maintain a unique ID or count very efficiently')
-            r.set('user_count',21)
+            logger.info(
+                'Step 6: Redis can maintain a unique ID or count very efficiently')
+            r.set('user_count', 21)
             r.incr('user_count')
             r.incr('user_count')
             r.decr('user_count')
