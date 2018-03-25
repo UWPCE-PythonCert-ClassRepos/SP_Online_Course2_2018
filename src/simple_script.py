@@ -24,14 +24,14 @@ def run_example(furniture_items):
         Write and read with pickle
         """
         log.info("\n\n====")
-        log.info('Demonstrate persistence with pickle')
+        log.info('Step 1: Demonstrate persistence with pickle')
         log.info('Write a pickle file with the furniture data')
 
         pickle.dump(furniture_items, open('data/data.pkl', 'wb'))
 
-        log.info('Now read it back from the pickle file')
+        log.info('Step 2: Now read it back from the pickle file')
         read_data = pickle.load(open('data/data.pkl', 'rb'))
-        log.info('Show that the write and read were successful')
+        log.info('Step 3: Show that the write and read were successful')
         assert read_data == furniture_items
         log.info("and print the data")
         pprint.pprint(read_data)
@@ -42,12 +42,12 @@ def run_example(furniture_items):
 
         """
         log.info("\n\n====")
-        log.info("Demonstrate working with shelve")
+        log.info("Step 4: Demonstrate working with shelve")
         shelf_file = shelve.open('data/shelve.dat')
-        log.info("store data at key")
+        log.info("Step 5: store data at key")
         shelf_file['key'] = furniture_items
 
-        log.info("Now retrieve a COPY of data at key")
+        log.info("Step 6: Now retrieve a COPY of data at key")
         read_items = shelf_file['key']
 
         log.info("Check it worked")
@@ -56,7 +56,7 @@ def run_example(furniture_items):
         log.info("And now print the copy")
         pprint.pprint(read_items)
 
-        log.info("delete data stored at key to cleanup and close")
+        log.info("Step 7: delete data stored at key to cleanup and close")
         del shelf_file['key']
         shelf_file.close()
 
@@ -75,12 +75,12 @@ def run_example(furniture_items):
             ('Pete', 'guitar', 0.1),
             ('John', 'bass', 89.71)
         ]
-        log.info("Write csv file")
+        log.info("Step 8: Write csv file")
         with open('data/rockstars.csv', 'w') as people:
             peoplewriter = csv.writer(people)
             peoplewriter.writerow(peopledata)
 
-        log.info("Read csv file back")
+        log.info("Step 9: Read csv file back")
         with open('data/rockstars.csv', 'r') as people:
             people_reader = csv.reader(people, delimiter=',', quotechar='"')
             for row in people_reader:
@@ -88,21 +88,21 @@ def run_example(furniture_items):
 
     def run_json():
         log.info("\n\n====")
-        log.info("Look at working with json data")
+        log.info("Step 10: Look at working with json data")
         furniture = [{'product': 'Red couch','description': 'Leather low back'},
         {'product': 'Blue couch','description': 'Cloth high back'},
         {'product': 'Coffee table','description': 'Plastic'},
         {'product': 'Red couch','description': 'Leather high back'}]
 
-        log.info("Return json string from an object")
+        log.info("Step 11: Return json string from an object")
         furniture_string = json.dumps(furniture)
 
-        log.info("Print the json")
+        log.info("Step 12: Print the json")
         pprint.pprint(furniture_string)
 
-        log.info("Returns an object from a json string representation")
+        log.info("Step 13: Returns an object from a json string representation")
         furniture_object = json.loads(furniture_string)
-        log.info("print the string")
+        log.info("Step 14: print the string")
         pprint.pprint(furniture_object)
 
     run_pickle()
