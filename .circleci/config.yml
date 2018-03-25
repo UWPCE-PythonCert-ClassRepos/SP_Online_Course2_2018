@@ -48,9 +48,10 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest --pylint --profile --cov . --junitxml=test_results/results.xml src/ tests/
+            autopep8 --in-place --aggressive src/*.py tests/*.py
+            pytest --pylint --profile --cov . --junitxml=test_results/results.xml src/*.py tests/*.py
 
       - store_artifacts:
-          path: test-reports
-          destination: test-reports
+          path: test_results
+          destination: results
           
