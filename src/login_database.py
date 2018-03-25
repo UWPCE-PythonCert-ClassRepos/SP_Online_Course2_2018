@@ -1,44 +1,35 @@
 """
-    module that will login to the various demnstartion databases consistently
-
+    module that will login to the various demonstration databases consistently
 """
 
 import configparser
 from pathlib import Path
 import pymongo
+import redis
+from neo4j.v1 import GraphDatabase, basic_auth
 
+import src.utilities
 
-def get_credentials(instance_name):
-    """
-        database credentials stored outside of git with .gitignore
-        user, pw and connect string (all in one place)
-        NOTE: proabably unsafe! Not encrypted on local machine!
+log = src.utilities.configure_logger('default', 'logs/login_databases_dev.log')
+config_file = Path(__file__).parent.parent / '.config/config.ini'
+config = configparser.ConfigParser()
 
-    """
-    CONFIG_FILE = Path(__file__).parent.parent / '.config/config.ini'
-    config = configparser.ConfigParser()
-
-    try:
-        config.read(CONFIG_FILE)
-        user = config["mongodb_cloud"]["user"]
-        pw = config["mongodb_cloud"]["pw"]
-        connection = config["mongodb_cloud"]["connection"]
-        return (user, pw, connection)
-
-    except Exception as e:
-        print(f'error: {e}')
-
-
-def login_mongodb_cloud(credentials):
+def login_mongodb_cloud():
     """
         connect to mongodb and login
     """
 
-#    logger.info('Here is where we use the connect to mongodb.')
-#    logger.info(
-#        'Note use of f string to embed the user & password (from the tuple).')
+    log.info('Here is where we use the connect to mongodb.')
+    log.info('Note use of f string to embed the user & password (from the tuple).')
+    try:
+        config.read(config_file)
+        user = config["mongodb_cloud"]["user"]
+        pw = config["mongodb_cloud"]["pw"]
 
-    client = pymongo.MongoClient(f'mongodb://{credentials[0]}:{credentials[1]}'
+    except Exception as e:
+        print(f'error: {e}')
+
+    client = pymongo.MongoClient(f'mongodb://{user}:{pw}'
                                  '@cluster0-shard-00-00-wphqo.mongodb.net:27017,'
                                  'cluster0-shard-00-01-wphqo.mongodb.net:27017,'
                                  'cluster0-shard-00-02-wphqo.mongodb.net:27017/test'
@@ -47,35 +38,45 @@ def login_mongodb_cloud(credentials):
     return client
 
 
-def login_redis_cloud(credentials):
+def login_redis_cloud():
     """
         connect to redis and login
     """
+    try:
+        config.read(config_file)
+        host = config["redis_cloud"]["host"]
+        port = config["redis_cloud"]["port"]
+        pw = config["redis_cloud"]["pw"]
 
-#    logger.info('Here is where we use the connect to redis.')
-#    logger.info('')
-    r = redis.StrictRedis(host=host, port=port,
-                          password=redis_pw, decode_responses=True)
+
+    except Exception as e:
+        print(f'error: {e}')
+
+    log.info('Here is where we use the connect to redis.')
+
+    try:
+        r = redis.StrictRedis(host=host, port=port, password=pw, decode_responses=True)
+
+    except Exception as e:
+        print(f'error: {e}')
+
     return r
 
 
-def login_neo4j_cloud(credentials):
+def login_neo4j_cloud():
     """
         connect to neo4j and login
 
     """
 
-#    logger.info('Here is where we use the connect to neo4j.')
-#    logger.info('')
+    log.info('Here is where we use the connect to neo4j.')
+    log.info('')
 
-    config = ConfigParser()
-    config.read(CONFIG)
+    config.read(config_file)
 
-    graphenedb_user = config["configuration"]["neo4juser"]
-    graphenedb_pass = config["configuration"]["neo4jpw"]
-    # graphenedb_url = 'bolt://hobby-opmhmhgpkdehgbkejbochpal.dbs.graphenedb.com:24786'
-    graphenedb_url = 'bolt://hobby-khhgnhgpkdehgbkeoldljpal.dbs.graphenedb.com:24786'
-
+    graphenedb_user = config["neo4j_cloud"]["user"]
+    graphenedb_pass = config["neo4j_cloud"]["pw"]
+    graphenedb_url = 'bolt://hobby-opmhmhgpkdehgbkejbochpal.dbs.graphenedb.com:24786'
     driver = GraphDatabase.driver(graphenedb_url,
                                   auth=basic_auth(graphenedb_user, graphenedb_pass))
 

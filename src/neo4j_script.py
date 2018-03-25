@@ -2,39 +2,32 @@
     neo4j example
 """
 
-import neo4j
 
-from src.login_database import login_neo4j_cloud
-from src.login_database import get_credentials
+import src.utilities
+import src.login_database
+import src.utilities
 
+log = src.utilities.configure_logger('default', 'logs/neo4j_script.log')
 
 def run_example():
 
-    # First, clear the entire database, so we can start over
+    log.info('Step 1: First, clear the entire database, so we can start over')
+    log.info("Running clear_all")
 
-    credentials = src.login_database.get_credentials('neo4j_cloud')
-
-    print("Running clear_all")
-
+    driver = src.login_database.login_neo4j_cloud()
     with driver.session() as session:
-        print("Before clearing: all the records")
-        result = session.run("MATCH (n) RETURN n")
-        msg = ("There are these records:" +
-               "\n".join([str(rec) for rec in result]))
         session.run("MATCH (n) DETACH DELETE n")
 
-    """
-    Add a few people, some with a little more info
-    """
+    log.info("Step 2: Add a few people")
+
     with driver.session() as session:
 
-        print('Adding a few Person nodes')
+        log.info('Adding a few Person nodes')
+        log.info('The cyph language is analagous to sql for neo4j')
         for first, last in [('Bob', 'Jones'),
                             ('Nancy', 'Cooper'),
                             ('Alice', 'Cooper'),
                             ('Fred', 'Barnes'),
-
-
                             ('Mary', 'Evans'),
                             ('Marie', 'Curie'),
                             ]:
@@ -42,16 +35,17 @@ def run_example():
                 first, last)
             session.run(cyph)
 
-        print("\nHere are all of people in the DB now:")
+        log.info("Step 3: Get all of people in the DB:")
         cyph = """MATCH (p:Person)
                   RETURN p.first_name as first_name, p.last_name as last_name
                 """
         result = session.run(cyph)
+        print("People in database:")
         for record in result:
             print(record['first_name'], record['last_name'])
 
-        print('\nCreate some relationships')
-        # Bob Jones likes Alice Cooper, Fred Barnes and Marie Curie
+        log.info('Step 4: Create some relationships')
+        log.info("Bob Jones likes Alice Cooper, Fred Barnes and Marie Curie")
 
         for first, last in [("Alice", "Cooper"),
                             ("Fred", "Barnes"),
@@ -63,7 +57,7 @@ def run_example():
             """ % (first, last)
             session.run(cypher)
 
-        print("Can we find all of Bob's friends?")
+        log.info("Step 5: Find all of Bob's friends")
         cyph = """
           MATCH (bob {first_name:'Bob', last_name:'Jones'})
                 -[:FRIEND]->(bobFriends)
@@ -75,7 +69,7 @@ def run_example():
             for f in rec.values():
                 print(f['first_name'], f['last_name'])
 
-        print("\nSetting up Marie's friends")
+        log.info("Setting up Marie's friends")
 
         for first, last in [("Mary", "Evans"),
                             ("Alice", "Cooper"),
@@ -89,14 +83,14 @@ def run_example():
             # print(cypher)
             session.run(cypher)
 
-        print("Can we find all of Marie's friends?")
+        print("Step 6: Find all of Marie's friends?")
         cyph = """
           MATCH (marie {first_name:'Marie', last_name:'Curie'})
                 -[:FRIEND]->(friends)
           RETURN friends
           """
         result = session.run(cyph)
-        print("Marie's friends are:")
+        print("\nMarie's friends are:")
         for rec in result:
             for f in rec.values():
                 print(f['first_name'], f['last_name'])

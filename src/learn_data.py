@@ -5,7 +5,7 @@
 
 def get_furniture_data():
     """
-        mongodb demonstration data
+    demonstration data
     """
 
     furniture_data = [

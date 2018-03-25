@@ -1,10 +1,5 @@
 """
-    log = src.utilities.configure_logger('default', 'logs/nosql_dev.log')
-    log.debug('debug message!')
-    log.info('info message!')
-    log.error('error message')
-    log.critical('critical message')
-    log.warning('warning message')
+enable easy and controllable logging
 """
 
 import logging
@@ -12,6 +7,9 @@ import logging.config
 
 
 def configure_logger(name, log_path):
+    """
+    generic logger
+    """
     logging.config.dictConfig({
         'version': 1,
         'formatters': {
