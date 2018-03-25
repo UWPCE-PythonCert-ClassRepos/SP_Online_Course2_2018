@@ -23,7 +23,7 @@ def run_example(furniture_items):
         """
         Write and read with pickle
         """
-
+        log.info("\n\n====")
         log.info('Demonstrate persistence with pickle')
         log.info('Write a pickle file with the furniture data')
 
@@ -41,15 +41,22 @@ def run_example(furniture_items):
         write and read with shelve
 
         """
-
+        log.info("\n\n====")
+        log.info("Demonstrate working with shelve")
         shelf_file = shelve.open('data/shelve.dat')
         log.info("store data at key")
         shelf_file['key'] = furniture_items
-        log.info("retrieve a COPY of data at key")
+
+        log.info("Now retrieve a COPY of data at key")
         read_items = shelf_file['key']
 
+        log.info("Check it worked")
         assert read_items == furniture_items
-        log.info("delete data stored at key")
+
+        log.info("And now print the copy")
+        pprint.pprint(read_items)
+
+        log.info("delete data stored at key to cleanup and close")
         del shelf_file['key']
         shelf_file.close()
 
@@ -57,7 +64,7 @@ def run_example(furniture_items):
         """
         write and read a csv
         """
-
+        log.info("\n\n====")
         peopledata = [
             ('John', 'second guitar', 117.45),
             ('Paul', 'bass', 22.01),
@@ -80,15 +87,23 @@ def run_example(furniture_items):
                 pprint.pprint(row)
 
     def run_json():
-        data = [{'product': 'Red couch','description': 'Leather low back'},
+        log.info("\n\n====")
+        log.info("Look at working with json data")
+        furniture = [{'product': 'Red couch','description': 'Leather low back'},
         {'product': 'Blue couch','description': 'Cloth high back'},
         {'product': 'Coffee table','description': 'Plastic'},
         {'product': 'Red couch','description': 'Leather high back'}]
-        s = json.dumps(data)
-        pprint.pprint(s)
-        j = json.loads(s)
 
-        pprint.pprint(j)
+        log.info("Return json string from an object")
+        furniture_string = json.dumps(furniture)
+
+        log.info("Print the json")
+        pprint.pprint(furniture_string)
+
+        log.info("Returns an object from a json string representation")
+        furniture_object = json.loads(furniture_string)
+        log.info("print the string")
+        pprint.pprint(furniture_object)
 
     run_pickle()
     run_shelve()
@@ -96,4 +111,3 @@ def run_example(furniture_items):
     run_json()
 
     return
-
