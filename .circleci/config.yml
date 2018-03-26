@@ -19,7 +19,9 @@ jobs:
 
     steps:
       - checkout
-
+          post:
+            - mkdir -p log
+            
       # Download and cache dependencies
       - restore_cache:
           keys:
