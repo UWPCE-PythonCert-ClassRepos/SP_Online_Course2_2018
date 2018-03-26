@@ -20,7 +20,7 @@ jobs:
     steps:
       - checkout:
           post:
-            - mkdir -p logs
+            - mkdir -p ~/repo/logs
             
       # Download and cache dependencies
       - restore_cache:
