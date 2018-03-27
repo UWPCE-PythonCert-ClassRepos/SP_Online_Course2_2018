@@ -19,8 +19,7 @@ jobs:
 
     steps:
       - checkout:
-          post:
-            - mkdir -p ~/repo/logs
+      - run: mkdir test-reports
             
       # Download and cache dependencies
       - restore_cache:
