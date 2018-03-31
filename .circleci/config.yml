@@ -50,7 +50,7 @@ jobs:
           command: |
             . venv/bin/activate
             autopep8 --in-place --aggressive src/*.py tests/*.py
-            pytest --pylint --profile --cov . --junitxml=test_results/results.xml src/*.py tests/*.py
+            pytest --pylint --profile --cov =src tests/ --junitxml=test_results/results.xml src/*.py tests/*.py
 
       - store_artifacts:
           path: test_results
