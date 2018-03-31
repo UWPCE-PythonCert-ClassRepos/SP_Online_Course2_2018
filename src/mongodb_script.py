@@ -8,6 +8,7 @@ import src.utilities
 
 log = src.utilities.configure_logger('default', 'logs/mongodb_script.log')
 
+
 def run_example(furniture_items):
     """
     mongodb data manipulation

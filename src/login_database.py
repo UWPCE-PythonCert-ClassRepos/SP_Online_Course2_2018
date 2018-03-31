@@ -14,6 +14,7 @@ log = src.utilities.configure_logger('default', 'logs/login_databases_dev.log')
 config_file = Path(__file__).parent.parent / '.config/config.ini'
 config = configparser.ConfigParser()
 
+
 def login_mongodb_cloud():
     """
         connect to mongodb and login

@@ -6,6 +6,7 @@
 import src.login_database
 import src.utilities
 
+
 def run_example():
     """
         uses non-presistent Redis only (as a cache)
