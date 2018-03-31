@@ -9,6 +9,7 @@ import src.utilities
 
 log = src.utilities.configure_logger('default', 'logs/neo4j_script.log')
 
+
 def run_example():
 
     log.info('Step 1: First, clear the entire database, so we can start over')
@@ -66,8 +67,8 @@ def run_example():
         result = session.run(cyph)
         print("Bob's friends are:")
         for rec in result:
-            for f in rec.values():
-                print(f['first_name'], f['last_name'])
+            for friend in rec.values():
+                print(friend['first_name'], friend['last_name'])
 
         log.info("Setting up Marie's friends")
 
@@ -80,7 +81,7 @@ def run_example():
               CREATE (p1)-[friend:FRIEND]->(p2:Person {first_name:'%s', last_name:'%s'})
               RETURN p1
             """ % (first, last)
-            # print(cypher)
+
             session.run(cypher)
 
         print("Step 6: Find all of Marie's friends?")
@@ -92,5 +93,5 @@ def run_example():
         result = session.run(cyph)
         print("\nMarie's friends are:")
         for rec in result:
-            for f in rec.values():
-                print(f['first_name'], f['last_name'])
+            for friend in rec.values():
+                print(friend['first_name'], friend['last_name'])
