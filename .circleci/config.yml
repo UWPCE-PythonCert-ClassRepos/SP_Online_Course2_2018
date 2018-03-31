@@ -18,9 +18,8 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - checkout:
-          post:
-            - mkdir -p ~/repo/logs
+      - checkout
+      - run: mkdir logs
             
       # Download and cache dependencies
       - restore_cache:
