@@ -19,7 +19,7 @@ def showoff_databases():
 
     log = src.utilities.configure_logger('default', 'logs/nosql_dev.log')
 
-    log.info("Mongodb example use data from Furniture module, so get it")
+    log.info("Mongodb example to use data from Furniture module, so get it")
     furniture = src.learn_data.get_furniture_data()
 
     src.mongodb_script.run_example(furniture)
