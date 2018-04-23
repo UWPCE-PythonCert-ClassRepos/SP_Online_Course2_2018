@@ -1,6 +1,4 @@
-# SP_Online_Course2_2018
-# Advanced Programming in Python - Self-Paced (Course 2)
-# Class repository for the self paced online class 2018
+# Class repository for the self paced online class 2018 (Course 2)
 
 It can be used by the class to share information and for students to submit their work.
 
