@@ -18,5 +18,11 @@ class TestGenerator(unittest.TestCase):
         expected_double_list = [1,2,4,8,16]
         self.assertEqual(list(actual_double_list), expected_double_list)
 
+    def test_fibonacci(self):
+        int_list = range(1,8)
+        actual_fib_list = TestGenerator.gen_class.fibonacci(int_list)
+        expected_fib_list = [1,1,2,3,5,8,13]
+        self.assertEqual(list(actual_fib_list),expected_fib_list)
+
 if __name__ == '__main__':
     unittest.main() 
