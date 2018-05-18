@@ -36,6 +36,20 @@ class Generator:
             else:
                 yield n
 
-    def prime_numbers(self):
-        pass
+    def prime(self,int_list):
+        """ return any value in a list of integers that is prime """
+
+        for n in int_list:
+            if n < 2:
+                continue 
+            else:
+                prime = True
+                for i in range(2,n):
+                   if n % i == 0:
+                       prime = False
+                       break
+                if prime:
+                    yield n
+
+
 

@@ -24,5 +24,11 @@ class TestGenerator(unittest.TestCase):
         expected_fib_list = [1,1,2,3,5,8,13]
         self.assertEqual(list(actual_fib_list),expected_fib_list)
 
+    def test_prime(self):
+        int_list = range(0,20)
+        actual_prime_list = TestGenerator.gen_class.prime(int_list)
+        expected_prime_list = [2,3,5,7,11,13,17,19]
+        self.assertEqual(list(actual_prime_list),expected_prime_list)
+
 if __name__ == '__main__':
     unittest.main() 
