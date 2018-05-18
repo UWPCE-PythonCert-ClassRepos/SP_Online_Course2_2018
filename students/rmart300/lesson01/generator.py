@@ -7,8 +7,13 @@ class Generator:
             my_sum += num
             yield my_sum
 
-    def doubler(self):
-        pass
+    def doubler(self, start, stop):
+        if start < 1:
+            start += 1
+        cur_value = start
+        for num in range(start, stop):
+            yield cur_value
+            cur_value *= 2
 
     def sum_series(n,x=0,y=1):
         """return the nth value of fibonacci (x=0,y=1) or lucas (x=2,y=1) series"""
