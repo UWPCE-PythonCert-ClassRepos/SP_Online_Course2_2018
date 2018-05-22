@@ -38,7 +38,7 @@ def prime(n=2):
         if n > 2:
             prime_n = True
             n += 2
-        else:    
+        else:
             n += 1
 
 
