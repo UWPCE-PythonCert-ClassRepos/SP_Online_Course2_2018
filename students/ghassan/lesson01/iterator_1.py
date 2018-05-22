@@ -4,6 +4,7 @@
 Simple iterator examples
 """
 
+# editing in order to re-submit lesson1
 
 class IterateMe_1:
     """
