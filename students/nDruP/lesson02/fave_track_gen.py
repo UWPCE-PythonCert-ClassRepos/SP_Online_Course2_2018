@@ -7,14 +7,16 @@ except ModuleNotFoundError:
 
 def fave_songs_by_artists(*fave_artist):
     music = pd.read_csv("featuresdf.csv")
-    iter_tracks = iter([t for t, a in zip(music.name, music.artists)
-                        if a in fave_artist])
+    iter_tracks = (t for t, a in zip(music.name, music.artists)
+                   if a in fave_artist)
     while True:
         yield next(iter_tracks)
 
 if __name__ == "__main__":
-    for a in fave_songs_by_artists('Ed Sheeran'):
-        print(a)
+    with open('ed_sheeran_songs.txt', 'w+') as edsh:
+        for a in fave_songs_by_artists('Ed Sheeran'):
+            print(a)
+            edsh.write(a)
     """
     for b in fave_songs_by_artists('Kendrick Lamar', 'Migos'):
         print(b)
