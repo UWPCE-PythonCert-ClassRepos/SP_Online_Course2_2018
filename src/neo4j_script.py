@@ -3,11 +3,11 @@
 """
 
 
-import src.utilities
-import src.login_database
-import src.utilities
+import utilities
+import login_database
+import utilities
 
-log = src.utilities.configure_logger('default', 'logs/neo4j_script.log')
+log = utilities.configure_logger('default', '../logs/neo4j_script.log')
 
 
 def run_example():
@@ -15,7 +15,7 @@ def run_example():
     log.info('Step 1: First, clear the entire database, so we can start over')
     log.info("Running clear_all")
 
-    driver = src.login_database.login_neo4j_cloud()
+    driver = login_database.login_neo4j_cloud()
     with driver.session() as session:
         session.run("MATCH (n) DETACH DELETE n")
 

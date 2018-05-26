@@ -3,8 +3,8 @@
 """
 
 
-import src.login_database
-import src.utilities
+import login_database
+import utilities
 
 
 def run_example():
@@ -13,11 +13,11 @@ def run_example():
 
     """
 
-    log = src.utilities.configure_logger('default', 'logs/redis_script.log')
+    log = utilities.configure_logger('default', '../logs/redis_script.log')
 
     try:
         log.info('Step 1: connect to Redis')
-        r = src.login_database.login_redis_cloud()
+        r = login_database.login_redis_cloud()
         log.info('Step 2: cache some data in Redis')
         r.set('andy', 'andy@somewhere.com')
 

@@ -3,10 +3,10 @@
 """
 
 import pprint
-import src.login_database
-import src.utilities
+import login_database
+import utilities
 
-log = src.utilities.configure_logger('default', 'logs/mongodb_script.log')
+log = utilities.configure_logger('default', '../logs/mongodb_script.log')
 
 
 def run_example(furniture_items):
@@ -14,7 +14,7 @@ def run_example(furniture_items):
     mongodb data manipulation
     """
 
-    with src.login_database.login_mongodb_cloud() as client:
+    with login_database.login_mongodb_cloud() as client:
         log.info('Step 1: We are going to use a database called dev')
         log.info('But if it doesnt exist mongodb creates it')
         db = client['dev']

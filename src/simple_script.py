@@ -8,9 +8,9 @@ import csv
 import json
 
 import pprint
-import src.utilities
+import utilities
 
-log = src.utilities.configure_logger('default', 'logs/mongodb_script.log')
+log = utilities.configure_logger('default', '../logs/mongodb_script.log')
 
 
 def run_example(furniture_items):
@@ -27,10 +27,10 @@ def run_example(furniture_items):
         log.info('Step 1: Demonstrate persistence with pickle')
         log.info('Write a pickle file with the furniture data')
 
-        pickle.dump(furniture_items, open('data/data.pkl', 'wb'))
+        pickle.dump(furniture_items, open('../data/data.pkl', 'wb'))
 
         log.info('Step 2: Now read it back from the pickle file')
-        read_data = pickle.load(open('data/data.pkl', 'rb'))
+        read_data = pickle.load(open('../data/data.pkl', 'rb'))
         log.info('Step 3: Show that the write and read were successful')
         assert read_data == furniture_items
         log.info("and print the data")
@@ -43,7 +43,7 @@ def run_example(furniture_items):
         """
         log.info("\n\n====")
         log.info("Step 4: Demonstrate working with shelve")
-        shelf_file = shelve.open('data/shelve.dat')
+        shelf_file = shelve.open('../data/shelve.dat')
         log.info("Step 5: store data at key")
         shelf_file['key'] = furniture_items
 
@@ -76,12 +76,12 @@ def run_example(furniture_items):
             ('John', 'bass', 89.71)
         ]
         log.info("Step 8: Write csv file")
-        with open('data/rockstars.csv', 'w') as people:
+        with open('../data/rockstars.csv', 'w') as people:
             peoplewriter = csv.writer(people)
             peoplewriter.writerow(peopledata)
 
         log.info("Step 9: Read csv file back")
-        with open('data/rockstars.csv', 'r') as people:
+        with open('../data/rockstars.csv', 'r') as people:
             people_reader = csv.reader(people, delimiter=',', quotechar='"')
             for row in people_reader:
                 pprint.pprint(row)
