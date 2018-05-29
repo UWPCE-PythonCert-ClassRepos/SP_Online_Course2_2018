@@ -23,5 +23,5 @@ all_songs = list(zip(names, artists, energy))
 energy_filter = filter_songs_by_energy(0.8) 
 energy8_songs = energy_filter(all_songs)
 print('Songs with energy > 0.8')
-print('\n'.join([f"{x[0]} by {x[1]}" for x in energy8_songs]))
+print('\n'.join([f"{x[0]} by {x[1]} has energy {round(x[2],2)}" for x in energy8_songs]))
 
