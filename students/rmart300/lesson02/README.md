@@ -10,5 +10,5 @@ generator.py
 
 closure.py
 
-1. A closure to capture high energy tracks (>8.0)
+1. A closure to capture high energy tracks (>0.8)
 2. Submit your code and the tracks it finds, artist name, track name and energy value.
