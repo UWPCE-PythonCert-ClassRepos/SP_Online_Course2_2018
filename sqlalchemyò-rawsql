@@ -1,0 +1,16 @@
+"""
+  a simple example of how to use sqlalchemy to run sql against a database
+
+"""
+
+from sqlalchemy.sql import text
+
+connection = engine.connect()
+
+# note use of vriable for the where clause
+# this helps to prevent sql injection attacks and is essential
+
+
+cmd = 'select * from Employees where EmployeeGroup == :group'
+employeeGroup = 'Staff'
+employees = connection.execute(text(cmd), group = employeeGroup)
