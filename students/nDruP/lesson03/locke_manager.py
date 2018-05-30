@@ -6,12 +6,14 @@ class Locke:
         self.capacity = capacity
 
     def __enter__(self):
-        print('Now in enter')
+        #print('Now in enter')
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print('Now in Exit\n\n')
-        pass
+        #print('Now in Exit\n\n')
+        if exc_type:
+            print(exc_val)
+        return True
     
     def move_boats_through(self, num_boats):
         if num_boats > self.capacity:
@@ -28,8 +30,6 @@ class Locke:
             print("Restarting the pumps")
             sleep(1)
 
-        pass
-
 
 if __name__ == '__main__':
     small_locke = Locke(5)
@@ -37,10 +37,7 @@ if __name__ == '__main__':
     boats = 8
 
     with small_locke as locke:
-        try:
-            locke.move_boats_through(boats)
-        except ValueError:
-            print("Too many boats for the locke")
+        locke.move_boats_through(boats)
 
     with large_locke as locke:
         locke.move_boats_through(boats)
