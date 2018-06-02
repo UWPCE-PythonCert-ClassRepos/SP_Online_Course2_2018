@@ -45,7 +45,7 @@ class IterateMe_2:
 
     def __next__(self):
         if not next(self.count):
-            return self.start 
+            return self.start
         else:
             try:
                 self.current += self.step
@@ -85,5 +85,9 @@ if __name__ == "__main__":
 
     for i in it:
         print(i)
-    # Result is that 'for' loop breaks when i=12. If loop is restarted, it begins at i=12,
-    # rather than at i=2. Range, OTOH, returns to i=2.
+    # Result is that 'for' loop breaks when i=12. If loop is restarted,
+    # it begins at i=12, rather than at i=2. Range object, OTOH,
+    # returns to i=2.
+
+    # Range objects are iterables, rather than iterators.
+    # Range objects implement __iter__ method, which creates iterator.
