@@ -1,0 +1,61 @@
+{
+    "__obj_type": "Donor_Dict",
+    "_dict": {
+        "sleve mcdichael": {
+            "__obj_type": "Donor",
+            "name": "Sleve McDichael",
+            "history": [
+                86457.89,
+		2346.43,
+		9099.09
+            ]
+        },
+        "willie dustice": {
+            "__obj_type": "Donor",
+            "name": "Willie Dustice",
+            "history": [
+                505.05,
+		43.21
+            ]
+        },
+        "rey mcscriff": {
+            "__obj_type": "Donor",
+            "name": "Rey McScriff",
+            "history": [
+	        666.0
+            ]
+        },
+	"mike truk": {
+            "__obj_type": "Donor",
+            "name": "Mike Truk",
+            "history": [
+	        70935.3,
+		12546.7,
+		312.0
+            ]
+        },
+	"bobson dugnutt": {
+            "__obj_type": "Donor",
+            "name": "Bobson Dugnutt",
+            "history": [
+	        1234.56,
+		789.0
+            ]
+        },
+	"todd bonzalez": {
+            "__obj_type": "Donor",
+            "name": "Todd Bonzalez",
+            "history": [
+	        10352.07,
+		2394.32
+            ]
+        },
+	"andrew": {
+            "__obj_type": "Donor",
+            "name": "andrew",
+            "history": [
+	        9473.65
+            ]
+        }
+    }
+}
