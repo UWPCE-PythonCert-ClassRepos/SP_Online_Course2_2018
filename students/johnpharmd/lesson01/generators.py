@@ -23,13 +23,30 @@ def doubler():
         x *= 2
 
 
-def fib():
+# def fib():
+#     """
+#     Fibonacci seq as a generator
+#     """
+#     n = 0
+#     x = 1
+#     while True:
+#         yield x
+#         n += 1
+#         if n == 1:
+#             x = 1
+#         elif n == 2:
+#             x = 2
+#         else:
+#             x = sum([fib() for i in range(n-1)])
+
+
+def prime():
     """
-    Fibonacci seq as a generator
+    Generates sequence of prime numbers
     """
-    n = 1
-    x = 1
+    i = 2
     while True:
-        yield x
-        n += 1
-        x = sum([2*i-3 for i in range(n)])
+        if i % 2 == 1 and i % 3 == 1 and i % 5 == 1:
+            print('.', end=' ')
+            yield i
+        i += 1
