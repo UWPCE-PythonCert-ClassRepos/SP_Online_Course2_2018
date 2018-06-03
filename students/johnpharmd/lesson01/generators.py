@@ -30,6 +30,6 @@ def fib():
     n = 1
     x = 1
     while True:
-        yield n
+        yield x
         n += 1
-        x = sum([i for i in range(n)])
+        x = sum([2*i-3 for i in range(n)])
