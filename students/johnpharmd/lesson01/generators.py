@@ -3,7 +3,7 @@
 
 def intsum():
     """
-    Adds next integer y to integer state x
+    Adds next integer y to integer value store x
     """
     x = 0
     y = 0
@@ -21,3 +21,13 @@ def doubler():
     while True:
         yield x
         x = 2*x
+
+
+def fib():
+    """
+    Fibonacci seq as a generator
+    """
+    n = 0
+    while True:
+        yield n
+        n = fib(n-2) + fib(n-1)
