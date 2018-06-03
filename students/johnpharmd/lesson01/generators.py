@@ -46,7 +46,8 @@ def prime():
     """
     i = 2
     while True:
-        if i % 2 == 1 and i % 3 == 1 and i % 5 == 1:
-            print('.', end=' ')
+        if i in (2, 3, 5, 7):
+            yield i
+        elif i % 2 == 1 and i % 3 != 0 and i % 5 != 0 and i % 7 != 0:
             yield i
         i += 1
