@@ -20,14 +20,16 @@ def doubler():
     x = 1
     while True:
         yield x
-        x = 2*x
+        x *= 2
 
 
 def fib():
     """
     Fibonacci seq as a generator
     """
-    n = 0
+    n = 1
+    x = 1
     while True:
         yield n
-        n = fib(n-2) + fib(n-1)
+        n += 1
+        x = sum([i for i in range(n)])
