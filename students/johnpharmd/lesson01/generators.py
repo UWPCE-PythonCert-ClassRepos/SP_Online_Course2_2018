@@ -27,19 +27,17 @@ def fib():
     """
     Fibonacci seq generator
     """
-    n = 1
+    i = 1
     x = 1
-    flist = [0]
+    flist = [1, 1]
     while True:
-        if n == 1:
-            x = 1
-        elif n == 2:
-            x = 2
-        else:
-            x = flist[n-2] + flist[n-1]
-        flist.append(x)
         yield x
-        n += 1
+        i += 1
+        if i == 2:
+            x = 1
+        else:
+            x = flist[i-2] + flist[i-1]
+        flist.append(x)
 
 
 def prime():
