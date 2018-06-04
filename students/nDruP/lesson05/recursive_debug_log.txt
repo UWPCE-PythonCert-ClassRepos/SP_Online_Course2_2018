@@ -1,0 +1,74 @@
+~/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05$ python -m pdb recursive.py 144
+> /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py(1)<module>()
+-> import sys
+(Pdb) n
+> /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py(4)<module>()
+-> def my_fun(n):
+(Pdb) n
+> /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) s
+> /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py(11)<module>()
+-> n = int(sys.argv[1])
+(Pdb) s
+> /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py(12)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) ll
+  4  ->	def my_fun(n):
+  5  	    if n == 2:
+  6  	        return True
+  7  	    return my_fun(n/2)
+(Pdb) b 5
+Breakpoint 1 at /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py:5
+(Pdb) condition 1 n <= 3
+New condition set for breakpoint 1.
+(Pdb) ll
+  4  ->	def my_fun(n):
+  5 B	    if n == 2:
+  6  	        return True
+  7  	    return my_fun(n/2)
+(Pdb) continue
+> /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+2.25
+(Pdb) s
+> /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) l
+  2  	
+  3  	
+  4  	def my_fun(n):
+  5 B	    if n == 2:
+  6  	        return True
+  7  ->	    return my_fun(n/2)
+  8  	
+  9  	
+ 10  	if __name__ == '__main__':
+ 11  	    n = int(sys.argv[1])
+ 12  	    print(my_fun(n))
+(Pdb) s
+--Call--
+> /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> /home/ndru/Documents/PYTHON220/SP_Online_Course2_2018/students/nDruP/lesson05/recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) l
+  1  	import sys
+  2  	
+  3  	
+  4  	def my_fun(n):
+  5 B->	    if n == 2:
+  6  	        return True
+  7  	    return my_fun(n/2)
+  8  	
+  9  	
+ 10  	if __name__ == '__main__':
+ 11  	    n = int(sys.argv[1])
+(Pdb) pp n
+1.125
