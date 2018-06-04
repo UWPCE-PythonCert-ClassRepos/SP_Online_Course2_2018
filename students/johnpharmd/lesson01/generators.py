@@ -23,26 +23,28 @@ def doubler():
         x *= 2
 
 
-# def fib():
-#     """
-#     Fibonacci seq as a generator
-#     """
-#     n = 0
-#     x = 1
-#     while True:
-#         yield x
-#         n += 1
-#         if n == 1:
-#             x = 1
-#         elif n == 2:
-#             x = 2
-#         else:
-#             x = sum([fib() for i in range(n-1)])
+def fib():
+    """
+    Fibonacci seq generator
+    """
+    n = 1
+    x = 1
+    flist = [0]
+    while True:
+        if n == 1:
+            x = 1
+        elif n == 2:
+            x = 2
+        else:
+            x = flist[n-2] + flist[n-1]
+        flist.append(x)
+        yield x
+        n += 1
 
 
 def prime():
     """
-    Generates sequence of prime numbers
+    Correctly generates sequence of only prime numbers through 113.
     """
     i = 2
     while True:
