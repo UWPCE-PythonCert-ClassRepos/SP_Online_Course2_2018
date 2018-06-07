@@ -14,4 +14,5 @@ ballard_locke.py
 
 recursion.py
 
-1. 
+1. recursive method for factorial
+2. tests 1 through 10 
