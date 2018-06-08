@@ -14,11 +14,10 @@ music = pd.read_csv("featuresdf.csv")
 #       Sorted in descending order by danceability (most danceable up top)
 
 goal = sorted([info for info in zip(music.artists, music.name, music.danceability, music.loudness) 
-            if info[2] > 0.8 and info[3] < -5.0], key=lambda info: info[2], reverse=True)
+            if info[2] > 0.8 and info[3] < -5.0], key=lambda info: info[2], reverse=True)[:5]
 
-goal = goal[:5]
-
-print(goal)
+for item in goal:
+    print(f"{item[0]:20}\t{item[1]:40}\t{item[2]:.2f}\t{item[3]:.2f}\t")
 
 
 
