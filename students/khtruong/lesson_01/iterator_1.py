@@ -4,7 +4,6 @@
 Simple iterator examples
 """
 
-# editing in order to re-submit lesson1
 
 class IterateMe_1:
     """
@@ -29,25 +28,49 @@ class IterateMe_1:
             raise StopIteration
 
 
-class IterateMe_2(IterateMe_1):
+class IterateMe_2:
     def __init__(self, start, stop, step=1):
-        self.start = start - step
+        self.start = start
         self.stop = stop
         self.step = step
+        self.current = start - step
 
     def __iter__(self):
+        self.current = self.start - self.step
         return self
 
     def __next__(self):
-        self.start += self.step
-        if self.start < self.stop:
-            return self.start
+        self.current += self.step
+        if self.current < self.stop:
+            return self.current
         else:
             raise StopIteration
 
 
 if __name__ == "__main__":
 
-    print("Testing the iterator")
-    for i in IterateMe_2(2, 20, 2):
+    print("Testing the iterator 1")
+    for i in IterateMe_1():
+        print(i)
+
+    print("Testing the iterator 2")
+    for i in IterateMe_2(0, 6, 2):
+        print(i)
+
+    print("Testing iterator 2 with break")
+    it = IterateMe_2(2, 20, 2)
+    for i in it:
+        if i > 10:
+            break
+        print(i)
+    for i in it:
+        print(i)
+
+    print("Testing range with break")
+    it = range(2, 20, 2)
+    for i in it:
+        if i > 10:
+            break
+        print(i)
+    for i in it:
         print(i)
