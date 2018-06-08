@@ -14,7 +14,7 @@ def fib(i=0, j=1):
         yield j
         i, j = j, i + j
 
-def gen_primes():
+def prime():
     D = {}
     q = 2
     
