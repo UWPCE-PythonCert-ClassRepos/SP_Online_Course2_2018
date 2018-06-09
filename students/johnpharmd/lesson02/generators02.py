@@ -10,8 +10,10 @@ def find_tracks():
     """
     returns all Ed Sheeran tracks, one by one
     """
+    # generator expressions are lazy (memory-saving), compared to list
+    # comprehensions, which are eager
     trackgen = (track for track in zip(m.name, m.artists)
-                      if track[1] == 'Ed Sheeran')
+                if track[1] == 'Ed Sheeran')
     while True:
         for track in trackgen:
             yield track
