@@ -8,12 +8,13 @@ def get_tracks_by_energy(energy):
     """
     returns tracks by artists, song name, energy level
     """
-    def find():
-        trackgen = (track for track in zip(m.artists, m.name, m.energy)
-                    if m.energy > energy)
-        return list(trackgen)
+    def find(artists=None, name=None):
+        if artists and name:
+            tlist = [track for track in zip(m.artists, m.name, m.energy)
+                     if m.energy > energy]
+            return tlist
     return find
 
 
-etracks = get_tracks_by_energy(1.0)
-print(etracks(8.0))
+etracks = get_tracks_by_energy(8.0)
+print(etracks(artists=True, name=True))
