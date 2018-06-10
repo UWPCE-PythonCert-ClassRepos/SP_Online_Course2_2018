@@ -1,0 +1,2111 @@
+galmamar (master) lesson05 $ python -m pdb recursive.py 12
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(1)<module>()
+-> import sys
+(Pdb) l
+  1  ->	import sys
+  2
+  3
+  4  	def my_fun(n):
+  5  	    if n == 2:
+  6  	        return True
+  7  	    return my_fun(n/2)
+  8
+  9
+ 10  	if __name__ == '__main__':
+ 11  	    n = int(sys.argv[1])
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(4)<module>()
+-> def my_fun(n):
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(11)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(12)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+12
+(Pdb) l
+  1  	import sys
+  2
+  3
+  4  ->	def my_fun(n):
+  5  	    if n == 2:
+  6  	        return True
+  7  	    return my_fun(n/2)
+  8
+  9
+ 10  	if __name__ == '__main__':
+ 11  	    n = int(sys.argv[1])
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+12
+(Pdb) ss
+*** NameError: name 'ss' is not defined
+(Pdb) s
+--Call--
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+6
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+3
+(Pdb) l
+  1  	import sys
+  2
+  3
+  4  ->	def my_fun(n):
+  5  	    if n == 2:
+  6  	        return True
+  7  	    return my_fun(n/2)
+  8
+  9
+ 10  	if __name__ == '__main__':
+ 11  	    n = int(sys.argv[1])
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+1
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+0
+(Pdb) n
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) c
+Traceback (most recent call last):
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/pdb.py", line 1314, in main
+    pdb._runscript(mainpyfile)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/pdb.py", line 1233, in _runscript
+    self.run(statement)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/bdb.py", line 400, in run
+    exec cmd in globals, locals
+  File "<string>", line 1, in <module>
+  File "recursive.py", line 12, in <module>
+    print(my_fun(n))
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 5, in my_fun
+    if n == 2:
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+RuntimeError: maximum recursion depth exceeded
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> /Users/galmamar/git_repo/SP_Online_Course2_2018/students/ghassan/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb)
