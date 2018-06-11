@@ -1,8 +1,8 @@
 import logging
+import logging.handlers
 import time
 
 format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
-syslog_format = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 log_timestr = time.strftime('%Y%m%d-%H%M%S')
 filename = '{}.log'.format(log_timestr)
 
@@ -16,14 +16,14 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
 
-server_handler = logging.SysLogHandler()
+server_handler = logging.handlers.SysLogHandler(address=('127.0.0.1', 514))
 server_handler.setLevel(logging.ERROR)
-server_handler.setFormatter(syslog_format)
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
+logger.addHandler(server_handler)
 
 
 def my_fun(n):
