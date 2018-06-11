@@ -23,6 +23,7 @@ class IterateMe_1:
 
 
 class IterateMe_2():
+    """ Iterator designed to match functionality of 'range' """
     
     def __init__(self, start, stop, step=1):
         self.start = start
@@ -52,7 +53,16 @@ if __name__ == "__main__":
     for i in IterateMe_1():
         print(i)
 
-    # print("Testing iterartor_2")
-    # for i in IterateMe_2(2, 20, 2):
-    #     print(i)
+    print("\nTesting iterartor_2")
+    it = IterateMe_2(2, 20, 2)
+
+    for i in it:
+        if i > 10: break
+        print(i)
+    print("Breaking after 10...\n")
+    
+    print("Picking up after breaking...")
+    for i in it:
+        print(i)
+        
 
