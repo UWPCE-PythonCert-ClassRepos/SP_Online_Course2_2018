@@ -23,14 +23,14 @@ def test_intsum():
 
 def test_intsum2():
 
-    g = gen.intsum2()
+    g2 = gen.intsum()
 
-    assert next(g) == 0
-    assert next(g) == 1
-    assert next(g) == 3
-    assert next(g) == 6
-    assert next(g) == 10
-    assert next(g) == 15
+    assert next(g2) == 0
+    assert next(g2) == 1
+    assert next(g2) == 3
+    assert next(g2) == 6
+    assert next(g2) == 10
+    assert next(g2) == 15
 
 
 def test_doubler():

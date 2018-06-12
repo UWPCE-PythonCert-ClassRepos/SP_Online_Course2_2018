@@ -1,23 +1,47 @@
 #!/usr/bin/env python
 """ A series of simple generators """
 
-def sum_of_integers(a=0):
-    count = a
+def intsum():
+    current = total = 0
     while True:
-        yield(a)
-        count += 1
-        a += count
+        yield(total)
+        current += 1
+        total += current
 
 
 def doubler():
-    pass
+    total = 1
+    while True:
+        yield(total)
+        total *= 2
 
 
-def fib_sequence():
-    pass 
+def fib():
+    n1, n2 = 0, 1
+    while True:
+        n1, n2 = n2, n1 + n2 
+        yield (n1)
 
 
-def prime_numbers():
-    pass 
+
+# def prime():
+#     current = 2
+#     divisor = [2]
+#     while True:
+#         for n in divisor:
+#             if current % n:
+#                 yield divisor
+#                 divisor.append(current)
+#             current += 1
+
+
+
+#             # for num in divisor:
+#             #     if current % num:
+#             #         divisor.append(current)
+#             #         yield current
+#             #     current += 1
+
+
 
 
