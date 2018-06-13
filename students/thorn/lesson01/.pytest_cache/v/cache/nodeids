@@ -1,3 +1,7 @@
 [
-  "test_iterator_1.py::test_IterateMe1"
+  "test_generator.py::test_intsum",
+  "test_generator.py::test_doubler",
+  "test_generator.py::test_fib",
+  "test_generator.py::test_prime",
+  "test_generator.py::test_count_threes"
 ]

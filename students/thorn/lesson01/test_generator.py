@@ -8,22 +8,9 @@ can be run with py.test or nosetests
 
 import generator_solution as gen
 
-
 def test_intsum():
 
     g = gen.intsum()
-
-    assert next(g) == 0
-    assert next(g) == 1
-    assert next(g) == 3
-    assert next(g) == 6
-    assert next(g) == 10
-    assert next(g) == 15
-
-
-def test_intsum2():
-
-    g = gen.intsum2()
 
     assert next(g) == 0
     assert next(g) == 1
@@ -59,3 +46,15 @@ def test_prime():
     g = gen.prime()
     for val in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]:
         assert next(g) == val
+
+
+def test_count_threes():
+    
+    g = gen.count_threes()
+
+    assert next(g) == 0
+    assert next(g) == 3
+    assert next(g) == 6
+    assert next(g) == 9
+    assert next(g) == 12
+    assert next(g) == 15
