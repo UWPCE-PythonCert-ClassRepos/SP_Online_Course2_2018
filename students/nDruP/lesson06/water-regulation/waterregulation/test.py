@@ -23,7 +23,7 @@ class DeciderTests(unittest.TestCase):
         Test decider's decide method
         """
         dec = Decider(100, .05)
-        actions = {
+        acts = {
             'PUMP_IN': 1,
             'PUMP_OUT': -1,
             'PUMP_OFF': 0,
@@ -31,13 +31,13 @@ class DeciderTests(unittest.TestCase):
         above = 110
         below = 90
         inside = 99
-        self.assertEqual(1, dec.decide(below, 0, actions))
-        self.assertEqual(1, dec.decide(below, 1, actions))
-        self.assertEqual(-1, dec.decide(above, 0, actions))
-        self.assertEqual(-1, dec.decide(above, -1, actions))
-        self.assertEqual(0, dec.decide(inside, 0, actions))
-        self.assertEqual(0, dec.decide(above, 1, actions))
-        self.assertEqual(0, dec.decide(below, -1, actions))
+        self.assertEqual(1, dec.decide(below, acts['PUMP_OFF'], acts))
+        self.assertEqual(1, dec.decide(below, acts['PUMP_IN'], acts))
+        self.assertEqual(-1, dec.decide(above, acts['PUMP_OFF'], acts))
+        self.assertEqual(-1, dec.decide(above, acts['PUMP_OUT'], acts))
+        self.assertEqual(0, dec.decide(inside, acts['PUMP_OFF'], acts))
+        self.assertEqual(0, dec.decide(above, acts['PUMP_IN'], acts))
+        self.assertEqual(0, dec.decide(below, acts['PUMP_OUT'], acts))
 
 
 class ControllerTests(unittest.TestCase):
@@ -65,8 +65,14 @@ class ControllerTests(unittest.TestCase):
         self.pump.set_state = MagicMock(return_value=True)
 
         self.controller.tick()
-        self.decider.decide.assert_called_with(100, self.pump.PUMP_OFF,
-                                               self.controller.actions)
+
+        self.sensor.measure.assert_called_with()
+        self.pump.get_state.assert_called_with()
+        self.decider.decide.assert_called_with(
+            100,
+            self.pump.PUMP_OFF,
+            self.controller.actions
+        )
         self.pump.set_state.assert_called_with(self.pump.PUMP_IN)
 
     def test_raise_url_controller(self):
