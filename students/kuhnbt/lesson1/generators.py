@@ -1,4 +1,11 @@
-def sum_integers(start=0):
+def intsum(start=0):
+    count=start
+    while True:
+        yield start
+        count += 1
+        start += count 
+
+def intsum2(start=0):
     count=start
     while True:
         yield start
@@ -10,17 +17,16 @@ def doubler(start=1):
         yield start
         start*=2
         
-def fibonacci():
+def fib():
     a = 0
     b = 1
-    yield a
     while True:
         yield b
         temp = b
         b += a
         a = temp
         
-def prime_number_generator(start):
+def prime(start=2):
     while True:
         for num in range(2, start // 2 + 1):
             if start % num == 0:
