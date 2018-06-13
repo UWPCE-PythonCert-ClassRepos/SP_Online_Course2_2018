@@ -14,9 +14,13 @@ music = pd.read_csv('featuresdf.csv')
 # genertor to produce Ed Sheeran tracks
 fav_music = (("artist: ", artist, "track: ", song) for artist in music.artists for song in music.name if artist == "Ed Sheeran")
 
-print(next(fav_music))
-print(next(fav_music))
-print("\n\n")
+#print(next(fav_music))
+#print(next(fav_music))
+#print("\n\n")
+
+# added per instructor feedback (vice using print statements)
+for row in fav_music:
+    print(row)
 
 # closure exercise
 
@@ -35,6 +39,10 @@ high_e = [[artist, song, energy] for [artist, song, energy] in \
           zip(music.artists, music.name, music.energy) if energy in cols]
 
 high_e_sort = sorted(high_e, key=lambda x: x[2], reverse=True)
+
+# just to seperate outputs
+print()
+print()
 
 for row in high_e_sort:
     print(row)
