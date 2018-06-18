@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 test_generator.py
 
@@ -58,4 +60,37 @@ def test_fib():
 def test_prime():
     g = gen.prime()
     for val in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]:
+        assert next(g) == val
+
+
+##########################Dennis's work below###########################
+
+def test_squared():
+    g = gen.squared()
+    for val in [1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225]:
+        assert next(g) == val
+
+def test_cubed():
+    g = gen.cubed()
+    for val in [1, 8, 27, 64, 125, 216, 343, 512, 729, 1000, 1331, 1728, 2197]:
+        assert next(g) == val
+
+def test_threes():
+    g = gen.threes()
+    for val in [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45]:
+        assert next(g) == val
+
+def test_minus7():
+    g = gen.minus7()
+    for val in [0, -7, -14, -21, -28, -35, -42, -49, -56, -63, -70, -77, -84]:
+        assert next(g) == val
+
+def test_factorial():
+    g = gen.factorial()
+    for val in [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800]:
+        assert next(g) == val
+
+def test_ten_to_xth_power():
+    g = gen.ten_to_xth_power()
+    for val in [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000]:
         assert next(g) == val
