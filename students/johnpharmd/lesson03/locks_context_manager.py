@@ -1,4 +1,5 @@
 # Ballard Locks context manager exercise
+from time import sleep
 
 
 class Locke(object):
@@ -9,16 +10,6 @@ class Locke(object):
     def __init__(self, boat_capacity):
         self.boat_capacity = boat_capacity
 
-    def __enter__(self):
-        print('Preparing to allow entry into locke.\n')
-        typical_operation()
-        print('\nBoats entering locke.')
-
-    def __exit__(self, *args):
-        print('Preparing locke for exiting.\n')
-        typical_operation()
-        print('\nBoats exiting locke.')
-
     @staticmethod
     def typical_operation():
         op_text = """
@@ -27,7 +18,18 @@ class Locke(object):
         Closing the doors.
         Restarting the pumps.
         """
+        sleep(2)
         print(op_text)
+
+    def __enter__(self):
+        print('Preparing to allow entry into locke.\n')
+        self.typical_operation()
+        print('\nBoats entering locke.')
+
+    def __exit__(self, *args):
+        print('Preparing locke for exiting.\n')
+        self.typical_operation()
+        print('\nBoats exiting locke.')
 
     def move_boats_through(boats):
         try:
