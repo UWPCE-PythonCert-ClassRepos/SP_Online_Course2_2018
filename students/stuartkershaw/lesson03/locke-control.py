@@ -17,7 +17,7 @@ def apply_selection(selection):
         print('Oops, invalid selection.')
 
 
-def lockes_interface():
+def locke_interface():
     options = 'Please select from the menu:\n'\
               '1) set number of boats for passage\n'\
               '2) quit\n'
@@ -40,7 +40,7 @@ def enter_num_boats():
 
 
 def main():
-    lockes_interface()
+    locke_interface()
 
 
 if __name__ == "__main__":
