@@ -3,7 +3,7 @@
 import pandas as pd
 music = pd.read_csv("featuresdf.csv")
 
-sorted_music = [f"{name}, {title}" for x, y, name, title in
+sorted_music = [f"{name}, {artists}" for x, y, name, artists in
                 sorted(zip(music.danceability,
                            music.loudness,
                            music.name,
