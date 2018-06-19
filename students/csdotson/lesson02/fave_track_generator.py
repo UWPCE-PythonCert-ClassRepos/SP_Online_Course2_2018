@@ -4,6 +4,7 @@
 import pandas as pd
 music = pd.read_csv("featuresdf.csv")
 
+# Generator
 tracks = ((x,y) for (x,y) in [(name, artist) for (name, artist) in zip(music.name, music.artists) if artist == "Ed Sheeran"])
 
 for t in tracks:
