@@ -34,13 +34,44 @@ def test_boats():
     assert locke.boats == 5
 
 
-def test_entry_conditions():
+def test_entry_conditions_valid():
     locke = Locke(5)
     locke.move_boats_through(5)
 
     assert locke.check_entry_conditions() is True
 
+
+def test_entry_conditions_invalid():
     with pytest.raises(ValueError) as excinfo:
+        locke = Locke(5)
         locke.move_boats_through(15)
 
-    assert str(excinfo.value) == "LARGE LOCKE appects 10 boats max."
+    assert str(excinfo.value) == "{} accepts {} boats max."\
+                                 .format(locke.size, locke.limit)
+
+
+def test_doors(capsys):
+    locke = Locke(5)
+
+    locke.open_doors()
+
+    captured = capsys.readouterr()
+    assert captured.out == "Opening the doors.\n"
+
+    locke.close_doors()
+
+    captured = capsys.readouterr()
+    assert captured.out == "Closing the doors.\n"
+
+
+def test_move_boats_through(capsys):
+    locke = Locke(5)
+
+    locke.move_boats_through(5)
+
+    captured = capsys.readouterr()
+    assert captured.out == "SMALL LOCKE activated.\n"\
+                           "Stopping the pumps.\n"\
+                           "Opening the doors.\n"\
+                           "Closing the doors.\n"\
+                           "Restarting the pumps.\n"

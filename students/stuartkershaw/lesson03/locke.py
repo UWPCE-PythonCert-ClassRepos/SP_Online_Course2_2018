@@ -49,8 +49,9 @@ class Locke:
         print("{} activated.".format(self.size))
         try:
             self.check_entry_conditions()
-            self.open_doors()
         except ValueError:
-            print("{} accepts {} boats max.".format(self.size, self.limit))
+            raise ValueError("{} accepts {} boats max."
+                             .format(self.size, self.limit))
         else:
+            self.open_doors()
             self.close_doors()
