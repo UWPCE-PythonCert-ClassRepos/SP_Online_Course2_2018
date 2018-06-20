@@ -24,5 +24,12 @@ class Locke:
             raise ValueError("Locke must have a boat limit.")
         self._limit = val
 
-    def move_boats_through(num_boats):
-        pass
+    @property
+    def size(self):
+        return "SMALL LOCKE" if self.limit <= 5 else "LARGE LOCKE"
+
+    def move_boats_through(self, num_boats):
+        try:
+            pass
+        except ValueError:
+            pass
