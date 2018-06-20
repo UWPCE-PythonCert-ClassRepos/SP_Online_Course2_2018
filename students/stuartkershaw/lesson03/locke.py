@@ -36,6 +36,7 @@ class Locke:
     def check_entry_conditions(self):
         if not self.boats <= self.limit:
             raise ValueError
+        return True
 
     def open_doors(self):
         print("Opening the doors.")
