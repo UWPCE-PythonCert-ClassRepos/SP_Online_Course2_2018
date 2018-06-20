@@ -29,17 +29,15 @@ def locke_interface():
 def enter_num_boats():
     while True:
         try:
-            num_boats = int(input('Please enter the number of boats to enter: '))
+            num_boats = int(input('Please enter the number of boats in: '))
             if not num_boats > 0:
                 raise ValueError
         except ValueError:
             print('Please provide a whole number greater than zero.')
         else:
-            # gate_size = 'SMALL' if num_boats <= 5 else 'LARGE'
-            small_locke = Locke(5)
-            large_locke = Locke(10)
-            print('{} boats granted for entry.'.format(num_boats))
-            # print('Opening {} gates.'.format(gate_size))
+            flexible_locke = Locke(5) if num_boats <= 5 else Locke(10)
+            with flexible_locke as locke:
+                locke.move_boats_through(num_boats)
             break
 
 

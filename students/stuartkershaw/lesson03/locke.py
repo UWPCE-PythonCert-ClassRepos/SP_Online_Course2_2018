@@ -5,6 +5,7 @@ class Locke:
 
     def __init__(self, limit):
         self._limit = limit
+        self._boats = None
 
     def __enter__(self):
         print("Stopping the pumps.")
@@ -18,18 +19,37 @@ class Locke:
     def limit(self):
         return self._limit
 
-    @limit.setter
-    def limit(self, val):
+    @property
+    def boats(self):
+        return self._boats
+
+    @boats.setter
+    def boats(self, val):
         if not val:
-            raise ValueError("Locke must have a boat limit.")
-        self._limit = val
+            raise ValueError("Locke must receive number of boats entering.")
+        self._boats = val
 
     @property
     def size(self):
         return "SMALL LOCKE" if self.limit <= 5 else "LARGE LOCKE"
 
+    def check_entry_conditions(self):
+        if not self.boats <= self.limit:
+            raise ValueError
+
+    def open_doors(self):
+        print("Opening the doors.")
+
+    def close_doors(self):
+        print("Closing the doors.")
+
     def move_boats_through(self, num_boats):
+        self.boats = num_boats
+        print("{} activated.".format(self.size))
         try:
-            pass
+            self.check_entry_conditions()
+            self.open_doors()
         except ValueError:
-            pass
+            print("{} accepts {} boats max.".format(self.size, self.limit))
+        else:
+            self.close_doors()
