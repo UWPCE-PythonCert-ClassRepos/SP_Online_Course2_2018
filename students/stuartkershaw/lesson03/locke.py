@@ -8,11 +8,13 @@ class Locke:
         self._boats = None
 
     def __enter__(self):
+        print("{} activated.".format(self.size))
         print("Stopping the pumps.")
         return self
 
     def __exit__(self, e_type, e_val, e_traceback):
         print("Restarting the pumps.")
+        print("{} deactivated.".format(self.size))
         return False
 
     @property
@@ -46,7 +48,6 @@ class Locke:
 
     def move_boats_through(self, num_boats):
         self.boats = num_boats
-        print("{} activated.".format(self.size))
         try:
             self.check_entry_conditions()
         except ValueError:

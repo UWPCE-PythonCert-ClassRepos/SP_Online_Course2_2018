@@ -70,8 +70,5 @@ def test_move_boats_through(capsys):
     locke.move_boats_through(5)
 
     captured = capsys.readouterr()
-    assert captured.out == "SMALL LOCKE activated.\n"\
-                           "Stopping the pumps.\n"\
-                           "Opening the doors.\n"\
-                           "Closing the doors.\n"\
-                           "Restarting the pumps.\n"
+    assert captured.out == "Opening the doors.\n"\
+                           "Closing the doors.\n"
