@@ -7,10 +7,12 @@ class Locke:
         self._limit = limit
 
     def __enter__(self):
-        pass
+        print("Stopping the pumps.")
+        return self
 
     def __exit__(self, e_type, e_val, e_traceback):
-        pass
+        print("Restarting the pumps.")
+        return False
 
     @property
     def limit(self):
@@ -19,5 +21,8 @@ class Locke:
     @limit.setter
     def limit(self, val):
         if not val:
-            raise ValueError("A Locke must have a boat limit.")
+            raise ValueError("Locke must have a boat limit.")
         self._limit = val
+
+    def move_boats_through(num_boats):
+        pass

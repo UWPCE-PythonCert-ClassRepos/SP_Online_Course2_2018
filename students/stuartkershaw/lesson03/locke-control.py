@@ -35,7 +35,9 @@ def enter_num_boats():
         except ValueError:
             print('Please provide a whole number greater than zero.')
         else:
+            gate_size = 'SMALL' if num_boats <= 5 else 'LARGE'
             print('{} boats granted for entry.'.format(num_boats))
+            print('Opening {} gates.'.format(gate_size))
             break
 
 
