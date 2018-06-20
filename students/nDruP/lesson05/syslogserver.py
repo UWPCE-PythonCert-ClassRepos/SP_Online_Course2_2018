@@ -8,7 +8,7 @@
 # Derived from https://gist.github.com/marcelom/4218010
 
 
-HOST, PORT = "0.0.0.0", 514
+HOST, PORT = "127.0.0.1", 514
 
 
 import socketserver

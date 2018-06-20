@@ -19,7 +19,7 @@ console_handler.setFormatter(formatter)
 
 server_format = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 server_formatter = logging.Formatter(server_format)
-server_handler = logging.handlers.SysLogHandler()
+server_handler = logging.handlers.SysLogHandler(address=("127.0.0.1", 514))
 server_handler.setLevel(logging.ERROR)
 server_handler.setFormatter(server_formatter)
 
