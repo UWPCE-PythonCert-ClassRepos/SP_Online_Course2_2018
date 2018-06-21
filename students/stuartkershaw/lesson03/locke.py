@@ -35,16 +35,16 @@ class Locke:
     def size(self):
         return "SMALL LOCKE" if self.limit <= 5 else "LARGE LOCKE"
 
-    def check_entry_conditions(self):
-        if not self.boats <= self.limit:
-            raise ValueError
-        return True
-
     def open_doors(self):
         print("Opening the doors.")
 
     def close_doors(self):
         print("Closing the doors.")
+
+    def check_entry_conditions(self):
+        if not self.boats <= self.limit:
+            raise ValueError
+        return True
 
     def move_boats_through(self, num_boats):
         self.boats = num_boats

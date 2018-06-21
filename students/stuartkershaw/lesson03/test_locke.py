@@ -65,9 +65,9 @@ def test_doors(capsys):
 
 
 def test_move_boats_through(capsys):
-    locke = Locke(5)
+    small_locke = Locke(5)
 
-    locke.move_boats_through(5)
+    small_locke.move_boats_through(5)
 
     captured = capsys.readouterr()
     assert captured.out == "Opening the doors.\n"\
