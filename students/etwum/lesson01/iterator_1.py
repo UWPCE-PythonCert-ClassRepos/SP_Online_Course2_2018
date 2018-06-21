@@ -22,20 +22,23 @@ class IterateMe_1:
         else:
             raise StopIteration
 
-
+# extend class
 class IterateMe_2(IterateMe_1):
 
     def __init__(self, start, stop, step=1):
-        self.current = -1
         self.start = start
         self.stop = stop
         self.step = step
+        self.current = start - step
 
     def __iter__(self):
+        # resets current
+        self.current = self.start - self.step
         return self
 
     def __next__(self):
-        self.current += 1
+        # iterates through the range until the stop is reached
+        self.current += self.step
         if self.current < self.stop:
             return self.current
         else:
@@ -45,14 +48,26 @@ class IterateMe_2(IterateMe_1):
 if __name__ == "__main__":
 
     print("Testing the iterator")
+
+    # prints 2 - 10 by 2; breaks after 10
+    it2 = range(2,20,2)
+    for i in it2:
+        if i > 10:
+            break
+        print(i)
+
+    # prints 2 - 18 by 2
+    for i in it2:
+        print(i)
+
     it = IterateMe_2(2, 20, 2)
 
-    # prints only 0-10
+    # matches range
     for i in it:
         if i > 10:
             break
         print(i)
 
-    # skips breakpoint of 11 and starts print at 12
+    # matches range
     for i in it:
         print(i)
