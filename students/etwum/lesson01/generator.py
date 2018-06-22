@@ -7,5 +7,11 @@ def int_sum(n=0, next_num=0):
         n += 1
 
 
+def doubler(n=1,double_num=1):
+    while True:
+        double_num = n
+        yield double_num
+        n *= 2
+
 
 
