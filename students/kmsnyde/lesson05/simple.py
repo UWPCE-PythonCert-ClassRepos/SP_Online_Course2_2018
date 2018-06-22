@@ -4,26 +4,35 @@ Created on Fri Jun 22 09:19:41 2018
 
 @author: Karl M. Snyder
 """
+import datetime
 import logging
 
-format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
+format_a = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
+format_b = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 
 #logging.basicConfig(format=format, level=logging.WARNING, filename='mylog.log')
 
-formatter = logging.Formatter(format)
+formatter = logging.Formatter(format_a)
+formatter1 = logging.Formatter(format_b)
 
-file_handler = logging.FileHandler('mylog.log')
+file_handler = logging.FileHandler('{}.log'.format(datetime.date.today()))
 file_handler.setLevel(logging.WARNING)
 file_handler.setFormatter(formatter)
 
 console_handler= logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
+console_handler.setLevel(logging.NOTSET)
 console_handler.setFormatter(formatter)
+
+syslog_handler = logging.handlers.SysLogHandler(address=('127.0.0.1', 514))
+syslog_handler.setLevel(logging.ERROR)
+syslog_handler.setFormatter(formatter1)
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
+
+
 
 def my_fun(n):
     for i in range(0, n):
