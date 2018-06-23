@@ -36,3 +36,8 @@ def test_doubler():
         j = next(g)
 
     assert j == 2**15
+
+
+def test_fib():
+    g = gen.fib()
+    assert [next(g) for i in range(9)] == [1, 1, 2, 3, 5, 8, 13, 21, 34]
