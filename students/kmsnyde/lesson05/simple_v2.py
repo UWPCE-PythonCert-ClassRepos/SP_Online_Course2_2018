@@ -6,6 +6,7 @@ Created on Fri Jun 22 09:19:41 2018
 """
 import datetime
 import logging
+import logging.handlers
 
 format_a = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 format_b = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
@@ -23,14 +24,15 @@ console_handler= logging.StreamHandler()
 console_handler.setLevel(logging.NOTSET)
 console_handler.setFormatter(formatter)
 
-syslog_handler = logging.handlers.SysLogHandler(address=('127.0.0.1', 514))
-syslog_handler.setLevel(logging.ERROR)
-syslog_handler.setFormatter(formatter1)
+data_handler = logging.handlers.DatagramHandler('127.0.0.1', 514)
+data_handler.setLevel(logging.ERROR)
+data_handler.setFormatter(formatter1)
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
+logger.addHandler(data_handler)
 
 
 
