@@ -10,8 +10,7 @@ class Locke(object):
     def __init__(self, boat_capacity):
         self.boat_capacity = boat_capacity
 
-    @staticmethod
-    def typical_operation():
+    def typical_operation(*args):
         op_text = """
         Stopping the pumps.
         Opening the doors.
@@ -23,18 +22,19 @@ class Locke(object):
 
     def __enter__(self):
         print('Preparing to allow entry into locke.\n')
-        self.typical_operation()
+        # self.typical_operation()
         print('\nBoats entering locke.')
 
     def __exit__(self, *args):
         print('Preparing locke for exiting.\n')
-        self.typical_operation()
+        # self.typical_operation()
         print('\nBoats exiting locke.')
 
-    def move_boats_through(boats):
+    def move_boats_through(self, boats):
         try:
             assert boats <= self.boat_capacity
             self.__enter__()
+            self.typical_operation()
             self.__exit__()
         except AssertionError:
             print('Number of boats exceeds locke\'s capacity.')
