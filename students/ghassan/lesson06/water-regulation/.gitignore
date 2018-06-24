@@ -1,0 +1,5 @@
+.idea/
+*pychache*
+*.pyc
+.coverage
+htmlcov
