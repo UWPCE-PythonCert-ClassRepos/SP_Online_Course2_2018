@@ -1,0 +1,7 @@
+{
+  "unit-test.py::AdderTests": true,
+  "unit-test.py::CalculatorTests": true,
+  "unit-test.py::MultiplierTests": true,
+  "unit-test.py::SubtracterTests": true,
+  "unit-test.py::TestCase": true
+}
