@@ -8,9 +8,19 @@ import pandas as pd
 music = pd.read_csv("featuresdf.csv")
 
 # Get post songs
-post_songs = [info for info in zip(music.artists, music.name) if info[0] == "Post Malone"]
+def post_malone_songs(songs):
+    for item in songs:
+        yield item
 
-# Print post songs
-print("Post Malone Songs:")
-for item in post_songs:
-    print(item[1])
+
+
+if __name__ == "__main__":
+    post_songs = (info for info in zip(music.artists, music.name) if info[0] == "Post Malone")
+
+    songs = post_malone_songs(post_songs)
+
+    for song in songs:
+        print(song[1])
+
+
+
