@@ -1,0 +1,126 @@
+2018-06-22 10:18:39,271 exercises.py:16   WARNING The value of i is 50.
+2018-06-22 10:18:39,273 exercises.py:20   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 10:20:13,885 exercises.py:16   WARNING The value of i is 50.
+2018-06-22 10:20:13,887 exercises.py:20   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 10:26:28,934 exercises.py:25  WARNING The value of i is 50.
+2018-06-22 10:26:28,935 exercises.py:29  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 10:38:25,864 exercises.py:30  DEBUG 0
+2018-06-22 10:38:25,869 exercises.py:30  DEBUG 1
+2018-06-22 10:38:25,872 exercises.py:30  DEBUG 2
+2018-06-22 10:38:25,876 exercises.py:30  DEBUG 3
+2018-06-22 10:38:25,880 exercises.py:30  DEBUG 4
+2018-06-22 10:38:25,884 exercises.py:30  DEBUG 5
+2018-06-22 10:38:25,888 exercises.py:30  DEBUG 6
+2018-06-22 10:38:25,891 exercises.py:30  DEBUG 7
+2018-06-22 10:38:25,895 exercises.py:30  DEBUG 8
+2018-06-22 10:38:25,899 exercises.py:30  DEBUG 9
+2018-06-22 10:38:25,903 exercises.py:30  DEBUG 10
+2018-06-22 10:38:25,907 exercises.py:30  DEBUG 11
+2018-06-22 10:38:25,911 exercises.py:30  DEBUG 12
+2018-06-22 10:38:25,915 exercises.py:30  DEBUG 13
+2018-06-22 10:38:25,919 exercises.py:30  DEBUG 14
+2018-06-22 10:38:25,923 exercises.py:30  DEBUG 15
+2018-06-22 10:38:25,926 exercises.py:30  DEBUG 16
+2018-06-22 10:38:25,930 exercises.py:30  DEBUG 17
+2018-06-22 10:38:25,934 exercises.py:30  DEBUG 18
+2018-06-22 10:38:25,938 exercises.py:30  DEBUG 19
+2018-06-22 10:38:25,942 exercises.py:30  DEBUG 20
+2018-06-22 10:38:25,945 exercises.py:30  DEBUG 21
+2018-06-22 10:38:25,949 exercises.py:30  DEBUG 22
+2018-06-22 10:38:25,953 exercises.py:30  DEBUG 23
+2018-06-22 10:38:25,957 exercises.py:30  DEBUG 24
+2018-06-22 10:38:25,961 exercises.py:30  DEBUG 25
+2018-06-22 10:38:25,965 exercises.py:30  DEBUG 26
+2018-06-22 10:38:25,968 exercises.py:30  DEBUG 27
+2018-06-22 10:38:25,972 exercises.py:30  DEBUG 28
+2018-06-22 10:38:25,976 exercises.py:30  DEBUG 29
+2018-06-22 10:38:25,979 exercises.py:30  DEBUG 30
+2018-06-22 10:38:25,983 exercises.py:30  DEBUG 31
+2018-06-22 10:38:25,987 exercises.py:30  DEBUG 32
+2018-06-22 10:38:25,991 exercises.py:30  DEBUG 33
+2018-06-22 10:38:25,995 exercises.py:30  DEBUG 34
+2018-06-22 10:38:26,000 exercises.py:30  DEBUG 35
+2018-06-22 10:38:26,004 exercises.py:30  DEBUG 36
+2018-06-22 10:38:26,007 exercises.py:30  DEBUG 37
+2018-06-22 10:38:26,011 exercises.py:30  DEBUG 38
+2018-06-22 10:38:26,015 exercises.py:30  DEBUG 39
+2018-06-22 10:38:26,019 exercises.py:30  DEBUG 40
+2018-06-22 10:38:26,022 exercises.py:30  DEBUG 41
+2018-06-22 10:38:26,026 exercises.py:30  DEBUG 42
+2018-06-22 10:38:26,030 exercises.py:30  DEBUG 43
+2018-06-22 10:38:26,034 exercises.py:30  DEBUG 44
+2018-06-22 10:38:26,037 exercises.py:30  DEBUG 45
+2018-06-22 10:38:26,041 exercises.py:30  DEBUG 46
+2018-06-22 10:38:26,045 exercises.py:30  DEBUG 47
+2018-06-22 10:38:26,049 exercises.py:30  DEBUG 48
+2018-06-22 10:38:26,053 exercises.py:30  DEBUG 49
+2018-06-22 10:38:26,057 exercises.py:30  DEBUG 50
+2018-06-22 10:38:26,061 exercises.py:32  WARNING The value of i is 50.
+2018-06-22 10:38:26,061 exercises.py:32  WARNING The value of i is 50.
+2018-06-22 10:38:26,067 exercises.py:36  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 10:38:26,067 exercises.py:36  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 10:38:26,073 exercises.py:30  DEBUG 51
+2018-06-22 10:38:26,077 exercises.py:30  DEBUG 52
+2018-06-22 10:38:26,081 exercises.py:30  DEBUG 53
+2018-06-22 10:38:26,086 exercises.py:30  DEBUG 54
+2018-06-22 10:38:26,090 exercises.py:30  DEBUG 55
+2018-06-22 10:38:26,093 exercises.py:30  DEBUG 56
+2018-06-22 10:38:26,097 exercises.py:30  DEBUG 57
+2018-06-22 10:38:26,101 exercises.py:30  DEBUG 58
+2018-06-22 10:38:26,104 exercises.py:30  DEBUG 59
+2018-06-22 10:38:26,109 exercises.py:30  DEBUG 60
+2018-06-22 10:38:26,112 exercises.py:30  DEBUG 61
+2018-06-22 10:38:26,116 exercises.py:30  DEBUG 62
+2018-06-22 10:38:26,119 exercises.py:30  DEBUG 63
+2018-06-22 10:38:26,123 exercises.py:30  DEBUG 64
+2018-06-22 10:38:26,127 exercises.py:30  DEBUG 65
+2018-06-22 10:38:26,131 exercises.py:30  DEBUG 66
+2018-06-22 10:38:26,135 exercises.py:30  DEBUG 67
+2018-06-22 10:38:26,139 exercises.py:30  DEBUG 68
+2018-06-22 10:38:26,143 exercises.py:30  DEBUG 69
+2018-06-22 10:38:26,147 exercises.py:30  DEBUG 70
+2018-06-22 10:38:26,150 exercises.py:30  DEBUG 71
+2018-06-22 10:38:26,154 exercises.py:30  DEBUG 72
+2018-06-22 10:38:26,158 exercises.py:30  DEBUG 73
+2018-06-22 10:38:26,163 exercises.py:30  DEBUG 74
+2018-06-22 10:38:26,166 exercises.py:30  DEBUG 75
+2018-06-22 10:38:26,169 exercises.py:30  DEBUG 76
+2018-06-22 10:38:26,173 exercises.py:30  DEBUG 77
+2018-06-22 10:38:26,177 exercises.py:30  DEBUG 78
+2018-06-22 10:38:26,181 exercises.py:30  DEBUG 79
+2018-06-22 10:38:26,184 exercises.py:30  DEBUG 80
+2018-06-22 10:38:26,188 exercises.py:30  DEBUG 81
+2018-06-22 10:38:26,192 exercises.py:30  DEBUG 82
+2018-06-22 10:38:26,196 exercises.py:30  DEBUG 83
+2018-06-22 10:38:26,201 exercises.py:30  DEBUG 84
+2018-06-22 10:38:26,205 exercises.py:30  DEBUG 85
+2018-06-22 10:38:26,209 exercises.py:30  DEBUG 86
+2018-06-22 10:38:26,213 exercises.py:30  DEBUG 87
+2018-06-22 10:38:26,216 exercises.py:30  DEBUG 88
+2018-06-22 10:38:26,220 exercises.py:30  DEBUG 89
+2018-06-22 10:38:26,223 exercises.py:30  DEBUG 90
+2018-06-22 10:38:26,227 exercises.py:30  DEBUG 91
+2018-06-22 10:38:26,231 exercises.py:30  DEBUG 92
+2018-06-22 10:38:26,235 exercises.py:30  DEBUG 93
+2018-06-22 10:38:26,239 exercises.py:30  DEBUG 94
+2018-06-22 10:38:26,242 exercises.py:30  DEBUG 95
+2018-06-22 10:38:26,246 exercises.py:30  DEBUG 96
+2018-06-22 10:38:26,250 exercises.py:30  DEBUG 97
+2018-06-22 10:38:26,254 exercises.py:30  DEBUG 98
+2018-06-22 10:38:26,259 exercises.py:30  DEBUG 99
+2018-06-22 10:41:18,718 exercises.py:32  WARNING The value of i is 50.
+2018-06-22 10:41:18,721 exercises.py:36  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 12:51:40,046 simple.py:32  WARNING The value of i is 50.
+2018-06-22 12:51:40,046 simple.py:32  WARNING The value of i is 50.
+2018-06-22 12:51:40,054 simple.py:36  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 12:51:40,054 simple.py:36  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 12:52:05,400 simple.py:32  WARNING The value of i is 50.
+2018-06-22 12:52:05,403 simple.py:36  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 12:56:30,998 simple.py:33  WARNING The value of i is 50.
+2018-06-22 12:56:31,004 simple.py:37  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 13:07:45,769 simple.py:41  WARNING The value of i is 50.
+2018-06-22 13:07:45,781 simple.py:45  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 13:13:48,858 simple.py:42  WARNING The value of i is 50.
+2018-06-22 13:13:48,871 simple.py:46  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2018-06-22 13:14:31,921 simple.py:43  WARNING The value of i is 50.
+2018-06-22 13:14:31,936 simple.py:47  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.

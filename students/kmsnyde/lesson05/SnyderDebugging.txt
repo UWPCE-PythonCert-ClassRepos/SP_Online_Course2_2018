@@ -1,0 +1,102 @@
+In recursion functions, a breakpoint needs to be identified to stop the recurring function at some designated number, if not, the recursion logic if faulty.  In this case (argument = 15), the argument to the function, where the argument is not a power of 2, will keep getting infinitely smaller but never acheive a "True" value (the argument will never equal 2). In any case where the argument is not a power of 2, the function is only halted when pythons "maximum recursion depth" is achieved, or the user stops the program using CTRL+C (or the like)
+
+
+
+C:\Users\HP-Home\Anaconda3>python -m pdb code/recursionex5.py 15
+> c:\users\hp-home\anaconda3\code\recursionex5.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3     def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6
+  7         return my_fun(n/2)
+  8
+  9     if __name__ == '__main__':
+ 10         n = int(sys.argv[1])
+ 11         print(my_fun(n))
+ 12
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(9)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(10)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(11)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\hp-home\anaconda3\code\recursionex5.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\hp-home\anaconda3\code\recursionex5.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\hp-home\anaconda3\code\recursionex5.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\hp-home\anaconda3\code\recursionex5.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\hp-home\anaconda3\code\recursionex5.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\hp-home\anaconda3\code\recursionex5.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\hp-home\anaconda3\code\recursionex5.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.46875
+(Pdb)
