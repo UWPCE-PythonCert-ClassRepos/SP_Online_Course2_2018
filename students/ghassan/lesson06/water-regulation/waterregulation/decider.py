@@ -51,7 +51,23 @@ class Decider(object):
         :return: The new action for the pump: one of actions['PUMP_IN'], actions['PUMP_OUT'], actions['PUMP_OFF']
         """
 
-        # TODO: Implement the properties of this method described above.
+        new_action = current_action
 
-        return actions['PUMP_IN']
-
+        if current_action == actions['PUMP_OFF']:
+            if current_height < self.target_height - self.target_height * self.margin:
+                new_action = actions['PUMP_IN']
+            elif current_height > self.target_height + self.target_height * self.margin:
+                new_action = actions['PUMP_OUT']
+            else:
+                new_action = actions['PUMP_OFF']
+        if current_action == actions['PUMP_IN']:
+            if current_height > self.target_height:
+                new_action = actions['PUMP_OFF']
+            else:
+                new_action = actions['PUMP_IN']
+        if current_action == actions['PUMP_OUT']:
+            if current_height < self.target_height:
+                new_action = actions['PUMP_OFF']
+            else:
+                new_action = actions['PUMP_OUT']
+        return new_action
