@@ -59,6 +59,8 @@ class ControllerTests(TestCase):
         d.decide = MagicMock(return_value=p.PUMP_IN)
         p.set_state = MagicMock(return_value=True)
         c.tick()
+        s.measure.assert_called_with()
+        p.get_state.assert_called_with()
         d.decide.assert_called_with(95, p.PUMP_IN, actions)
 
 
