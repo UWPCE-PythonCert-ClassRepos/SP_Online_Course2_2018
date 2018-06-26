@@ -25,8 +25,12 @@ def fib(n1=0,n2=1):
 
 def prime(n=2):
     while True:
-        prime_num = n
-        yield prime_num
-
-
+        boolPrim = True
+        for x in range(2,n):
+            if n % x == 0:
+                boolPrim = False
+                break
+        if boolPrim:
+            yield n
+        n += 1
 
