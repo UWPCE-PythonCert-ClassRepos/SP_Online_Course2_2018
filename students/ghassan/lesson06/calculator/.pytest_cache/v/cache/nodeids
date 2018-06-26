@@ -1,8 +1,0 @@
-[
-  "unit-test.py::AdderTests::test_adding",
-  "unit-test.py::SubtracterTests::test_subtracting",
-  "unit-test.py::MultiplierTests::test_multiplying",
-  "unit-test.py::CalculatorTests::test_adder_call",
-  "unit-test.py::CalculatorTests::test_insufficient_operands",
-  "unit-test.py::CalculatorTests::test_subtracter_call"
-]
