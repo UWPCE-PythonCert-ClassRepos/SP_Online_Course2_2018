@@ -62,8 +62,3 @@ class ControllerTests(TestCase):
         s.measure.assert_called_with()
         p.get_state.assert_called_with()
         d.decide.assert_called_with(95, p.PUMP_IN, actions)
-
-
-
-
-
