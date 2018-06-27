@@ -17,15 +17,16 @@ class ModuleTests(unittest.TestCase):
     Module tests for the water-regulation module
     """
 
-    def app_test(self):
+    def test_app(self):
         """
         Testing the app
         :return:
         """
-        p = Pump('127.0.0.1', 8080)
-        s = Sensor('127.0.0.1', 8083)
+        p = Pump('127.0.0.1', '8080')
+        s = Sensor('127.0.0.1', '8083')
         d = Decider(100, .10)
         c = Controller(s, p, d)
+        c.pump.set_state = MagicMock(return_value=True)
         for action in c.actions.values():
             for water_level in range(50, 150, 5):
                 # measuring the water level
