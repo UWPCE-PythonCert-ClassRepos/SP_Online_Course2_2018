@@ -1,0 +1,113 @@
+In very general terms, use a couple of sentences to address the problem with our code. For example, give your best guess or insight on the following questions:
+    What is wrong with our logic?
+        There is no stop condition for values not a power of 2
+	Why doesn't the function stop calling itself?
+	    There is no stop condition for values not a power of 2.  Once input becomes less than 2, the function runs in an  infinite loop
+    What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+	    Gets closer and closer to 0
+
+A copy-and-paste of your terminal debugging activity.
+	
+[smartin@fcdsqappprdg01 lesson05_debugging_logging]$ py -m pdb recursion.py 4
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(1)<module>()
+-> import sys
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(12)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(13)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+--Return--
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(8)my_fun()->True
+-> return my_fun(n/2)
+(Pdb) n
+True
+--Return--
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(13)<module>()->None
+-> print(my_fun(n))
+(Pdb) pp n
+4
+(Pdb) n
+--Return--
+> <string>(1)<module>()->None
+(Pdb) n
+The program finished and will be restarted
+
+[smartin@fcdsqappprdg01 lesson05_debugging_logging]$ py -m pdb recursion.py 3
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(1)<module>()
+-> import sys
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(12)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(13)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+1.5
+(Pdb) c
+Traceback (most recent call last):
+  File "/data/opt/python3.6/lib/python3.6/pdb.py", line 1667, in main
+    pdb._runscript(mainpyfile)
+  File "/data/opt/python3.6/lib/python3.6/pdb.py", line 1548, in _runscript
+    self.run(statement)
+  File "/data/opt/python3.6/lib/python3.6/bdb.py", line 431, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "/data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py", line 13, in <module>
+    print(my_fun(n))
+  File "/data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "/data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py", line 3, in my_fun
+    def my_fun(n):
+  File "/data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "/data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "/data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py", line 8, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 984 more times]
+  File "/data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py", line 5, in my_fun
+    if n == 2:
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> /data/home/smartin/python220/SP_Online_Course2_2018/students/rmart300/lesson05_debugging_logging/recursion.py(5)my_fun()
+-> if n == 2:
+(Pdb) exit
