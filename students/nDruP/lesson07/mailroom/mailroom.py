@@ -102,10 +102,10 @@ def save_donation_db(d_name, d_gift):
     donor_db = SqliteDatabase(db)
     save_txt = " "
     while save_txt not in ['y', 'n', '']:
-        print("Would you like to save this gift to the db?")
+        print("Would you like to save this gift to the db?[y/n]")
         save_txt = user_input()
     if save_txt == 'y':
-        db.create_donation(new_donor, new_gift)
+        db.create_donation(d_name, d_gift)
     return ""
 
 
@@ -294,8 +294,9 @@ def operate_db(*args):
     print(divider)
     
     db_op = 0
-    while db_op not in ['1', '2', '']:
+    while db_op not in ['1', '2', '3', '']:
         print('Would you like to:\n1. Update an Entry\n2. Delete an Entry')
+        print('3. Delete all records from 1 donor')
         db_op = user_input()
         
     if db_op:
@@ -315,13 +316,25 @@ def operate_db(*args):
                     up_val = input_donor_float()
                 if up_val:
                     db.update_donation_by_id(up_op, up_val)
+                    
         elif db_op == '2':
-            del_op = -1
-            while del_op and del_op not in db.row_id_list:
+            del_row = -1
+            while del_row and del_row not in db.row_id_list:
                 print('Delete which entry')
                 del_op = conv_str(user_input())
             if del_op:
                 db.delete_donation_by_id(del_op)
+
+        elif db_op == '3':
+            del_name = True
+            while del_name and del_name not in db.name_list:
+                print('Delete which donor?')
+                del_name = user_input()
+            if del_name:
+                db.delete_all_from_name(del_name)
+        print(divider)
+        db.select_print_all_rows()
+        print(divider)
     return
 
 

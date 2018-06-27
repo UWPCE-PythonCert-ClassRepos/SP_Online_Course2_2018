@@ -27,19 +27,26 @@ class Donation_Operations():
             row_ids.append(row.id)
         return row_ids
 
+    @property
+    def name_list(self):
+        names = []
+        for row in Donation.select():
+            names.append(row.donor)
+        return names
+
     def create_donation(self, new_donor, new_gift):
-        with self.database.atomic() as transaction:
+        with self.database.atomic():
             new_donation = Donation.create(donor=new_donor, gift=new_gift)
             new_donation.save()
 
     def update_donation_by_id(self, row_id, update_value):
-        with self.database.atomic() as transaction:
+        with self.database.atomic():
             for row in Donation.select().where(Donation.id == row_id):
                 row.gift = update_value
                 row.save()
 
     def update_donation_by_name_amt(self, donor, update_gift, update_value):
-        with self.database.atomic() as transaction:
+        with self.database.atomic():
             for row in Donation.select().where(
                     Donation.donor == donor &
                     Donation.gift == update_gift):
@@ -47,16 +54,22 @@ class Donation_Operations():
                 row.save()
 
     def delete_donation_by_id(self, row_id):
-        with self.database.atomic() as transaction:
+        with self.database.atomic():
             for row in Donation.select().where(Donation.id == row_id):
                 row.delete_instance()
 
     def delete_donation_by_name_amt(self, name, gift_amt):
-        with self.database.atomic() as transaction:
+        with self.database.atomic():
             for row in Donation.select().where(
                     Donation.donor == name &
                     Donation.gift == gift_amt):
                 row.delete_instance()
+                
+    def delete_all_from_name(self, name):
+        with self.database.atomic():
+            for row in Donation.select().where(Donation.donor == name):
+                row.delete_instance()
+
 
     @staticmethod
     def select_print_donor_info(self, order_by_field=0):
@@ -80,4 +93,4 @@ class Donation_Operations():
         for row in Donation.select():
             print(f'ID: {row.id:<}', end='\t')
             print(f'Donor: {row.donor:20}', end='\t')
-            print(f'Gift Amt: ${row.gift}')
+            print(f'Gift Amt: ${row.gift:.2f}')
