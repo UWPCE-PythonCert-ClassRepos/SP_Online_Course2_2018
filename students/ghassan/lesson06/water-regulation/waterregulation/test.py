@@ -50,6 +50,10 @@ class ControllerTests(TestCase):
     """
 
     def test_tick(self):
+        """
+        Testing the tick method in controller
+        :return:
+        """
         p = Pump('127.0.0.1', 8080)
         s = Sensor('127.0.0.1', 8083)
         d = Decider(100, .10)
