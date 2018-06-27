@@ -13,12 +13,11 @@ import os
 import datetime
 from donor import Donor
 from donor_dict import Donor_Dict
-from donor_peewee_model import *
+from donor_db import *
 
 
 divider = "\n" + "*" * 50 + "\n"
-db = 'donor.db'
-d = Donor_Dict.from_db(db)
+db = Donation_Operations()
 
 
 def main_menu(user_prompt=None):
@@ -29,7 +28,8 @@ def main_menu(user_prompt=None):
                      "2": create_donor_report,
                      "3": write_letters_to_all,
                      "4": simulate,
-                     "5": mr_exit}
+                     "5": operate_db,
+                     "6": mr_exit}
     options = list(valid_prompts.keys())
     print(divider + "We're a Pyramid Scheme & So Are You! E-Mailroom" +
           divider)
@@ -40,7 +40,8 @@ def main_menu(user_prompt=None):
         print("2. Create Donor Report")
         print("3. Send letters to everyone")
         print("4. Run Projections")
-        print("5. Quit")
+        print("5. Perform Donor Database Operations")
+        print("6. Quit")
         user_prompt = input(">")
         print(divider)
     return valid_prompts.get(user_prompt)
@@ -104,16 +105,7 @@ def save_donation_db(d_name, d_gift):
         print("Would you like to save this gift to the db?")
         save_txt = user_input()
     if save_txt == 'y':
-        try:
-            donor_db.connect()
-            donor_db.execute_sql('PRAGMA foreign_keys = ON;')
-            with donor_db.transaction():
-                new_donation = Donation.create(donor = d_name, gift = d_gift)
-                new_donation.save()
-        except Exception as e:
-            print(e)
-        finally:
-            donor_db.close()
+        db.create_donation(new_donor, new_gift)
     return ""
 
 
@@ -155,7 +147,7 @@ def input_donor_name(donor_name="list", *arg):
     return donor_name
 
 
-def input_challenge_name(d_dict=d):
+def input_challenge_name(d_dict):
     """
     Prompt user for existing names in dict or 'all'.
     """
@@ -200,7 +192,7 @@ def input_donor_float(d_amt=0):
     return d_amt
 
 
-def create_thank_u():
+def create_thank_u(d_dict):
     """
     Compose and print a thank you letter to the donor for their donation.
     Return to main
@@ -214,8 +206,8 @@ def create_thank_u():
         print("\nEnter a Donation Amount:")
         gift_amt = input_donor_float()
         if gift_amt != "":
-            d.add_donor(d_name, gift_amt)
-            thanks = d[d_name.lower()].thank_u_letter_str(1)
+            d_dict.add_donor(d_name, gift_amt)
+            thanks = d_dict[d_name.lower()].thank_u_letter_str(1)
             print(thanks)
             print(save_donation_db(d_name, gift_amt))
             print(save_to_dir(d_name, thanks))
@@ -240,7 +232,7 @@ def sort_report_by():
     return int(report_sort)
 
 
-def create_donor_report(d_dict=d, rep_name="donor_report"):
+def create_donor_report(d_dict, rep_name="donor_report"):
     """
     Print a list of donors sorted by method chosen in sort_report_by.
     Donor Name, Num Gifts, Average Gift, Total Given
@@ -253,7 +245,7 @@ def create_donor_report(d_dict=d, rep_name="donor_report"):
     return
 
 
-def write_letters_to_all():
+def write_letters_to_all(d_dict):
     """
     Write a full set of letters to each donor to individual files on disk.
     Go through all donors in donor_dict, generate a thank you letter,
@@ -261,15 +253,15 @@ def write_letters_to_all():
     """
     write_dir = input_dir()
     if write_dir:
-        for donor in d.keys:
-            print(write_txt_to_dir(d[donor].name,
-                                   d[donor].thank_u_letter_str(),
+        for donor in d_dict.keys:
+            print(write_txt_to_dir(d_dict[donor].name,
+                                   d_dict[donor].thank_u_letter_str(),
                                    write_dir))
         print("Finished writing the letters")
     return
 
 
-def simulate(d_dict=d):
+def simulate(d_dict):
     """
     Display Donor Report altered by user's specifications.
     """
@@ -296,7 +288,44 @@ def simulate(d_dict=d):
     return
 
 
-def mr_exit():
+def operate_db(*args):
+    print(divider)
+    db.select_print_all_rows()
+    print(divider)
+    
+    db_op = 0
+    while db_op not in ['1', '2', '']:
+        print('Would you like to:\n1. Update an Entry\n2. Delete an Entry')
+        db_op = user_input()
+        
+    if db_op:
+        print(divider)
+        db.select_print_all_rows()
+        print(divider)
+        
+        if db_op == '1':
+            up_op = -1
+            while up_op and up_op not in db.row_id_list:
+                print('Update which entry')
+                up_op = conv_str(user_input())
+            if up_op:
+                up_val = None
+                while not up_val:
+                    print('Update to what value')
+                    up_val = input_donor_float()
+                if up_val:
+                    db.update_donation_by_id(up_op, up_val)
+        elif db_op == '2':
+            del_op = -1
+            while del_op and del_op not in db.row_id_list:
+                print('Delete which entry')
+                del_op = conv_str(user_input())
+            if del_op:
+                db.delete_donation_by_id(del_op)
+    return
+
+
+def mr_exit(d):
     """
     Prompt user to save donor dict before exiting program.
     """
@@ -312,6 +341,7 @@ def mr_exit():
 
 if __name__ == '__main__':
     while True:
-        main_menu()()
+        d = Donor_Dict.from_db("donor.db")
+        main_menu()(d)
         input("Press Enter to continue...........")
 
