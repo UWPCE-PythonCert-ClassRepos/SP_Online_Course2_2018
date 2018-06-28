@@ -1,0 +1,2 @@
+[MASTER]
+disable=too-few-public-methods,line-too-long,import-error,no-name-in-module,relative-import,invalid-name,no-self-use,no-member
