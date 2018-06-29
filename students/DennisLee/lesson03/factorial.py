@@ -14,14 +14,5 @@ if __name__ == '__main__':
     def output(number):
         print('The factorial of {} is {}.'.format(number, factorial(number)))
     
-    output(5)
-    output(7)
-    output(10)
-    output(3)
-    output(6)
-    output(2)
-    output(0)
-    output(4)
-    output(1)
-    output(9)
-    output(8)
+    for x in range(1, 11):
+        output(x)
