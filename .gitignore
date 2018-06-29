@@ -3,6 +3,9 @@
 
 # PyCharm files
 .idea/
+uw-venv
+*.zip
+*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -109,3 +112,4 @@ ENV/
 # VSCode project files
 .vscode/
 *.txt
+students/etwum/lesson01/featuresdf.csv
