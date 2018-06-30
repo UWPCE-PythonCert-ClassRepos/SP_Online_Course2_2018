@@ -4,8 +4,10 @@ Created on Sun May 20 07:03:34 2018
 
 @author: Karl M. Snyder
 """
-
-import json_save.json_save_dec as js
+import json
+import json_save_meta as js
+import json_save_dec as jsd
+from saveables import List as ls
 
 
 class Main:
@@ -13,7 +15,8 @@ class Main:
         self.menu = {1: 'Send a Thank You',
                      2: 'Create a Report',
                      3: 'Send letters to everyone',
-                     4: 'Quit'}
+                     4: 'Read json data from file',
+                     5: 'Quit'}
     
     def main_menu(self):
         print('\n', 'Please select a number from the following choices:\n')
@@ -24,7 +27,7 @@ class Main:
             input1 = input("Selection: ")
             #print(type(input1), input1)
             try:
-                if int(input1) in range(1, 4):
+                if int(input1) in range(1, 5):
                     if int(input1) == 1:
                         print('\nType a user\'s name or "list" to show names.')
                         input2 = input('-> ')
@@ -39,7 +42,10 @@ class Main:
                         our_donors.create_report()
                     if int(input1) == 3:
                         our_donors.send_letters_all()
-                elif int(input1) == 4:
+                    if int(input1) == 4:
+                        print("selected 4")
+                        print(our_donors.js_data)
+                elif int(input1) == 5:
                     print("Exiting program...")
                     break
             except ValueError:
@@ -87,7 +93,7 @@ class Donor:
     def donation(self):
         return '{} made a donation of {:,.2f}'.format(self.name,
                 self.donations)
-        
+
     @staticmethod
     def sort_key(self):
         return Donor.donor_dict[self.name]['total']
@@ -102,21 +108,19 @@ class Donor:
                      replace(' ', '_')), 'w') as f:
             f.write(letter)
 
-@js.json_save
+
 class Donors:
     
     donors_list = [(name, Donor.donor_dict[name]['total'], Donor.donor_dict[name]['num_donations'], Donor.donor_dict[name]['avg']) for name in Donor.donor_dict]
     
-    def make_js(self):
-        json_style = js._to_json(self)
-        return json_style
-            
-    def save_js(self):
-        file = self.make_js()
-        with open('donors.json', 'w') as f:
-            f.write(file)
-            
-    
+    json_list = ls.to_json_compat(donors_list)
+    with open('json_data.json', 'w') as f:
+        json.dump(json_list, f)
+        
+    with open('json_data.json', 'r') as f:
+        js_data = json.load(f)
+
+
     donors_list_sort= sorted(donors_list,key=lambda i: i[1], 
                                 reverse=True)
     
@@ -144,6 +148,7 @@ if __name__ == '__main__':
     ex = Main()
     ex.main_menu()
     ex.selection()
-our_donors = Donors()
+    our_donors = Donors()
+    
         
         
