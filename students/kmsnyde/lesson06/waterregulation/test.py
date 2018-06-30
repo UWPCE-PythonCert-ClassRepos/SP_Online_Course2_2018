@@ -11,6 +11,8 @@ from sensor import Sensor
 from controller import Controller
 from decider import Decider
 
+actions = {'PUMP_IN': 1, 'PUMP_OUT': -1, 'PUMP_OFF': 0}
+
 
 class DeciderTests(unittest.TestCase):
     """
@@ -29,11 +31,6 @@ class DeciderTests(unittest.TestCase):
         within = 97
         low = 94
 
-        actions = {
-            'PUMP_IN': 1,
-            'PUMP_OUT': -1,
-            'PUMP_OFF': 0}
-
         self.assertEqual(1, case1.decide(low, actions['PUMP_OFF'], actions))
         self.assertEqual(-1, case1.decide(high, actions['PUMP_OFF'], actions))
         self.assertEqual(0, case1.decide(within, actions['PUMP_OFF'], actions))
@@ -48,25 +45,28 @@ class ControllerTests(unittest.TestCase):
     Unit tests for the Controller class
     """
 
-    sensor = Sensor('127.0.0.1', '8000')
-    pump = Pump('127.0.0.1', '8000')
-    dec = Decider(100, .05)
-    con = Controller(sensor, pump, dec)
-
     def test_controller_tick(self):
         """test the tick function in the controller"""
 
-        self.con.tick()
+        sensor = Sensor('127.0.0.1', 8000)
+        pump = Pump('127.0.0.1', 8000)
+        dec = Decider(100, .05)
+        con = Controller(sensor, pump, dec)
 
         # liquid height
-        self.sensor.measure = MagicMock(return_value=100)
-        self.sensor.measure.assert_called_with()
+        sensor.measure = MagicMock(return_value=94)
 
         # state of pump
-        self.pump.get_state = MagicMock(return_value=self.pump.PUMP_IN)
-        self.pump.get_state.assert_called_with()
+        pump.get_state = MagicMock(return_value=pump.PUMP_IN)
 
         # decider next state for pump
-        self.dec.decide = MagicMock(return_value=self.pump.PUMP_IN)
-        self.dec.decide.assert_called_with(94, self.pump.PUMP_OFF,
-                                           self.controller.actions)
+        dec.decide = MagicMock(return_value=pump.PUMP_IN)
+
+        # this line was added to fix my error
+        pump.set_state = MagicMock(return_value=True)
+
+        con.tick()
+
+        sensor.measure.assert_called_with()
+        pump.get_state.assert_called_with()
+        dec.decide.assert_called_with(94, pump.PUMP_IN, actions)

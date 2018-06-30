@@ -18,7 +18,6 @@ class Pump(object):
     def __init__(self, address, port):
         """
         Create a connection to a pump controller.
-
         :param address: the address of the pump controller
         :param port: the port number of the pump controller
         """
@@ -29,7 +28,6 @@ class Pump(object):
     def set_state(self, state):
         """
         Set the state of the remote pump.
-
         :param state: One of PUMP_IN, PUMP_OFF, PUMP_OUT
         :return: True if the remote pump controller acknowledges the request,
         otherwise False
@@ -47,7 +45,6 @@ class Pump(object):
     def get_state(self):
         """
         Get the state of the remote pump.
-
         :return: One of PUMP_IN, PUMP_OFF, PUMP_OUT
         """
         response = urllib.request.urlopen(self.address + ":" + self.port)

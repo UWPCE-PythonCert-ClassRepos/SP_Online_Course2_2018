@@ -31,4 +31,7 @@ class ModuleTests(unittest.TestCase):
         self.con.pump.get_state = MagicMock(return_value="PUMP_IN")
         self.con.sensor.measure = MagicMock(return_value=100)
         self.con.tick()
-        self.con.pump.get_state = MagicMock(return_value=self.dec.decide(self.con.sensor.measure(),            self.con.pump.get_state(), self.con.actions))
+        self.con.pump.get_state\
+            = MagicMock(return_value=self.dec.decide(self.con.sensor.measure(),
+                                                     self.con.pump.get_state(),
+                                                     self.con.actions))
