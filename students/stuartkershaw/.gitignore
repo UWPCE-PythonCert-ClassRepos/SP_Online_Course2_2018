@@ -1,12 +1,7 @@
-# Mac files
-.DS_Store
 
-# PyCharm files
-.idea/
-uw-venv
-*.zip
-*.csv
+# Created by https://www.gitignore.io/api/vim,python
 
+### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -17,7 +12,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -50,6 +44,7 @@ htmlcov/
 .coverage
 .coverage.*
 .cache
+.pytest_cache/
 nosetests.xml
 coverage.xml
 *.cover
@@ -58,10 +53,6 @@ coverage.xml
 # Translations
 *.mo
 *.pot
-
-# Django stuff:
-*.log
-local_settings.py
 
 # Flask stuff:
 instance/
@@ -83,18 +74,19 @@ target/
 .python-version
 
 # celery beat schedule file
-celerybeat-schedule
+celerybeat-schedule.*
 
 # SageMath parsed files
 *.sage.py
 
-# dotenv
+# Environments
 .env
-
-# virtualenv
 .venv
+env/
 venv/
 ENV/
+env.bak/
+venv.bak/
 
 # Spyder project settings
 .spyderproject
@@ -109,7 +101,17 @@ ENV/
 # mypy
 .mypy_cache/
 
-# VSCode project files
-.vscode/
-*.txt
-students/etwum/lesson01/featuresdf.csv
+### Vim ###
+# swap
+.sw[a-p]
+.*.sw[a-p]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
+
+
+# End of https://www.gitignore.io/api/vim,python
