@@ -43,7 +43,7 @@ def fibonacci():
 
 def primes():
 
-    y = 1
+    y = 2
     while True:
         if not [x for x in range(2, y) if y % x == 0]:
             yield y
