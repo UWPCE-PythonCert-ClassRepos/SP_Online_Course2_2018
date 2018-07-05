@@ -14,7 +14,7 @@ def musicInfo(item):
 music_table = zip(music.name, music.artists, music.danceability, music.loudness)
 
 music_specs = sorted([(a, b, c, d) for a, b, c, d in music_table if c > 0.8 and d < -0.5]),
-                     key = musicInfo, reverse = True)[0:5]
+                     key=musicInfo, reverse=True)[0:5]
 
 print('Title                                             |Artist              |Danceability   |Loudness    ')
 print('____________________________________________________________________________________________________________')
