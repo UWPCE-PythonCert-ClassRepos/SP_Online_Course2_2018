@@ -1,0 +1,46 @@
+{
+    "__obj_type": "DataBase",
+    "donors": [
+        {
+            "__obj_type": "Donor",
+            "firstname": "Jeff",
+            "lastname": "Bezos",
+            "fullname": "Jeff Bezos",
+            "donations": [
+                3.65,
+                54.5
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "firstname": "Mark",
+            "lastname": "Zuckerberg",
+            "fullname": "Mark Zuckerberg",
+            "donations": [
+                36.54,
+                1.25,
+                54.87
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "firstname": "Paul",
+            "lastname": "Allen",
+            "fullname": "Paul Allen",
+            "donations": [
+                17.38
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "firstname": "William",
+            "lastname": "Gates",
+            "fullname": "William Gates",
+            "donations": [
+                25.55,
+                33.33,
+                78.14
+            ]
+        }
+    ]
+}
