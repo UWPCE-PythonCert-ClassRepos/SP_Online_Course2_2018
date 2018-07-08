@@ -4,7 +4,7 @@ import unittest, mailroom, mailroom_ui
 class MailroomTestCase(unittest.TestCase):
 
     def setUp(self):
-        donor_history = {
+        self.donor_history = {
                 'Red Herring': [65820.5, 31126.37, 15000, 2500],
                 'Papa Smurf': [210.64, 1000, 57.86, 2804.83, 351.22, 48],
                 'Pat Panda': [55324.4, 35570.53, 14920.50],
@@ -13,7 +13,7 @@ class MailroomTestCase(unittest.TestCase):
                 'Daphne Dastardly': [82]
         }
         self.coll = mailroom.DonorCollection()
-        for name, amts in donor_history.items():
+        for name, amts in self.donor_history.items():
                 self.coll.add(name, amts)        
 
     def tearDown(self):
@@ -56,6 +56,15 @@ class MailroomTestCase(unittest.TestCase):
         projected = dict(self.coll.projector(3, 100, 1000))
         self.assertEqual(projected['Mama Murphy'], [1800, 2355.60])
         self.assertEqual(projected['Pat Panda'], [])
+
+    def test_to_python_dict_100(self):
+        self.assertEqual(self.donor_history, self.coll.to_python_dict)
+
+    def test_to_python_dict_101(self):
+        self.coll.add('Harry Lipp', 25.52)
+        self.assertEqual(self.coll.to_python_dict['Harry Lipp'], [25.52])
+        self.assertEqual(self.donor_history,
+                dict(list(self.coll.to_python_dict.items())[:-1]))
 
     def test_do_all(self):
         self.input_strings = [

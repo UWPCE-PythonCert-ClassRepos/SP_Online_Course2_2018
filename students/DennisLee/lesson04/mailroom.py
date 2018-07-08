@@ -203,6 +203,10 @@ class DonorCollection():
                 print(('{:<25s} | {:>15d}' + 5*' | ${:>18,.2f}').format(*stats))
         print('\n')
 
+    @property
+    def to_python_dict(self):
+        return dict(self.projector(1, 0, 1e12))
+
     def save_letters(self, folder=""):
         """
         Save the donor thank-you letters to disk.
