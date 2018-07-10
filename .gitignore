@@ -108,5 +108,4 @@ ENV/
 
 # VSCode project files
 .vscode/
-*.txt
 students/etwum/lesson01/featuresdf.csv
