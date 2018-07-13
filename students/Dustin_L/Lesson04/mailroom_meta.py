@@ -6,8 +6,7 @@ Mail Room module.
 """
 
 import os
-from donor import Donor
-from donor_database import DonorDatabase, DonorDict
+from donor_database import DonorDatabase
 
 SELECT_PROMPT = ('\nPlease select from the following options:\n'
                  '\t1. Send a Thank You\n'

@@ -58,11 +58,6 @@ class DonorDatabase(js.JsonSaveable):
             yield donor
         return
 
-    # def __next__(self):
-    #     for donor in self._donors.values():
-    #         yield donor
-    #     return
-
     def __setitem__(self, key, value):
         self._donors[key] = value
 
