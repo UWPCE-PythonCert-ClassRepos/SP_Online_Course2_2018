@@ -1,0 +1,90 @@
+The problem with this function is that it assumes that n is a power of 2 and
+therefore will eventually equal 2 if continually divided by 2. If any number
+that is not a power of 2 is passed in then the base condition of "n == 2" will
+never be met. Consequently, the function will continue to call itself, dividing
+n by 2 each time indefinitely.
+
+
+DEBUG OUTPUT
+~/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05   Lesson05  python3 -m pdb recursive.py 15
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(2)<module>()
+-> """Recursive module"""
+(Pdb) n
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(3)<module>()
+-> import sys
+(Pdb) n
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(6)<module>()
+-> def my_func(n):
+(Pdb) n
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(13)<module>()
+-> if __name__ == '__main__':
+(Pdb) s
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(14)<module>()
+-> n = int(sys.argv[1])
+(Pdb) s
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(15)<module>()
+-> print(my_func(n))
+(Pdb) s
+--Call--
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(6)my_func()
+-> def my_func(n):
+(Pdb) ll
+  6  ->	def my_func(n):
+  7  	    if n == 2:
+  8  	        return True
+  9
+ 10  	    return my_func(n / 2)
+(Pdb) b 5
+*** Blank or comment
+(Pdb) b 7
+Breakpoint 1 at /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py:7
+(Pdb) condition 1 n <= 3
+New condition set for breakpoint 1.
+(Pdb) ll
+  6  ->	def my_func(n):
+  7 B	    if n == 2:
+  8  	        return True
+  9
+ 10  	    return my_func(n / 2)
+(Pdb) continue
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(7)my_func()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) s
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(10)my_func()
+-> return my_func(n / 2)
+(Pdb) l
+  5
+  6  	def my_func(n):
+  7 B	    if n == 2:
+  8  	        return True
+  9
+ 10  ->	    return my_func(n / 2)
+ 11
+ 12
+ 13  	if __name__ == '__main__':
+ 14  	    n = int(sys.argv[1])
+ 15  	    print(my_func(n))
+(Pdb) s
+--Call--
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(6)my_func()
+-> def my_func(n):
+(Pdb) s
+> /Users/dustinlane/Documents/Python_UW_Certificate/Python_II/SP_Online_Course2_2018/students/Dustin_L/Lesson05/recursive.py(7)my_func()
+-> if n == 2:
+(Pdb) l
+  2  	"""Recursive module"""
+  3  	import sys
+  4
+  5
+  6  	def my_func(n):
+  7 B->	    if n == 2:
+  8  	        return True
+  9
+ 10  	    return my_func(n / 2)
+ 11
+ 12
+(Pdb) pp n
+0.9375
+(Pdb)
