@@ -1,3 +1,8 @@
+We omitted the recursion base case which allowed ints of less than 2 to run against the condtional of 'n == 2' forever.
+Included the base case to return false if 'n < 2' to patch the script. 
+
+pdb debug logs below:
+
 django@stuarts-macbook:~/SP_Online_Course2_2018/students/stuartkershaw/lesson05$ python -m pdb recurse.py 15
 > /Users/django/PythonCert/Python220/SP_Online_Course2_2018/students/stuartkershaw/lesson05/recurse.py(1)<module>()
 -> import sys
