@@ -1,4 +1,4 @@
-We omitted the recursion base case which allowed ints of less than 2 to run against the condtional of 'n == 2' forever.
+We omitted the recursion base case which allowed n to decrease and run against the condtional of 'n == 2' forever.
 Included the base case to return false if 'n < 2' to patch the script. 
 
 pdb debug logs below:
