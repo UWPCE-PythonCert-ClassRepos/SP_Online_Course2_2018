@@ -6,12 +6,9 @@
 # ugly.
 
 # Derived from https://gist.github.com/marcelom/4218010
-
+import socketserver
 
 HOST, PORT = "0.0.0.0", 514
-
-
-import socketserver
 
 
 class SyslogUDPHandler(socketserver.BaseRequestHandler):
@@ -23,15 +20,14 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
         except UnicodeDecodeError:
             # The message was sent by a UDPHandler. It will be ugly.
             pass
-        socket = self.request[1]
-        print( "%s : " % self.client_address[0], str(data))
+        print("%s : " % self.client_address[0], str(data))
+
 
 if __name__ == "__main__":
     try:
-        server = socketserver.UDPServer((HOST,PORT), SyslogUDPHandler)
+        server = socketserver.UDPServer((HOST, PORT), SyslogUDPHandler)
         server.serve_forever(poll_interval=0.5)
     except (IOError, SystemExit):
         raise
     except KeyboardInterrupt:
-        print ("Crtl+C Pressed. Shutting down.")
-
+        print("Crtl+C Pressed. Shutting down.")
