@@ -1,21 +1,30 @@
 import logging
+import logging.handlers
+import time
 
-format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
+format_default = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
+format_syslog = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 
-formatter = logging.Formatter(format)
-
-file_handler = logging.FileHandler('mylog.log')
-file_handler.setLevel(logging.WARNING)
-file_handler.setFormatter(formatter)
+formatter_default = logging.Formatter(format_default)
+formatter_syslog = logging.Formatter(format_syslog)
 
 console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
-console_handler.setFormatter(formatter)
+console_handler.setLevel("DEBUG")
+console_handler.setFormatter(formatter_default)
+
+file_handler = logging.FileHandler('{}.log'.format(time.strftime("%Y-%m-%d")))
+file_handler.setLevel("WARNING")
+file_handler.setFormatter(formatter_default)
+
+sys_handler = logging.handlers.SysLogHandler(address=("0.0.0.0", 514))
+sys_handler.setLevel("ERROR")
+sys_handler.setFormatter(formatter_syslog)
 
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-logger.addHandler(file_handler)
+logger.setLevel("DEBUG")
 logger.addHandler(console_handler)
+logger.addHandler(file_handler)
+logger.addHandler(sys_handler)
 
 
 def my_fun(n):

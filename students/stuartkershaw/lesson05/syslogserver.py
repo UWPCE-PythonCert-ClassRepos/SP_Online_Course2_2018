@@ -26,6 +26,7 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
 if __name__ == "__main__":
     try:
         server = socketserver.UDPServer((HOST, PORT), SyslogUDPHandler)
+        print("Server running on port: {}".format(PORT))
         server.serve_forever(poll_interval=0.5)
     except (IOError, SystemExit):
         raise
