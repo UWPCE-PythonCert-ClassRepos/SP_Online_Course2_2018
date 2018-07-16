@@ -1,0 +1,149 @@
+Q. What is wrong with our logic?
+A. The recursive function's exit condition requires the parameter to be 2. However, when it calls itself, it simply divides by 2. This is fine for powers of 2, but all other numbers will not divide evenly. Depending on what the goals of this function are, it can be fixed by making the exit condition more general (ie, n < 2).
+
+Q. Why doesn't the function stop calling itself?
+A. Because the exit condition is 'n == 2', and this will not happen with certain values (ie, values that aren't powers of 2)
+
+Q. What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+A. The value of n is getting smaller and smaller. For odd values, the values of n start to get decimal places (ie, n == 6, then 3, then 1.5, then 0.75, then etc). 
+
+Harvey@LAPTOP-QC4OG8M9 MINGW64 /c/OS_xfer/Python_Projects/Python_220/SP_Online_Course2_2018/students/HarveyHerela/Lesson05 (master)
+$ python -m pdb recursive.py 11
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(8)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(9)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(10)<module>()
+-> print(my_fun(n))
+(Pdb) n
+Traceback (most recent call last):
+  File "C:\Users\Harvey\AppData\Local\Programs\Python\Python36-32\lib\pdb.py", line 1667, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Users\Harvey\AppData\Local\Programs\Python\Python36-32\lib\pdb.py", line 1548, in _runscript
+    self.run(statement)
+  File "C:\Users\Harvey\AppData\Local\Programs\Python\Python36-32\lib\bdb.py", line 431, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py", line 10, in <module>
+    print(my_fun(n))
+  File "c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py", line 6, in my_fun
+    return my_fun(n/2)
+  File "c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py", line 6, in my_fun
+    return my_fun(n/2)
+  File "c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py", line 6, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 980 more times]
+  File "c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py", line 3, in my_fun
+    def my_fun(n):
+  File "C:\Users\Harvey\AppData\Local\Programs\Python\Python36-32\lib\bdb.py", line 50, in trace_dispatch
+    return self.dispatch_call(frame, arg)
+  File "C:\Users\Harvey\AppData\Local\Programs\Python\Python36-32\lib\bdb.py", line 76, in dispatch_call
+    if not (self.stop_here(frame) or self.break_anywhere(frame)):
+  File "C:\Users\Harvey\AppData\Local\Programs\Python\Python36-32\lib\bdb.py", line 173, in break_anywhere
+    return self.canonic(frame.f_code.co_filename) in self.breaks
+  File "C:\Users\Harvey\AppData\Local\Programs\Python\Python36-32\lib\bdb.py", line 29, in canonic
+    if filename == "<" + filename[1:-1] + ">":
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\users\harvey\appdata\local\programs\python\python36-32\lib\bdb.py(29)canonic()
+-> if filename == "<" + filename[1:-1] + ">":
+(Pdb) cont
+Post mortem debugger finished. The recursive.py will be restarted
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(8)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(9)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(10)<module>()
+-> print(my_fun(n))
+(Pdb) p n
+11
+(Pdb) s
+--Call--
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) p n
+11
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) p n
+5.5
+(Pdb) !n = 2
+(Pdb) p n
+2
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(5)my_fun()
+-> return True
+(Pdb) n
+--Return--
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(5)my_fun()->True
+-> return True
+(Pdb) n
+--Return--
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(6)my_fun()->True
+-> return my_fun(n/2)
+(Pdb) n
+--Call--
+> c:\users\harvey\appdata\local\programs\python\python36-32\lib\encodings\cp1252.py(18)encode()
+-> def encode(self, input, final=False):
+(Pdb) n
+> c:\users\harvey\appdata\local\programs\python\python36-32\lib\encodings\cp1252.py(19)encode()
+-> return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+(Pdb) n
+--Return--
+> c:\users\harvey\appdata\local\programs\python\python36-32\lib\encodings\cp1252.py(19)encode()->b'True'
+-> return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+(Pdb) n
+True--Call--
+> c:\users\harvey\appdata\local\programs\python\python36-32\lib\encodings\cp1252.py(18)encode()
+-> def encode(self, input, final=False):
+(Pdb) n
+> c:\users\harvey\appdata\local\programs\python\python36-32\lib\encodings\cp1252.py(19)encode()
+-> return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+(Pdb) n
+--Return--
+> c:\users\harvey\appdata\local\programs\python\python36-32\lib\encodings\cp1252.py(19)encode()->b'\r\n'
+-> return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+(Pdb) n
+
+--Return--
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(10)<module>()->None
+-> print(my_fun(n))
+(Pdb) n
+--Return--
+> <string>(1)<module>()->None
+(Pdb) n
+The program finished and will be restarted
+> c:\os_xfer\python_projects\python_220\sp_online_course2_2018\students\harveyherela\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) q
+
+Harvey@LAPTOP-QC4OG8M9 MINGW64 /c/OS_xfer/Python_Projects/Python_220/SP_Online_Course2_2018/students/HarveyHerela/Lesson05 (master)
+$
