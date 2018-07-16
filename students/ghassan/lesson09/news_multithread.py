@@ -14,7 +14,7 @@ configs.read(CONF_FILE)
 API_KEY = configs['DEFAULT']['key']
 BASE_URL = 'https://newsapi.org/v1/'
 WORD = 'trump'
-THREADS = 2
+THREADS = 10
 
 
 def get_sources():
@@ -36,7 +36,7 @@ logging.info('Sources: {}'.format(my_data))
 def get_articles(source):
     url = '{}articles'.format(BASE_URL)
     params = {
-        'sources': source,
+        'source': source,
         'apiKey': API_KEY,
         'sortBy': 'top',
     }
