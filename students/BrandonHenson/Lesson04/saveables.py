@@ -55,6 +55,27 @@ class String(Saveable):
     default = ""
 
 
+class Bool(Saveable):
+    """
+    A Saveable boolean
+
+    Booleans are pretty much the same in JSON as Python, so nothing to do here
+    """
+    default = False
+
+
+class Int(Saveable):
+
+    """
+    A Saveable integer
+
+    Integers are a little different in JSON than Python. Strictly speaking
+    JSON only has "numbers", which can be integer or float, so a little to
+    do here to make sure we get an int in Python.
+    """
+
+    default = 0
+
     @staticmethod
     def to_python(val):
         """
@@ -63,7 +84,42 @@ class String(Saveable):
         return int(val)
 
 
+class Float(Saveable):
+    """
+    A Saveable floating point number
 
+    floats are a little different in JSON than Python. Strictly speaking
+    JSON only has "numbers", which can be integer or float, so a little to
+    do here to make sure we get a float in Python.
+    """
+
+    default = 0.0
+
+    @staticmethod
+    def to_python(val):
+        """
+        Convert a number to a python float
+        """
+        return float(val)
+
+# Container types: these need to hold  Saveable objects.
+
+
+class Tuple(Saveable):
+    """
+    This assumes that whatever is in the tuple is Saveable  or a "usual"
+    type: numbers, strings.
+    """
+    default = ()
+
+    @staticmethod
+    def to_python(val):
+        """
+        Convert a list to a tuple -- json only has one array type,
+        which matches to a list.
+        """
+        # simply uses the List to_python method -- that part is the same.
+        return tuple(List.to_python(val))
 
 
 class List(Saveable):
@@ -102,6 +158,42 @@ class List(Saveable):
         return new_list
 
 
+class Dict(Saveable):
+    """
+    This assumes that whatever in the dict is Saveable as well.
+
+    This supports non-string keys, but all keys must be the same type.
+    """
+    default = {}
+
+    @staticmethod
+    def to_json_compat(val):
+        d = {}
+        # first key, arbitrarily
+        key_type = type(next(iter(val.keys())))
+        if key_type is not str:
+            # need to add key_type to json
+            d['__key_not_string'] = True
+            key_not_string = True
+        else:
+            key_not_string = False
+        for key, item in val.items():
+            kis = type(key) is str
+            if ((kis and key_not_string) or (not (kis or key_not_string))):
+                raise TypeError("dict keys must be all strings or no strings")
+            if key_type is not str:
+                # convert key to string
+                s_key = repr(key)
+                # make sure it can be reconstituted
+                if ast.literal_eval(s_key) != key:
+                    raise ValueError(f"json save cannot save dicts with key:{key}")
+            else:
+                s_key = key
+            try:
+                d[s_key] = item.to_json_compat()
+            except AttributeError:
+                d[s_key] = item
+        return d
 
     @staticmethod
     def to_python(val):
