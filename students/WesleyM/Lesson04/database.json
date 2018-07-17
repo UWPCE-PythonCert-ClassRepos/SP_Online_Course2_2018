@@ -1,0 +1,30 @@
+{
+    "__obj_type": "DonorLoad",
+    "donors": {
+        "Alice Adams Ron": [
+            20
+        ],
+        "Bob Be-Lake": [
+            100
+        ],
+        "Charles Cruz": [
+            30,
+            50,
+            10
+        ],
+        "Denise Dnice": [
+            10,
+            5
+        ],
+        "Edward Eduardo": [
+            25,
+            20,
+            20,
+            20,
+            10
+        ],
+        "Bob": [
+            1000.0
+        ]
+    }
+}
