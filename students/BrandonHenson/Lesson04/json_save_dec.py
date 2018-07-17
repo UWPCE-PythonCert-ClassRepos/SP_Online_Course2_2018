@@ -5,6 +5,7 @@ json_save implemented as a decorator
 """
 
 import json
+from pathlib import Path
 from saveables import Saveable, List
 
 #   from .json_save_meta import *
@@ -56,7 +57,7 @@ def _from_json_dict(cls, dic):
     return obj
 
 
-def __new__(cls, *args):
+def __new__(cls, *args, **kwargs):
     """
     This adds instance attributes to assure they are all there, even if
     they are not set in the subclasses __init__
@@ -117,6 +118,7 @@ def json_save(cls):
     # add the methods:
     cls.__new__ = __new__
     cls.to_json_compat = _to_json_compat
+    cls.__eq__ = __eq__
     cls.from_json_dict = _from_json_dict
     cls.to_json = _to_json
 
@@ -133,3 +135,14 @@ def from_json_dict(j_dict):
     obj_type = j_dict["__obj_type"]
     obj = Saveable.ALL_SAVEABLES[obj_type].from_json_dict(j_dict)
     return obj
+
+
+def from_json(_json):
+    """
+    Factory function that re-creates a JsonSaveable object
+    from a json string or file
+    """
+    if isinstance(_json, (str, Path)):
+        return from_json_dict(json.loads(_json))
+    else:  # assume a file-like object
+        return from_json_dict(json.load(_json))
