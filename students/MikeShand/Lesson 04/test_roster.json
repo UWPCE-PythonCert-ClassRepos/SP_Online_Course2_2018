@@ -1,0 +1,1 @@
+{"__obj_type": "Roster", "donor_list": [{"__obj_type": "Donor", "name": "Andy", "donations": [10.0]}, {"__obj_type": "Donor", "name": "Bill", "donations": [15.0, 25.0]}, {"__obj_type": "Donor", "name": "Chuck", "donations": [20.0, 30.0, 40.0]}, {"__obj_type": "Donor", "name": "Dave", "donations": [45.0]}]}
