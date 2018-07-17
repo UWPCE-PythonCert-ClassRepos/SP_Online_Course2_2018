@@ -1,8 +1,8 @@
-# Brandon Henson
 # Python 220
 # Lesson 4
-# 7-15-18
+# 7-17-18
 # !/usr/bin/env python3
+
 
 import os
 from mailroom import Donor, Donor_list
@@ -13,6 +13,8 @@ donor_history = Donor_list(Donor('Brandon Henson', [1005.49, 3116.72, 5200]),
                        Donor('Michael Green', [2400.54]),
                        Donor('Brandon Henson Jr', [355.42, 579.31]),
                        Donor('Kaiya Henson', [636.9, 850.13, 125.23]))
+
+
 
 prompt = ('\nSelect an option:\n'
              '[1] Send A Thank You To New Or Exsisting Donor\n'
@@ -42,14 +44,14 @@ def exit():
 
 def load():
     global donor_history
-    to_load = input("What do you want to load?\n")
+    to_load = input("What do you want to load (with extension)?\n")
     with open(to_load, 'r') as f:
         donor_load = json.load(f)
     donor_history = donor_history.from_json_dict(donor_load)
 
 
 def save():
-    record_name = input("Name Of file?")
+    record_name = input("Name Of file(without extension)?")
     info = donor_history.to_json()
     donor_history.save(record_name, info)
 
@@ -87,6 +89,7 @@ def thank_everyone():
         make_file(donor.write_note(), make_destination(donor, 'n', directory))
 
 
+
 def add_donation(name, amount, donor_list_obj):
     new_donor = True
     for donor in donor_list_obj.donor_dictionary:
@@ -113,11 +116,10 @@ def add_new_full(name="", thank_you=""):
 
 def send_to():
     recipient = input("\nWho is the donor?\n"
-                      "Enter a full name or 'list' to see a list: ")
-    if recipient.upper() == 'LIST':
-        print("\nHere are the donors:")
+                      "Enter a name or 'list'")
+    if recipient.lower() == 'list':
         print(donor_history)
-        recipient = input("\nWho is the donor? ")
+        recipient = input("\nWho is the donor?\n")
         return recipient
     else:
         return recipient
@@ -139,8 +141,18 @@ def thank_you():
         add_new_full(name, 'y')
 
 
-arg_dict = {"1": thank_you, "2": report, "3": thank_everyone,
-            "4": exit, "5": save, "6": load}
+def donor_list_sum(donor_list):
+    tot_donations = 0
+    for donor in donor_list.donor_dictionary:
+        tot_donations += donor.total_donated
+    return tot_donations
+
+
+
+
+arg_dict = {"1": thank_you, "2": report,  "3": thank_everyone, "4": exit,
+              "5": save, "6": load}
+
 
 if __name__ == '__main__':
     menu_selection(prompt, arg_dict)
