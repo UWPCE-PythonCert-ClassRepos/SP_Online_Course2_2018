@@ -1,0 +1,1 @@
+Lesson 5: Debugging and logging. No raid allowed! 
