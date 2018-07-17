@@ -1,7 +1,7 @@
 # Brandon Henson
 # Python 220
 # Lesson 4
-# 7-15-18
+# 7-17-18
 # !/usr/bin/env python3
 
 import json
@@ -105,7 +105,7 @@ class Donor_list():
             print(donor)
 
     def save(self, file_name, info):
-        name = "{}.txt".format(file_name)
+        name = "{}.json".format(file_name)
         with open(name, 'w') as f:
             f.write(info)
         print("saved")
@@ -115,50 +115,3 @@ class Donor_list():
 
     def __str__(self):
         return "\n".join(donor.name for donor in self.donor_dictionary)
-
-    def new_donation(self, amount):
-        self.donations.append(amount)
-
-    def write_note(self, current_donation=0):
-        note = ["Dear {},\n".format(self.name),
-                '\nThank you for your generous \
-donations totaling ${:,}.'.format(self.total_donated),
-                "\nThe money will be put to good use."
-                "\n\nSincerely, \n                -The Team"]
-        if current_donation > 0:
-            curr = ("This donation of ${:,} "
-                    "really helps.".format(current_donation))
-            note.insert(2, curr)
-        return "".join(note)
-
-    @property
-    def total_donated(self):
-        return sum(self.donations)
-
-    @property
-    def number_of_donations(self):
-        return len(self.donations)
-
-    @property
-    def average_donation(self):
-        return sum(self.donations) / len(self.donations)
-
-    def __str__(self):
-        return "{:17} ${:14,.2f} {:13} ${:13,.2f}".format\
-            (self.name, self.total_donated, self.number_of_donations,
-                self.average_donation)
-
-    def __repr__(self):
-        return "Donor(\'{}\', {})".format(self.name, self.donations)
-
-    def __lt__(self, other):
-        return self.total_donated < other.total_donated
-
-    def __gt__(self, other):
-        return self.total_donated > other.total_donated
-
-    def __eq__(self, other):
-        return self.total_donated == other.total_donated
-
-    def __ne__(self, other):
-        return self.total_donated != other.total_donated
