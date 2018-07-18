@@ -32,6 +32,10 @@ class Donor:
         return {self.last_name: {'title': self.title, 'donations':
                 sum(self.donations), 'num_donations': len(self.donations)}}
 
+    # @donor.setter
+    # def donor(self, donor):
+    #     self.donor = {donor[1]: {'title': donor[0], 'donations': donor[2]}}
+
     @property
     def donation(self):
         """getter for most recent donation amount"""
@@ -56,7 +60,8 @@ class DonorGroup:
     @donorgroup.setter
     def donorgroup_new_donor(self, new_donor):
         """enables addition of new donor dictionary"""
-        self.donors = dict(self.donors.items() + new_donor.items())
+        self.new_donor = new_donor
+        self.donors = dict(**self.donors, **self.new_donor.donor)
 
     def withdraw(self, title, last_name):
         """given donor last name as string, removes donor from self.donors"""
@@ -81,7 +86,7 @@ class DonorGroup:
         for donor_list in new_list:
             formatted_donor = ('{:<15}'.format(donor_list[1])
                                + '{}{:>10}'.format(' $', donor_list[0])
-                               + '{:>12}'.format(donor_list[2])
+                               + '{:>13}'.format(donor_list[2])
                                + '{}{:>11}'.format(' $',
                                donor_list[0] // donor_list[2]))
             print(formatted_donor)
@@ -96,11 +101,15 @@ class UI:
     def __init__(self):
         self.donors = DonorGroup(donors_dct)
         self.menu_dct = {'1': self.donors.donorgroup,
-                         '2': self.donors.get_report, 'q': sys.exit}
+                         '2': self.donors.get_report,
+                         'q': sys.exit}
+        # fixme: consider this:
+        # '3': Donor(input('Enter title, lastname, donation:')),
         self.main_text = '\n'.join((
                                     'Choose from the following:',
-                                    '"1" - Get a List,',
-                                    '"2" - Create a Report, or',
+                                    '"1" - Get a List of Donors,',
+                                    '"2" - Create a Report,',
+                                    '"3" - Add a Donor, or',
                                     '"q" to Quit: '
                                   ))
         while True:
@@ -113,6 +122,13 @@ class UI:
                 elif response == '1':
                     print(self.donors.donorgroup)
                 if response != '1':
+                    if response == '3':
+                        q_title = input('Enter donor title: ')
+                        q_lastname = input('Enter last name: ')
+                        q_donation = int(input('Donation amount (USD)?: '))
+                        self.donors.donorgroup_new_donor = Donor(q_title,
+                                                                 q_lastname,
+                                                                 q_donation)
                     self.menu_dct[response]()
             except KeyError:
                 print('\nThat selection is invalid. Please try again.')
