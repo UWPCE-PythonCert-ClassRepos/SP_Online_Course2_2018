@@ -1,0 +1,159 @@
+The function will only return True when n is a power of 2.
+The function only know how to return True when n equals 2 or call itself when False.
+When n is a power of 2, n/2 will eventually equals 2.
+If not, n just get smaller and smaller eventually less than 2 and will never equal to 2. 
+
+Below is my debugging log:
+PS: 07/17/2018 20:52:55>python -m pdb .\recursive.py 15
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(2)<module>()
+-> import sys(Pdb) ll
+  1     #!/usr/bin/env python
+  2  -> import sys
+  3
+  4
+  5     def my_fun(n):  6         if n == 2:
+  7             return True
+  8         return my_fun(n/2)
+  9
+ 10
+ 11     if __name__ == '__main__':
+ 12         n = int(sys.argv[1])
+ 13         print(my_fun(n))
+(Pdb) n
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(5)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(11)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(12)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(13)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) ll
+  5  -> def my_fun(n):
+  6         if n == 2:
+  7             return True
+  8         return my_fun(n/2)
+(Pdb) n
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) ll
+  5     def my_fun(n):
+  6  ->     if n == 2:
+  7             return True
+  8         return my_fun(n/2)
+(Pdb) n
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) ll
+  5     def my_fun(n):
+  6         if n == 2:
+  7             return True
+  8  ->     return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+7.5
+(Pdb) ll
+  5  -> def my_fun(n):
+  6         if n == 2:
+  7             return True
+  8         return my_fun(n/2)
+(Pdb) b 6
+Breakpoint 1 at c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py:6
+(Pdb) c
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) ppn
+*** NameError: name 'ppn' is not defined
+(Pdb) pp n
+7.5
+(Pdb) c
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) c
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) c
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) pp n
+0.9375
+(Pdb) c
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.46875
+(Pdb) c
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.234375
+(Pdb) c
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.1171875
+(Pdb) c
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.05859375
+(Pdb) clear
+Clear all breaks? yes
+Deleted breakpoint 1 at c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py:6
+(Pdb) c
+Traceback (most recent call last):
+  File "C:\Users\Slick Willy\AppData\Local\Programs\Python\Python36\lib\pdb.py", line 1667, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Users\Slick Willy\AppData\Local\Programs\Python\Python36\lib\pdb.py", line 1548, in _runscript
+    self.run(statement)
+  File "C:\Users\Slick Willy\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 434, in
+run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py", line 13, in <module>
+    print(my_fun(n))
+  File "c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 4 more times]
+  File "c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py", line 6, in my_fun
+    if n == 2:
+  File "c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 977 more times]
+  File "c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py", line 6, in my_fun
+    if n == 2:
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) quit
+Post mortem debugger finished. The .\recursive.py will be restarted
+> c:\users\slick willy\documents\python_220\local_repo\students\khtruong\lesson_05\recursive.py(2)<module>()
+-> import sys
+(Pdb) exit
+PS: 07/17/2018 20:55:49>
