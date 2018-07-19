@@ -13,11 +13,12 @@ import os
 import datetime
 from donor import Donor
 from donor_dict import Donor_Dict
+from redis_mailroom import Redis_Mailroom_Client
 
 
 d = Donor_Dict.from_file("dict_init.txt")
 divider = "\n" + "*" * 50 + "\n"
-
+validater = Redis_Mailroom_Client()
 
 def main_menu(user_prompt=None):
     """
@@ -175,6 +176,13 @@ def input_donor_float(d_amt=0):
     return d_amt
 
 
+def add_validate_client(name):
+    email = input('Enter an email for ' + name + '\n')
+    p_num = input('Enter a phone number for ' + name + '\n')
+    sec_answ = input('What is ' + name + "'s favorite beverage?\n")
+    validater.create_client(name, email, p_num, sec_answ)
+
+
 def create_thank_u():
     """
     Compose and print a thank you letter to the donor for their donation.
@@ -190,9 +198,10 @@ def create_thank_u():
         gift_amt = input_donor_float()
         if gift_amt != "":
             d.add_donor(d_name, gift_amt)
+            add_validate_client(d_name)
             thanks = d[d_name.lower()].thank_u_letter_str(1)
             print(thanks)
-            print(save_to_dir(d_name, thanks))
+            print(save_to_dir(validater.lookup_email(d_name), thanks))
     return
 
 
@@ -235,7 +244,9 @@ def write_letters_to_all():
     write_dir = input_dir()
     if write_dir:
         for donor in d.keys:
-            print(write_txt_to_dir(d[donor].name,
+            print(donor)
+            print(validater.lookup_email(d[donor].name))
+            print(write_txt_to_dir(validater.lookup_email(d[donor].name),
                                    d[donor].thank_u_letter_str(),
                                    write_dir))
         print("Finished writing the letters")
@@ -279,4 +290,11 @@ def mr_exit():
         save_confirm = input('>').lower()
     if save_confirm == 'y':
         print(write_txt_to_dir("dict_init", d.dict_to_txt(), os.getcwd()))
+        validater.write_lookup_file('lookup_list.txt')
     sys.exit()
+
+if __name__ == '__main__':
+    while True:
+        main_menu()()
+        input("Press Enter to continue...........")
+
