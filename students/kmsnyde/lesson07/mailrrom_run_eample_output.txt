@@ -1,0 +1,134 @@
+Luis,
+
+I am a bit confused by your feedback so not sure what to do.
+
+I uploaded 2 files for the mailroom project; mailroom_sql.py and mailroom_op.py into Git.
+
+Mailroom_op.py should be executed.  if you choose menu "1", you can type a current person (e.g., 'Karl') in and "add" a donation; this will persist in the database.  If you select menu "1", you can type in a new person, add a donation, and this person will persist in the database. you can check this by updating or adding a new person using menu 1 and then choose menu 2 and you will see they are added to the report (or money for a current user updates the report).  In menu item 4, you can delete a user; then use menu 2 and you will see they are gone.
+
+I'm not understanding what is being asked.  I've run an example and put in the results (with annotations below).
+
+SHOWS ORIGINAL DATABASE PRELOADED
+Please select a number from the following choices:
+
+1: Send a Thank You (and add/update donor)
+2: Create a Report
+3: Send letters to everyone
+4: Delete a Donor
+5: Quit
+
+Selection: 2
+
+Donor Name                  | Total Given          | Num Gifts       | Average Gift
+-----------------------------------------------------------------------------------
+Woody                             2400.00                    3               800.00
+Bob                               1500.00                    3               500.00
+Karl                               600.55                    3               200.18
+Mary                               455.99                    1               455.99
+
+ Please select a number from the following choices:
+
+1: Send a Thank You (and add/update donor)
+2: Create a Report
+3: Send letters to everyone
+4: Delete a Donor
+5: Quit
+
+UPDATES 'KARL' WITH $500
+Selection: 1
+
+Type a user's name or "list" to show names.
+
+-> Karl
+
+Donation amount: 500
+
+ Please select a number from the following choices:
+
+1: Send a Thank You (and add/update donor)
+2: Create a Report
+3: Send letters to everyone
+4: Delete a Donor
+5: Quit
+
+Selection: 2
+
+Donor Name                  | Total Given          | Num Gifts       | Average Gift
+-----------------------------------------------------------------------------------
+Woody                             2400.00                    3               800.00
+Bob                               1500.00                    3               500.00
+Karl                              1100.55                    4               275.14
+Mary                               455.99                    1               455.99
+
+ Please select a number from the following choices:
+
+1: Send a Thank You (and add/update donor)
+2: Create a Report
+3: Send letters to everyone
+4: Delete a Donor
+5: Quit
+
+ADD NEW USER DARLA WITH $222.22 DONATION
+
+Selection: 1
+
+Type a user's name or "list" to show names.
+
+-> Darla
+
+Donation amount: 222.22
+Your thank you letter has been written to disk.
+
+Selection: 2
+
+Donor Name                  | Total Given          | Num Gifts       | Average Gift
+-----------------------------------------------------------------------------------
+Woody                             2400.00                    3               800.00
+Bob                               1500.00                    3               500.00
+Karl                              1100.55                    4               275.14
+Mary                               455.99                    1               455.99
+Darla                              222.22                    1               222.22
+
+ Please select a number from the following choices:
+
+1: Send a Thank You (and add/update donor)
+2: Create a Report
+3: Send letters to everyone
+4: Delete a Donor
+5: Quit
+
+DELETE DONOR DARLA
+
+Selection: 4
+
+Type a user's name or "list" to show names.
+
+-> Darla
+You deleted Darla from the donor database.
+
+ Please select a number from the following choices:
+
+1: Send a Thank You (and add/update donor)
+2: Create a Report
+3: Send letters to everyone
+4: Delete a Donor
+5: Quit
+
+Selection: 2
+
+Donor Name                  | Total Given          | Num Gifts       | Average Gift
+-----------------------------------------------------------------------------------
+Woody                             2400.00                    3               800.00
+Bob                               1500.00                    3               500.00
+Karl                              1100.55                    4               275.14
+Mary                               455.99                    1               455.99
+
+ Please select a number from the following choices:
+
+1: Send a Thank You (and add/update donor)
+2: Create a Report
+3: Send letters to everyone
+4: Delete a Donor
+5: Quit
+
+Please advise.  Thanks.
