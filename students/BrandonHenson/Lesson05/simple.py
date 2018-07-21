@@ -18,7 +18,6 @@ console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
 
 
-
 remote_handler = logging.handlers.DatagramHandler('127.0.0.1', 514)
 remote_handler.setLevel(logging.ERROR)
 remote_handler.setFormatter(system_formatter)
@@ -30,6 +29,7 @@ logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 logger.addHandler(remote_handler)
 
+
 def my_fun(n):
     for i in range(0, n):
         logging.debug(i)
@@ -38,7 +38,8 @@ def my_fun(n):
         try:
             i / (50 - i)
         except ZeroDivisionError:
-            logging.error("Tried to divide by zero. Var i was {}. Recovered gracefully.".format(i))
+            logging.error("Tried to divide by zero.\
+            Var i was {}. Recovered gracefully.".format(i))
 
 
 if __name__ == "__main__":
