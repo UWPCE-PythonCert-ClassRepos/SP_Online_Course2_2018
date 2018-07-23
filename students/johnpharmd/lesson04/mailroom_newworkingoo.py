@@ -21,7 +21,6 @@ donors_dct = {'Gates': {'title': 'Mr.', 'donations': 150000,
 class Donor:
     """creates objects for individual donors"""
     def __init__(self, title, last_name, donation):
-        # fixme: self.ID = 0
         self.title = title
         self.last_name = last_name
         self.donations = [donation]
@@ -31,10 +30,6 @@ class Donor:
         """getter for individual donor"""
         return {self.last_name: {'title': self.title, 'donations':
                 sum(self.donations), 'num_donations': len(self.donations)}}
-
-    # @donor.setter
-    # def donor(self, donor):
-    #     self.donor = {donor[1]: {'title': donor[0], 'donations': donor[2]}}
 
     @property
     def donation(self):
@@ -57,11 +52,27 @@ class DonorGroup:
         """getter for self.donors; returns list of donors in group"""
         return sorted([donor for donor in self.donors])
 
-    @donorgroup.setter
-    def donorgroup_new_donor(self, new_donor):
-        """enables addition of new donor dictionary"""
-        self.new_donor = new_donor
+    # @donorgroup.setter
+    # def donorgroup_new_donor(self, new_donor=None):
+    #     """enables addition of new donor dictionary"""
+    #     if new_donor is None:
+    #         self.add_donor_to_donorgroup()
+    #         # q_title = input('Enter donor title: ')
+    #         # q_lastname = input('Enter last name: ')
+    #         # q_donation = int(input('Donation amount (USD)?: '))
+    #         # self.new_donor = Donor(q_title, q_lastname, q_donation)
+    #     else:
+    #         self.new_donor = new_donor
+    #         self.donors = dict(**self.donors, **self.new_donor.donor)
+
+    def add_donor_to_donorgroup(self):
+        q_title = input('Enter donor title: ')
+        q_lastname = input('Enter last name: ')
+        q_donation = int(input('Donation amount (USD)?: '))
+        self.new_donor = Donor(q_title, q_lastname, q_donation)
         self.donors = dict(**self.donors, **self.new_donor.donor)
+        print(self.donors)
+        return self.donors
 
     def withdraw(self, title, last_name):
         """given donor last name as string, removes donor from self.donors"""
@@ -102,9 +113,8 @@ class UI:
         self.donors = DonorGroup(donors_dct)
         self.menu_dct = {'1': self.donors.donorgroup,
                          '2': self.donors.get_report,
+                         '3': self.donors.add_donor_to_donorgroup,
                          'q': sys.exit}
-        # fixme: consider this:
-        # '3': Donor(input('Enter title, lastname, donation:')),
         self.main_text = '\n'.join((
                                     'Choose from the following:',
                                     '"1" - Get a List of Donors,',
@@ -119,17 +129,21 @@ class UI:
             try:
                 if response == 'q':
                     print('Program execution completed.')
-                elif response == '1':
-                    print(self.donors.donorgroup)
-                if response != '1':
-                    if response == '3':
-                        q_title = input('Enter donor title: ')
-                        q_lastname = input('Enter last name: ')
-                        q_donation = int(input('Donation amount (USD)?: '))
-                        self.donors.donorgroup_new_donor = Donor(q_title,
-                                                                 q_lastname,
-                                                                 q_donation)
+                # elif response == '1':
+                #     print(self.donors.donorgroup)
+                # if response != '1':
+                    # if response == '3':
+                    # q_title = input('Enter donor title: ')
+                    # q_lastname = input('Enter last name: ')
+                    # q_donation = int(input('Donation amount (USD)?: '))
+                    # self.donors.donorgroup_new_donor = Donor(q_title,
+                    #                                          q_lastname,
+                    #                                          q_donation)
+                if type(self.menu_dct[response]) != list:
                     self.menu_dct[response]()
+                else:
+                    print(self.menu_dct[response])
+
             except KeyError:
                 print('\nThat selection is invalid. Please try again.')
 
