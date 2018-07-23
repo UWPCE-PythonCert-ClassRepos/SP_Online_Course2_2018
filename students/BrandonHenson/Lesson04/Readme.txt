@@ -1,0 +1,1 @@
+I fixed my code so it saves json for all objects but still creates txt for letters
