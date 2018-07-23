@@ -85,14 +85,6 @@ class Donor_Dict():
         sum_col = max(len("Total Given"), len(str(self.total_sum)))
         return [name_col, hist_col, avg_col, sum_col]
 
-    def dict_to_txt(self):
-        dict_txt = ""
-        for d in self.donors:
-            dict_txt += d.name + ';'
-            dict_txt += ("{}" + (",{}"*(len(d.history)-1))).format(*d.history)
-            dict_txt += '\n'
-        return dict_txt
-
     def add_donor(self, d_name, contribution):
         key_name = d_name.lower()
         if key_name in self._dict:
