@@ -198,7 +198,8 @@ def create_thank_u():
         gift_amt = input_donor_float()
         if gift_amt != "":
             d.add_donor(d_name, gift_amt)
-            add_validate_client(d_name)
+            if d_name not in validater.keys:
+                add_validate_client(d_name)
             thanks = d[d_name.lower()].thank_u_letter_str(1)
             print(thanks)
             print(save_to_dir(validater.lookup_email(d_name), thanks))
