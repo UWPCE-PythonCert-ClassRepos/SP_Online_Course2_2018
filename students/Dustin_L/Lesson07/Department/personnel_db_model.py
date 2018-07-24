@@ -27,7 +27,7 @@ class Department(BaseModel):
     dept_num_check = 'upper( substr( dept_num, 1, 1 ) BETWEEN "A" AND "Z" )'
 
     logger.info('The department name')
-    dept_name = pw.CharField(max_length=30)
+    dept_name = pw.CharField(primary_key=True, max_length=30)
 
     logger.info('The department manager')
     dept_mgr = pw.CharField(max_length=30)
@@ -94,6 +94,38 @@ class Job(BaseModel):
 
 
 if __name__ == '__main__':
+    PERSON_NAME = 0
+    LIVES_IN_TOWN = 1
+    NICKNAME = 2
+    people = [('Andrew', 'Sumner', 'Andy'),
+              ('Peter', 'Seattle', None),
+              ('Susan', 'Boston', 'Beannie'),
+              ('Pam', 'Coventry', 'PJ'),
+              ('Steven', 'Colchester', None),
+              ]
+
+    DEPT_NAME = 0
+    DEPT_MGR = 1
+    DEPT_NUM = 2
+    departments = [('R&D', 'Bertie', 'R100'),
+                   ('Accounting', 'Beth', 'A100'),
+                   ('Marketing', 'Marge', 'M100'),
+                   ('HR', 'Lucy', 'H100')]
+
+    JOB_NAME = 0
+    START_DATE = 1
+    END_DATE = 2
+    DURATION = 3
+    SALARY = 4
+    PERSON_EMPLOYED = 5
+    DEPARTMENT = 6
+    jobs = [('Analyst', '2001-09-22', '2003-01-30', 495, 65500, 'Andrew', 'HR'),
+            ('Senior analyst', '2003-02-01', '2006-10-22', 1359, 70000, 'Andrew', 'Accounting'),
+            ('Senior business analyst', '2006-10-23', '2016-12-24', 3715, 80000, 'Andrew', 'Marketing'),
+            ('Admin supervisor', '2012-10-01', '2014-11-10', 770, 45900, 'Peter', 'R&D'),
+            ('Admin manager', '2014-11-14', '2018-01-05', 1148, 45900, 'Peter', 'Marketing')
+            ]
+
     logger.info("Creating database datatables")
     with database as db:
         db.execute_sql('PRAGMA foreign_keys = ON;')
@@ -101,3 +133,25 @@ if __name__ == '__main__':
                           Job,
                           Person,
                           PersonNumKey])
+
+        logger.info("Adding people to database")
+        for person in people:
+            Person.create(person_name=person[PERSON_NAME],
+                          lives_in_town=person[LIVES_IN_TOWN],
+                          nickname=person[NICKNAME])
+
+        logger.info("Adding jobs to database")
+        for job in jobs:
+            Job.create(job_name=job[JOB_NAME],
+                       start_date=job[START_DATE],
+                       end_date=job[END_DATE],
+                       duration_days=job[DURATION],
+                       salary=job[SALARY],
+                       person_employed=job[PERSON_EMPLOYED],
+                       job_dept=job[DEPARTMENT])
+
+        logger.info("Add departments to database")
+        for dept in departments:
+            Department.create(dept_name=dept[DEPT_NAME],
+                              dept_mgr=dept[DEPT_MGR],
+                              dept_num=dept[DEPT_NUM])
