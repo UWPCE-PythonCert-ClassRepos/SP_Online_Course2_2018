@@ -11,7 +11,8 @@ class Calculator(object):
         self.stack = []
 
     def enter_number(self, number):
-        self.stack.insert(0, number)
+        # updated the code so the number goes to the index of 1
+        self.stack.insert(1, number)
 
     def _do_calc(self, operator):
         try:
