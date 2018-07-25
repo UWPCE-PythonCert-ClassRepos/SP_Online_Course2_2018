@@ -8,6 +8,7 @@ from calculator.divider import Divider
 from calculator.calculator import Calculator
 from calculator.exceptions import InsufficientOperands
 
+
 class AdderTests(TestCase):
 
     def test_adding(self):
@@ -26,6 +27,26 @@ class SubtracterTests(TestCase):
         for i in range(-10, 10):
             for j in range(-10, 10):
                 self.assertEqual(i - j, subtracter.calc(i, j))
+
+
+class MultiplierTests(TestCase):
+    def test_multiplying(self):
+        multiplier = Multiplier()
+
+        for i in range(-10,10):
+            for j in range(-10,10):
+                self.assertEqual(i * j, multiplier.calc(i,j))
+
+
+class DividerTest(TestCase):
+    def test_dividing(self):
+        divider = Divider()
+
+        for i in range(-10,10):
+            for j in range(-10,10):
+                if j != 0:
+                    self.assertEqual(i / j, divider.calc(i,j))
+
 
 
 class CalculatorTests(TestCase):
