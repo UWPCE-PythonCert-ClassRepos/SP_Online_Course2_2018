@@ -2,6 +2,8 @@
 """This module contains the Donor Database class"""
 
 import datetime
+import donor_database_model as dm
+import peewee as pw
 from collections import defaultdict
 from donor import Donor
 
@@ -122,6 +124,35 @@ class DonorDict(defaultdict):
                             filter(lambda d: d <= max_don, donations)))
         else:
             return list(map(lambda x: x * factor, donations))
+
+    @classmethod
+    def from_db(cls, db_path):
+        """Alternate constructor which creates and returns a DonorDict based
+           off the contents of the passed Peewee database.
+
+        Args:
+            db_path (string): Path to Peewee database.
+
+        Returns:
+            DonorDict: Newly constructed DonorDict
+        """
+        database = pw.SqliteDatabase(db_path)
+        db_donors = {}
+        donors = []
+
+        # Extract donors and their donations from the database
+        with database as db:
+            db.execute_sql('PRAGMA foreign_keys = ON;')
+            query = dm.Donation.select().order_by(dm.Donation.donor_name.desc())
+
+            for d in query:
+                db_donors.setdefault(str(d.donor_name), []).append(float(d.amount))
+
+        # Instantiate all Donor objects
+        for donor, donations in db_donors.items():
+            donors.append(Donor(donor, donations=donations))
+
+        return cls(*donors)
 
     def projection(self, factor, min_don=None, max_don=None):
         """Return projection for a contribution that multiplies all current
