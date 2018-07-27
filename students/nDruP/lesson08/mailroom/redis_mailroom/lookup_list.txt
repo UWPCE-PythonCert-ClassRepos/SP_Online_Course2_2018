@@ -1,0 +1,8 @@
+Sleve McDichael,sleve@mail.com,555-555-0000,lean
+Willie Dustice,willie@mail.com,555-555-1111,coffee
+Rey McScriff,rey@mail.com,555-555-2222,water
+Mike Truk,mike@mail.com,555-555-3333,root beer
+Bobson Dugnutt,bobson@mail.com,555-555-4444,tea
+Todd Bonzalez,todd@mail.com,555-555-5555,cola
+andrew,drew@mail.com,555-555-1234,boba
+power,power@mail.com,555-555-8383,gasoline

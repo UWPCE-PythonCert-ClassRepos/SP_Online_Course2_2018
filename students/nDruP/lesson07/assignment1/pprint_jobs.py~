@@ -13,28 +13,15 @@ def pull_jobs():
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
         logger.info("Pulling all the departments that a person has worked at.")
-        query = (
-            Job.select(
-                Job.job_dept,
-                Job.job_name,
-                Job.person_employed
-            )
-            .order_by(
-                Job.person_employed.desc(),
-                Job.start_date.asc()
-            )
+        query = (Job
+                 .select(Job.job_dept, Job.job_name, Job.person_employed)
+                 .order_by(Job.person_employed.desc(), Job.start_date.asc())
         )
-        pp.pprint(query)
-        for job in query:            
-            print('\n'+'********')
-            #print(type(job))
+        for job in query:
             pp.pprint(job.job_dept)
-            #print(job.job_dept)
             pp.pprint(job.job_name)
-            #print(job.job_name)
             pp.pprint(job.person_employed)
-            #print(job.person_employed)
-            print('********'+'\n')
+            print()
     except Exception as e:
         logger.info(e)
     finally:
