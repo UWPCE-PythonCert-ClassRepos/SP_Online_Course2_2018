@@ -52,9 +52,10 @@ class DonorGroup:
         """getter for self.donors; returns list of donors in group"""
         return sorted([donor for donor in self.donors])
 
-    # @donorgroup.setter
-    # def donorgroup_new_donor(self, new_donor=None):
-    #     """enables addition of new donor dictionary"""
+    @donorgroup.setter
+    def donorgroup_new_donor(self, new_donor):
+        """enables addition of new donor last name to donorgroup list"""
+        self.donorgroup += new_donor.donor.keys()
     #     if new_donor is None:
     #         self.add_donor_to_donorgroup()
     #         # q_title = input('Enter donor title: ')
@@ -71,8 +72,9 @@ class DonorGroup:
         q_donation = int(input('Donation amount (USD)?: '))
         self.new_donor = Donor(q_title, q_lastname, q_donation)
         self.donors = dict(**self.donors, **self.new_donor.donor)
-        print(self.donors)
-        return self.donors
+        self.donorgroup_new_donor = self.new_donor
+        # print(self.donorgroup)
+        return self.donorgroup
 
     def withdraw(self, title, last_name):
         """given donor last name as string, removes donor from self.donors"""
@@ -115,6 +117,7 @@ class UI:
                          '2': self.donors.get_report,
                          '3': self.donors.add_donor_to_donorgroup,
                          'q': sys.exit}
+        self.new_donor = self.donors.donorgroup_new_donor
         self.main_text = '\n'.join((
                                     'Choose from the following:',
                                     '"1" - Get a List of Donors,',
