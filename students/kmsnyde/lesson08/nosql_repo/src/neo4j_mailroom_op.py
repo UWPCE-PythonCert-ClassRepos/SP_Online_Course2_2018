@@ -20,7 +20,7 @@ class Run_Ex():
     driver = login_database.login_neo4j_cloud()
     #with driver.session() as session:
     session = driver.session()
-    session.run("MATCH (n) DETACH DELETE n")
+    #session.run("MATCH (n) DETACH DELETE n")
 
     #log.info("\n\nPopulate a Donor Database")
 
