@@ -12,6 +12,11 @@ import simple_script
 import utilities
 import employee_data
 import mongodb_employee_script
+import donor_data
+
+
+#from mongodb_mailroom_op import *
+
 
 
 def showoff_databases():
@@ -31,10 +36,9 @@ def showoff_databases():
     neo4j_script.run_example()
     simple_script.run_example(furniture)
     
-    log.info('Running mongodb_emplyee_script for assignment')
+    log.info('Running mongodb_employee_script for assignment')
     employee = employee_data.get_employee_data()
     mongodb_employee_script.run_example(employee)
-
 
 if __name__ == '__main__':
     """
@@ -42,3 +46,8 @@ if __name__ == '__main__':
     """
 
     showoff_databases()
+#    ex = Main()
+#    ex.get_db()
+#    ex.main_menu()
+#    ex.selection()
+    

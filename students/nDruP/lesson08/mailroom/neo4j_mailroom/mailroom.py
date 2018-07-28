@@ -11,11 +11,10 @@ to the original prompt
 import sys
 import os
 import datetime
-from donor import Donor
-from donor_dict import Donor_Dict
+from donor_neo4j import *
 
 
-d = Donor_Dict.from_file("dict_init.txt")
+d = Donor_DB()
 divider = "\n" + "*" * 50 + "\n"
 
 
@@ -27,7 +26,7 @@ def main_menu(user_prompt=None):
                      "2": create_donor_report,
                      "3": write_letters_to_all,
                      "4": simulate,
-                     "5": mr_exit}
+                     "5": sys.exit}
     options = list(valid_prompts.keys())
     print(divider + "We're a Pyramid Scheme & So Are You! E-Mailroom" +
           divider)
@@ -190,8 +189,10 @@ def create_thank_u():
         gift_amt = input_donor_float()
         if gift_amt != "":
             d.add_donor(d_name, gift_amt)
-            thanks = d[d_name.lower()].thank_u_letter_str(1)
+            thanks = d.thank_u_letter_str(d_name.lower(), 1)
+            print(divider)
             print(thanks)
+            print(divider)
             print(save_to_dir(d_name, thanks))
     return
 
@@ -235,8 +236,8 @@ def write_letters_to_all():
     write_dir = input_dir()
     if write_dir:
         for donor in d.keys:
-            print(write_txt_to_dir(d[donor].name,
-                                   d[donor].thank_u_letter_str(),
+            print(write_txt_to_dir(d[donor]['name'],
+                                   divider+d.thank_u_letter_str(donor)+divider,
                                    write_dir))
         print("Finished writing the letters")
     return
@@ -269,14 +270,7 @@ def simulate(d_dict=d):
     return
 
 
-def mr_exit():
-    """
-    Prompt user to save donor dict before exiting program.
-    """
-    print("Before exiting would you like to save the donor info?[y/n]")
-    save_confirm = ""
-    while save_confirm not in ['y', 'n']:
-        save_confirm = input('>').lower()
-    if save_confirm == 'y':
-        print(write_txt_to_dir("dict_init", d.dict_to_txt(), os.getcwd()))
-    sys.exit()
+if __name__ == '__main__':
+    while True:
+        main_menu()()
+        input("Press enter to continue....................")
