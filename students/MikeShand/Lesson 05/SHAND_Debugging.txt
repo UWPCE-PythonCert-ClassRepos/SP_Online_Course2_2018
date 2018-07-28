@@ -1,0 +1,106 @@
+1. What is wrong with our logic: The recursion function needs to have termination conditions for all inputs, 
+not just the inputs for which the desired output is True
+
+2. Why doesn't the function stop calling itself? : With any initial input that isn't a power of 2, 
+the function will never reach the "if n == 2" condition; therefore, it will continue calling itself forever.
+
+3. What's happening to the value of n as the function gets deeper and deeper into recursion? : The value of n is 
+approaching 0 in increasingly small steps of n/2 in size.  
+
+
+
+Microsoft Windows [Version 10.0.17134.191]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Users\Michael\Desktop\Python Examples\Python 220 examples\Lesson 05>python -m pdb recursive.py
+> c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py(3)<module>()
+-> def my_fun(n):
+(Pdb) ll
+  1     #!/usr/bin/env python3
+  2
+  3  -> def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6
+  7         return my_fun(n/2)
+  8
+  9     if __name__ == '__main__':
+ 10         n = 15
+ 11         print(my_fun(n))
+ 12
+(Pdb) n
+> c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py(9)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py(10)<module>()
+-> n = 15
+(Pdb) n
+> c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py(11)<module>()
+-> print(my_fun(n))
+(Pdb) n
+Traceback (most recent call last):
+  File "C:\Python\lib\pdb.py", line 1667, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Python\lib\pdb.py", line 1548, in _runscript
+    self.run(statement)
+  File "C:\Python\lib\bdb.py", line 431, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py", line 11, in <module>
+    print(my_fun(n))
+  File "c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  File "c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py", line 7, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 980 more times]
+  File "c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py", line 3, in my_fun
+    def my_fun(n):
+  File "C:\Python\lib\bdb.py", line 50, in trace_dispatch
+    return self.dispatch_call(frame, arg)
+  File "C:\Python\lib\bdb.py", line 76, in dispatch_call
+    if not (self.stop_here(frame) or self.break_anywhere(frame)):
+  File "C:\Python\lib\bdb.py", line 173, in break_anywhere
+    return self.canonic(frame.f_code.co_filename) in self.breaks
+  File "C:\Python\lib\bdb.py", line 29, in canonic
+    if filename == "<" + filename[1:-1] + ">":
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\python\lib\bdb.py(29)canonic()
+-> if filename == "<" + filename[1:-1] + ">":
+(Pdb) c
+Post mortem debugger finished. The recursive.py will be restarted
+> c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py(3)<module>()
+-> def my_fun(n):
+(Pdb) ll
+  1     #!/usr/bin/env python3
+  2
+  3  -> def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6
+  7         return my_fun(n/2)
+  8
+  9     if __name__ == '__main__':
+ 10         n = 15
+ 11         print(my_fun(n))
+ 12
+(Pdb) b 4
+Breakpoint 1 at c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py:4
+(Pdb) condition 1 n < 2
+New condition set for breakpoint 1.
+(Pdb) c
+> c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) condition 1 n < 1
+New condition set for breakpoint 1.
+(Pdb) c
+> c:\users\michael\desktop\python examples\python 220 examples\lesson 05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb)
