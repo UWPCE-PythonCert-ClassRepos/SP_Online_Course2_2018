@@ -21,21 +21,20 @@ def run_example():
         log.info('Step 2: cache some data in Redis')
         r.set('andy', 'andy@somewhere.com')
 
-        log.info('Step 2: now I can read it')
+        log.info('Step 3: now I can read it')
         email = r.get('andy')
         log.info('But I must know the key')
         log.info(f'The results of r.get: {email}')
 
-        log.info('Step 3: cache more data in Redis')
+        log.info('Step 4: cache more data in Redis')
         r.set('pam', 'pam@anywhere.com')
         r.set('fred', 'fred@fearless.com')
 
-        log.info('Step 4: delete from cache')
+        log.info('Step : delete from cache')
         r.delete('andy')
         log.info(f'r.delete means andy is now: {email}')
 
-        log.info(
-            'Step 6: Redis can maintain a unique ID or count very efficiently')
+        log.info('Step 6: Redis can maintain a unique ID or count very efficiently')
         r.set('user_count', 21)
         r.incr('user_count')
         r.incr('user_count')
