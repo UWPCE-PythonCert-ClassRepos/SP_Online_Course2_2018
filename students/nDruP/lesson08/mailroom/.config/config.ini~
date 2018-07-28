@@ -1,0 +1,13 @@
+[mongodb_cloud]
+user = admin
+pw = Password1
+connection = mongodb+srv://admin:Password1@cluster0-vfzxa.mongodb.net/?replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true
+
+[redis_cloud]
+host = redis-13054.c16.us-east-1-2.ec2.cloud.redislabs.com
+port = 13054
+pw = AbWnkPBCUhK1HAZwdhD9agK4AW2SfIWo
+
+[neo4j_cloud]
+user = ndru_p
+pw = b.I128KWUJluUy.XWKktJqZsFZg72LC
