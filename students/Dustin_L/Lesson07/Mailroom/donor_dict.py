@@ -11,6 +11,11 @@ from donor import Donor
 class DonorDict(defaultdict):
     """A database of Donors"""
 
+    thank_you_fmt = ('\nDear {:s},\n'
+                     'Thank you for your generous donation of ${:,.2f}.\n'
+                     '\t\tSincerely,\n'
+                     '\t\t  -Your conscience')
+
     def __init__(self, *donors):
         if not donors:
             donors = []
@@ -20,10 +25,6 @@ class DonorDict(defaultdict):
         self.def_pad = 7
         self.col_sep = ' | '
         self.cols = ['Donor Name', 'Total Given', 'Num Gifts', 'Average Gift']
-        self.thank_you_fmt = ('\nDear {:s},\n'
-                              'Thank you for your generous donation of ${:,.2f}.\n'
-                              '\t\tSincerely,\n'
-                              '\t\t  -Your conscience')
 
     def __missing__(self, key):
         if self.default_factory is None:
