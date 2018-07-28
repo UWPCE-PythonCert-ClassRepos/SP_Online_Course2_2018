@@ -1,35 +1,26 @@
-"""
-Replicates most donor_dict functionality except it uses pymongo commands.
-The format of the data is {'name': x, 'key': x.lower(), 'gifts': []}
-The db it is accessing is dev and the collection it pulls from is donors
-"""
-
-
+from neo4j.v1 import GraphDatabase, basic_auth
 import configparser
-import pymongo
 from pathlib import Path
-from donor_dict import Donor_Dict
 from donor import Donor
+from donor_dict import Donor_Dict
 
 
-config_file = Path(__file__).parent.parent / '.config/config.ini'
+config_file = Path(__file__).parent / '../.config/config.ini'
 config = configparser.ConfigParser()
+
 
 
 class Donor_DB():
     def __init__(self):
-        self._client = None
-        user = None
-        pw = None
-        uri = None
-        try:
-            config.read(config_file)
-            user = config["mongodb_cloud"]["user"]
-            pw = config["mongodb_cloud"]["pw"]
-            uri = config["mongodb_cloud"]["connection"]
-        except Exception as e:
-            print(f'error: {e}')
-        self._client = pymongo.MongoClient(uri, serverSelectionTimeoutMS=10000, authMechanism='SCRAM-SHA-1', username=user, password=pw)
+        config.read(config_file)
+
+        graphenedb_user = config["neo4j_cloud"]["user"]
+        graphenedb_pass = config["neo4j_cloud"]["pw"]
+        graphenedb_url = 'bolt://hobby-opmhmhgpkdehgbkejbochpal.dbs.graphenedb.com:24786'
+        self._driver = GraphDatabase.driver(
+            graphenedb_url,
+            auth=basic_auth(graphenedb_user, graphenedb_pass)
+        )
         self.all_donor_info = []
         self.set_donor_info()
 
@@ -42,15 +33,14 @@ class Donor_DB():
 
     def set_donor_info(self):
         info = []
-        with self._client as client:
-            donors = client.get_database()['donors']
-            info = [
-                (d['name'],
-                len(d['gifts']),
-                sum(d['gifts']),
-                sum(d['gifts'])/len(d['gifts']))
-                for d in donors.find()
-            ]
+        cyph = "MATCH (d:Donor) RETURN d.name as n, d.gifts as g"
+        with self._driver.session() as session:
+            results = session.run(cyph)
+            for d in results:
+                num_g = len(d['g'])
+                sum_g = sum(d['g'])
+                avg_g = round(sum_g/num_g, 2)
+                info.append((d['n'], num_g, sum_g, avg_g))
         self.all_donor_info = info
 
     @property
@@ -58,10 +48,13 @@ class Donor_DB():
         return [d[0] for d in self.all_donor_info]
 
     @property
-    def histories(self):        
-        with self._client as client:
-            donors = client.get_database()['donors']
-            hist = [d['gifts'] for d in donors.find()]
+    def histories(self):
+        hist = []
+        with self._driver.session() as session:
+            hist_cyph = "MATCH (d:Donor) RETURN d.gifts as g"
+            hist_results = session.run(hist_cyph)
+            for donor in hist_results:
+                hist.append(donor['g'])
         return hist
 
     @property
@@ -78,9 +71,12 @@ class Donor_DB():
 
     @property
     def keys(self):
-        with self._client as client:
-            donors = client.get_database()['donors']
-            keys = [d['key'] for d in donors.find()]
+        keys = []
+        with self._driver.session() as session:
+            key_cyph = "MATCH (d:Donor) RETURN d.keys as k"
+            key_results = session.run(key_cyph)
+            for donor in key_results:
+                keys.append(donor['k'])
         return keys
 
     @property
@@ -93,18 +89,21 @@ class Donor_DB():
 
     def add_donor(self, d_name, contribution):
         key_name = d_name.lower()
-        with self._client as client:
-            donors = client.get_database()['donors']
-            if not donors.find_one({'key': key_name}):
-                print('Did not find')
-                donors.insert_one(
-                    {'name': d_name, 'key': key_name, 'gifts':[contribution]}
-                )
+        with self._driver.session() as session:
+            check_cyph = ("MATCH (d:Donor {key:'"+key_name+"'}) "
+                          "RETURN d.gifts as g")
+            check_result = session.run(check_cyph)
+            if check_result.peek():
+                for donor in check_result:
+                    gifts = donor['g']
+                    gifts.append(contribution)
+                    update_cyph = ("MATCH (d:Donor{key:'"+key_name+"'}) "
+                                   "SET d.gifts = %s"%(gifts))
+                    session.run(update_cyph)
             else:
-                donors.update_one(
-                    {'key': key_name},
-                    {'$push': {'gifts': contribution}}
-                )
+                new_cyph = ("CREATE (d:Donor {name:'%s', key:'%s', gifts:%s})"
+                            %(d_name, key_name, [contribution]))
+                session.run(new_cyph)
         self.set_donor_info()
     
     def challenge(self, alter, min_gift=-1.0, max_gift=-1.0, *filt_names):
@@ -115,9 +114,9 @@ class Donor_DB():
             min_gift = min([min(g) for g in self.histories]) - .01
         if max_gift == -1.0:
             max_gift = max([max(g) for g in self.histories]) + .01
-        with self._client as client:
-            donors = client.get_database()['donors']
-            donor_data = donors.find()
+        with self._driver.session() as session:
+            data_cyph = ("MATCH (d:Donor) RETURN d.name as name, d.gifts as gifts")
+            donor_data = session.run(data_cyph)
             for d in donor_data:
                 if d['name'] in filt_names:
                     chal_d = Donor('*'+d['name'], d['gifts'])
@@ -174,10 +173,12 @@ class Donor_DB():
     def thank_u_letter_str(self, d_name, new_gift=False):
         key_name = d_name.lower()
         gifts = []
-        with self._client as client:
-            donors = client.get_database()['donors']
-            donor = donors.find_one({'key': key_name})
-            gifts = donor['gifts']
+        with self._driver.session() as session:
+            donor_cyph = ("MATCH (d:Donor {key:'" + key_name +
+                          "'}) RETURN d.gifts as g")
+            donor_result = session.run(donor_cyph)
+            for donor in donor_result:
+                gifts = donor['g']
         thank_u_letter = f"Dearest {d_name},\n"
         if new_gift:
             thank_gift = gifts[len(gifts)-1]
