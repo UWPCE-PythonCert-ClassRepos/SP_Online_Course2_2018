@@ -4,8 +4,8 @@
 This module contains all of the functions for the Mail Room module that
 utilizes Peewee for its database.
 """
-
-import os
+import peewee as pw
+import database_ops as do
 from donor_dict import DonorDict
 
 SELECT_PROMPT = ('\nPlease select from the following options:\n'
@@ -65,7 +65,7 @@ def prompt_for_donor(prompt, donor_db):
             break
         elif usr_in == 'list':
             print()
-            for name in donor_db:
+            for name in do.get_donor_names(donor_db):
                 print(name.title())
         else:
             donor = " ".join([name.title() for name in usr_in.split()])
@@ -136,8 +136,10 @@ def send_thank_you(donor_db):
     if not donation:
         return
 
-    donor_db[donor].add_donation(donation)
-    print(donor_db.thank_you_fmt.format(donor, donation))
+    # Add donor to database, will not duplicate if donor already in db
+    do.add_donor(donor, donor_db)
+    do.add_donation(donor, donation, donor_db)
+    print(DonorDict.thank_you_fmt.format(donor, donation))
 
 
 def create_report(donor_db):
@@ -150,12 +152,14 @@ def create_report(donor_db):
     Args:
         donor_db (DonorDict): Database instance containing all donors
     """
-    print(donor_db.create_report())
+    in_mem_db = DonorDict.from_db(donor_db)
+    print(in_mem_db.create_report())
 
 
 def send_letters(donor_db):
     """Create a letter for each donor and write to disk as a text file"""
-    donor_db.send_letters()
+    in_mem_db = DonorDict.from_db(donor_db)
+    in_mem_db.send_letters()
 
 
 def create_projection(donor_db):
@@ -177,26 +181,20 @@ def create_projection(donor_db):
 
     min_don = prompt_for_float(min_prompt, error_prompt)
     max_don = prompt_for_float(max_prompt, error_prompt)
-    projection = donor_db.projection(factor, min_don=min_don, max_don=max_don)
+    in_mem_db = DonorDict.from_db(donor_db)
+    projection = in_mem_db.projection(factor, min_don=min_don, max_don=max_don)
 
     print(f'\nProjected contribution value: ${projection:,.2f}')
 
 
 def quit_mailroom(donor_db):
     """Exit operations when quitting mail room"""
-    prompt = ('\nWould you like to save the Donor Database? (y/[n])\n'
-              ' --> ')
-
-    usr_in = input(prompt).strip().lower()
-    if usr_in.startswith('y'):
-        pass
-
     print('Quitting mailroom...')
 
 
 def main():
     """Main function"""
-    donor_db = DonorDict.from_db('donor_db.db')
+    donor_db = pw.SqliteDatabase('donor_db.db')
 
     opt_dict = dict(zip(PROMPT_OPTS, (send_thank_you,
                                       create_report,
