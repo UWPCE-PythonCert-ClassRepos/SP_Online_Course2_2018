@@ -41,4 +41,9 @@ class Controller(object):
 
         # TODO: Implement the above-defined behaviors
 
-        return None
+        liquid_height = self.sensor.measure()
+        currentstate_pump = self.pump.get_state()
+        nextstate_pump = self.decider.decide(liquid_height, currentstate_pump, self.actions)
+
+
+        return self.pump.set_state(nextstate_pump)
