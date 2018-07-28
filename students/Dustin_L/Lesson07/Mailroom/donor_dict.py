@@ -126,20 +126,26 @@ class DonorDict(defaultdict):
             return list(map(lambda x: x * factor, donations))
 
     @classmethod
-    def from_db(cls, db_path):
+    def from_db(cls, in_database):
         """Alternate constructor which creates and returns a DonorDict based
            off the contents of the passed Peewee database.
 
         Args:
-            db_path (string): Path to Peewee database.
+            in_database (string): Path to Peewee database.
+            in_database (SqliteDatabse): SqliteDatabase instance.
 
         Returns:
             DonorDict: Newly constructed DonorDict
         """
-        database = pw.SqliteDatabase(db_path)
+        if isinstance(in_database, str):
+            database = pw.SqliteDatabase(in_database)
+        elif isinstance(in_database, pw.SqliteDatabase):
+            database = in_database
+        else:
+            raise Exception('Passed database reference is invalid')
+
         db_donors = {}
         donors = []
-
         # Extract donors and their donations from the database
         with database as db:
             db.execute_sql('PRAGMA foreign_keys = ON;')
