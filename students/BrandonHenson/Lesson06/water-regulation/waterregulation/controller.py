@@ -5,13 +5,12 @@ Encapsulates command and coordination for the water-regulation module
 
 class Controller(object):
     """
-    Encapsulates command and coordination for the water-regulation module
+    command and coordination for  water-regulation
     """
 
     def __init__(self, sensor, pump, decider):
         """
         Create a new controller
-
         :param sensor: Typically an instance of sensor.Sensor
         :param pump: Typically an instance of pump.Pump
         :param decider: Typically an instance of decider.Decider
@@ -32,8 +31,10 @@ class Controller(object):
         On each call to tick, the controller shall:
 
           1. query the sensor for the current height of liquid in the tank
-          2. query the pump for its current state (pumping in, pumping out, or at rest)
-          3. query the decider for the next appropriate state of the pump, given the above
+          2. query the pump for its current state (pumping in, pumping out, \
+or at rest)
+          3. query the decider for the next appropriate state of the pump, \
+given the above
           4. set the pump to that new state
 
         :return: True if the pump has acknowledged its new state, else False
@@ -41,4 +42,8 @@ class Controller(object):
 
         # TODO: Implement the above-defined behaviors
 
-        return None
+        height_of_liquid = self.sensor.measure()
+        pump_state = self.pump.get_state()
+        next_state = self.decider.decide(height_of_liquid,
+                                         pump_state, self.actions)
+        return self.pump.set_state(next_state)
