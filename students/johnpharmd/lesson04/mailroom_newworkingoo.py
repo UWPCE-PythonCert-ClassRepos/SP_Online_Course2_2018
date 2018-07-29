@@ -101,7 +101,6 @@ class UI:
                          '2': self.donors.get_report,
                          '3': self.donors.add_donor_to_donorgroup,
                          'q': sys.exit}
-        # self.new_donor = self.donors.donorgroup_new_donor
         self.main_text = '\n'.join((
                                     'Choose from the following:',
                                     '"1" - Get a List of Donors,',
@@ -116,16 +115,6 @@ class UI:
             try:
                 if response == 'q':
                     print('Program execution completed.')
-                # elif response == '1':
-                #     print(self.donors.donorgroup)
-                # if response != '1':
-                    # if response == '3':
-                    # q_title = input('Enter donor title: ')
-                    # q_lastname = input('Enter last name: ')
-                    # q_donation = int(input('Donation amount (USD)?: '))
-                    # self.donors.donorgroup_new_donor = Donor(q_title,
-                    #                                          q_lastname,
-                    #                                          q_donation)
                 if type(self.menu_dct[response]) != list:
                     self.menu_dct[response]()
                 else:
