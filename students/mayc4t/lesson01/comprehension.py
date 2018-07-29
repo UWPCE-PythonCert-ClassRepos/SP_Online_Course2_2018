@@ -1,6 +1,5 @@
-#!/usr/bin/python 
+#!/usr/bin/env python3 
 
-import pandas as pd
 import pandas as pd
 
 music = pd.read_csv("featuresdf.csv")
