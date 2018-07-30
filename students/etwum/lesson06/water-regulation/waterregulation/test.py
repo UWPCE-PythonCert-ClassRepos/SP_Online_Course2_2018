@@ -20,15 +20,20 @@ class DeciderTests(unittest.TestCase):
     # TODO: write a test or tests for each of the behaviors defined for
     #       Decider.decide
 
-    def test_dummy(self):
-        """
-        Just some example syntax that you might use
-        """
+    def test_decide(self):
 
-        pump = Pump('127.0.0.1', 8000)
-        pump.set_state = MagicMock(return_value=True)
+        actions = {'PUMP_IN': 1, 'PUMP_OFF': 0, 'PUMP_OUT': -1}
 
-        self.fail("Remove this test.")
+        target = Decider(100, .05)
+
+        self.assertEqual(1, target.decide(94, actions['PUMP_OFF'], actions))
+        self.assertEqual(-1, target.decide(106, actions['PUMP_OFF'], actions))
+        self.assertEqual(0, target.decide(104, actions['PUMP_OFF'], actions))
+        self.assertEqual(0, target.decide(106, actions['PUMP_IN'], actions))
+        self.assertEqual(1, target.decide(93, actions['PUMP_IN'], actions))
+        self.assertEqual(0, target.decide(93, actions['PUMP_OUT'], actions))
+        self.assertEqual(-1, target.decide(112, actions['PUMP_OUT'], actions))
+
 
 
 class ControllerTests(unittest.TestCase):
