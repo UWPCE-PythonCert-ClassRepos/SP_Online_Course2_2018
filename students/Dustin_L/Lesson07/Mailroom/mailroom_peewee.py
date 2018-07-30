@@ -196,6 +196,10 @@ def main():
     """Main function"""
     donor_db = pw.SqliteDatabase('donor_db.db')
 
+    # Test addtional donor database operations
+    # do.update_donation('Mike McHargue', 12000, 10000, donor_db)
+    # do.delete_donor('Mike McHargue', donor_db)
+
     opt_dict = dict(zip(PROMPT_OPTS, (send_thank_you,
                                       create_report,
                                       send_letters,

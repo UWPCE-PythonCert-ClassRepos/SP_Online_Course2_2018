@@ -61,3 +61,46 @@ def add_donation(donor, donation, donor_db):
         d.total_donations = d.total_donations + decimal.Decimal(donation)
         d.ave_donations = d.total_donations / len(d.donations)
         d.save()
+
+
+def update_donation(donor, donation, new_donation, donor_db):
+    """Updates a donation based on donor name and donation amount.
+
+    Args:
+        donor (str): donor name
+        donation (float): donation to match
+        donor_db (SqliteDatabase): SqliteDatabase.
+    """
+    with donor_db as db:
+        db.execute_sql('PRAGMA foreign_keys = ON;')
+        query = dm.Donation.select().where((dm.Donation.donor_name == donor) &
+                                           (dm.Donation.amount == float(donation)))
+        for match in query:
+            match.amount = new_donation
+            match.save()
+
+            d = dm.Donor().get(dm.Donor.name == donor)
+            total = 0
+            for dn in d.donations:
+                total = total + dn.amount
+            d.total_donations = total
+            d.ave_donations = d.total_donations / len(d.donations)
+            d.save()
+
+
+def delete_donor(donor, donor_db):
+    """Delete the specified donor and all of their respective donations from
+       the database.
+
+    Args:
+        donor (str): donor name.
+        donor_db (SqliteDatabase): SqliteDatabase
+    """
+    with donor_db as db:
+        db.execute_sql('PRAGMA foreign_keys = ON;')
+        query = dm.Donor.select().where(dm.Donor.name == donor)
+        for match in query:
+            for donation in match.donations:
+                donation.delete_instance()
+
+            match.delete_instance()
