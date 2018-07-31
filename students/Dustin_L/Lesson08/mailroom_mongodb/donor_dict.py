@@ -60,6 +60,12 @@ class DonorDict(defaultdict):
                 self[d[self.name_key]] = Donor(d[self.name_key],
                                                d[self.donations_key])
 
+            for name in list(self.keys()):
+                for d in donors.find({self.name_key: name}):
+                    break
+                else:
+                    del self[name]
+
     def add_donation(self, donor, donation):
         """Adds donation to database
 
@@ -213,3 +219,37 @@ class DonorDict(defaultdict):
             f_name = f'{donor.replace(" ", "_")}_{now}.txt'
             with open(f_name, 'w') as f:
                 f.write(self.thank_you_fmt.format(donor, data.total_donations))
+
+    def update_donation(self, donor, donation, new_donation):
+        """Updates a donation based on donor name and donation amount.
+
+        Args:
+            donor (str): donor name
+            donation (float): donation to match
+            new_donation (float): new donation to replace with
+        """
+        with self._client as client:
+            donors = client[self.database_name][self.collection_name]
+            for d in donors.find({self.name_key: donor}):
+                all_donations = d[self.donations_key]
+
+                for i, dns in enumerate(d[self.donations_key]):
+                    if dns == donation:
+                        all_donations[i] = new_donation
+                        donors.update_one(
+                            {self.name_key: d[self.name_key]},
+                            {'$set': {self.donations_key: all_donations}})
+
+            self._update_dict()
+
+    def delete_donor(self, donor):
+        """Deletes the specified donor as well as their donation history
+
+        Args:
+            donor (str): Name of donor.
+        """
+        with self._client as client:
+            donors = client[self.database_name][self.collection_name]
+            donors.delete_many({self.name_key: donor})
+
+        self._update_dict()
