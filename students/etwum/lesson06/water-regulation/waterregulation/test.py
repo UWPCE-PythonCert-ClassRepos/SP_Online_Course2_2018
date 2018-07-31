@@ -35,7 +35,6 @@ class DeciderTests(unittest.TestCase):
         self.assertEqual(-1, target.decide(112, actions['PUMP_OUT'], actions))
 
 
-
 class ControllerTests(unittest.TestCase):
     """
     Unit tests for the Controller class
@@ -44,4 +43,23 @@ class ControllerTests(unittest.TestCase):
     # TODO: write a test or tests for each of the behaviors defined for
     #       Controller.tick
 
-    pass
+    def setUp(self):
+        """
+        Sets up controller.
+        """
+        self.sensor = Sensor("127.0.0.1", 8080)
+        self.pump = Pump("127.0.0.1", 8050)
+        self.decider = Decider(100, .05)
+        self.controller = Controller(self.sensor, self.pump, self.decider)
+
+    def test_tick(self):
+        self.sensor.measure = MagicMock(return_value=95)
+        self.pump.get_state = MagicMock(return_value=self.pump.PUMP_IN)
+        self.decider.decide = MagicMock(return_value=self.pump.PUMP_IN)
+        self.pump.set_state = MagicMock(return_value=True)
+        self.controller.tick()
+
+        self.sensor.measure.assert_called_with()
+        self.pump.get_state.assert_called_with()
+        self.decider.decide.assert_called_with(95, self.pump.PUMP_IN, self.controller.actions)
+        self.pump.set_state.assert_called_with(self.pump.PUMP_IN)
