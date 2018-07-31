@@ -18,6 +18,7 @@ class DonorDict(defaultdict):
 
     name_key = 'name'
     donations_key = 'donations'
+    email_key = 'email'
     thank_you_fmt = ('\nDear {:s},\n'
                      'Thank you for your generous donation of ${:,.2f}.\n'
                      '\t\tSincerely,\n'
@@ -142,6 +143,12 @@ class DonorDict(defaultdict):
 
         return header + '\n'.join(rows)
 
+    def donor_names(self):
+        """Generator yielding all donor names in database"""
+        donors = json.loads(self._redis.get(self.db_name))
+        for donor in donors:
+            yield donor[self.name_key]
+
     @staticmethod
     def filter_and_factor(factor, donations, min_don=None, max_don=None):
         """For each donation, multiply by the factor value if the donation is
@@ -174,6 +181,23 @@ class DonorDict(defaultdict):
         else:
             return list(map(lambda x: x * factor, donations))
 
+    def lookup_email(self, donor):
+        """Looks up the email address for the specified donor.
+
+        Args:
+            donor (str): Donor name.
+
+        Returns:
+            str: Donor email address, None if done does not exist.
+        """
+        d_str = self._redis.get(self.db_name)
+        if d_str:
+            donors = json.loads(d_str)
+            for d in donors:
+                if d[self.name_key].lower().startswith(donor.lower()):
+                    return d[self.email_key]
+        return None
+
     def purge_db(self):
         """Purges the database"""
         donors = self._redis.delete(self.db_name)
@@ -201,12 +225,6 @@ class DonorDict(defaultdict):
                                                      min_don=min_don,
                                                      max_don=max_don))
         return projection
-
-    def donor_names(self):
-        """Generator yielding all donor names in database"""
-        donors = json.loads(self._redis.get(self.db_name))
-        for donor in donors:
-            yield donor[self.name_key]
 
     def send_letters(self):
         """Create a letter for each donor and write to disk as a text file"""

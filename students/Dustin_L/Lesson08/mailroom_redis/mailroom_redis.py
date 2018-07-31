@@ -12,9 +12,10 @@ SELECT_PROMPT = ('\nPlease select from the following options:\n'
                  '\t2. Create a Report\n'
                  '\t3. Send letters to all donors\n'
                  '\t4. Create contribution projection\n'
-                 '\t5. quit\n'
+                 '\t5. Get donor email address\n'
+                 '\t6. quit\n'
                  ' --> ')
-PROMPT_OPTS = (1, 2, 3, 4, 5)
+PROMPT_OPTS = (1, 2, 3, 4, 5, 6)
 
 
 def get_usr_input():
@@ -181,6 +182,29 @@ def create_projection(donor_db):
     print(f'\nProjected contribution value: ${projection:,.2f}')
 
 
+def get_email(donor_db):
+    """Gets the email address for the specified donor if the donor exists
+       in the database and if that donor has an email address.
+
+    Args:
+        donor_db (DonorDict): Database instance containing all donors.
+    """
+    name_prompt = ('\nPlease enter the donor name:\n'
+                   '(Enter "list" to see all donors)\n'
+                   '(Enter "quit" to return to main menu)\n'
+                   ' --> ')
+
+    donor = prompt_for_donor(name_prompt, donor_db)
+    if not donor:
+        return
+
+    email = donor_db.lookup_email(donor)
+    if not email:
+        print('\nCould not locate email in database.')
+    else:
+        print(f'\n{donor}\'s email address: {email}')
+
+
 def quit_mailroom(donor_db):
     """Exit operations when quitting mail room"""
     print('Quitting mailroom...')
@@ -197,6 +221,7 @@ def main():
                                       create_report,
                                       send_letters,
                                       create_projection,
+                                      get_email,
                                       quit_mailroom)))
     choice = ''
     while choice != PROMPT_OPTS[-1]:
