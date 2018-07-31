@@ -3,7 +3,7 @@ Encapsulates command and coordination for the water-regulation module
 """
 
 
-class Controller(object):
+class Controller:
     """
     Encapsulates command and coordination for the water-regulation module
     """

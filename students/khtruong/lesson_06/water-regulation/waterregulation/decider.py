@@ -3,7 +3,7 @@ Encapsulates decision making in the water-regulation module
 """
 
 
-class Decider(object):
+class Decider:
     """
     Encapsulates decision making in the water-regulation module
     """

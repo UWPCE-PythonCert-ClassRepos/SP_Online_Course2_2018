@@ -52,7 +52,28 @@ class ControllerTests(unittest.TestCase):
     Unit tests for the Controller class
     """
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Controller.tick
+    def setUp(self):
+        """Setup docstring."""
+        address = "127.0.0.1"
+        port = "8000"
+        self.sensor = Sensor(address, port)
+        self.pump = Pump(address, port)
+        self.decider = Decider(100, 0.05)
+        self.controller = Controller(self.sensor, self.pump, self.decider)
 
-    pass
+    def tearDown(self):
+        """Teardown docstring."""
+        pass
+
+    def test_tick(self):
+        """Method docstring."""
+        self.sensor.measure = MagicMock(return_value=90)
+        self.pump.get_state = MagicMock(return_value=Pump.PUMP_OFF)
+        self.decider.decide = MagicMock(return_value=Pump.PUMP_IN)
+        self.pump.set_state = MagicMock(return_value=True)
+        self.controller.tick()
+        self.sensor.measure.assert_called_with()
+        self.pump.get_state.assert_called_with()
+        self.decider.decide.assert_called_with(90, self.pump.PUMP_OFF,
+                                               self.controller.actions)
+        self.pump.set_state.assert_called_with(self.pump.PUMP_IN)
