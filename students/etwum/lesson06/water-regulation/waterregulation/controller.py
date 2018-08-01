@@ -45,5 +45,4 @@ class Controller(object):
         currentstate_pump = self.pump.get_state()
         nextstate_pump = self.decider.decide(liquid_height, currentstate_pump, self.actions)
 
-
         return self.pump.set_state(nextstate_pump)

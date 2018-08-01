@@ -20,4 +20,20 @@ class ModuleTests(unittest.TestCase):
     # TODO: write an integration test that combines controller and decider,
     #       using a MOCKED sensor and pump.
 
-    pass
+    def test_module(self):
+
+        target = Decider(100, .05)
+        controller = Controller(Sensor("127.0.0.1", 8080),
+                                Pump("127.0.0.1", 8050), target)
+        controller.pump.set_state = MagicMock(return_value=True)
+
+        for action in controller.actions.values():
+            controller.pump.get_state = MagicMock(return_value=action)
+            for levels in range(90,115,5):
+                controller.sensor.measure = MagicMock(return_value=levels)
+                controller.tick()
+                controller.pump.get_state = MagicMock(return_value=target.decide(
+                    controller.sensor.measure(),controller.pump.get_state(),
+                    controller.actions
+                ))
+
