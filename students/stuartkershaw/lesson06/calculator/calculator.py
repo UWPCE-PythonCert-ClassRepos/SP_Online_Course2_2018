@@ -5,6 +5,7 @@ This module provides a calculator
 
 from .exceptions import InsufficientOperands
 
+
 class Calculator():
     """
     This class provides calculator methods
