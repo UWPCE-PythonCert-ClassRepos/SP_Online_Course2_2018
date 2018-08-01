@@ -112,3 +112,6 @@ ENV/
 # VSCode project files
 .vscode/
 students/etwum/lesson01/featuresdf.csv
+
+# secrets
+.config/
