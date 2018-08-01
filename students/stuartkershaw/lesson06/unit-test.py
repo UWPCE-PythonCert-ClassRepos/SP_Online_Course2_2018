@@ -108,4 +108,16 @@ class CalculatorTests(TestCase):
 
         self.divider.calc.assert_called_with(1, 2)
 
+    def test_result_to_stack(self):
+        self.subtracter.calc = MagicMock(return_value=0)
+
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.add()
+
+        self.calculator.enter_number(1)
+        self.calculator.subtract()
+
+        self.subtracter.calc.assert_called_with(3, 1)
+
 
