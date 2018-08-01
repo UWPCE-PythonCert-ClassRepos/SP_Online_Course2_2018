@@ -28,6 +28,27 @@ class SubtracterTests(TestCase):
                 self.assertEqual(i - j, subtracter.calc(i, j))
 
 
+class MultiplierTests(TestCase):
+
+    def test_multiplying(self):
+        multiplier = Multiplier()
+
+        for i in range(-10, 10):
+            for j in range(-10, 10):
+                self.assertEqual(i * j, multiplier.calc(i, j))
+
+
+class DividerTests(TestCase):
+
+    def test_dividing(self):
+        divider = Divider()
+
+        for i in range(-10, 10):
+            for j in range(-10, 10):
+                if not i == 0 and not j == 0:
+                    self.assertEqual(i / j, divider.calc(i, j))
+
+
 class CalculatorTests(TestCase):
 
     def setUp(self):
@@ -43,6 +64,13 @@ class CalculatorTests(TestCase):
 
         with self.assertRaises(InsufficientOperands):
             self.calculator.add()
+
+    def test_zero_division(self):
+        self.calculator.enter_number(0)
+        self.calculator.enter_number(0)
+
+        with self.assertRaises(ZeroDivisionError):
+            self.calculator.divide()
 
     def test_adder_call(self):
         self.adder.calc = MagicMock(return_value=0)
@@ -61,5 +89,23 @@ class CalculatorTests(TestCase):
         self.calculator.subtract()
 
         self.subtracter.calc.assert_called_with(1, 2)
+
+    def test_multiplier_call(self):
+        self.multiplier.calc = MagicMock(return_value=0)
+
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.multiply()
+
+        self.multiplier.calc.assert_called_with(1, 2)
+
+    def test_divider_call(self):
+        self.divider.calc = MagicMock(return_value=0)
+
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.divide()
+
+        self.divider.calc.assert_called_with(1, 2)
 
 
