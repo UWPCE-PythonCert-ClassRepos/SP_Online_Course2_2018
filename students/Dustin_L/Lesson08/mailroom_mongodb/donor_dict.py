@@ -148,6 +148,24 @@ class DonorDict(defaultdict):
 
         return header + '\n'.join(rows)
 
+    def delete_donor(self, donor):
+        """Deletes the specified donor as well as their donation history
+
+        Args:
+            donor (str): Name of donor.
+
+        Retursn:
+            bool: True if delete successful, False otherwise
+        """
+        with self._client as client:
+            donors = client[self.database_name][self.collection_name]
+            result = donors.delete_many({self.name_key: donor})
+
+        if result.deleted_count > 0:
+            self._update_dict()
+            return True
+        return False
+
     @staticmethod
     def filter_and_factor(factor, donations, min_don=None, max_don=None):
         """For each donation, multiply by the factor value if the donation is
@@ -228,6 +246,7 @@ class DonorDict(defaultdict):
             donation (float): donation to match
             new_donation (float): new donation to replace with
         """
+        donation_modified = False
         with self._client as client:
             donors = client[self.database_name][self.collection_name]
             for d in donors.find({self.name_key: donor}):
@@ -236,20 +255,13 @@ class DonorDict(defaultdict):
                 for i, dns in enumerate(d[self.donations_key]):
                     if dns == donation:
                         all_donations[i] = new_donation
-                        donors.update_one(
+                        result = donors.update_one(
                             {self.name_key: d[self.name_key]},
                             {'$set': {self.donations_key: all_donations}})
+                        if result.modified_count > 0:
+                            donation_modified = True
 
-            self._update_dict()
+            if donation_modified is True:
+                self._update_dict()
 
-    def delete_donor(self, donor):
-        """Deletes the specified donor as well as their donation history
-
-        Args:
-            donor (str): Name of donor.
-        """
-        with self._client as client:
-            donors = client[self.database_name][self.collection_name]
-            donors.delete_many({self.name_key: donor})
-
-        self._update_dict()
+        return donation_modified

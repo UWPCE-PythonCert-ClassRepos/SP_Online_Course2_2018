@@ -12,9 +12,11 @@ SELECT_PROMPT = ('\nPlease select from the following options:\n'
                  '\t2. Create a Report\n'
                  '\t3. Send letters to all donors\n'
                  '\t4. Create contribution projection\n'
-                 '\t5. quit\n'
+                 '\t5. Delete donor\n'
+                 '\t6. Update donation\n'
+                 '\t7. quit\n'
                  ' --> ')
-PROMPT_OPTS = (1, 2, 3, 4, 5)
+PROMPT_OPTS = (1, 2, 3, 4, 5, 6, 7)
 
 
 def get_usr_input():
@@ -181,6 +183,66 @@ def create_projection(donor_db):
     print(f'\nProjected contribution value: ${projection:,.2f}')
 
 
+def delete_donor(donor_db):
+    """Prompts user for a donor to delete from the database.
+
+    Args:
+        donor_db (DonorDict): Database instance containing all donors.
+    """
+    name_prompt = ('\nPlease enter name of donor to delete:\n'
+                   '(Enter "list" to see all donors)\n'
+                   '(Enter "quit" to return to main menu)\n'
+                   ' --> ')
+
+    donor = prompt_for_donor(name_prompt, donor_db)
+    if not donor:
+        return
+
+    if donor_db.delete_donor(donor):
+        print(f'\n{donor} successfully removed')
+    else:
+        print(f'\n{donor} not found in database.')
+
+
+def update_donation(donor_db):
+    """Prompts user to update a donation made by a specific donor to a new
+       donation amount.
+
+    Args:
+        donor_db (DonorDict): Database instance containing all donors.
+    """
+    name_prompt = ('\nPlease enter name of relevant donor:\n'
+                   '(Enter "list" to see all donors)\n'
+                   '(Enter "quit" to return to main menu)\n'
+                   ' --> ')
+    amount_prompt = ('\nPlease enter the donation amount to be updated:\n'
+                     '(Enter "quit" to return to main menu)\n'
+                     ' --> ')
+    new_amount_prompt = ('\nPlease enter the new donation amount:\n'
+                         '(Enter "quit" to return to main menu)\n'
+                         ' --> ')
+    error_prompt = '\nDonation amount must be a number'
+
+    donor = prompt_for_donor(name_prompt, donor_db)
+    if not donor:
+        return
+
+    old_donation = prompt_for_float(amount_prompt, error_prompt)
+    if not old_donation:
+        return
+
+    new_donation = prompt_for_float(new_amount_prompt, error_prompt)
+    if not new_donation:
+        return
+
+    if donor_db.update_donation(donor, old_donation, new_donation):
+        print(f'\n{donor}\'s donation of ${old_donation} successfully updated '
+              f'to ${new_donation}')
+    else:
+        print(f'\nUnable to locate {donor}\'s donation of ${old_donation} in '
+              f'the database')
+
+
 def quit_mailroom(donor_db):
     """Exit operations when quitting mail room"""
     print('Quitting mailroom...')
@@ -197,6 +259,8 @@ def main():
                                       create_report,
                                       send_letters,
                                       create_projection,
+                                      delete_donor,
+                                      update_donation,
                                       quit_mailroom)))
     choice = ''
     while choice != PROMPT_OPTS[-1]:
