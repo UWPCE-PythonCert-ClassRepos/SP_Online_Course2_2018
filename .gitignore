@@ -113,5 +113,5 @@ ENV/
 .vscode/
 students/etwum/lesson01/featuresdf.csv
 
-# secrets
+#secrets
 .config/
