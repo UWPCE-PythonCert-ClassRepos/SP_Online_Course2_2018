@@ -17,18 +17,22 @@ class DeciderTests(unittest.TestCase):
     Unit tests for the Decider class
     """
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Decider.decide
+    def test_decider_decide(self):
+        actions = {
+            'PUMP_IN': 1,
+            'PUMP_OFF': 0,
+            'PUMP_OUT': -1
+        }
 
-    def test_dummy(self):
-        """
-        Just some example syntax that you might use
-        """
+        decider = Decider(100, .10)
 
-        pump = Pump('127.0.0.1', 8000)
-        pump.set_state = MagicMock(return_value=True)
-
-        self.fail("Remove this test.")
+        self.assertEqual(1, decider.decide(89, 'PUMP_OFF', actions))
+        self.assertEqual(-1, decider.decide(111, 'PUMP_OFF', actions))
+        self.assertEqual(0, decider.decide(95, 'PUMP_OFF', actions))
+        self.assertEqual(0, decider.decide(101, 'PUMP_IN', actions))
+        self.assertEqual(1, decider.decide(99, 'PUMP_IN', actions))
+        self.assertEqual(0, decider.decide(99, 'PUMP_OUT', actions))
+        self.assertEqual(-1, decider.decide(101, 'PUMP_OUT', actions))
 
 
 class ControllerTests(unittest.TestCase):
