@@ -53,7 +53,6 @@ class Decider(object):
         :return: The new action for the pump: one of actions['PUMP_IN'], actions['PUMP_OUT'], actions['PUMP_OFF']
         """
 
-
         upper_margin_height = self.target_height + self.target_height_margin
         lower_margin_height = self.target_height - self.target_height_margin
 
@@ -75,4 +74,3 @@ class Decider(object):
             return actions['PUMP_OFF']
         else:
             return actions['PUMP_OUT']
-
