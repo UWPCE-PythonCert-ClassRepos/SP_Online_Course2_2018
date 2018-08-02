@@ -20,11 +20,8 @@ def print_personjob_records():
     try:
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
-        query = (Job
-                 .select())
 
-        for job in query:
-            #pprint.pprint([job.person_employed.person_name, job.job_name, job.job_department.department_name])
+        for job in Job:
             pprint.pprint(f'{job.person_employed.person_name} had job as {job.job_name} in department {job.job_department.department_name}')
 
     except Exception as e:
