@@ -39,10 +39,10 @@ class Controller(object):
         :return: True if the pump has acknowledged its new state, else False
         """
 
-        liquidHeight = self.sensor.measure()
-        curPumpState = self.pump.get_state()
-        nextPumpStart = self.decider.decide(liquidHeight, curPumpState, self.actions)
+        liquid_height = self.sensor.measure()
+        cur_pump_state = self.pump.get_state()
+        next_pump_start = self.decider.decide(liquid_height, cur_pump_state, self.actions)
         
-        self.pump.set_state(nextPumpStart)
+        self.pump.set_state(next_pump_start)
 
         return None
