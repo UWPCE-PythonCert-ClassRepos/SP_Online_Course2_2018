@@ -17,7 +17,6 @@ class ModuleTests(unittest.TestCase):
     Module tests for the water-regulation module
     """
 
-    # TODO: write an integration test that combines controller and decider,
     #       using a MOCKED sensor and pump.
 
     def test_module(self):
@@ -29,11 +28,12 @@ class ModuleTests(unittest.TestCase):
 
         for action in controller.actions.values():
             controller.pump.get_state = MagicMock(return_value=action)
-            for levels in range(90,115,5):
+            for levels in range(90, 115, 5):
                 controller.sensor.measure = MagicMock(return_value=levels)
                 controller.tick()
-                controller.pump.get_state = MagicMock(return_value=target.decide(
-                    controller.sensor.measure(),controller.pump.get_state(),
-                    controller.actions
-                ))
-
+                controller.pump.get_state = MagicMock(
+                    return_value=target.decide(
+                        controller.sensor.measure(),
+                        controller.pump.get_state(),
+                        controller.actions
+                    ))

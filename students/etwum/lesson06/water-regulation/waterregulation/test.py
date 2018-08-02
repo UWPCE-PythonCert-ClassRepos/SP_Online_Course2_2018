@@ -17,7 +17,6 @@ class DeciderTests(unittest.TestCase):
     Unit tests for the Decider class
     """
 
-    # TODO: write a test or tests for each of the behaviors defined for
     #       Decider.decide
 
     def test_decide(self):
@@ -39,8 +38,6 @@ class ControllerTests(unittest.TestCase):
     """
     Unit tests for the Controller class
     """
-
-    # TODO: write a test or tests for each of the behaviors defined for
     #       Controller.tick
 
     def setUp(self):
@@ -61,5 +58,6 @@ class ControllerTests(unittest.TestCase):
 
         self.sensor.measure.assert_called_with()
         self.pump.get_state.assert_called_with()
-        self.decider.decide.assert_called_with(95, self.pump.PUMP_IN, self.controller.actions)
+        self.decider.decide.assert_called_with(95, self.pump.PUMP_IN,
+                                               self.controller.actions)
         self.pump.set_state.assert_called_with(self.pump.PUMP_IN)

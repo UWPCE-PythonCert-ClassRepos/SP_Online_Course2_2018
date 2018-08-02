@@ -32,17 +32,18 @@ class Controller(object):
         On each call to tick, the controller shall:
 
           1. query the sensor for the current height of liquid in the tank
-          2. query the pump for its current state (pumping in, pumping out, or at rest)
-          3. query the decider for the next appropriate state of the pump, given the above
+          2. query the pump for its current state
+          (pumping in, pumping out, or at rest)
+          3. query the decider for the next appropriate state of the pump,
+          given the above
           4. set the pump to that new state
 
         :return: True if the pump has acknowledged its new state, else False
         """
 
-        # TODO: Implement the above-defined behaviors
-
         liquid_height = self.sensor.measure()
         currentstate_pump = self.pump.get_state()
-        nextstate_pump = self.decider.decide(liquid_height, currentstate_pump, self.actions)
+        nextstate_pump = self.decider.decide(liquid_height,
+                                             currentstate_pump, self.actions)
 
         return self.pump.set_state(nextstate_pump)
