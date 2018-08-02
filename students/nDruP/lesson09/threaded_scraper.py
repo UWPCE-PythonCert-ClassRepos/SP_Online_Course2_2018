@@ -33,8 +33,9 @@ def get_sources():
     resp = requests.get(url, params=params)
     data = resp.json()
     sources = [src['id'].strip() for src in data['sources']]
-    print("All the US, English language sources")
-    print(sources)
+    print("All the US, English language sources:")
+    for s in sources:
+        print(s)
     return sources
 
 def get_top_headlines(source):
@@ -44,7 +45,7 @@ def get_top_headlines(source):
     url = NEWS_API_URL + "top-headlines"
     params = {"sources": source,
               "apiKey": NEWS_API_KEY}
-    print("requesting: " + source)
+    print("requesting top-headlines from: " + source)
     resp = requests.get(url, params=params)
     if resp.status_code !=  200:
         print(source + " has a problem")
@@ -54,12 +55,24 @@ def get_top_headlines(source):
     data = resp.json()
     return data['articles']
 
+def scrape_articles_queue(news_queue):
+    while not news_queue.empty():
+        articles = news_queue.get()
+        for article in articles:
+            if SCRAPE_WORD in article['title'].lower():
+                print(article['source']['name'])
+                print(article['title'])
+                print('author: ' + str(article['author']))
+                print(article['description'])
+                print(article['url'])
+                print()
+
+
 if __name__ == '__main__':
     news_queue = queue.Queue()
+    
     def add_news_queue(src):
         news_queue.put(get_top_headlines(src))
-        print("put on queue")
-        print(news_queue.qsize())
 
     sources = get_sources()
     threads = []
@@ -71,16 +84,5 @@ if __name__ == '__main__':
 
     for t in threads:
         t.join()
-    input('press enter to continue')
-
     
-    while not news_queue.empty():
-        articles = news_queue.get()
-        for article in articles:
-            if (article['title'].lower()).contains(SCRAPE_WORD):
-                print(article['source']['name'])
-                print(article['title'])
-                print('author: ' + str(article['author']))
-                print(article['description'])
-                print(article['url'])
-                print()
+    scrape_articles_queue(news_queue)
