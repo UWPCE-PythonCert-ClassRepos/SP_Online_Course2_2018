@@ -27,5 +27,6 @@ class Sensor(object):
     
         :return: True if the remote liquid height sensor controller acknowledges the request, otherwise False
         """
+        
         response = urllib.request.urlopen(self.address + ":" + self.port)
         return float(response.read)

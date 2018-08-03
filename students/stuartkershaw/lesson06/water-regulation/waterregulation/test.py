@@ -18,6 +18,10 @@ class DeciderTests(unittest.TestCase):
     """
 
     def test_decider_decide(self):
+        """
+        Test the decide method
+        """
+
         actions = {
             'PUMP_IN': 1,
             'PUMP_OFF': 0,
@@ -26,13 +30,13 @@ class DeciderTests(unittest.TestCase):
 
         decider = Decider(100, .10)
 
-        self.assertEqual(1, decider.decide(89, 'PUMP_OFF', actions))
-        self.assertEqual(-1, decider.decide(111, 'PUMP_OFF', actions))
-        self.assertEqual(0, decider.decide(95, 'PUMP_OFF', actions))
-        self.assertEqual(0, decider.decide(101, 'PUMP_IN', actions))
-        self.assertEqual(1, decider.decide(99, 'PUMP_IN', actions))
-        self.assertEqual(0, decider.decide(99, 'PUMP_OUT', actions))
-        self.assertEqual(-1, decider.decide(101, 'PUMP_OUT', actions))
+        self.assertEqual(1, decider.decide(89, 0, actions))
+        self.assertEqual(-1, decider.decide(111, 0, actions))
+        self.assertEqual(0, decider.decide(95, 0, actions))
+        self.assertEqual(0, decider.decide(101, 1, actions))
+        self.assertEqual(1, decider.decide(99, 1, actions))
+        self.assertEqual(0, decider.decide(99, -1, actions))
+        self.assertEqual(-1, decider.decide(101, -1, actions))
 
 
 class ControllerTests(unittest.TestCase):
@@ -41,6 +45,10 @@ class ControllerTests(unittest.TestCase):
     """
 
     def test_controller_tick(self):
+        """
+        Test the tick method
+        """
+
         sensor = Sensor('127.0.0.1', '3080')
         pump = Pump('127.0.0.1', '4080')
         decider = Decider(100, .10)
