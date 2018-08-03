@@ -21,7 +21,7 @@ class ModuleTests(unittest.TestCase):
         """
         Test the waterregulation module
         """
-        
+
         sensor = Sensor('127.0.0.1', '3080')
         pump = Pump('127.0.0.1', '4080')
         decider = Decider(100, .10)
@@ -34,5 +34,7 @@ class ModuleTests(unittest.TestCase):
         for action in controller.actions.values():
             for liquid_height in levels:
                 controller.sensor.measure = MagicMock(return_value=liquid_height)
-                controller.pump.get_state = MagicMock(return_value=decider.decide(liquid_height, action, controller.actions))
+                controller.pump.get_state = MagicMock(
+                    return_value=decider.decide(liquid_height, action, controller.actions)
+                )
                 controller.tick()

@@ -3,7 +3,7 @@ Encapsulates command and coordination for the water-regulation module
 """
 
 
-class Controller(object):
+class Controller():
     """
     Encapsulates command and coordination for the water-regulation module
     """
@@ -42,7 +42,5 @@ class Controller(object):
         liquid_height = self.sensor.measure()
         cur_pump_state = self.pump.get_state()
         next_pump_start = self.decider.decide(liquid_height, cur_pump_state, self.actions)
-        
-        self.pump.set_state(next_pump_start)
 
-        return None
+        self.pump.set_state(next_pump_start)

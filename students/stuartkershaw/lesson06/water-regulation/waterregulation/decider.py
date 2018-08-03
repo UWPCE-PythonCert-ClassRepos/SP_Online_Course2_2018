@@ -3,7 +3,7 @@ Encapsulates decision making in the water-regulation module
 """
 
 
-class Decider(object):
+class Decider():
     """
     Encapsulates decision making in the water-regulation module
     """
@@ -50,26 +50,32 @@ class Decider(object):
         :param current_action: the current action of the pump
         :param actions: a dictionary containing the keys 'PUMP_IN', 'PUMP_OFF',
                         and 'PUMP_OUT'
-        :return: The new action for the pump: one of actions['PUMP_IN'], actions['PUMP_OUT'], actions['PUMP_OFF']
+        :return: The new action for the pump: one of actions['PUMP_IN'],
+                 actions['PUMP_OUT'], actions['PUMP_OFF']
         """
 
         upper_margin_height = self.target_height + self.target_height_margin
         lower_margin_height = self.target_height - self.target_height_margin
 
-        if (current_action == 0 and current_height < lower_margin_height):
-            return actions['PUMP_IN']
-        
-        elif (current_action == 0 and current_height > upper_margin_height):
-            return actions['PUMP_OUT']
+        next_action = None
 
-        elif (current_action == 0 and (current_height >= lower_margin_height and current_height <= upper_margin_height)):
-            return actions['PUMP_OFF']
+        if (current_action == 0 and current_height < lower_margin_height):
+            next_action = actions['PUMP_IN']
+
+        elif (current_action == 0 and current_height > upper_margin_height):
+            next_action = actions['PUMP_OUT']
+
+        elif (current_action == 0 and (
+                current_height >= lower_margin_height <= upper_margin_height)):
+            next_action = actions['PUMP_OFF']
 
         elif (current_action == 1 and current_height > self.target_height):
-            return actions['PUMP_OFF']
+            next_action = actions['PUMP_OFF']
 
         elif (current_action == -1 and current_height < self.target_height):
-            return actions['PUMP_OFF']
+            next_action = actions['PUMP_OFF']
 
         else:
-            return current_action
+            next_action = current_action
+
+        return next_action
