@@ -1,12 +1,3 @@
-# Mac files
-.DS_Store
-
-# PyCharm files
-.idea/
-uw-venv
-*.zip
-*.csv
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -33,6 +24,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+__pycache__/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -108,10 +100,3 @@ ENV/
 
 # mypy
 .mypy_cache/
-
-# VSCode project files
-.vscode/
-students/etwum/lesson01/featuresdf.csv
-
-#secrets
-.config/
