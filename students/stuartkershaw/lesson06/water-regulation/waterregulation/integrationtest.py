@@ -33,8 +33,12 @@ class ModuleTests(unittest.TestCase):
 
         for action in controller.actions.values():
             for liquid_height in levels:
-                controller.sensor.measure = MagicMock(return_value=liquid_height)
+                controller.sensor.measure = MagicMock(
+                    return_value=liquid_height
+                )
                 controller.pump.get_state = MagicMock(
-                    return_value=decider.decide(liquid_height, action, controller.actions)
+                    return_value=decider.decide(
+                        liquid_height, action, controller.actions
+                    )
                 )
                 controller.tick()

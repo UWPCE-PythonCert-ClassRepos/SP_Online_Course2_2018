@@ -64,5 +64,7 @@ class ControllerTests(unittest.TestCase):
 
         sensor.measure.assert_called_with()
         pump.get_state.assert_called_with()
-        decider.decide.assert_called_with(105, pump.PUMP_IN, controller.actions)
+        decider.decide.assert_called_with(
+            105, pump.PUMP_IN, controller.actions
+        )
         pump.set_state.assert_called_with(pump.PUMP_OFF)
