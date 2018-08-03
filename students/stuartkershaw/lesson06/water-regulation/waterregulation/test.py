@@ -40,7 +40,21 @@ class ControllerTests(unittest.TestCase):
     Unit tests for the Controller class
     """
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Controller.tick
+    def test_controller_tick(self):
+        sensor = Sensor('127.0.0.1', '3080')
+        pump = Pump('127.0.0.1', '4080')
+        decider = Decider(100, .10)
 
-    pass
+        controller = Controller(sensor, pump, decider)
+
+        sensor.measure = MagicMock(return_value=105)
+        pump.get_state = MagicMock(return_value=pump.PUMP_IN)
+        decider.decide = MagicMock(return_value=pump.PUMP_OFF)
+        pump.set_state = MagicMock(return_value=True)
+
+        controller.tick()
+
+        sensor.measure.assert_called_with()
+        pump.get_state.assert_called_with()
+        decider.decide.assert_called_with(105, pump.PUMP_IN, controller.actions)
+        pump.set_state.assert_called_with(pump.PUMP_OFF)
