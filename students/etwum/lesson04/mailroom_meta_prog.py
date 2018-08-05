@@ -162,40 +162,23 @@ class Interaction:
 
     def save_donations(self):
 
-        json_file = {}
+        json_file = []
         for donor in self.donor_list:
             current_donor = donor.donor_data()
-            json_file.update(current_donor)
-        saved_data = Donor_Save(json_file)
-        try:
-            with open('donor_list.json', 'w') as outfile:
-                saved_data.to_json(outfile)
-                print('saved file.')
-        except IOError as e:
-            print(e)
+            json_file.append(current_donor)
+        with open('donor_list.json', 'w') as outfile:
+            json.dump(json_file, outfile)
+            print('Data Saved.')
 
     def load_donations(self):
-        loaded_donors = []
+        loaded_donors = None
         with open('donor_list.json') as infile:
             data = json.load(infile)
 
-            loaded_donors.append(data['donors'])
-
-        for x in loaded_donors:
+        for x in data:
             self.add_new_donor(DonorData(x))
 
-        print('loaded file.')
-
-
-
-"""donor1 = DonorData({"donor name": "Lionel Messi", "total donations": 1000000.00, "number donations": 5,
-                     "avg donation": 20000.00})
-donor2 = DonorData({"donor name": "Thierry Henry", "total donations": 500, "number donations": 1,
-                     "avg donation": 500})
-donor3 = DonorData({"donor name": "Michael Jordan", "total donations": 45000, "number donations": 3,
-                     "avg donation": 15000})
-donor4 = DonorData({"donor name": "Kobe Bryant", "total donations": 8000, "number donations": 2,
-                     "avg donation": 4000})"""
+        print('Data loaded.')
 
 
 run = Interaction([])
@@ -234,7 +217,6 @@ def main():
                 # then runs the function from the dictionary
                 options()[str_choice]()
             elif str_choice == 6:
-                options()[5]()
                 print("\nExiting Program")
             else:
                 raise Exception
