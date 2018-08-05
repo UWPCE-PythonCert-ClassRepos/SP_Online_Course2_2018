@@ -12,6 +12,12 @@ class MailroomTestCase(unittest.TestCase):
                 'Mama Murphy': [156316.99, 8500.3, 12054.33, 600, 785.20],
                 'Daphne Dastardly': [82]
         }
+        self.donor_hist2 = {  # Use for JSON save and load tests
+                'Seymour Sudds': [30, 825.1, 389],
+                'Jane Lane': [1950],
+                'Redd Hedd': [25.25, 2538.85],
+                'Mary Barry': [4800, 1.59, 1028.8, 302]
+        }
         self.coll = mailroom.DonorCollection()
         for name, amts in self.donor_history.items():
                 self.coll.add(name, amts)        
@@ -61,14 +67,24 @@ class MailroomTestCase(unittest.TestCase):
         self.assertEqual(self.donor_history, self.coll.to_python_dict)
 
     def test_to_python_dict_101(self):
-        self.coll.add('Harry Lipp', 25.52)
+        self.coll.add('Karl-Heinz Berthold', 800)
+        self.assertEqual(len(self.coll.donors), 6)
+        self.assertEqual(self.coll.to_python_dict['Karl-Heinz Berthold'], 
+                [3545.2, 10579.31, 800])
+        for k, v in self.donor_history.items():
+            if k != 'Karl-Heinz Berthold':
+                self.assertEqual(v, self.coll.to_python_dict[k])
+
+    def test_to_python_dict_102(self):
+        self.coll.add('  Harry Lipp  ', 25.52)
+        self.assertEqual(len(self.coll.donors), 7)
         self.assertEqual(self.coll.to_python_dict['Harry Lipp'], [25.52])
-        self.assertEqual(self.donor_history,
-                dict(list(self.coll.to_python_dict.items())[:-1]))
+        for k, v in self.donor_history.items():
+            self.assertEqual(v, self.coll.to_python_dict[k])
 
     def test_do_all(self):
         self.input_strings = [
-            '0', '01', '5', '6', '7', '8', 'a',  # Bad main menu input
+            '0', '01', '7', '8', 'a',  # Bad main menu input
             '2',  # Show initial donor history
             '1', '',
             '1', 'quit',
@@ -106,6 +122,20 @@ class MailroomTestCase(unittest.TestCase):
             '4', '3 \t 100.01 \t 100',  # Floor > ceiling --> $0 contributions
             '4', '2 \t 0 \t 100 \tDoubling contributions under $100!',
             '4', '3 \t 50 \t 10000000000000 \tTripling contributions over $50!',
+            # '5', 'jfdasojdfsao^*&)^#$*^*#$@',
+            # '5', 'c:\\windows\\'
+            # '5', 'x:\\',
+            # '5', 'test',  # Save letters to relative subfolder
+            # '5', '',  # Save letters in current folder
+            # '5', 'c:\\donorlist',  # Save letters in absolute folder
+            # '5', '..',  # Save letters in parent folder (assuming not @ root)
+            # '6', 'jfdasojdfsao^*&)^#$*^*#$@',
+            # '6', 'c:\\windows\\'
+            # '6', 'x:\\',
+            # '6', 'test',  # Save letters to relative subfolder
+            # '6', '',  # Save letters in current folder
+            # '6', 'c:\\donorlist',  # Save letters in absolute folder
+            # '6', '..',  # Save letters in parent folder (assuming not @ root)
             '9'
         ]
         dui = mailroom_ui.DonorUI(self.coll)

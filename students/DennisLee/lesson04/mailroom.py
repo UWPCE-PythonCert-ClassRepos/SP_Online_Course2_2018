@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import json_save_dec as js
 from functools import reduce
 
 class Donor():
@@ -119,9 +120,10 @@ class Donor():
         
         return text.format(self.name, self.donations[index], extra)
     
-
-class DonorCollection():
+class DonorCollection(metaclass=js.MetaJsonSaveable):
     """Contains methods and properties for an entire donor roster."""
+
+    db_dict = js.Dict()
 
     def __init__(self):
         """Create a dict of donor names and associated `Donor` objects."""
@@ -150,6 +152,11 @@ class DonorCollection():
         except IndexError:
             raise IndexError(
                     f"Name '{key}' is not in the donor collection.")
+
+    @property
+    def to_python_dict(self):
+        # return dict(self.projector(1, 0, 1e12))
+        db_dict = self.projector(1, 0, 1e12)
 
     def add(self, name, amount):
         """
@@ -202,10 +209,6 @@ class DonorCollection():
                         i.average, i.largest, i.smallest)
                 print(('{:<25s} | {:>15d}' + 5*' | ${:>18,.2f}').format(*stats))
         print('\n')
-
-    @property
-    def to_python_dict(self):
-        return dict(self.projector(1, 0, 1e12))
 
     def save_letters(self, folder=""):
         """
