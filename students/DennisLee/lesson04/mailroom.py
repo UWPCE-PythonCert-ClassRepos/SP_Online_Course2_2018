@@ -120,7 +120,7 @@ class Donor():
         
         return text.format(self.name, self.donations[index], extra)
     
-class DonorCollection(metaclass=js.MetaJsonSaveable):
+class DonorCollection(js.JsonSaveable):
     """Contains methods and properties for an entire donor roster."""
 
     db_dict = js.Dict()
