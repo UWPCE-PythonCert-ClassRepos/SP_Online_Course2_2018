@@ -1,6 +1,5 @@
 # cython: profile=True
 
-
 def fibonacci(int n):
     if n < 2:
        return 1
@@ -24,13 +23,19 @@ def factorial(int n):
     return n * factorial(n-1)
 
 def run_fact():
+    results = []
     for i in range(25):
-        factorial(i)
+        results.append(factorial(i))
+    return results
 
 def run_fibo():
+    results = []
     for i in range(15):
-        fibonacci(i)
+        results.append(fibonacci(i))
+    return results
 
 def alt_run_fibo():
+    results = []
     for i in range(15):
-        alt_fibonacci(i)
+        results.append(alt_fibonacci(i))
+    return results
