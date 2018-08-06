@@ -1,6 +1,4 @@
 # cython: profile=True
-from cpython cimport array
-import array
 
 
 def fibonacci(int n):
@@ -9,8 +7,8 @@ def fibonacci(int n):
     return fibonacci(n-1)+fibonacci(n-2)
 
 def alt_fibonacci(n):
-    cdef array.array first_fibos = array.array('i',[1,1])
-    cdef int[:] two_fibo = first_fibos
+    cdef int two_fibo[2]
+    two_fibo[:] = [1,1]
     for i in range(n-2):
         two_fibo[1] += two_fibo[0]
         two_fibo[0] = two_fibo[1] - two_fibo[0]
