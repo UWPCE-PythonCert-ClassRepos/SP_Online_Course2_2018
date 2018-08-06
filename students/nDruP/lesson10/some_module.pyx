@@ -1,12 +1,16 @@
 # cython: profile=True
+from cpython cimport array
+import array
 
-def fibonacci(n):
+
+def fibonacci(int n):
     if n < 2:
        return 1
     return fibonacci(n-1)+fibonacci(n-2)
 
 def alt_fibonacci(n):
-    two_fibo = [1,1]
+    cdef array.array first_fibos = array.array('i',[1,1])
+    cdef int[:] two_fibo = first_fibos
     for i in range(n-2):
         two_fibo[1] += two_fibo[0]
         two_fibo[0] = two_fibo[1] - two_fibo[0]
@@ -16,7 +20,7 @@ def alt_fibonacci(n):
 def hewwo():
     return 'H-hewwo world?!'
 
-def factorial(n):
+def factorial(int n):
     if n <= 1:
        return 1
     return n * factorial(n-1)
