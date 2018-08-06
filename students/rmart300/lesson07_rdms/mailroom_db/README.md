@@ -27,10 +27,4 @@ def challenge()
 def donation_challenge()
     """ prompts user for amounts to filter and increase donation amounts by then performs map, filter, reduce functions """
 
-def save_data()
-    """ leverages json save decorator to save donor collection to json files saved on file storage """
-
-def load_data()
-    """ leverages json save decorator to load json files saved on file storage and create donor collection """ 
-
 mailroom.py imports donor and donor_collection classes to take user selections and execute methods
