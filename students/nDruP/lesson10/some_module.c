@@ -1488,7 +1488,7 @@ static PyObject *__pyx_pf_11some_module_fibonacci(CYTHON_UNUSED PyObject *__pyx_
  * 
  * def alt_fibonacci(n):             # <<<<<<<<<<<<<<
  *     cdef int two_fibo[2]
- *     two_fibo[:] = [1, 1]
+ *     two_fibo[:] = [1,1]
  */
 
 /* Python wrapper */
@@ -1524,7 +1524,7 @@ static PyObject *__pyx_pf_11some_module_2alt_fibonacci(CYTHON_UNUSED PyObject *_
   /* "some_module.pyx":11
  * def alt_fibonacci(n):
  *     cdef int two_fibo[2]
- *     two_fibo[:] = [1, 1]             # <<<<<<<<<<<<<<
+ *     two_fibo[:] = [1,1]             # <<<<<<<<<<<<<<
  *     for i in range(n-2):
  *         two_fibo[1] += two_fibo[0]
  */
@@ -1534,7 +1534,7 @@ static PyObject *__pyx_pf_11some_module_2alt_fibonacci(CYTHON_UNUSED PyObject *_
 
   /* "some_module.pyx":12
  *     cdef int two_fibo[2]
- *     two_fibo[:] = [1, 1]
+ *     two_fibo[:] = [1,1]
  *     for i in range(n-2):             # <<<<<<<<<<<<<<
  *         two_fibo[1] += two_fibo[0]
  *         two_fibo[0] = two_fibo[1] - two_fibo[0]
@@ -1588,7 +1588,7 @@ static PyObject *__pyx_pf_11some_module_2alt_fibonacci(CYTHON_UNUSED PyObject *_
     __pyx_t_3 = 0;
 
     /* "some_module.pyx":13
- *     two_fibo[:] = [1, 1]
+ *     two_fibo[:] = [1,1]
  *     for i in range(n-2):
  *         two_fibo[1] += two_fibo[0]             # <<<<<<<<<<<<<<
  *         two_fibo[0] = two_fibo[1] - two_fibo[0]
@@ -1608,7 +1608,7 @@ static PyObject *__pyx_pf_11some_module_2alt_fibonacci(CYTHON_UNUSED PyObject *_
 
     /* "some_module.pyx":12
  *     cdef int two_fibo[2]
- *     two_fibo[:] = [1, 1]
+ *     two_fibo[:] = [1,1]
  *     for i in range(n-2):             # <<<<<<<<<<<<<<
  *         two_fibo[1] += two_fibo[0]
  *         two_fibo[0] = two_fibo[1] - two_fibo[0]
@@ -1635,7 +1635,7 @@ static PyObject *__pyx_pf_11some_module_2alt_fibonacci(CYTHON_UNUSED PyObject *_
  * 
  * def alt_fibonacci(n):             # <<<<<<<<<<<<<<
  *     cdef int two_fibo[2]
- *     two_fibo[:] = [1, 1]
+ *     two_fibo[:] = [1,1]
  */
 
   /* function exit code */
@@ -2364,7 +2364,7 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * def alt_fibonacci(n):             # <<<<<<<<<<<<<<
  *     cdef int two_fibo[2]
- *     two_fibo[:] = [1, 1]
+ *     two_fibo[:] = [1,1]
  */
   __pyx_tuple__9 = PyTuple_Pack(3, __pyx_n_s_n, __pyx_n_s_two_fibo, __pyx_n_s_i); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
@@ -2699,7 +2699,7 @@ if (!__Pyx_RefNanny) {
  * 
  * def alt_fibonacci(n):             # <<<<<<<<<<<<<<
  *     cdef int two_fibo[2]
- *     two_fibo[:] = [1, 1]
+ *     two_fibo[:] = [1,1]
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11some_module_3alt_fibonacci, NULL, __pyx_n_s_some_module); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
