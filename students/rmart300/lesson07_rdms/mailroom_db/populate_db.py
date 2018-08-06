@@ -17,7 +17,7 @@ def populate_donor_table():
 
     database = SqliteDatabase('mailroom.db')
 
-    logger.info('Working with Person class')
+    logger.info('Working with Donor class')
 
     FIRST_NAME = 0
     LAST_NAME = 1
@@ -35,7 +35,7 @@ def populate_donor_table():
         database.execute_sql('PRAGMA foreign_keys = ON;')
         for donor in donors:
             with database.transaction():
-                new_donor = Donor.create(
+                new_donor = Donors.create(
                     first_name = donor[FIRST_NAME],
                     last_name = donor[LAST_NAME]
                     )
@@ -71,9 +71,9 @@ def populate_donation_table():
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
         for donation in donations:
-            for donor in Donor:
+            for donor in Donors:
                 with database.transaction():
-                    new_donation = Donation.create(
+                    new_donation = Donations.create(
                         amount = int(donation),
                         donation_date = datetime.now(),
                         donor = donor.id

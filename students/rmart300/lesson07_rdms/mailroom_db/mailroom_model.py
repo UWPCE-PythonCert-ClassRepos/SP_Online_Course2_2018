@@ -13,7 +13,7 @@ class BaseModel(Model):
     class Meta:
         database = database
 
-class Donor(BaseModel):
+class Donors(BaseModel):
     """
         This class defines Person, which maintains details of someone
         for whom we want to research career to date.
@@ -28,7 +28,10 @@ class Donor(BaseModel):
             (('first_name', 'last_name'), True),  # This should generated a unique constraint of those two columns
         )
 
-class Donation(BaseModel):
+    def __repr__(self):
+        return f"{first_name} {last_name}"
+
+class Donations(BaseModel):
 
     """
         This class defines Donation, which maintains list of donations by donor
@@ -38,4 +41,4 @@ class Donation(BaseModel):
 
     amount = FloatField()
     donation_date = DateField()
-    donor = ForeignKeyField(Donor, related_name='by_donor', null = False)    
+    donor = ForeignKeyField(Donors, related_name='by_donor', null = False)   

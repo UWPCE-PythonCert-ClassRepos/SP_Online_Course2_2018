@@ -18,24 +18,10 @@ def validate_user_selection(action, action_dict):
 
 if __name__ == '__main__':
 
-    init_message = "Would you like to (1) load existing data or (2) load default data? "
-    data_init = input(init_message)
     donor_list = []
 
-    if int(data_init) == 1:
-        dc = DonorCollection()
-        dc.load_donor_collection()
-        print(dc.donor_list)
-
-    if int(data_init) == 2 or (dc is not None and len(dc.donor_list) == 0):
-        donor_list = [
-                      Donor('Fred Smith'), 
-                      Donor('Terrie Ann'), 
-                      Donor('Murray Martin'), 
-                      Donor('Josh Jones'), 
-                      Donor('Jane Doe')
-                     ]
-        dc = DonorCollection(donor_list)
+    dc = DonorCollection()
+    dc.load_donor_collection()
 
     # prompt user for action and then call function
     action = 0
@@ -45,7 +31,7 @@ if __name__ == '__main__':
         prompt_message += '2 - \“Create a Report\” or '
         prompt_message += '3 - \"Send letters to everyone\" or '
         prompt_message += '4 - \"Donation Challenge\" or '
-        prompt_message += '5 - \"Save Donor Collection\" or 6 - \“quit\”\n'
+        prompt_message += '5 - \“quit\”\n'
         action = input(prompt_message)
        
         action_dict = { 
@@ -53,8 +39,7 @@ if __name__ == '__main__':
                         2: dc.create_report, 
                         3: dc.write_letters, 
                         4: dc.donation_challenge, 
-                        5: dc.save_donor_collection,
-                        6: exit,
+                        5: exit,
                       }
  
         if not validate_user_selection(action, action_dict):
