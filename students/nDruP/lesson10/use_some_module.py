@@ -1,16 +1,25 @@
 import some_module
 import cProfile
-#from timeit import timeit as timer
+from timeit import timeit as timer
 
-print(some_module.hewwo())
+#print(timer(lambda: some_module.run_fact()))
+#print(timer(lambda: some_module.run_fibo()))
+#print(timer(lambda: some_module.alt_run_fibo()))
 
-#print(timer(lambda: run_fact()))
+#cProfile.run('some_module.run_fact()')
+#cProfile.run('some_module.run_fibo()')
+#cProfile.run('some_module.alt_run_fibo()')
 
-#print(timer(lambda: run_fibo()))
+def run():    
+    some_module.run_fact()
+    some_module.run_fibo()
+    some_module.alt_run_fibo()
 
-#print(timer(lambda: alt_run_fibo()))
 
+if __name__ == '__main__':
+    pr = cProfile.Profile()
 
-cProfile.run('some_module.run_fact()')
-cProfile.run('some_module.run_fibo()')
-cProfile.run('some_module.alt_run_fibo()')
+    pr.enable()
+    run()
+    pr.disable()
+    pr.print_stats(sort='time')
