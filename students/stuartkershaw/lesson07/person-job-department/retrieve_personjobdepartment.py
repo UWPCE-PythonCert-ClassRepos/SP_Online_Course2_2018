@@ -1,23 +1,18 @@
 from datetime import datetime
 from create_personjobdepartment import *
 
+import pprint
 import logging
 
 def days_between(start_date, end_date):
+    """
+        take two DateField objects, return days between
+    """
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
     return abs((end_date - start_date).days)
 
-def convert_datetime(end_date_in, start_date_in):
-    end_date = str(end_date_in)
-    start_date = str(start_date_in)
-    return datetime.strptime(''.join(end_date.split('-')), '%Y%m%d') - datetime.strptime(''.join(start_date.split('-')), '%Y%m%d')
-
 def join_classes():
-    """
-        demonstrate how to join classes together : no matches too
-    """
-
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -31,21 +26,44 @@ def join_classes():
                  .join(Department, JOIN.INNER)
                 )
 
+        jobs = []
+
         for job in query:
             try:
-                logger.info(f'{job.person_employed} held position \'{job.job_name}\' '\
+                logger.info('send start_date and end_date to days_between()')
+                logger.info(f'{job.person_employed.person_name} held position {job.job_name} '\
                             f'in department {job.department.department_name} '\
                             f'for {days_between(job.start_date, job.end_date)} days')
 
+                job_info = {
+                    'name': job.person_employed.person_name,
+                    'title': job.job_name,
+                    'department': job.department.department_name,
+                    'days': days_between(job.start_date, job.end_date)
+                }
+
+                jobs.append(job_info)
+
             except Exception as e:
-                logger.info(f'Person {job.person_employed} had no job')
+                logger.info(e)
 
 
     except Exception as e:
         logger.info(e)
 
     finally:
+        print_jobs(jobs)
         database.close()
+
+def print_jobs(jobs):
+    """
+        pretty print array of job dicts
+    """
+    if len(jobs) > 0:
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(jobs)
+    else:
+        print('No jobs to print out')
 
 if __name__ == '__main__':
     join_classes()
