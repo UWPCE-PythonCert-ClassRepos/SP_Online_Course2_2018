@@ -22,6 +22,3 @@ top_dance_str = ("{}"+"\n{}"*(len(top_dance)-1)).format(*top_dance)
 print(top_dance_str)
 with open("top_danceables_2017.txt", 'w+') as spotify:
     spotify.write(top_dance_str)
-    
-
-

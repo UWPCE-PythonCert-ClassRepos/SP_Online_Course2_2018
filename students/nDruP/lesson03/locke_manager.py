@@ -20,15 +20,15 @@ class Locke:
             raise ValueError('Too many boats for the locke')
         else:
             print("Stopping the pumps")
-            sleep(1)
+            sleep(.25)
             print("Opening the doors")
-            sleep(1)
+            sleep(.25)
             print("Letting the boats in")
-            sleep(num_boats/2)
+            sleep(num_boats/4)
             print("Closing the doors")
-            sleep(1)
+            sleep(.25)
             print("Restarting the pumps")
-            sleep(1)
+            sleep(.25)
 
 
 if __name__ == '__main__':
