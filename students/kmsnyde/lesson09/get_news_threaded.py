@@ -24,8 +24,8 @@ def get_sources(sources):
     print('Got the sources')
     #print(r.url)
     sources.extend([src['id'].strip() for src in data['sources']])
-    for i in sources:
-        print(i)
+#    for i in sources:
+#        print(i)
     return sources
     
 #get_sources(sources)
@@ -55,11 +55,13 @@ def get_articles(source):
         
 if __name__ == '__main__':
     
-    Thread(target=get_sources, args=(sources,)).start()
+    get_sources(sources)
     l = []
+    #sources = sources[:3]
     for i in sources:
-        t = Thread(target=get_articles, args=(i))
+        t = Thread(target=get_articles, args=(i,))
         t.start()
         l.append(t)
-    for x in l:
-        x.join()
+        
+    for t in l:
+        t.join()
