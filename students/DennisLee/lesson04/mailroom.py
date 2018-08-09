@@ -153,10 +153,9 @@ class DonorCollection(js.JsonSaveable):
             raise IndexError(
                     f"Name '{key}' is not in the donor collection.")
 
-    @property
-    def to_python_dict(self):
-        # return dict(self.projector(1, 0, 1e12))
-        db_dict = self.projector(1, 0, 1e12)
+    def to_json_compat(self):
+        self.db_dict = dict(self.projector(1, 0, 1e12))
+        return super().to_json_compat()
 
     def add(self, name, amount):
         """
@@ -348,3 +347,13 @@ class DonorCollection(js.JsonSaveable):
         """
         all_gifts = reduce(lambda x, y: x + y, dict(donation_list).values())
         return round(sum(all_gifts), 2)
+
+
+if __name__ == '__main__':
+    a = DonorCollection()
+    a.add('Fred', [12.5])
+    a.add('Barney', [5, 10, 20, 45.5])
+    a.add('Wilma', [850, 84.2])
+    a.add('Betty', [284, 283, 288.1])
+    json_dict = a.to_json_compat()
+    print(json_dict)
