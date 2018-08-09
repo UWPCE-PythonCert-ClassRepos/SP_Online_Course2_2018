@@ -21,14 +21,17 @@ class ModuleTests(unittest.TestCase):
     #       using a MOCKED sensor and pump.
 
     def test_water(self):
+        """the test method"""
         pump = Pump('127.0.0.1', '8000')
         decider = Decider(100, 2)
         sensor = Sensor('127.0.0.1', '8000')
         controller = Controller(sensor, pump, decider)
         controller.pump.set_state = MagicMock(return_value=True)
-        level = [100, 100, 95]
+        controller.pump.get_state = MagicMock(return_value=True)
+        # level = [100, 100, 95]
         for act in controller.actions.values():
-            for water in level:
-                controller.sensor.measure = MagicMock(return_value=water)
-                controller.pump.get_state = MagicMock(return_value=decider.decide(water, act, controller.actions))
+            for level in range(0, 200, 1):
+                controller.sensor.measure = MagicMock(return_value=level)
+                controller.pump.get_state = MagicMock(return_value=decider.decide(level, act, controller.actions))
+                controller.pump.set_state = MagicMock(return_value=True)
                 controller.tick()

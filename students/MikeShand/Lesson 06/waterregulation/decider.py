@@ -72,10 +72,3 @@ class Decider():
             else:
                 new_action = actions["PUMP_OUT"]
         return new_action
-
-    def dont_decide(self):
-        """
-        docstring
-        :return:
-        """
-        pass

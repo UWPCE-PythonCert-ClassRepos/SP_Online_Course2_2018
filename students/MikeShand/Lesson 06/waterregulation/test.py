@@ -62,6 +62,7 @@ class ControllerTests(unittest.TestCase):
         sensor = Sensor('127.0.0.1', '8000')
         controller = Controller(sensor, pump, decider)
         sensor.measure = MagicMock(return_value=102)
+        pump.set_state = MagicMock(return_value=pump.PUMP_OFF)
         pump.get_state = MagicMock(return_value=pump.PUMP_OFF)
         decider.decide = MagicMock(return_value=pump.PUMP_OFF)
         controller.tick()

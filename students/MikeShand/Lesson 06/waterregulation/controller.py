@@ -45,10 +45,3 @@ class Controller():
         next_state = self.decider.decide(current_height, current_state, self.actions)
 
         return self.pump.set_state(next_state)
-
-    def tock(self):
-        """
-        docstring
-        :return:
-        """
-        pass
