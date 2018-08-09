@@ -14,15 +14,16 @@ class BaseModel(Model):
 
 
 class Donor(BaseModel):
-    name = CharField(primary_key=True, max_length=30, null=False)
-    avg_donation = FloatField()
-    total_donation = FloatField()
-    num_donations = IntegerField()
+    full_name = CharField(primary_key=True, max_length=30, null=False)
+    avg_donation = FloatField(null=True)
+    total_donation = FloatField(null=True)
+    num_donations = IntegerField(null=True)
 
 
 class Donation(BaseModel):
-    amount = DecimalField(null=False)
-    donor = ForeignKeyField(Donor, null=False)
+    amount = FloatField(null=False)
+    donor_name = ForeignKeyField(Donor, null=False,
+                                 related_name='was_filled_by')
 
 
 if __name__ == "__main__":
@@ -48,28 +49,28 @@ if __name__ == "__main__":
         for key, val in db.items():
             with database.transaction():
                 donor = Donor.create(
-                    name=key,
+                    full_name=key,
                     avg_donation=sum(val) / len(val),
                     total_donation=sum(val),
                     num_donations=len(val)
                 )
                 donor.save()
 
-                for d in val:
+                for amount in val:
                     donation = Donation.create(
-                        amount=d,
-                        donor=key
+                        amount=amount,
+                        donor_name=key
                     )
                 donation.save()
 
         for donor in Donor:
-            logger.info(f'{donor.name}, '
+            logger.info(f'{donor.full_name}, '
                         f'{donor.avg_donation}, '
                         f'{donor.total_donation}, '
                         f'{donor.num_donations}')
 
         for donation in Donation:
-            logger.info(f'{donation.donor}, '
+            logger.info(f'{donation.donor_name}, '
                         f'{donation.amount}')
 
     except Exception as e:
