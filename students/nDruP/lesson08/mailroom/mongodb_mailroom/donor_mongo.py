@@ -29,8 +29,9 @@ class Donor_DB():
             uri = config["mongodb_cloud"]["connection"]
         except Exception as e:
             print(f'error: {e}')
-
         self._client = pymongo.MongoClient(uri, serverSelectionTimeoutMS=10000, authMechanism='SCRAM-SHA-1', username=user, password=pw)
+        self.all_donor_info = []
+        self.set_donor_info()
 
     def __getitem__(self, key_name):
         with self._client as client:
@@ -39,8 +40,7 @@ class Donor_DB():
             d = donors.find_one(query)
         return d
 
-    @property
-    def all_donor_info(self):
+    def set_donor_info(self):
         info = []
         with self._client as client:
             donors = client.get_database()['donors']
@@ -51,7 +51,7 @@ class Donor_DB():
                 sum(d['gifts'])/len(d['gifts']))
                 for d in donors.find()
             ]
-        return info
+        self.all_donor_info = info
 
     @property
     def names(self):
@@ -105,6 +105,7 @@ class Donor_DB():
                     {'key': key_name},
                     {'$push': {'gifts': contribution}}
                 )
+        self.set_donor_info()
     
     def challenge(self, alter, min_gift=-1.0, max_gift=-1.0, *filt_names):
         remain_names = [x for x in self.names if x not in filt_names]

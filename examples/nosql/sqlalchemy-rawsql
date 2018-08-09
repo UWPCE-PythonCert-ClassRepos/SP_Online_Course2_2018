@@ -1,0 +1,18 @@
+"""
+  a simple example of how to use sqlalchemy to run sql against a database
+
+"""
+
+import sqlalchemy
+from sqlalchemy import create_engine
+
+# replace xxx with database specific conection string
+
+engine = create_engine('xxx')
+
+with engine.connect() as con:
+
+    rs = con.execute('SELECT * FROM book') 
+
+    for row in rs:
+        print row
