@@ -75,6 +75,36 @@ class DataBase:
         finally:
             self.database.close()
 
+    def delete_donor(self):
+        self.list_donors()
+        name = fullname_input()
+        try:
+            self.database.connect()
+            self.database.execute_sql('PRAGMA foreign_keys = ON;')
+            with self.database.transaction():
+                donor = Donor.get(Donor.full_name == name)
+                donor.delete_instance()
+        except Exception as e:
+            logger.info(e)
+        finally:
+            self.database.close()
+        self.list_donors()
+
+    def update_donor_name(self):
+        self.list_donors()
+        curr_name, new_name = name_update_input()
+        try:
+            self.database.connect()
+            self.database.execute_sql('PRAGMA foreign_keys = ON;')
+            with self.database.transaction():
+                Donor.update(full_name=new_name).where(
+                    Donor.full_name == curr_name).execute()
+        except Exception as e:
+            logger.info(e)
+        finally:
+            self.database.close()
+        self.list_donors()
+
     def print_donor_and_amount(self, fullname, amount):
         self.add_donor_donation(fullname, amount)
         print(self._format_letter(fullname, amount))
@@ -156,6 +186,13 @@ def fullname_input():
     return input('Enter a donor first and last name > ').title()
 
 
+def name_update_input():
+    """Return prompt asking for currenty name and new name."""
+    curr_name = fullname_input()
+    new_name = input('Enter a new first and last name > ').title()
+    return curr_name, new_name
+
+
 def amount_input():
     """Return prompt asking for donation amount."""
     while True:
@@ -177,12 +214,16 @@ main_prompt = ('\nEnter "q" to "Exit Menu" \n'
                'Enter "1" to "Send a Thank You" \n'
                'Enter "2" to "Create a Report" \n'
                'Enter "3" to "Send Letters to Everyone" \n'
+               'Enter "4" to "Delete Donor" \n'
+               'Enter "5" to "Update Donor Name" \n'
                'What do you want to do? > '
                )
 
 main_dict = {'1': send_thankyou_email,
              '2': db.create_report,
-             '3': db.send_letters
+             '3': db.send_letters,
+             '4': db.delete_donor,
+             '5': db.update_donor_name,
              }
 
 thankyou_prompt = ('\nEnter "q" to "Exit Menu" \n'
