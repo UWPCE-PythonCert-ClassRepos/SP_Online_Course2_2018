@@ -7,7 +7,7 @@ import logging
 
 def populate_donors():
     """
-    add donor data to database
+        Add donor data to database
     """
 
     logging.basicConfig(level=logging.INFO)
@@ -27,14 +27,17 @@ def populate_donors():
     try:
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
+
         for donor in donors:
             with database.transaction():
                 new_donor = Donor.create(
                         donor_name=donor)
                 new_donor.save()
+
                 logger.info('Database add successful')
 
         logger.info('Print the Donor records we saved...')
+
         for saved_donor in Donor:
             logger.info(f'{saved_donor.donor_name}')
 
@@ -49,7 +52,7 @@ def populate_donors():
 
 def populate_donations():
     """
-        add donation data to database
+        Add donation data to database
     """
 
     logging.basicConfig(level=logging.INFO)
@@ -72,15 +75,18 @@ def populate_donations():
     try:
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
+
         for donation in donations:
             with database.transaction():
                 new_donation = Donation.create(
                     donation_amount=donation[DONATION_AMOUNT],
                     donation_donor=donation[DONATION_DONOR])
                 new_donation.save()
+
                 logger.info('Database add successful')
 
         logger.info('Print the Donation records we saved...')
+
         for donation in Donation:
             logger.info('Donation amount: {}, donor name: {}'
                         .format(donation.donation_amount,

@@ -16,6 +16,7 @@ def join_classes():
     try:
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
+
         query = (Donation
                  .select(Donation, Donor)
                  .join(Donor, JOIN.INNER))
@@ -47,7 +48,7 @@ def join_classes():
 
 def print_donations(donations):
     """
-        pretty print array of donation dicts
+        Pretty print array of donation dicts
     """
     if len(donations) > 0:
         pp = pprint.PrettyPrinter(indent=4)
