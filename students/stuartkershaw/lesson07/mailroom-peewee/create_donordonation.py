@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import logging
 import datetime
 from peewee import (SqliteDatabase, Model, CharField, ForeignKeyField,
@@ -30,7 +32,7 @@ class Donation(BaseModel):
         This class defines Donation, which maintains donation value and
         donor name.
     """
-    donation_value = DecimalField(max_digits=8, decimal_places=2)
+    donation_amount = DecimalField(max_digits=8, decimal_places=2)
     donation_donor = ForeignKeyField(Donor, null=False)
     donation_date = DateTimeField(default=datetime.datetime.now)
     logger.info('Created Donation table with donation value, '
@@ -41,5 +43,7 @@ database.create_tables([
     Donor,
     Donation
 ])
+
+logger.info('Database created with Donor and Donation tables.')
 
 database.close()
