@@ -48,7 +48,7 @@ def join_classes():
 
 def print_donations(donations):
     """
-        Pretty print array of donation dicts
+    Pretty print array of donation dicts
     """
     if len(donations) > 0:
         pp = pprint.PrettyPrinter(indent=4)

@@ -7,7 +7,7 @@ import logging
 
 def populate_donors():
     """
-        Add donor data to database
+    Add donor data to database
     """
 
     logging.basicConfig(level=logging.INFO)
@@ -52,7 +52,7 @@ def populate_donors():
 
 def populate_donations():
     """
-        Add donation data to database
+    Add donation data to database
     """
 
     logging.basicConfig(level=logging.INFO)
