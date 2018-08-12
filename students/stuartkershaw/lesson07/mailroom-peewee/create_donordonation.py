@@ -20,7 +20,7 @@ class BaseModel(Model):
 
 class Donor(BaseModel):
     """
-        This class defines Donor, which maintains donor name
+    This class defines Donor, which maintains donor name
     """
     donor_name = CharField(primary_key=True, max_length=30)
     donor_created = DateTimeField(default=datetime.datetime.now)
@@ -28,8 +28,8 @@ class Donor(BaseModel):
 
 class Donation(BaseModel):
     """
-        This class defines Donation, which maintains donation value and
-        donor name.
+    This class defines Donation, which maintains donation value and
+    donor name.
     """
     donation_amount = IntegerField()
     donation_donor = ForeignKeyField(Donor, null=False)
