@@ -6,7 +6,7 @@ import logging
 
 def create_donor(name):
     """
-        Add new donor to database
+    Add new donor to database
     """
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ def create_donor(name):
 
 def create_donation(donor, amount):
     """
-        Add new donation to database
+    Add new donation to database
     """
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
@@ -72,7 +72,7 @@ def create_donation(donor, amount):
 
 def get_donor_names():
     """
-        Get donor names from database
+    Get donor names from database
     """
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
@@ -106,7 +106,7 @@ def get_donor_names():
 
 def get_donor_donations():
     """
-        Get donor donations from database
+    Get donor donations from database
     """
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
