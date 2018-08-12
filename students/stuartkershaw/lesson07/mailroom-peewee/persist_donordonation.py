@@ -126,8 +126,7 @@ def get_donor_donations():
         for donation in query:
             try:
                 donor_donations.setdefault(donation.donation_donor.donor_name,
-                                           []).append(
-                                            float(donation.donation_amount))
+                                           []).append(float(donation.donation_amount))
 
             except Exception as e:
                 logger.info(e)

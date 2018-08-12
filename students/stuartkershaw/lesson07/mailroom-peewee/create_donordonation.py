@@ -3,7 +3,7 @@
 import logging
 import datetime
 from peewee import (SqliteDatabase, Model, CharField, ForeignKeyField,
-                    DateTimeField, DecimalField)
+                    DateTimeField, IntegerField)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,8 +31,8 @@ class Donation(BaseModel):
         This class defines Donation, which maintains donation value and
         donor name.
     """
+    donation_amount = IntegerField()
     donation_donor = ForeignKeyField(Donor, null=False)
-    donation_amount = DecimalField(max_digits=8, decimal_places=2)
     donation_date = DateTimeField(default=datetime.datetime.now)
 
 

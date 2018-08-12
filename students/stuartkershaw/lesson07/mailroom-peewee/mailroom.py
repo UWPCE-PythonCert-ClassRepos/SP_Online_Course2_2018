@@ -7,22 +7,6 @@ import pathlib
 pth = pathlib.Path('./')
 
 
-class Donor:
-
-    def __init__(self, name):
-        self._name = name
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, val):
-        if not val:
-            raise ValueError("A Donor must have a name.")
-        self._name = val
-
-
 class DonorList:
 
     def __init__(self):
@@ -45,14 +29,14 @@ class DonorList:
 
     def add_donor(self, name):
         try:
-            donor = Donor(name)
-            create_donor(donor.name)
+            create_donor(name)
         except:
             pass
 
     def add_donation(self, donor, val):
         if val < 1:
             raise ValueError("A positive donation value is required.")
+
         try:
             create_donation(donor, val)
         except:
@@ -87,9 +71,11 @@ class DonorList:
             'donor_name': donor,
             'donations': sum(self.get_donations(donor))
         }
+
         message = 'Dear {donor_name}, thanks so much '\
                   'for your generous donations in the amount of: '\
                   '${donations}.'.format(**message_obj)
+
         return message
 
     def generate_rollup(self):
@@ -97,11 +83,8 @@ class DonorList:
             donations = self.get_donations(donor)
 
             number = len(donations)
-            total = sum(donations)
-            average = float(
-                format(
-                    sum(donations) / len(donations), '.2f')
-                )
+            total = int(sum(donations))
+            average = float(format(sum(donations) / len(donations), '.2f'))
 
             donor_rollup = {
                 donor: dict(zip(('number', 'total', 'average'),
@@ -114,24 +97,31 @@ class DonorList:
         if not len(self.donor_names):
             print('The list of donors is empty.')
             return
+
         self.generate_rollup()
+
         headings = ('Donor Name', 'Num Gifts', 'Total Given', 'Average Gift')
+
         print('{:20}{:<15}{:<15}{:<15}'.format(*headings))
         print('{:_<65}'.format(''))
+
         for donor in self.donor_names:
-            print('{:<20}'.format(donor),
-                                 ('{:<15}' * len(self.rollup[donor]))
+            print('{:<20}'.format(donor), ('{:<15}' * len(self.rollup[donor]))
                   .format(*self.rollup[donor].values()))
 
     def generate_letters(self):
         if not len(self.donor_names):
             print('The list of donors is empty.')
             return
+
         self.generate_rollup()
+
         for donor in self.donor_names:
             with open(donor.replace(' ', '_') + '.txt', 'w') as outfile:
                 outfile.write(self.compose_thank_you(donor))
+
         print('Letters generated: ')
+
         for f in pth.iterdir():
             if '.txt' in str(f):
                 print(f)
@@ -179,9 +169,12 @@ class DonorCli:
         if not self.donorCollection.donor_names:
             print('The list of donors is empty.')
             return
+
         instruction = 'Please enter a full name '\
                       'or type \'list\' to see donors:\n'
+
         name_input = input(instruction)
+
         if name_input == 'list':
             self.donorCollection.get_donor_names()
             self.accept_donation()
