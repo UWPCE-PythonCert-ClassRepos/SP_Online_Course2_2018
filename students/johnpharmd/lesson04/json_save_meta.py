@@ -34,7 +34,7 @@ class MetaJsonSaveable(type):
         # and then the same parameters as the type() factory function
 
         # you want to call the regular type initilizer:
-        super().__init__(name, bases, attr_dict)
+        super(MetaJsonSaveable, cls).__init__(name, bases, attr_dict)
 
         # here's where we work with the class attributes:
         # these will be the attributes that get saved and reconstructed from json.
@@ -44,9 +44,9 @@ class MetaJsonSaveable(type):
             if isinstance(attr, cls):
                 cls._attrs_to_save[key] = attr
         # special case JsonSaveable -- no attrs to save yet
-        if cls.__name__ != "JsonSaveable" and (not cls._attrs_to_save):
-            raise TypeError(f"{cls.__name__} class has no saveable attributes.\n"
-                            "           Note that Saveable attributes must be instances")
+        # if cls.__name__ != "JsonSaveable" and (not cls._attrs_to_save):
+        #     raise TypeError(f"{cls.__name__} class has no saveable attributes.\n"
+        #                     "           Note that Saveable attributes must be instances")
 
         # register this class so we can re-construct instances.
         # cls.ALL_SAVEABLES[attr_dict["__qualname__"]] = cls
@@ -160,27 +160,29 @@ def from_json(_json):
 if __name__ == "__main__":
 
     # Example of using it.
-    class MyClass(JsonSaveable(*args)):
+    class MyClass(JsonSaveable):
 
-        x = int()
-        y = float()
-        l = list()
+        # x = int(x)
+        # y = float(y)
+        # = list(l)
 
         def __init__(self, x, lst):
             self.x = x
             self.lst = lst
+            self.attr_dict = {'x': self.x, 'lst': self.lst}
 
     class OtherSaveable(JsonSaveable):
 
-        foo = String()
-        bar = Int()
+        # foo = str(foo)
+        # bar = int(bar)
 
         def __init__(self, foo, bar):
             self.foo = foo
             self.bar = bar
+            self.attr_dict = {'foo': self.foo, 'bar': self.bar}
 
     # create one:
-    print("about to create a instance")
+    print("about to create a instance (line 185)")
     mc = MyClass(5, [3, 5, 7, 9])
 
     print(mc)
