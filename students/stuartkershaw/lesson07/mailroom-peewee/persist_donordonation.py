@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from peewee import JOIN
 from create_donordonation import SqliteDatabase, Donor, Donation
 
@@ -10,7 +8,6 @@ def create_donor(name):
     """
         Add new donor to database
     """
-
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -29,11 +26,6 @@ def create_donor(name):
             new_donor.save()
             logger.info('Database add successful')
 
-        logger.info('Print the Donor record we saved...')
-
-        for saved_donor in Donor:
-            logger.info(f'{saved_donor.donor_name}')
-
     except Exception as e:
         logger.info(f'Error creating = {name}')
         logger.info(e)
@@ -43,11 +35,10 @@ def create_donor(name):
         database.close()
 
 
-def create_donation(amount, donor):
+def create_donation(donor, amount):
     """
         Add new donation to database
     """
-
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -63,19 +54,12 @@ def create_donation(amount, donor):
 
         with database.transaction():
             new_donation = Donation.create(
-                donation_amount=amount,
-                donation_donor=donor)
+                donation_donor=donor,
+                donation_amount=amount)
 
             new_donation.save()
 
             logger.info('Database add successful')
-
-        logger.info('Print the Donation record we saved...')
-
-        for donation in Donation:
-            logger.info('Donation amount: {}, donor name: {}'
-                        .format(donation.donation_amount,
-                                donation.donation_donor))
 
     except Exception as e:
         logger.info(f'Error creating = {amount} for {donor}')
@@ -84,6 +68,40 @@ def create_donation(amount, donor):
     finally:
         logger.info('database closes')
         database.close()
+
+
+def get_donor_names():
+    """
+        Get donor names from database
+    """
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    database = SqliteDatabase('mailroom.db')
+
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+
+        query = (Donor
+                 .select())
+
+        donor_names = []
+
+        for donor in query:
+            try:
+                donor_names.append(donor.donor_name)
+
+            except Exception as e:
+                logger.info(e)
+
+    except Exception as e:
+        logger.info(e)
+
+    finally:
+        database.close()
+
+        return donor_names
 
 
 def get_donor_donations():
@@ -103,12 +121,12 @@ def get_donor_donations():
                  .select(Donation, Donor)
                  .join(Donor, JOIN.INNER))
 
-        donations = {}
+        donor_donations = {}
 
         for donation in query:
             try:
-                donations.setdefault(donation.donation_donor.donor_name,
-                                     []).append(
+                donor_donations.setdefault(donation.donation_donor.donor_name,
+                                           []).append(
                                             float(donation.donation_amount))
 
             except Exception as e:
@@ -118,9 +136,6 @@ def get_donor_donations():
         logger.info(e)
 
     finally:
-        print(donations)
         database.close()
 
-
-if __name__ == '__main__':
-    get_donor_donations()
+        return donor_donations

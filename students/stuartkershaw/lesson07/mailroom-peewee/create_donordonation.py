@@ -24,7 +24,6 @@ class Donor(BaseModel):
     """
     donor_name = CharField(primary_key=True, max_length=30)
     donor_created = DateTimeField(default=datetime.datetime.now)
-    logger.info('Created Donor table with donor name and date created fields.')
 
 
 class Donation(BaseModel):
@@ -32,18 +31,14 @@ class Donation(BaseModel):
         This class defines Donation, which maintains donation value and
         donor name.
     """
-    donation_amount = DecimalField(max_digits=8, decimal_places=2)
     donation_donor = ForeignKeyField(Donor, null=False)
+    donation_amount = DecimalField(max_digits=8, decimal_places=2)
     donation_date = DateTimeField(default=datetime.datetime.now)
-    logger.info('Created Donation table with donation value, '
-                'date given, and donor name foreign key fields.')
 
 
 database.create_tables([
     Donor,
     Donation
 ])
-
-logger.info('Database created with Donor and Donation tables.')
 
 database.close()
