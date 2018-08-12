@@ -183,21 +183,22 @@ if __name__ == "__main__":
             self.attr_dict = {'foo': self.foo, 'bar': self.bar}
 
     # create one:
-    print("about to create a instance (line 185)")
+    print("about to create an instance of MyClass (p-statement01; line 185)")
     mc = MyClass(5, [3, 5, 7, 9])
 
-    print(mc)
+    print('p-statement02:', mc)
 
     jc = mc.to_json_compat()
 
     # re-create it from the dict:
     mc2 = MyClass.from_json_dict(jc)
 
-    print(mc2 == "fred")
+    print('p-statement03:', mc2 == "fred")
 
+    print('Assertion: mc2 == mc')
     assert mc2 == mc
 
-    print(mc.to_json())
+    print('p-statement04:', mc.to_json())
 
     # now try it nested...
     mc_nest = MyClass(34, [OtherSaveable("this", 2),
@@ -205,12 +206,12 @@ if __name__ == "__main__":
                            ])
 
     mc_nest_comp = mc_nest.to_json_compat()
-    print(mc_nest_comp)
+    print('p-statement05:', mc_nest_comp)
 
     # can we re-create it?
     mc_nest2 = MyClass.from_json_dict(mc_nest_comp)
 
-    print(mc_nest)
-    print(mc_nest2)
+    print('p-statement06:', mc_nest)
+    print('p-statement07:', mc_nest2)
 
     assert mc_nest == mc_nest2
