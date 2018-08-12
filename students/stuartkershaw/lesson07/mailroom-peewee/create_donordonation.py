@@ -33,7 +33,7 @@ class Donation(BaseModel):
     """
     donation_amount = IntegerField()
     donation_donor = ForeignKeyField(Donor, null=False)
-    donation_date = DateTimeField(default=datetime.datetime.now)
+    donation_created = DateTimeField(default=datetime.datetime.now)
 
 
 database.create_tables([
