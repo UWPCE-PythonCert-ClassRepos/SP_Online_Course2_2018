@@ -15,21 +15,22 @@ that be saved and reloaded to/from JSON
 
 import json
 
-# import * is a bad idea in general, but helpful for a module that's part
-# of a package, where you control the names.
-# from .saveables import *
-
 
 class MetaJsonSaveable(type):
     """
     The metaclass for creating JsonSaveable classes
 
     Deriving from type makes it a metaclass.
-
-    Note: the __init__ gets run at compile time, not run time.
-          (module import time)
     """
+
+    def __new__(type, name, bases, attr_dict):
+        return super().__new__(type, name, bases, attr_dict)
+
     def __init__(cls, name, bases, attr_dict):
+        """
+        Note: the __init__ gets run at compile time, not run time.
+        (module import time)
+        """
         # it gets the class object as the first param.
         # and then the same parameters as the type() factory function
 
