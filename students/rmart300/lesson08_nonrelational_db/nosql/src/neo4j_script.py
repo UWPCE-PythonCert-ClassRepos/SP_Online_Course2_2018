@@ -31,6 +31,10 @@ def run_example():
                             ('Fred', 'Barnes'),
                             ('Mary', 'Evans'),
                             ('Marie', 'Curie'),
+                            ('Ross', 'Martin'),
+                            ('Morgan', 'Strobel'),
+                            ('Roy', 'Trammell'),
+                            ('Rachel', 'Martin')
                             ]:
             cyph = "CREATE (n:Person {first_name:'%s', last_name: '%s'})" % (
                 first, last)
@@ -95,3 +99,53 @@ def run_example():
         for rec in result:
             for friend in rec.values():
                 print(friend['first_name'], friend['last_name'])
+
+        ##############
+        log.info('Adding a few color nodes')
+        log.info('The cyph language is analagous to sql for neo4j')
+        for color in ['Blue', 'Green', 'Red', 'Yellow', 'Black', 'Purple', 'Orange']:
+            cyph = "CREATE (n:Color {color:'%s'})" % (color)
+            session.run(cyph)
+
+        log.info('Create some person-color relationships')
+        log.info("Bob Jones likes Blue and Green")
+
+        for color in ['Blue','Green']:
+            cypher = """
+              MATCH (p1:Person {first_name:'Bob', last_name:'Jones'})
+              CREATE (p1)-[person:COLOR]->(c:Color {color:'%s'})
+              RETURN p1
+            """ % (color)
+            session.run(cypher)
+
+        log.info("Find all of Bob's favorite colors")
+        cyph = """
+          MATCH (bob {first_name:'Bob', last_name:'Jones'})
+                -[:COLOR]->(bobsColors)
+          RETURN bobsColors
+          """
+        result = session.run(cyph)
+        print("Bob's favorite colors are:")
+        for rec in result:
+            for color in rec.values():
+                print(color['color'])
+
+        for color in ['Purple','Yellow']:
+            cypher = """
+              MATCH (p1:Person {first_name:'Rachel', last_name:'Martin'})
+              CREATE (p1)-[person:COLOR]->(c:Color {color:'%s'})
+              RETURN p1
+            """ % (color)
+            session.run(cypher)
+
+        log.info("Step 5: Find all of Rachel's favorite colors")
+        cyph = """
+          MATCH (bob {first_name:'Rachel', last_name:'Martin'})
+                -[:COLOR]->(bobsColors)
+          RETURN bobsColors
+          """
+        result = session.run(cyph)
+        print("Rachel's favorite colors are:")
+        for rec in result:
+            for color in rec.values():
+                print(color['color'])
