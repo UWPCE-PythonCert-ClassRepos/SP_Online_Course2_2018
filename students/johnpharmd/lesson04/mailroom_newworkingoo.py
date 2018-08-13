@@ -1,24 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import json_save_meta as jsm
-
-
-donors_dct = {'Gates': {'title': 'Mr.', 'donations': 150000,
-                        'num_donations': 3},
-              'Brin': {'title': 'Mr.', 'donations': 150000,
-                       'num_donations': 3},
-              'Cerf': {'title': 'Mr.', 'donations': 50000,
-                       'num_donations': 2},
-              'Musk': {'title': 'Mr.', 'donations': 100000,
-                       'num_donations': 1},
-              'Berners-Lee': {'title': 'Mr.', 'donations':
-                              50000, 'num_donations': 2},
-              'Wojcicki': {'title': 'Ms.', 'donations': 125000,
-                           'num_donations': 1},
-              'Avey': {'title': 'Ms.', 'donations': 200000,
-                       'num_donations': 2}}
-
-# donors_dct = jsm.JsonSaveable.to_json(donors_dct)
+import json_save_meta as j_s_m
 
 
 class Donor:
@@ -45,10 +27,10 @@ class Donor:
         self.donations.append(donation)
 
 
-class DonorGroup(jsm.JsonSaveable):
+class DonorGroup(j_s_m.JsonSaveable):
     """creates donor group dictionary objs for multiple donor dictionaries"""
-    def __init__(self, donor_dct):
-        self.donors = donors_dct
+    def __init__(self):
+        self.donors = {}
 
     def donorgroup(self):
         """returns list of donors in group"""
@@ -93,17 +75,16 @@ class DonorGroup(jsm.JsonSaveable):
             print(formatted_donor)
 
     def save_data(self):
-        self.to_json()
-        # with open('test.txt', 'w') as outfile:
-        #     outfile.write('This is current DonorGroup data:\n' +
-        #                   str(self.donorgroup))
+        with open('mailroom_json.txt', 'w') as outfile:
+            outfile.write('This is updated DonorGroup data:\n' +
+                          self.to_json())
 
 
 class UI:
     def __init__(self):
-        self.donors = DonorGroup(donors_dct)
-        # print('self.donors.donorgroup():', self.donors.donorgroup())
-        # self.donors = DonorGroup(donors_dct)
+        self.donors = DonorGroup()
+        with open('mailroom_json.txt', 'r') as infile:
+            self.donors.to_json(infile.read())
         self.menu_dct = {'1': self.donors.donorgroup,
                          '2': self.donors.get_report,
                          '3': self.donors.add_donor_to_donorgroup,
