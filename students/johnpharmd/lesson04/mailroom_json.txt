@@ -1,0 +1,4 @@
+This is updated DonorGroup data:
+{
+    "__obj_type": "DonorGroup"
+}

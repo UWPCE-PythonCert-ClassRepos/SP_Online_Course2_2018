@@ -83,7 +83,7 @@ class JsonSaveable(metaclass=MetaJsonSaveable):
                 return False
         return True
 
-    def to_json_compat(self):
+    def to_json_compat(self, *args):
         """
         converts this object to a json-compatible dict.
 
