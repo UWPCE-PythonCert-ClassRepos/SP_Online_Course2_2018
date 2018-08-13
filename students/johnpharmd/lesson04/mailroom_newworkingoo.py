@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import json_save_meta as jsm
 
 
 donors_dct = {'Gates': {'title': 'Mr.', 'donations': 150000,
@@ -16,6 +17,8 @@ donors_dct = {'Gates': {'title': 'Mr.', 'donations': 150000,
                            'num_donations': 1},
               'Avey': {'title': 'Ms.', 'donations': 200000,
                        'num_donations': 2}}
+
+# donors_dct = jsm.JsonSaveable.to_json(donors_dct)
 
 
 class Donor:
@@ -42,14 +45,15 @@ class Donor:
         self.donations.append(donation)
 
 
-class DonorGroup:
+class DonorGroup(jsm.JsonSaveable):
     """creates donor group dictionary objs for multiple donor dictionaries"""
-    def __init__(self, donors):
-        self.donors = donors
+    def __init__(self, donor_dct):
+        self.donors = donors_dct
 
     def donorgroup(self):
         """returns list of donors in group"""
-        print(sorted([donor for donor in self.donors]))
+        print(sorted(self.donors))
+        # print(sorted([donor for donor in self.donors.__dict__]))
 
     def add_donor_to_donorgroup(self):
         q_title = input('Enter donor title: ')
@@ -89,23 +93,28 @@ class DonorGroup:
             print(formatted_donor)
 
     def save_data(self):
-        with open('test.txt', 'w') as outfile:
-            outfile.write('This is current DonorGroup data:\n' +
-                          str(self.donorgroup))
+        self.to_json()
+        # with open('test.txt', 'w') as outfile:
+        #     outfile.write('This is current DonorGroup data:\n' +
+        #                   str(self.donorgroup))
 
 
 class UI:
     def __init__(self):
         self.donors = DonorGroup(donors_dct)
+        # print('self.donors.donorgroup():', self.donors.donorgroup())
+        # self.donors = DonorGroup(donors_dct)
         self.menu_dct = {'1': self.donors.donorgroup,
                          '2': self.donors.get_report,
                          '3': self.donors.add_donor_to_donorgroup,
+                         '4': self.donors.save_data,
                          'q': sys.exit}
         self.main_text = '\n'.join((
                                     'Choose from the following:',
                                     '"1" - Get a List of Donors,',
                                     '"2" - Create a Report,',
-                                    '"3" - Add a Donor, or',
+                                    '"3" - Add a Donor,',
+                                    '"4" - Save Data, or',
                                     '"q" to Quit: '
                                   ))
         while True:
