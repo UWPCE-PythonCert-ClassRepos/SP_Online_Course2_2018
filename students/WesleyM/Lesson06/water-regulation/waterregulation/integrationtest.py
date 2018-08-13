@@ -29,7 +29,8 @@ class ModuleTests(unittest.TestCase):
                 # measuring the water level
                 controller.sensor.measure = MagicMock(return_value=water_level)
                 # getting the state of the pump
-                controller.pump.get_state = MagicMock(return_value=decider.decide(\
-                    water_level, action, controller.actions))
+                controller.pump.get_state = MagicMock(
+                        return_value=decider.decide(
+                            water_level, action, controller.actions))
                 # running the tick functions
                 controller.tick()

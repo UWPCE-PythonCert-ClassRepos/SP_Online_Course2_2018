@@ -28,8 +28,10 @@ class DeciderTests(unittest.TestCase):
         deciders = Decider(100, .05)
         self.assertEqual(1, deciders.decide(90, actions['PUMP_OFF'], actions))
         self.assertEqual(1, deciders.decide(90, actions['PUMP_IN'], actions))
-        self.assertEqual(-1, deciders.decide(120, actions['PUMP_OFF'], actions))
-        self.assertEqual(-1, deciders.decide(120, actions['PUMP_OUT'], actions))
+        self.assertEqual(-1, deciders.decide(
+            120, actions['PUMP_OFF'], actions))
+        self.assertEqual(-1, deciders.decide(
+            120, actions['PUMP_OUT'], actions))
         self.assertEqual(0, deciders.decide(100, actions['PUMP_OFF'], actions))
         self.assertEqual(0, deciders.decide(120, actions['PUMP_IN'], actions))
         self.assertEqual(0, deciders.decide(90, actions['PUMP_OUT'], actions))
