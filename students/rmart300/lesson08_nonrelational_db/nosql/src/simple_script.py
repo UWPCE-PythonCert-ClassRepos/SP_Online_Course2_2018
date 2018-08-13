@@ -12,8 +12,8 @@ import utilities
 
 log = utilities.configure_logger('default', '../logs/mongodb_script.log')
 
-
-def run_example(furniture_items):
+def run_example():
+#def run_example(furniture_items):
     """
     various persistence and serialization scenarios
 
@@ -89,25 +89,32 @@ def run_example(furniture_items):
     def run_json():
         log.info("\n\n====")
         log.info("Step 10: Look at working with json data")
-        furniture = [{'product': 'Red couch','description': 'Leather low back'},
-        {'product': 'Blue couch','description': 'Cloth high back'},
-        {'product': 'Coffee table','description': 'Plastic'},
-        {'product': 'Red couch','description': 'Leather high back'}]
+        customers = [{'id': 1, 'first_name': 'Ross', 'last_name': 'Martin', 'zip_code': 94920, 'color': 'Blue'},
+                     {'id': 2, 'first_name': 'Rachel', 'last_name': 'Martin', 'zip_code': 94920, 'color': 'Yellow'},
+                     {'id': 3, 'first_name': 'Wolf', 'last_name': 'Martin', 'zip_code': 94920, 'color': 'Green'},
+                     {'id': 4, 'first_name': 'Tom', 'last_name': 'Strobel', 'zip_code': 94920, 'color': 'Purple'},
+                     {'id': 5, 'first_name': 'Holly', 'last_name': 'Strobel', 'zip_code': 94920, 'color': 'White'},
+                     {'id': 6, 'first_name': 'Steve', 'last_name': 'Martin', 'zip_code': 27360, 'color': 'Blue'},
+                     {'id': 7, 'first_name': 'Terrie', 'last_name': 'Martin', 'zip_code': 27360, 'color': 'Blue'},
+                     {'id': 8, 'first_name': 'Morgan', 'last_name': 'Strobel', 'zip_code': 34567, 'color': 'Black'},
+                     {'id': 9, 'first_name': 'Ryan', 'last_name': 'Strobel', 'zip_code': 94920, 'color': 'Green'},
+                     {'id': 10, 'first_name': 'Roy', 'last_name': 'Trammell', 'zip_code': 23432, 'color': 'Blue'},
+                    ]
 
         log.info("Step 11: Return json string from an object")
-        furniture_string = json.dumps(furniture)
+        customer_string = json.dumps(customers)
 
         log.info("Step 12: Print the json")
-        pprint.pprint(furniture_string)
+        pprint.pprint(customer_string)
 
         log.info("Step 13: Returns an object from a json string representation")
-        furniture_object = json.loads(furniture_string)
+        customer_object = json.loads(customer_string)
         log.info("Step 14: print the string")
-        pprint.pprint(furniture_object)
+        pprint.pprint(customer_object)
 
-    run_pickle()
-    run_shelve()
-    run_csv()
+    #run_pickle()
+    #run_shelve()
+    #run_csv()
     run_json()
 
     return
