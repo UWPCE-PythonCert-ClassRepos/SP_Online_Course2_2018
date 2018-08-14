@@ -3,8 +3,6 @@
 """
 json_save
 
-USE THIS LINK FOR HELP: https://realpython.com/python-json/
-
 metaclass based system for saving objects in a JSON format
 
 This could be useful, but it's kept simple to show the use of metaclasses
@@ -14,6 +12,9 @@ that be saved and reloaded to/from JSON
 """
 
 import json
+
+# import * is a bad idea in general, but helpful for a modules that's part
+# of a package, where you control the names.
 from saveables import *
 
 
@@ -23,24 +24,22 @@ class MetaJsonSaveable(type):
 
     Deriving from type makes it a metaclass.
     """
-
-    # def __new__(type, name, bases, attr_dict):
-    #     return super().__new__(type, name, bases, attr_dict)
-
+    def __new__(type, name, bases, attr_dict):
+        print('Creating class', name)
+        return super().__new__(type, name, bases, attr_dict)
+    """
+    Note: the __init__ gets run at compile time, not run time.
+          (module import time)
+    """
     def __init__(cls, name, bases, attr_dict):
-        """
-        Note: the __init__ gets run at compile time, not run time.
-        (module import time)
-        """
         # it gets the class object as the first param.
         # and then the same parameters as the type() factory function
 
         # you want to call the regular type initilizer:
-        print('Initializing class', cls)
-        super(MetaJsonSaveable, cls).__init__(name, bases, attr_dict)
+        super().__init__(name, bases, attr_dict)
 
         # here's where we work with the class attributes:
-        # these will be the attributes that get saved and reconstructed from json.
+        # these will the attributes that get saved and reconstructed from json.
         # each class object gets its own dict
         cls._attrs_to_save = {}
         for key, attr in attr_dict.items():
@@ -52,8 +51,7 @@ class MetaJsonSaveable(type):
                             "           Note that Saveable attributes must be instances")
 
         # register this class so we can re-construct instances.
-        cls.ALL_SAVEABLES[attr_dict["__qualname__"]] = cls
-        # cls.__new__(cls)
+        Saveable.ALL_SAVEABLES[attr_dict["__qualname__"]] = cls
 
 
 class JsonSaveable(metaclass=MetaJsonSaveable):
@@ -85,13 +83,13 @@ class JsonSaveable(metaclass=MetaJsonSaveable):
                 return False
         return True
 
-    def to_json_compat(self, *args):
+    def to_json_compat(self):
         """
         converts this object to a json-compatible dict.
 
         returns the dict
         """
-        # add an __obj_type attribute, so it can be reconstructed
+        # add and __obj_type attribute, so it can be reconstructed
         dic = {"__obj_type": self.__class__.__qualname__}
         for attr, typ in self._attrs_to_save.items():
             dic[attr] = typ.to_json_compat(getattr(self, attr))
@@ -113,7 +111,7 @@ class JsonSaveable(metaclass=MetaJsonSaveable):
         for attr, typ in cls._attrs_to_save.items():
             setattr(obj, attr, typ.to_python(dic[attr]))
         # make sure it gets initialized
-        obj.__init__()
+        # obj.__init__()
         return obj
 
     def to_json(self, fp=None, indent=4):
@@ -165,42 +163,39 @@ if __name__ == "__main__":
     # Example of using it.
     class MyClass(JsonSaveable):
 
-        x = 1
-        y = 1.0
-        l = []
+        x = Int()
+        y = Float()
+        l = List()
 
         def __init__(self, x, lst):
             self.x = x
             self.lst = lst
-            self.attr_dict = {'x': self.x, 'lst': self.lst}
 
     class OtherSaveable(JsonSaveable):
 
-        # foo = str(foo)
-        # bar = int(bar)
+        foo = String()
+        bar = Int()
 
         def __init__(self, foo, bar):
             self.foo = foo
             self.bar = bar
-            self.attr_dict = {'foo': self.foo, 'bar': self.bar}
 
     # create one:
-    print("about to create an instance of MyClass (p-statement01; line 185)")
+    print("about to create a instance")
     mc = MyClass(5, [3, 5, 7, 9])
 
-    print('p-statement02:', mc)
+    print(mc)
 
     jc = mc.to_json_compat()
 
     # re-create it from the dict:
     mc2 = MyClass.from_json_dict(jc)
 
-    print('p-statement03:', mc2 == "fred")
+    print(mc2 == "fred")
 
-    print('Assertion: mc2 == mc')
     assert mc2 == mc
 
-    print('p-statement04:', mc.to_json())
+    print(mc.to_json())
 
     # now try it nested...
     mc_nest = MyClass(34, [OtherSaveable("this", 2),
@@ -208,12 +203,12 @@ if __name__ == "__main__":
                            ])
 
     mc_nest_comp = mc_nest.to_json_compat()
-    print('p-statement05:', mc_nest_comp)
+    print(mc_nest_comp)
 
     # can we re-create it?
     mc_nest2 = MyClass.from_json_dict(mc_nest_comp)
 
-    print('p-statement06:', mc_nest)
-    print('p-statement07:', mc_nest2)
+    print(mc_nest)
+    print(mc_nest2)
 
     assert mc_nest == mc_nest2
