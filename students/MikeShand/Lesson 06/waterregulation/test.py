@@ -56,6 +56,9 @@ class ControllerTests(unittest.TestCase):
     # TODO: write a test or tests for each of the behaviors defined for
     #       Controller.tick
     def test_tick(self):
+        """
+        Tests each tick
+        """
 
         pump = Pump('127.0.0.1', '8000')
         decider = Decider(100, 2)

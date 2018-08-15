@@ -21,7 +21,9 @@ class ModuleTests(unittest.TestCase):
     #       using a MOCKED sensor and pump.
 
     def test_water(self):
-        """the test method"""
+        """
+        the test method
+        """
         pump = Pump('127.0.0.1', '8000')
         decider = Decider(100, 2)
         sensor = Sensor('127.0.0.1', '8000')

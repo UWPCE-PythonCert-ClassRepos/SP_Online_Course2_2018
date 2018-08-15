@@ -5,7 +5,7 @@ Encapsulates the connection to an HTTP liquid height sensor controller.
 import urllib.request
 
 
-class Sensor(object):
+class Sensor:
     """
     Encapsulates the connection to an HTTP liquid height sensor controller
     """

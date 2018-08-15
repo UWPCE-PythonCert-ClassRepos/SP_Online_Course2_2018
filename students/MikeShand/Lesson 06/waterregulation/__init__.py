@@ -1,3 +1,5 @@
+"""An init file to create a package"""
+
 from pump import Pump
 from sensor import Sensor
 
