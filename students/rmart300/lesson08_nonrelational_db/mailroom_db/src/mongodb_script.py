@@ -6,6 +6,7 @@
 import pprint
 import login_database
 import utilities
+from datetime import datetime
 from bson.objectid import ObjectId
 
 log = utilities.configure_logger('default', '../logs/mongodb_script.log')
@@ -13,12 +14,13 @@ log = utilities.configure_logger('default', '../logs/mongodb_script.log')
 class MailroomDB:
 
     def __init__(self, refresh_db=False):
-        self.db = client['mailroom']
-        self.donations = self.db['donations']
+        with login_database.login_mongodb_cloud() as client:
+            self.db = client['mailroom']
+            self.donations = self.db['donations']
 
-        if refresh_db:
-            self.db.drop_collection('donations')
-            self.initiate_database()
+            if refresh_db or self.donations.count() == 0:
+                self.db.drop_collection('donations')
+                self.initiate_database()
 
     def initiate_database(self):
 
@@ -60,11 +62,16 @@ class MailroomDB:
 
     def get_donor_list(self):
 
-        return self.donations.distinct('first_name','last_name')
+        #return self.donations.distinct('first_name','last_name')
+        return self.donations.collection.aggregate([{"$group": {"_id": {'first_name': "$first_name", 'last_name': "$last_name"}}}])
 
     def get_donation(self, donation_id):
     
         return self.donations.find_one({'_id': ObjectId(donation_id)})
+
+    def get_donation_list_by_donor(self, first_name, last_name):
+    
+        return self.donations.find( {'$and': [{'first_name': {'$eq': first_name}}, {'last_name': {'$eq': last_name}}]}).sort('donation_date', 1)
 
     def update_donation(self, donation_id, amount):    
     
@@ -79,7 +86,7 @@ class MailroomDB:
     
     def show_donations_by_donor(self, first_name, last_name):
     
-        cursor = self.donations.find( {'$and': [{'first_name': {'$eq': first_name}}, {'last_name': {'$eq': last_name}}]}).sort('donation_date', 1)
+        cursor = self.get_donation_list_by_donor(first_name, last_name)
     
         for doc in cursor:
             print(f"Donor: {doc['first_name']} {doc['last_name']} Amount: {doc['amount']} Date: {doc['donation_date']}")

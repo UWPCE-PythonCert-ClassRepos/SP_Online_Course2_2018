@@ -1,4 +1,4 @@
-from mailroom_model import *
+from mongodb_script import MailroomDB
 from datetime import datetime
 import logging
 
@@ -79,10 +79,12 @@ class Donor(object):
     def load_donation_list(self):
         """ reads database and loads list """
 
-        donation_list = Donations.select().join(Donors).where(Donors.first_name == self.first_name, Donors.last_name == self.last_name)
+        mailroom = MailroomDB()
+        donation_list = mailroom.get_donation_list_by_donor(self.first_name, self.last_name)       
+ 
         self.amount_list = []
         for donation in donation_list:
-             self.amount_list.append(donation.amount)
+             self.amount_list.append(donation['amount'])
 
         return self.amount_list
 

@@ -201,6 +201,7 @@ class DonorCollection(object):
         mailroom = MailroomDB()
         donor_list_from_db = mailroom.get_donor_list()
         for existing_donor in donor_list_from_db:
+            print(str(existing_donor))
             donor = Donor(f"{existing_donor['first_name']} {existing_donor['last_name']}")
             self.donor_list.append(donor)
             donor.load_donation_list()
