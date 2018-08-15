@@ -18,10 +18,6 @@ donors_dct = {'Gates': {'title': 'Mr.', 'donations': 150000,
               'Avey': {'title': 'Ms.', 'donations': 200000,
                        'num_donations': 2}}
 
-# donors_dct = JsonSaveable(donors_dct)
-# donors_dct.to_json()
-# print('type(donors_dct):', type(donors_dct))
-# print(donors_dct)
 
 with open('test_mailroom_json.txt', 'w') as outfile:
     json.dump(donors_dct, outfile)

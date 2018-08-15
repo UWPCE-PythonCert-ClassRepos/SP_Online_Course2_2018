@@ -37,16 +37,15 @@ class DonorGroup(js.JsonSaveable):
     def load_data(cls):
         with open('mailroom_json.txt', 'r') as infile:
             data = json.load(infile)
-        # cls.to_json_compat(data)
-        return cls.from_json_dict(data)
+        return data
 
     def __init__(self):
-        print('Initializing class instance from', self)
+        # print('Initializing class instance from', self)
         self.donors = self.load_data()
 
     def donorgroup(self):
         """returns list of donors in group"""
-        print(sorted(self.donors))
+        print(sorted([donor for donor in self.donors]))
 
     def add_donor_to_donorgroup(self):
         q_title = input('Enter donor title: ')
@@ -73,9 +72,10 @@ class DonorGroup(js.JsonSaveable):
         for i in range(55):
             print('-', end='')
         print()
-        new_list = [[self.donors[donor]['donations'], donor,
-                     self.donors[donor]['num_donations']] for
-                    donor in self.donors]
+        new_list = []
+        for donor in self.donors:
+            new_list.append([self.donors[donor]['donations'], donor,
+                            self.donors[donor]['num_donations']])
         new_list.sort(reverse=True)
         for donor_list in new_list:
             formatted_donor = ('{:<15}'.format(donor_list[1])
@@ -87,14 +87,13 @@ class DonorGroup(js.JsonSaveable):
 
     def save_data(self):
         with open('mailroom_json.txt', 'w') as outfile:
-            outfile.write('This is updated DonorGroup data:\n' +
-                          self.to_json())
+            json.dump(self.donors, outfile)
 
 
 class UI:
     def __init__(self):
         self.donors = DonorGroup()
-        print('self.donors:', self.donors)
+        # print('self.donors:', self.donors)
         self.menu_dct = {'1': self.donors.donorgroup,
                          '2': self.donors.get_report,
                          '3': self.donors.add_donor_to_donorgroup,

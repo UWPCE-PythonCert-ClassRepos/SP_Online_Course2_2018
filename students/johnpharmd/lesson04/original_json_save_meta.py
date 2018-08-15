@@ -25,7 +25,7 @@ class MetaJsonSaveable(type):
     Deriving from type makes it a metaclass.
     """
     def __new__(type, name, bases, attr_dict):
-        print('Creating class', name)
+        # print('Creating class', name)
         return super().__new__(type, name, bases, attr_dict)
     """
     Note: the __init__ gets run at compile time, not run time.
@@ -132,7 +132,8 @@ class JsonSaveable(metaclass=MetaJsonSaveable):
     def __str__(self):
         msg = ["{} object, with attributes:".format(self.__class__.__qualname__)]
         for attr in self._attrs_to_save.keys():
-            msg.append("{}: {}".format(attr, getattr(self, attr)))
+            if attr not in msg:
+                msg.append("{}: {}".format(attr, getattr(self, attr)))
         return "\n".join(msg)
 
 
