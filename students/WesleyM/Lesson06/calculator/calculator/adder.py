@@ -1,4 +1,6 @@
 """Adder Function"""
+
+
 class Adder(object):
     """Adder Class used for calculator"""
     @staticmethod

@@ -1,4 +1,6 @@
 """Multiplier Function"""
+
+
 class Multiplier(object):
     """Multiplier Class used for calculator"""
     @staticmethod
