@@ -1,21 +1,8 @@
 #!/usr/bin/env python3
 import sys
+import json
 import original_json_save_meta as js
-
-# donors_dct = {'Gates': {'title': 'Mr.', 'donations': 150000,
-#                         'num_donations': 3},
-#               'Brin': {'title': 'Mr.', 'donations': 150000,
-#                        'num_donations': 3},
-#               'Cerf': {'title': 'Mr.', 'donations': 50000,
-#                        'num_donations': 2},
-#               'Musk': {'title': 'Mr.', 'donations': 100000,
-#                        'num_donations': 1},
-#               'Berners-Lee': {'title': 'Mr.', 'donations':
-#                               50000, 'num_donations': 2},
-#               'Wojcicki': {'title': 'Ms.', 'donations': 125000,
-#                            'num_donations': 1},
-#               'Avey': {'title': 'Ms.', 'donations': 200000,
-#                        'num_donations': 2}}
+from saveables import Dict
 
 
 class Donor:
@@ -44,23 +31,22 @@ class Donor:
 
 class DonorGroup(js.JsonSaveable):
     """creates donor group dictionary objs for multiple donor dictionaries"""
+    donors = Dict()
+
     @classmethod
     def load_data(cls):
         with open('mailroom_json.txt', 'r') as infile:
-            data = infile.read()
-        data = json.load(data)
-        print('cls.donors:', cls.donors)
-        donors = cls.from_json_dict(data)
-        return donors
+            data = json.load(infile)
+        # cls.to_json_compat(data)
+        return cls.from_json_dict(data)
 
     def __init__(self):
-        load_data()
-        print('Initializing class object from', self)
+        print('Initializing class instance from', self)
+        self.donors = self.load_data()
 
     def donorgroup(self):
         """returns list of donors in group"""
         print(sorted(self.donors))
-        # print(sorted([donor for donor in self.donors.__dict__]))
 
     def add_donor_to_donorgroup(self):
         q_title = input('Enter donor title: ')
