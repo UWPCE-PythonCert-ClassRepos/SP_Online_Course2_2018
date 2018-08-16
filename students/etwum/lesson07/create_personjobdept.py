@@ -54,8 +54,8 @@ class Department(BaseModel):
     logger.info('Department class')
 
     logger.info('Define department number')
-    department_number = CharField(primary_key=True, max_length=4, constraints=Check('department_number[:1]' in
-    "('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z')"))
+    department_number = CharField(primary_key=True, max_length=4,
+                                  constraints=[Check('substr(department_number,1,1) BETWEEN "A" AND "Z"')])
 
     logger.info('Define length of department name')
     department_name = CharField(max_length=30)

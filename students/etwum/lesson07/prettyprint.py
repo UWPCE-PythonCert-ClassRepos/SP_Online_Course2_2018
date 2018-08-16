@@ -15,11 +15,10 @@ def print_data():
 
     data = (Job.select(Job.job_name, Job.salary, Job.start_date))
     for x in data:
-        person_data = [x.job_name, ]
 
-        pprint.pprint(Job.job_name)
-        pprint.pprint(Job.salary)
-        pprint.pprint(Job.start_date)
+        pprint.pprint(x.job_name)
+        pprint.pprint(x.salary)
+        pprint.pprint(x.start_date)
 
     database.close()
 
