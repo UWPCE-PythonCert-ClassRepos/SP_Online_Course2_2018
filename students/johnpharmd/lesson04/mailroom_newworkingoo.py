@@ -52,16 +52,20 @@ class DonorGroup(js.JsonSaveable):
         q_lastname = input('Enter last name: ')
         q_donation = int(input('Donation amount (USD)?: '))
         self.new_donor = Donor(q_title, q_lastname, q_donation)
+        print(q_title, q_lastname, 'added to DonorGroup')
         self.donors = dict(**self.donors, **self.new_donor.donor)
         self.donorgroup_new_donor = self.new_donor
         return self.donorgroup
 
-    def withdraw(self, title, last_name):
+    def withdraw(self):
         """given donor last name as string, removes donor from self.donors"""
-        for donor in self.donors[:]:
-            for key, val in donor.items():
-                if key == last_name and val['title'] == title:
-                    self.donors.remove(donor)
+        q_title = input('Enter donor title: ')
+        q_lastname = input('Enter last name: ')
+        ddonors = dict(self.donors)
+        for donor, _dict in ddonors.items():
+            if donor == q_lastname and _dict['title'] == q_title:
+                print(q_title, q_lastname, 'removed from DonorGroup')
+                self.donors.pop(donor)
 
     def get_report(self):
         print()
@@ -93,18 +97,20 @@ class DonorGroup(js.JsonSaveable):
 class UI:
     def __init__(self):
         self.donors = DonorGroup()
-        # print('self.donors:', self.donors)
+        print('self.donors:', self.donors)
         self.menu_dct = {'1': self.donors.donorgroup,
                          '2': self.donors.get_report,
                          '3': self.donors.add_donor_to_donorgroup,
-                         '4': self.donors.save_data,
+                         '4': self.donors.withdraw,
+                         '5': self.donors.save_data,
                          'q': sys.exit}
         self.main_text = '\n'.join((
                                     'Choose from the following:',
                                     '"1" - Get a List of Donors,',
                                     '"2" - Create a Report,',
                                     '"3" - Add a Donor,',
-                                    '"4" - Save Data, or',
+                                    '"4" - Remove a Donor,',
+                                    '"5" - Save Data, or',
                                     '"q" to Quit: '
                                   ))
         while True:
