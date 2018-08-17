@@ -9,10 +9,16 @@ import json
 import json_save.json_save.json_save_dec as jsd
 
 
+@jsd.json_save
 class Donor:
     """
     Information about single donors.
     """
+
+    # Saveables objects setup
+    name = jsd.String()
+    donations = jsd.List()
+    
     def __init__(self, name, donations=None):
         self.name = name
         self.donations = donations
@@ -42,10 +48,8 @@ class Donor:
     def __gt__(self, other):
         return self.donor_totals > other.donor_totals
 
-    # def __eq__(self, other):
-    #     return self.donor_totals == other.donor_totals and other.donor_totals == self.donor_totals
-        
 
+@jsd.json_save
 class DonorList:
     """
     Holds a list of donor objects.
@@ -56,6 +60,9 @@ class DonorList:
         prompts for a donation amd adds to donor
         prints thank you note
     """
+
+    donors = jsd.List()
+
     def __init__(self, donors=None):
         # Accepts only a list of donors now
         self.donors = donors
@@ -63,10 +70,6 @@ class DonorList:
     def list_donor_names(self):
         donor_names = [donor.name for donor in self.donors]
         return ('\n'.join(donor_names))
-
-    # def add_donor(self, new_donor):
-    #     """ Deprecated --> function is contained in add_donor and donation """
-    #     self.donors.append(new_donor)
 
     def add_donation(self, target_donor, new_donation):
         target_donor.add_donation(new_donation)
@@ -151,6 +154,32 @@ class DonorList:
         """
                 f.write(message)
 
+    def save_json(self):
+        """ JSON formatted donor information. """
+        # Convert to json compatible and use json built in to convert to str and write
+        info = jsd._to_json_compat(self)
+        with open('donors.json', 'w+') as outfile:
+            json.dump(info, outfile)
+    
+    # @classmethod
+    # def load_json(cls):
+    #     """ Loads a JSON donor dictionary. """
+    #     with open('donors.json', 'r') as infile:
+    #         info = json.load(infile)
+    #         formatted_info = jsd.from_json_dict(info)
+    #         return formatted_info
+    #     print(formatted_info)
+    #     return formatted_info
+
+
+    def load_json(self):
+        """ Loads a JSON donor dictionary. """
+        with open('donors.json', 'r') as infile:
+            info = json.load(infile)
+            formatted_info = jsd.from_json_dict(info)
+        self.donors = formatted_info
+
+
     def quitter(self):
         print("Quitting.")
         quit()
@@ -160,10 +189,12 @@ def main():
     """ Controls the menu. """
     donor1 = Donor("Tom Horn", [599.23, 1000.00])
     donor2 = Donor("Theo Hartwell", [0.01, 0.01, 0.1])
-    donor3 = Donor("Bailey Kimmitt", [8723.22, 27167.22, 91817.66])
-    donor4 = Donor("Paul Hubbell", [90012.32, 2312.24])
-    donor5 = Donor("David Beckham", [1817266.11, 123123.66, 111335.112])
-    donors = DonorList([donor1, donor2, donor3, donor4, donor5])
+    # donor3 = Donor("Bailey Kimmitt", [8723.22, 27167.22, 91817.66])
+    # donor4 = Donor("Paul Hubbell", [90012.32, 2312.24])
+    # donor5 = Donor("David Beckham", [1817266.11, 123123.66, 111335.112])
+    # donors = DonorList([donor1, donor2, donor3, donor4, donor5])
+
+    donors = DonorList([donor1, donor2])
 
     while True:
         choice = input(
@@ -171,7 +202,9 @@ def main():
         1 - Send Thanks\n\
         2 - Create Donor Report\n\
         3 - Send Letters\n\
-        4 - Quit\n")
+        4 - Save Donors \n\
+        5 - Load Donors \n\
+        6 - Quit\n")
         print()
         if choice == '1':
             donors.send_thanks()
@@ -180,6 +213,10 @@ def main():
         if choice == '3':
             donors.create_letters()
         if choice == '4':
+            donors.save_json()
+        if choice == '5':
+            donors.load_json()
+        if choice == '6':
             donors.quitter()
 
 if __name__ == "__main__":

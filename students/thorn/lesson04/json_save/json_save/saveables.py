@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 The Saveable objects used by both the metaclass and decorator approach.
 """

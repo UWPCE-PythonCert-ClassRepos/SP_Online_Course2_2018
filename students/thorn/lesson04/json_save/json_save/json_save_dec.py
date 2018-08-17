@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 json_save implemented as a decorator
 """
