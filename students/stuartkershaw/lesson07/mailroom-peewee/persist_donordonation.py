@@ -35,6 +35,14 @@ def create_donor(name):
         database.close()
 
 
+def update_donor(name):
+    pass
+
+
+def delete_donor(name):
+    pass
+
+
 def create_donation(donor, amount):
     """
     Add new donation to database
@@ -68,6 +76,14 @@ def create_donation(donor, amount):
     finally:
         logger.info('database closes')
         database.close()
+
+
+def update_donation(donation):
+    pass
+
+
+def delete_donation(donation):
+    pass
 
 
 def get_donor_names():

@@ -154,8 +154,11 @@ class DonorCli:
                 print("\n".join(self.donorCollection.donor_names))
                 return
 
-    def find_donor_update(self):
-        pass
+    def find_donor_update(self, donor):
+        update_donor(donor)
+
+    def find_donor_delete(self, donor):
+        delete_donor(donor)
 
     def add_donation(self, donor):
         while True:
@@ -190,14 +193,17 @@ class DonorCli:
         else:
             print('Donor not found.')
 
-    def find_donation_update(self):
-        pass
+    def find_donation_update(self, donation):
+        update_donation(donation)
+
+    def find_donation_delete(self, donation):
+        delete_donation(donation)
 
     def apply_selection(self, selection):
         arg_dict = {
             '1': self.set_donor,
             '2': self.find_donor_update,
-            '3': self.get_donor,
+            '3': self.get_donor_operation,
             '4': self.find_donation_update,
             '5': self.donorCollection.generate_table,
             '6': self.donorCollection.generate_letters,
