@@ -62,8 +62,11 @@ class MailroomDB:
 
     def get_donor_list(self):
 
-        #return self.donations.distinct('first_name','last_name')
-        return self.donations.collection.aggregate([{"$group": {"_id": {'first_name': "$first_name", 'last_name': "$last_name"}}}])
+        donor_list = set()
+        for doc in self.donations.find():
+            donor_list.add((doc['first_name'], doc['last_name']))
+        
+        return donor_list
 
     def get_donation(self, donation_id):
     
@@ -73,11 +76,24 @@ class MailroomDB:
     
         return self.donations.find( {'$and': [{'first_name': {'$eq': first_name}}, {'last_name': {'$eq': last_name}}]}).sort('donation_date', 1)
 
+    def add_donation(self, first_name, last_name, amount):
+
+        donation_dict = { 'first_name': first_name,
+                          'last_name': last_name,
+                          'amount': amount,
+                          'donation_date': datetime.now(),
+                        }
+
+        try:
+            self.donations.insert(donation_dict)
+        except Exception as ex:
+            print(f"Unable to save donation: {ex}")
+
     def update_donation(self, donation_id, amount):    
     
-        doc = get_donation(donation_id)
-        doc['amount'] = amount        
-
+        doc = self.get_donation(donation_id)
+        doc['amount'] = amount
+        print(f'updating with amount {amount}')
         self.donations.update({"_id": ObjectId(donation_id)}, doc, upsert=True) 
 
     def delete_donation(self, donation_id):
@@ -93,6 +109,6 @@ class MailroomDB:
     
     def show_donations(self):
 
-        for doc in self.donations:
+        for doc in self.donations.find():
             print(f"_id: {doc['_id']} Donor: {doc['first_name']} {doc['last_name']} Amount: {doc['amount']} Date: {doc['donation_date']}")
 

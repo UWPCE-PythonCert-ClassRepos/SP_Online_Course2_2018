@@ -72,51 +72,28 @@ class DonorCollection(object):
                 str(donor.donation_total), str(donor.donation_count), str(donor.donation_average))
             print(data_row)
 
-    def display_all_donations(self):
-
-        database = SqliteDatabase('mailroom.db')
-        try:
-
-            database.connect()
-            database.execute_sql('PRAGMA foreign_keys = ON;')
-
-            print("{0:10}  {1:>25}   ${2:>8}".format('Id','Donor Name','Donation Amount'))
-
-            for donation in Donations:
-                row = "{0:10}  {1:>25}   ${2:>8}".format(donation.id, 
-                       f'{donation.donor.first_name} {donation.donor.last_name}', str(donation.amount))
-                print(row)
-        except Exception as ex:
-            logging.error('unable to load data for {}. Exception: {}'.format(donation, ex))
-        finally:
-            database.close()
-
     def update_donation(self):
 
-        self.display_all_donations()
+        mailroom_db = MailroomDB()
+        mailroom_db.show_donations()
         donation_id = input("Please provide id of donation to update: ")
         
-        database = SqliteDatabase('mailroom.db')
-        try:
+        #try:
+        if True:
 
-            database.connect()
-            database.execute_sql('PRAGMA foreign_keys = ON;')
-
-            donation = Donations.get(Donations.id == int(donation_id))
-            old_amount = donation.amount
+            donation = mailroom_db.get_donation(donation_id)
+            print(donation)
+            old_amount = donation['amount']
             amount = input(f"Current amount is ${old_amount}. What amount would you like to save? ")
-            donation.amount = float(amount)
-            donation.save()
+            mailroom_db.update_donation(donation_id, float(amount))
             
             for donor in self.donor_list:
-                if donor.first_name == donation.donor.first_name and donor.last_name == donation.donor.last_name:
-                     donor.update_amount_in_list(old_amount, donation.amount)
+                if donor.first_name == donation['first_name'] and donor.last_name == donation['last_name']:
+                     donor.update_amount_in_list(old_amount, amount)
                      break
 
-        except Exception as ex:
-            logging.error('unable to update data for {}. Exception: {}'.format(donation, ex))
-        finally:
-            database.close()
+        #except Exception as ex:
+        #    logging.error('unable to update data for {}. Exception: {}'.format(donation_id, ex))
 
     def delete_donation(self):
 
@@ -201,7 +178,6 @@ class DonorCollection(object):
         mailroom = MailroomDB()
         donor_list_from_db = mailroom.get_donor_list()
         for existing_donor in donor_list_from_db:
-            print(str(existing_donor))
-            donor = Donor(f"{existing_donor['first_name']} {existing_donor['last_name']}")
+            donor = Donor(f"{existing_donor[0]} {existing_donor[1]}")
             self.donor_list.append(donor)
             donor.load_donation_list()

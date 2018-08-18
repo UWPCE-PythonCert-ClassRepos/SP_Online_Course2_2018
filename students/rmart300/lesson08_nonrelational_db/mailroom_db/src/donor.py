@@ -17,14 +17,7 @@ class Donor(object):
         else:
             self.first_name = name.split()[0]
             self.last_name = name.split()[1]
-            record = Donors.select().where(Donors.first_name == self.first_name, Donors.last_name == self.last_name)
-            if len(record) == 0:
-                self.donor = Donors.create(first_name = self.first_name, last_name = self.last_name)
-                self.amount_list = list(amount_list)
-                self.save_donation_list()
-            else:
-                self.donor = record[0]
-                self.load_donation_list()    
+            self.load_donation_list()    
         
     def update_amount_in_list(self, old_amount, new_amount):
         """ update first instance of old amount with new amount """
@@ -57,20 +50,8 @@ class Donor(object):
 
     def save_donation(self, amount):
 
-        database = SqliteDatabase('mailroom.db')
-        try:
-
-            database.connect()
-            database.execute_sql('PRAGMA foreign_keys = ON;')
-            new_donation = Donations.create(
-                donor = self.donor,
-                amount = amount,
-                donation_date = datetime.now()
-            )
-        except Exception as ex:
-            logger.error('unable to create donation {} for {} {}. exception {}'.format(str(amount), self.donor.first_name, self.donor.last_name, ex))
-        finally:
-            database.close()
+        mailroom = MailroomDB() 
+        mailroom.add_donation(self.first_name, self.last_name, amount)
 
     def save_donation_list(self):
         for amount in self.amount_list:
