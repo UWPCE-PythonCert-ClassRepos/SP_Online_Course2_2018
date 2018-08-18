@@ -61,7 +61,7 @@ class DonorList:
             return "Donor not found."
 
     def get_donor_names(self):
-        print("\n".join([donor for donor in self.donor_names]))
+        return [donor for donor in self.donor.names]
 
     def compose_thank_you(self, donor):
         if not donor:
@@ -147,12 +147,15 @@ class DonorCli:
                 return
             else:
                 self.donorCollection.add_donor(name)
-                self.set_donation(name)
+                self.add_donation(name)
                 print('{} added. Current donors: '.format(name))
-                self.donorCollection.get_donor_names()
+                print("\n".join(self.donorCollection.donor_names))
                 return
 
-    def set_donation(self, donor):
+    def update_donor(self):
+        pass
+
+    def add_donation(self, donor):
         while True:
             try:
                 donation = int(input('Please enter a donation amount: '))
@@ -165,7 +168,7 @@ class DonorCli:
                 print('${} donation received.'.format(donation))
                 self.get_selection()
 
-    def accept_donation(self):
+    def get_donor(self, operation=None):
         if not self.donorCollection.donor_names:
             print('The list of donors is empty.')
             return
@@ -176,40 +179,52 @@ class DonorCli:
         name_input = input(instruction)
 
         if name_input == 'list':
-            self.donorCollection.get_donor_names()
-            self.accept_donation()
+            print("\n".join(self.donorCollection.donor_names))
+            if operation == 'set_donation':
+                self.get_donor(operation)
         elif name_input in self.donorCollection.donor_names:
-            self.set_donation(name_input)
+            if operation == 'set_donation':
+                self.add_donation(name_input)
         else:
             print('Donor not found.')
+
+    def update_donation(self):
+        pass
 
     def apply_selection(self, selection):
         arg_dict = {
             '1': self.set_donor,
-            '2': self.accept_donation,
-            '3': self.donorCollection.generate_table,
-            '4': self.donorCollection.generate_letters,
-            '5': quit
+            '2': self.update_donor,
+            '3': self.get_donor,
+            '4': self.update_donation,
+            '5': self.donorCollection.generate_table,
+            '6': self.donorCollection.generate_letters,
+            '7': quit
         }
         try:
             if not arg_dict.get(selection):
                 raise KeyError
-            arg_dict.get(selection)()
+            if selection == '3':
+                arg_dict.get(selection)('set_donation')
+            else:
+                arg_dict.get(selection)()
         except KeyError:
             print('Oops, invalid selection.')
 
     def get_selection(self):
         options = 'Please select from the menu:\n'\
                   '1) add new donor\n'\
-                  '2) log donation\n'\
-                  '3) create a report\n'\
-                  '4) send letters to everyone\n'\
-                  '5) quit\n'
+                  '2) update donor\n'\
+                  '3) add new donation\n'\
+                  '4) update donation\n'\
+                  '5) create a report\n'\
+                  '6) send letters to everyone\n'\
+                  '7) quit\n'
         while True:
             selection = input(options)
             self.apply_selection(selection)
-            if selection == '2':
-                self.get_selection()
+            if selection == '3':
+                self.get_donor()
 
 
 def main():
