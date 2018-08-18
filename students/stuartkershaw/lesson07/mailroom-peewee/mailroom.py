@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 from persist_donordonation import (create_donor, create_donation,
+                                   update_donor, update_donation,
+                                   delete_donor, delete_donation,
                                    get_donor_names, get_donor_donations)
 
 import pathlib
@@ -152,7 +154,7 @@ class DonorCli:
                 print("\n".join(self.donorCollection.donor_names))
                 return
 
-    def update_donor(self):
+    def find_donor_update(self):
         pass
 
     def add_donation(self, donor):
@@ -168,7 +170,7 @@ class DonorCli:
                 print('${} donation received.'.format(donation))
                 self.get_selection()
 
-    def get_donor(self, operation=None):
+    def get_donor_operation(self, operation=None):
         if not self.donorCollection.donor_names:
             print('The list of donors is empty.')
             return
@@ -181,22 +183,22 @@ class DonorCli:
         if name_input == 'list':
             print("\n".join(self.donorCollection.donor_names))
             if operation == 'set_donation':
-                self.get_donor(operation)
+                self.get_donor_operation(operation)
         elif name_input in self.donorCollection.donor_names:
             if operation == 'set_donation':
                 self.add_donation(name_input)
         else:
             print('Donor not found.')
 
-    def update_donation(self):
+    def find_donation_update(self):
         pass
 
     def apply_selection(self, selection):
         arg_dict = {
             '1': self.set_donor,
-            '2': self.update_donor,
+            '2': self.find_donor_update,
             '3': self.get_donor,
-            '4': self.update_donation,
+            '4': self.find_donation_update,
             '5': self.donorCollection.generate_table,
             '6': self.donorCollection.generate_letters,
             '7': quit
@@ -224,7 +226,7 @@ class DonorCli:
             selection = input(options)
             self.apply_selection(selection)
             if selection == '3':
-                self.get_donor()
+                self.get_donor_operation()
 
 
 def main():
