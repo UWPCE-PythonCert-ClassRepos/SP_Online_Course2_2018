@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os
+import os, json
 import json_save_dec as js
 from functools import reduce
 
@@ -131,6 +131,7 @@ class DonorCollection(js.JsonSaveable):
         self.factor = 1.0
         self.floor = 0.0
         self.ceiling = 1.0e12
+        self.json_filename = 'DonorCollection.json'
 
     def __repr__(self):
         return "DonorCollection()"
@@ -241,6 +242,61 @@ class DonorCollection(js.JsonSaveable):
                 with open(filename, 'w') as f:
                     for line in lines:
                         f.write(line + '\n')
+            os.chdir(cur_dir)
+            return folder
+
+    def load_json_file(self, folder=""):
+        """
+        Load a JSON file containing a donor collection database.
+
+        :folder:  The name of the folder to load the JSON file from
+                  (filename contained in the `json_filename` property.)
+                  Use the current folder if the specified folder cannot
+                  be opened.
+
+        :return:  A `DonorCollection` object containing the loaded
+                  data, converted back to a `DonorCollection` object.
+        """
+        cur_dir = os.getcwd()
+        if not folder:
+            folder = cur_dir
+        try:
+            os.chdir(folder)
+        except (FileNotFoundError, PermissionError, OSError):
+            print(f'Cannot open folder "folder" - using current folder...')
+        finally:
+            with open(self.json_filename, 'r') as f:
+                strs = f.readlines()
+                json_dictionary = json.loads(''.join(strs))
+                new_db = self.from_json_dict(json_dictionary)
+                print("Here's the Python dict:\n", new_db.db_dict)
+                print("Here are the donor db vars:\n", vars(new_db))
+                print("Here is the donor db dir:\n", dir(new_db))
+                for k, v in new_db.db_dict.items():
+                    new_db.add(k, v)
+                return new_db
+
+    def save_json_file(self, folder=""):
+        """
+        Save the current donor collection database in a JSON file.
+
+        :folder:  The name of the folder to save the JSON file to
+                  (filename contained in the `json_filename` property.)
+
+        :return:  The name of the saved JSON file.
+        """
+        cur_dir = os.getcwd()
+        if not folder:
+            folder = cur_dir
+        try:
+            os.mkdir(folder)
+        except FileExistsError:  # Okay if folder already exists
+            pass
+        finally:  # Save each letter, with donor name in each file name
+            os.chdir(folder)
+            folder = os.getcwd()  # Set folder name to the full OS path
+            with open(self.json_filename, 'w') as f:
+                self.to_json(f)
             os.chdir(cur_dir)
             return folder
 
@@ -355,5 +411,28 @@ if __name__ == '__main__':
     a.add('Barney', [5, 10, 20, 45.5])
     a.add('Wilma', [850, 84.2])
     a.add('Betty', [284, 283, 288.1])
+
+    print('\tPrinting the converted JSON dict to screen...\n')
     json_dict = a.to_json_compat()
     print(json_dict)
+
+    print('\tSaving the JSON file to C:\\Test...\n')
+    a.save_json_file('C:\\Test')
+
+    print('\tDeleting the donor collection...\n')
+    del a
+
+    print('\tLoading the JSON file back from a file...\n')
+    b = DonorCollection()
+    b.load_json_file(
+        # 'C:\\Test'
+        )
+
+    print('\tPrinting the loaded/converted Python dict to screen...\n')
+    print(b.db_dict)
+
+    print('\tPrinting the individual donor objects to screen...\n')
+    print(b['Fred'])
+    print(b['Barney'])
+    print(b['Wilma'])
+    print(b['Betty'])
