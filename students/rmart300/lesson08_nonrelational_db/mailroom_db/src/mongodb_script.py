@@ -19,6 +19,7 @@ class MailroomDB:
             self.donations = self.db['donations']
 
             if refresh_db or self.donations.count() == 0:
+                print('refreshing database')
                 self.db.drop_collection('donations')
                 self.initiate_database()
 

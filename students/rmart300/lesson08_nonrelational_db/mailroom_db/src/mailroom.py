@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from donor_collection import DonorCollection
 from donor import Donor
 
@@ -20,8 +20,11 @@ if __name__ == '__main__':
 
     donor_list = []
 
+    start_time = datetime.now()
     dc = DonorCollection()
     dc.load_donor_collection()
+    end_time = datetime.now()
+    print(f"database loaded in {end_time - start_time} ({end_time} - {start_time})")
 
     # prompt user for action and then call function
     action = 0

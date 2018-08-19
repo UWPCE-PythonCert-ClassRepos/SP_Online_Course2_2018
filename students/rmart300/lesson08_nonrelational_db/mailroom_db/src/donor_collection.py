@@ -1,4 +1,5 @@
 import os,re
+from datetime import datetime
 from donor import Donor
 from functools import reduce
 from mongodb_script import MailroomDB 
@@ -24,22 +25,25 @@ class DonorCollection(object):
         except ValueError as e: 
             return 'invalid donation amount: ' + str(amount)
 
-        existing_donor = None
+        donor = None
         for d in self.donor_list:
             if name == str(d):
-                existing_donor = d
+                donor = d
                 break
 
-        if existing_donor is not None:
-            existing_donor.amount_list.append(amount)
-            existing_donor.save_donation(amount)
-        else:
+        if donor is None:
             try:
-                d = Donor(name,[amount])
+                donor = Donor(name)
             except IndexError as e:
                 return 'Could not send thank you.  The first and last name of donor must be provided\n'
             else:
-                self.donor_list.append(d)
+                self.donor_list.append(donor)
+ 
+        # add donation to list in memory
+        donor.amount_list.append(amount)
+        # add donation to database
+        donor.save_donation(amount)
+
         return f"Hi {d}\nThank you for your donation of {amount} to the mailroom!\n"
 
     def send_thank_you(self):
@@ -73,16 +77,14 @@ class DonorCollection(object):
             print(data_row)
 
     def update_donation(self):
+        """ display donations and interact with user to update donation """
 
         mailroom_db = MailroomDB()
         mailroom_db.show_donations()
         donation_id = input("Please provide id of donation to update: ")
         
-        #try:
-        if True:
-
+        try:
             donation = mailroom_db.get_donation(donation_id)
-            print(donation)
             old_amount = donation['amount']
             amount = input(f"Current amount is ${old_amount}. What amount would you like to save? ")
             mailroom_db.update_donation(donation_id, float(amount))
@@ -92,33 +94,30 @@ class DonorCollection(object):
                      donor.update_amount_in_list(old_amount, amount)
                      break
 
-        #except Exception as ex:
-        #    logging.error('unable to update data for {}. Exception: {}'.format(donation_id, ex))
+        except Exception as ex:
+            logging.error('unable to update data for {}. Exception: {}'.format(donation_id, ex))
 
     def delete_donation(self):
+        """ display donations and interact with user to delete donation """
 
-        self.display_all_donations()
-        donation_id = input("Please provide id of donation to delete: ")
+        mailroom_db = MailroomDB()
+        mailroom_db.show_donations()
+        donation_id = input("Please provide id of donation to update: ")
 
-        database = SqliteDatabase('mailroom.db')
-        try:
+        if True:
+        #try:
 
-            database.connect()
-            database.execute_sql('PRAGMA foreign_keys = ON;')
-
-            donation = Donations.get(Donations.id == int(donation_id))
-            amount = donation.amount
-            donation.delete_instance()
+            donation = mailroom_db.get_donation(donation_id) 
+            amount = donation['amount']
+            mailroom_db.delete_donation(donation_id)
 
             for donor in self.donor_list:
-                if donor.first_name == donation.donor.first_name and donor.last_name == donation.donor.last_name:
+                if donor.first_name == donation['first_name'] and donor.last_name == donation['last_name']:
                     donor.delete_amount_from_list(amount)
                     break
 
-        except Exception as ex:
-            logging.error('unable to update data for {}. Exception: {}'.format(donation, ex))
-        finally:
-            database.close()
+        #except Exception as ex:
+        #    logging.error('unable to delete data for {}. Exception: {}'.format(donation_id, ex))
 
 
     def write_letters(self):
@@ -175,9 +174,8 @@ class DonorCollection(object):
     def load_donor_collection(self):
         """ function to load donor collection from existing records in database """
 
-        mailroom = MailroomDB()
-        donor_list_from_db = mailroom.get_donor_list()
+        mailroom_db = MailroomDB()
+        donor_list_from_db = mailroom_db.get_donor_list()
         for existing_donor in donor_list_from_db:
             donor = Donor(f"{existing_donor[0]} {existing_donor[1]}")
             self.donor_list.append(donor)
-            donor.load_donation_list()

@@ -7,7 +7,8 @@ logger = logging.getLogger(__name__)
 
 class Donor(object):
 
-    def __init__(self, name, amount_list = (500, 100, 1000, 20)):
+    #def __init__(self, name, amount_list = (500, 100, 1000, 20)):
+    def __init__(self, name):
 
         try:
             name.split()[1]
@@ -60,8 +61,8 @@ class Donor(object):
     def load_donation_list(self):
         """ reads database and loads list """
 
-        mailroom = MailroomDB()
-        donation_list = mailroom.get_donation_list_by_donor(self.first_name, self.last_name)       
+        mailroom_db = MailroomDB()
+        donation_list = mailroom_db.get_donation_list_by_donor(self.first_name, self.last_name)       
  
         self.amount_list = []
         for donation in donation_list:
