@@ -3,6 +3,7 @@ from datetime import datetime
 from donor import Donor
 from functools import reduce
 from mongodb_script import MailroomDB 
+import redis_script as rs
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -17,7 +18,7 @@ class DonorCollection(object):
 
         self.donor_list = []
 
-    def validate_and_create_thank_you(self, name, amount):
+    def validate_and_create_thank_you(self, name, amount, zip_code):
         """ send a thank you email to the donor for donation """
 
         try:
@@ -29,11 +30,12 @@ class DonorCollection(object):
         for d in self.donor_list:
             if name == str(d):
                 donor = d
+                donor.zip_code = zip_code
                 break
 
         if donor is None:
             try:
-                donor = Donor(name)
+                donor = Donor(name, zip_code)
             except IndexError as e:
                 return 'Could not send thank you.  The first and last name of donor must be provided\n'
             else:
@@ -59,20 +61,23 @@ class DonorCollection(object):
                 for donor in self.donor_list:
                     print(donor)
 
+        zip_code = input("Provide zip code: ").strip()
+        
         amount = input("Provide a donation amount:")
-        thank_you_message = self.validate_and_create_thank_you(name, amount)
+        thank_you_message = self.validate_and_create_thank_you(name, amount, zip_code)
         print(thank_you_message)
 
     def create_report(self):
         """ Print a list of donors, sorted by total historical donation amount"""
 
-        title = "{0:20} | {1:15} | {2:10} | {3:15}".format('Donor Name','Total Given','Num Gifts','Average Gift')
+        title = "{0:20} | {1:5} | {2:15} | {3:10} | {4:15}".format('Donor Name','Zip', 'Total Given','Num Gifts','Average Gift')
         print(title)
 
         #sort the dictionary by descending order of the sum of values
         sorted_list = sorted(self.donor_list, key=lambda d: d.donation_total, reverse=True)
         for donor in sorted_list:
-            data_row = "{0:20}  ${1:>15}   {2:>10}   ${3:>15}".format(str(donor),
+            zip_code = rs.get_donor_zip_code(str(donor))
+            data_row = "{0:20} {1:5}  ${2:>15}   {3:>10}   ${4:>15}".format(str(donor), donor.zip_code,
                 str(donor.donation_total), str(donor.donation_count), str(donor.donation_average))
             print(data_row)
 
@@ -177,5 +182,7 @@ class DonorCollection(object):
         mailroom_db = MailroomDB()
         donor_list_from_db = mailroom_db.get_donor_list()
         for existing_donor in donor_list_from_db:
-            donor = Donor(f"{existing_donor[0]} {existing_donor[1]}")
+            donor_name = f"{existing_donor[0]} {existing_donor[1]}"
+            zip_code = rs.get_donor_zip_code(donor_name)
+            donor = Donor(donor_name, zip_code)
             self.donor_list.append(donor)

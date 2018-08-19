@@ -1,4 +1,5 @@
 from mongodb_script import MailroomDB
+import redis_script as rs
 from datetime import datetime
 import logging
 
@@ -8,7 +9,7 @@ logger = logging.getLogger(__name__)
 class Donor(object):
 
     #def __init__(self, name, amount_list = (500, 100, 1000, 20)):
-    def __init__(self, name):
+    def __init__(self, name, zip_code):
 
         try:
             name.split()[1]
@@ -17,7 +18,9 @@ class Donor(object):
             raise
         else:
             self.first_name = name.split()[0]
-            self.last_name = name.split()[1]
+            self.last_name = name.split()[1] 
+            self.zip_code = zip_code.split('-')[0]
+            rs.set_donor_zip_code(str(self), self.zip_code)
             self.load_donation_list()    
         
     def update_amount_in_list(self, old_amount, new_amount):
