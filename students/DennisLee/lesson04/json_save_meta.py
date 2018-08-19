@@ -98,9 +98,6 @@ class JsonSaveable(metaclass=MetaJsonSaveable):
         the json compatible dict
 
         the object is created with __new__ before setting the attributes
-
-        NOTE: __init__ is not called.
-        There should not be any extra initialization required in __init__
         """
         # create a new object
         obj = cls.__new__(cls)
