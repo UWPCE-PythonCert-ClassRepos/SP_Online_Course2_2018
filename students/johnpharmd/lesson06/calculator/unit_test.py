@@ -1,4 +1,5 @@
 from unittest import TestCase
+from unittest.mock import MagicMock
 from exceptions import InsufficientOperands
 from adder import Adder
 from subtracter import Subtracter
@@ -65,20 +66,34 @@ class CalculatorTests(TestCase):
         with self.assertRaises(InsufficientOperands):
             self.calculator.add()
 
-    # def test_adder_call(self):
-    #     self.adder.calc = MagicMock(return_value=0)
+    def test_adder_call(self):
+        self.adder.calc = MagicMock(return_value=0)
 
-    #     self.calculator.enter_number(1)
-    #     self.calculator.enter_number(2)
-    #     self.calculator.add()
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.add()
 
-    #     self.adder.calc.assert_called_with(1, 2)
+        self.adder.calc.assert_called_with(1, 2)
 
-    # def test_subtracter_call(self):
-    #     self.subtracter.calc = MagicMock(return_value=0)
+    def test_subtracter_call(self):
+        self.subtracter.calc = MagicMock(return_value=0)
 
-    #     self.calculator.enter_number(1)
-    #     self.calculator.enter_number(2)
-    #     self.calculator.subtract()
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.subtract()
 
-    #     self.subtracter.calc.assert_called_with(1, 2)
+        self.subtracter.calc.assert_called_with(1, 2)
+
+    def test_multiplier_call(self):
+        self.multiplier.calc = MagicMock(return_value=0)
+
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.multiply()
+
+    def test_divider_call(self):
+        self.divider.calc = MagicMock(return_value=0)
+
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.divide()
