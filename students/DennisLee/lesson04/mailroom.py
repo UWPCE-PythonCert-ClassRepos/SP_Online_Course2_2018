@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os, json
-import json_save_dec as js
+import json_save_meta as js
 from functools import reduce
 
 class Donor():
@@ -157,6 +157,13 @@ class DonorCollection(js.JsonSaveable):
                     f"Name '{key}' is not in the donor collection.")
 
     def to_json_compat(self):
+        """
+        Update the donor database dict variable, then convert it to
+        JSON. We're doing this instead of representing the actual
+        `Donor` objects containing the full info, since we already have
+        a projector function that creates a normal Python dict with
+        everything we need.
+        """
         self.db_dict = dict(self.projector(1, 0, 1e12))
         return super().to_json_compat()
 
@@ -250,7 +257,8 @@ class DonorCollection(js.JsonSaveable):
     @classmethod
     def load_json_file(self, folder=""):
         """
-        Load a JSON file containing a donor collection database.
+        Load a JSON file containing a donor collection database. This
+        is an altenate donor database constructor.
 
         :folder:  The name of the folder to load the JSON file from
                   (filename contained in the `json_filename` property.)
@@ -272,9 +280,6 @@ class DonorCollection(js.JsonSaveable):
                 strs = f.readlines()
                 json_dictionary = json.loads(''.join(strs))
                 new_db = DonorCollection.from_json_dict(json_dictionary)
-                # print("Here's the Python dict:\n", new_db.db_dict)
-                # print("Here are the donor db vars:\n", vars(new_db))
-                # print("Here is the donor db dir:\n", dir(new_db))
                 new_db.__init__()
                 for k, v in new_db.db_dict.items():
                     new_db.add(k, v)
@@ -287,7 +292,7 @@ class DonorCollection(js.JsonSaveable):
         :folder:  The name of the folder to save the JSON file to
                   (filename contained in the `json_filename` property.)
 
-        :return:  The name of the saved JSON file.
+        :return:  None.
         """
         cur_dir = os.getcwd()
         if not folder:
@@ -302,7 +307,6 @@ class DonorCollection(js.JsonSaveable):
             with open(self.json_filename, 'w') as f:
                 self.to_json(f)
             os.chdir(cur_dir)
-            return folder
 
     def challenge(self, factor, min_donation=0.0, max_donation=1e12):
         """
@@ -410,6 +414,7 @@ class DonorCollection(js.JsonSaveable):
 
 
 if __name__ == '__main__':
+    dir_name = ''
     a = DonorCollection()
     a.add('Fred', [12.5])
     a.add('Barney', [5, 10, 20, 45.5])
@@ -421,17 +426,14 @@ if __name__ == '__main__':
     print(json_dict)
 
     print('\n\tSaving the JSON file...\n')
-    a.save_json_file(
-        # 'C:\\Test'
-        )
+    a.save_json_file(dir_name)
 
     print('\n\tDeleting the donor collection...\n')
     del a
 
     print('\n\tLoading the JSON file back from a file...\n')
-    b = DonorCollection.load_json_file(
-        # 'C:\\Test'
-        )
+    b = DonorCollection.load_json_file(dir_name)
+    
     print('\n\tShowing a report of the JSON-loaded donor list...\n')
     b.create_report()
 
