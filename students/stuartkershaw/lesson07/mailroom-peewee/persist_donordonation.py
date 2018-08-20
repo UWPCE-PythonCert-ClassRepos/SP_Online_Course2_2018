@@ -36,11 +36,11 @@ def create_donor(name):
 
 
 def update_donor(name):
-    pass
+    print('Updating donor name for {}...'.format(name))
 
 
 def delete_donor(name):
-    pass
+    print('Deleting donor {}...'.format(name))
 
 
 def create_donation(donor, amount):

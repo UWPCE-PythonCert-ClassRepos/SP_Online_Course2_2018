@@ -155,10 +155,25 @@ class DonorCli:
                 return
 
     def find_donor_update(self, donor):
-        update_donor(donor)
-
-    def find_donor_delete(self, donor):
-        delete_donor(donor)
+        while True:
+            try:
+                action = input('Updating {}...\nPlease enter \'1\' to update or \'2\' to delete: '.format(donor))
+                if action not in ['1', '2']:
+                    raise ValueError
+            except ValueError:
+                print('Oops, invalid selection...')
+                return
+            else:
+                if action == '1':
+                    updated_name = input('Please enter a new name for {}: '.format(donor))
+                    update_donor(updated_name)
+                elif action == '2':
+                    validate = input('Are are you sure you wish to delete {}? (yes/no): '.format(donor))
+                    if validate.lower() == 'yes':
+                        delete_donor(donor)
+                    else:
+                        print('Donor {} was unmodified.'.format(donor))
+                return
 
     def add_donation(self, donor):
         while True:
@@ -178,20 +193,24 @@ class DonorCli:
             print('The list of donors is empty.')
             return
 
-        instruction = 'Please enter a full name '\
+        instruction = 'Please enter a name '\
                       'or type \'list\' to see donors:\n'
 
         name_input = input(instruction)
 
         if name_input == 'list':
             print("\n".join(self.donorCollection.donor_names))
-            if operation == 'set_donation':
-                self.get_donor_operation(operation)
+            self.get_donor_operation(operation)
         elif name_input in self.donorCollection.donor_names:
-            if operation == 'set_donation':
+            if operation == 'update_donor':
+                self.find_donor_update(name_input)
+            elif operation == 'set_donation':
                 self.add_donation(name_input)
+            elif operation == 'update_donation':
+                self.find_donation_update(name_input)
         else:
             print('Donor not found.')
+            self.get_donor_operation(operation)
 
     def find_donation_update(self, donation):
         update_donation(donation)
@@ -202,9 +221,9 @@ class DonorCli:
     def apply_selection(self, selection):
         arg_dict = {
             '1': self.set_donor,
-            '2': self.find_donor_update,
+            '2': self.get_donor_operation,
             '3': self.get_donor_operation,
-            '4': self.find_donation_update,
+            '4': self.get_donor_operation,
             '5': self.donorCollection.generate_table,
             '6': self.donorCollection.generate_letters,
             '7': quit
@@ -212,8 +231,12 @@ class DonorCli:
         try:
             if not arg_dict.get(selection):
                 raise KeyError
-            if selection == '3':
+            elif selection == '2':
+                arg_dict.get(selection)('update_donor')
+            elif selection == '3':
                 arg_dict.get(selection)('set_donation')
+            elif selection == '4':
+                arg_dict.get(selection)('update_donation')
             else:
                 arg_dict.get(selection)()
         except KeyError:
