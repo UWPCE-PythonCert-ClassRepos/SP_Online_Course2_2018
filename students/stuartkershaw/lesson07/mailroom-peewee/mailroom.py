@@ -5,6 +5,7 @@ from persist_donordonation import (create_donor, create_donation,
                                    delete_donor, delete_donation,
                                    get_donor_names, get_donor_donations)
 
+import pprint
 import pathlib
 pth = pathlib.Path('./')
 
@@ -154,27 +155,6 @@ class DonorCli:
                 print("\n".join(self.donorCollection.donor_names))
                 return
 
-    def find_donor_update(self, donor):
-        while True:
-            try:
-                action = input('Updating {}...\nPlease enter \'1\' to update or \'2\' to delete: '.format(donor))
-                if action not in ['1', '2']:
-                    raise ValueError
-            except ValueError:
-                print('Oops, invalid selection...')
-                return
-            else:
-                if action == '1':
-                    updated_name = input('Please enter a new name for {}: '.format(donor))
-                    update_donor(updated_name)
-                elif action == '2':
-                    validate = input('Are are you sure you wish to delete {}? (yes/no): '.format(donor))
-                    if validate.lower() == 'yes':
-                        delete_donor(donor)
-                    else:
-                        print('Donor {} was unmodified.'.format(donor))
-                return
-
     def add_donation(self, donor):
         while True:
             try:
@@ -187,6 +167,86 @@ class DonorCli:
                 self.donorCollection.add_donation(donor, donation)
                 print('${} donation received.'.format(donation))
                 self.get_selection()
+
+    def find_donor_donation_update(self, donor, donation=None):
+        if not donation:
+            while True:
+                try:
+                    action = input('Please enter \'1\' to update or \'2\' to '
+                                   'delete: '.format(donor))
+                    if action not in ['1', '2']:
+                        raise ValueError
+                except ValueError:
+                    print('Oops, invalid selection...')
+                    return
+                else:
+                    if action == '1':
+                        updated_name = input('Please enter a new name for {}: '
+                                             .format(donor))
+                        update_donor(updated_name)
+                    elif action == '2':
+                        validate = input('Are are you sure you wish to delete '
+                                         '{}? (yes/no): '.format(donor))
+                        if validate.lower() == 'yes':
+                            delete_donor(donor)
+                        else:
+                            print('Donor {} unchanged.'.format(donor))
+                    return
+        else:
+            while True:
+                try:
+                    action = input('Please enter \'1\' to update or \'2\' to '
+                                   'delete: '.format(donation))
+                    if action not in ['1', '2']:
+                        raise ValueError
+                except ValueError:
+                    print('Oops, invalid selection...')
+                    return
+                else:
+                    if action == '1':
+                        updated_value = input('Please enter a new val for {}: '
+                                              .format(donation))
+                        try:
+                            updated_value = int(updated_value)
+                            if not updated_value > 0:
+                                raise ValueError
+                            else:
+                                update_donation(donor, updated_value)
+                        except ValueError:
+                            print('Oops, invalid selection...')
+                            return
+                    elif action == '2':
+                        validate = input('Are are you sure you wish to delete '
+                                         '{}? (yes/no): '.format(donation))
+                        if validate.lower() == 'yes':
+                            delete_donation(donor, donation)
+                        else:
+                            print('Donation {} unchanged.'.format(donation))
+                    return
+
+    def select_donation(self, donor):
+        donations = self.donorCollection.get_donations(donor)
+        range_donations = range(1, len(donations) + 1)
+        donations_dict = dict(zip(range_donations, donations))
+
+        while True:
+            try:
+                print('Updating {}\'s donations.'.format(donor))
+                pp = pprint.PrettyPrinter(width=1)
+                pp.pprint(donations_dict)
+                select = int(input('Please enter \'1\' through \'{}\' '
+                                   'to select a donation to update: '
+                                   .format(len(donations))))
+                if select not in donations_dict.keys():
+                    raise ValueError
+            except ValueError:
+                print('Oops, invalid selection...')
+                return
+            else:
+                print('Updating {}\'s donation of {}.'
+                      .format(donor, donations[select - 1]))
+                self.find_donor_donation_update(donor, donations[select - 1])
+                return
 
     def get_donor_operation(self, operation=None):
         if not self.donorCollection.donor_names:
@@ -203,20 +263,14 @@ class DonorCli:
             self.get_donor_operation(operation)
         elif name_input in self.donorCollection.donor_names:
             if operation == 'update_donor':
-                self.find_donor_update(name_input)
+                self.find_donor_donation_update(name_input)
             elif operation == 'set_donation':
                 self.add_donation(name_input)
             elif operation == 'update_donation':
-                self.find_donation_update(name_input)
+                self.select_donation(name_input)
         else:
             print('Donor not found.')
             self.get_donor_operation(operation)
-
-    def find_donation_update(self, donation):
-        update_donation(donation)
-
-    def find_donation_delete(self, donation):
-        delete_donation(donation)
 
     def apply_selection(self, selection):
         arg_dict = {

@@ -78,12 +78,12 @@ def create_donation(donor, amount):
         database.close()
 
 
-def update_donation(donation):
-    pass
+def update_donation(donor, donation):
+    print('Updating donation {} for {}...'.format(donor, donation))
 
 
-def delete_donation(donation):
-    pass
+def delete_donation(donor, donation):
+    print('Deleting donation {} for {}...'.format(donor, donation))
 
 
 def get_donor_names():
