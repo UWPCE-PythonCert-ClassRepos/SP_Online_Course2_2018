@@ -1,0 +1,2 @@
+2018-08-17 13:53:26,722 simple5.py:51   WARNING The value of i is 50.
+2018-08-17 13:53:26,738 simple5.py:56   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.

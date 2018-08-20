@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import os
+import os, json
+import json_save_meta as js
 from functools import reduce
 
 class Donor():
@@ -119,9 +120,12 @@ class Donor():
         
         return text.format(self.name, self.donations[index], extra)
     
-
-class DonorCollection():
+class DonorCollection(js.JsonSaveable):
     """Contains methods and properties for an entire donor roster."""
+
+    db_dict = js.Dict()  # Database dict is the only variable to convert
+    json_filename = 'DonorCollection.json'  # Don't include filename in
+                                            # JSON conversion
 
     def __init__(self):
         """Create a dict of donor names and associated `Donor` objects."""
@@ -129,6 +133,7 @@ class DonorCollection():
         self.factor = 1.0
         self.floor = 0.0
         self.ceiling = 1.0e12
+        # print("\n\nThe donor collection has been initialized!\n\n")
 
     def __repr__(self):
         return "DonorCollection()"
@@ -147,9 +152,20 @@ class DonorCollection():
                     f"'{type(key)}' - it should be a string instead.")
         try:
             return self.donors[key.strip()]
-        except IndexError:
-            raise IndexError(
+        except KeyError:
+            raise KeyError(
                     f"Name '{key}' is not in the donor collection.")
+
+    def to_json_compat(self):
+        """
+        Update the donor database dict variable, then convert it to
+        JSON. We're doing this instead of representing the actual
+        `Donor` objects containing the full info, since we already have
+        a projector function that creates a normal Python dict with
+        everything we need.
+        """
+        self.db_dict = dict(self.projector(1, 0, 1e12))
+        return super().to_json_compat()
 
     def add(self, name, amount):
         """
@@ -237,6 +253,60 @@ class DonorCollection():
                         f.write(line + '\n')
             os.chdir(cur_dir)
             return folder
+
+    @classmethod
+    def load_json_file(self, folder=""):
+        """
+        Load a JSON file containing a donor collection database. This
+        is an altenate donor database constructor.
+
+        :folder:  The name of the folder to load the JSON file from
+                  (filename contained in the `json_filename` property.)
+                  Use the current folder if the specified folder cannot
+                  be opened.
+
+        :return:  A `DonorCollection` object containing the loaded
+                  data, converted back to a `DonorCollection` object.
+        """
+        cur_dir = os.getcwd()
+        if not folder:
+            folder = cur_dir
+        try:
+            os.chdir(folder)
+        except (FileNotFoundError, PermissionError, OSError):
+            print(f'Cannot open folder "folder" - using current folder...')
+        finally:
+            with open(self.json_filename, 'r') as f:
+                strs = f.readlines()
+                json_dictionary = json.loads(''.join(strs))
+                new_db = DonorCollection.from_json_dict(json_dictionary)
+                new_db.__init__()
+                for k, v in new_db.db_dict.items():
+                    new_db.add(k, v)
+                return new_db
+
+    def save_json_file(self, folder=""):
+        """
+        Save the current donor collection database in a JSON file.
+
+        :folder:  The name of the folder to save the JSON file to
+                  (filename contained in the `json_filename` property.)
+
+        :return:  None.
+        """
+        cur_dir = os.getcwd()
+        if not folder:
+            folder = cur_dir
+        try:
+            os.mkdir(folder)
+        except FileExistsError:  # Okay if folder already exists
+            pass
+        finally:  # Save each letter, with donor name in each file name
+            os.chdir(folder)
+            folder = os.getcwd()  # Set folder name to the full OS path
+            with open(self.json_filename, 'w') as f:
+                self.to_json(f)
+            os.chdir(cur_dir)
 
     def challenge(self, factor, min_donation=0.0, max_donation=1e12):
         """
@@ -341,3 +411,37 @@ class DonorCollection():
         """
         all_gifts = reduce(lambda x, y: x + y, dict(donation_list).values())
         return round(sum(all_gifts), 2)
+
+
+if __name__ == '__main__':
+    dir_name = ''
+    a = DonorCollection()
+    a.add('Fred', [12.5])
+    a.add('Barney', [5, 10, 20, 45.5])
+    a.add('Wilma', [850, 84.2])
+    a.add('Betty', [284, 283, 288.1])
+
+    print('\n\tPrinting the converted JSON dict to screen...\n')
+    json_dict = a.to_json_compat()
+    print(json_dict)
+
+    print('\n\tSaving the JSON file...\n')
+    a.save_json_file(dir_name)
+
+    print('\n\tDeleting the donor collection...\n')
+    del a
+
+    print('\n\tLoading the JSON file back from a file...\n')
+    b = DonorCollection.load_json_file(dir_name)
+    
+    print('\n\tShowing a report of the JSON-loaded donor list...\n')
+    b.create_report()
+
+    print('\n\tPrinting the loaded/converted Python dict to screen...\n')
+    print(b.db_dict)
+
+    print('\n\tPrinting the individual donor objects to screen...\n')
+    print(b['Fred'])
+    print(b['Barney'])
+    print(b['Wilma'])
+    print(b['Betty'])
