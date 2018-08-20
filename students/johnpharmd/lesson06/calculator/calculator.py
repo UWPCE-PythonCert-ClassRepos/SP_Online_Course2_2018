@@ -12,7 +12,9 @@ class Calculator():
         self.stack = []
 
     def enter_number(self, number):
-        self.stack.insert(0, number)
+        # choice of 0 for insert position is incorrect because it 
+        # leads to incorrect subtraction and division results
+        self.stack.insert(1, number)
 
     def _do_calc(self, operator):
         try:

@@ -1,12 +1,12 @@
 from unittest import TestCase
 from unittest.mock import MagicMock
 
-from calculator.adder import Adder
-from calculator.subtracter import Subtracter
-from calculator.multiplier import Multiplier
-from calculator.divider import Divider
-from calculator.calculator import Calculator
-from calculator.exceptions import InsufficientOperands
+from adder import Adder
+from subtracter import Subtracter
+from multiplier import Multiplier
+from divider import Divider
+from calculator import Calculator
+from exceptions import InsufficientOperands
 
 
 class ModuleTests(TestCase):
@@ -18,18 +18,18 @@ class ModuleTests(TestCase):
         calculator.enter_number(5)
         calculator.enter_number(2)
 
-        calculator.multiply()
-
+        r1 = calculator.multiply()
+        print('multiplication result:', r1)
         calculator.enter_number(46)
 
-        calculator.add()
-
+        r2 = calculator.add()
+        print('addition result:', r2)
         calculator.enter_number(8)
 
-        calculator.divide()
-
+        r3 = calculator.divide()
+        print('division result:', r3)
         calculator.enter_number(1)
 
         result = calculator.subtract()
-
+        print('result after final step of subtraction:', result)
         self.assertEqual(6, result)
