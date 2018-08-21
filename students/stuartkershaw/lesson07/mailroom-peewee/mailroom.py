@@ -183,7 +183,7 @@ class DonorCli:
                     if action == '1':
                         updated_name = input('Please enter a new name for {}: '
                                              .format(donor))
-                        update_donor(updated_name)
+                        update_donor(donor, updated_name)
                     elif action == '2':
                         validate = input('Are are you sure you wish to delete '
                                          '{}? (yes/no): '.format(donor))

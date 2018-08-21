@@ -35,12 +35,79 @@ def create_donor(name):
         database.close()
 
 
-def update_donor(name):
-    print('Updating donor name for {}...'.format(name))
+def update_donor(old_name, new_name):
+    """
+    Update donor name
+    """
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    database = SqliteDatabase('mailroom.db')
+
+    logger.info('Working with Donor class')
+
+    logger.info('Updating Donor record...')
+
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+
+        with database.transaction():
+            update_donor_name = Donor.update(donor_name=new_name)\
+                .where(Donor.donor_name == old_name)
+
+            update_donor_donations = Donation.update(donation_donor=new_name)\
+                .where(Donation.donation_donor == old_name)
+
+            update_donor_name.execute()
+            update_donor_donations.execute()
+
+            logger.info('Database update successful')
+
+    except Exception as e:
+        logger.info(f'Error updating {old_name} to {new_name}')
+        logger.info(e)
+
+    finally:
+        logger.info('database closes')
+        database.close()
 
 
 def delete_donor(name):
-    print('Deleting donor {}...'.format(name))
+    """
+    Delete donor
+    """
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    database = SqliteDatabase('mailroom.db')
+
+    logger.info('Working with Donor class')
+
+    logger.info('Deleting Donor record...')
+
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+
+        with database.transaction():
+            donor = Donor.get(donor_name=name)
+
+            delete_donor_donations = Donation.delete()\
+                .where(Donation.donation_donor == name)
+
+            donor.delete_instance()
+            delete_donor_donations.execute()
+
+            logger.info('Database delete successful')
+
+    except Exception as e:
+        logger.info(f'Error deleting {name}')
+        logger.info(e)
+
+    finally:
+        logger.info('database closes')
+        database.close()
 
 
 def create_donation(donor, amount):
@@ -141,8 +208,9 @@ def get_donor_donations():
 
         for donation in query:
             try:
-                donor_donations.setdefault(donation.donation_donor.donor_name,
-                                           []).append(float(donation.donation_amount))
+                donor_donations\
+                    .setdefault(donation.donation_donor.donor_name,
+                                []).append(float(donation.donation_amount))
 
             except Exception as e:
                 logger.info(e)
