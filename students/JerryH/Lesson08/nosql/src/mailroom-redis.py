@@ -104,6 +104,11 @@ def delete_donation():
     else:
         print("Can't find the name you want to delete.")
 
+def find_email():
+    name = input("Type a donor's name to find their email: \n -->")
+
+    print(r.hget(name, 'Email'))
+
 
 def quit_program():
 	print("Thanks for using my script! Bye!")
@@ -114,10 +119,10 @@ try:
     r = login_database.login_redis_cloud()
     r.flushdb()
 
-    r.hmset('Bill Gates', {'Donation': '234.22, 45.24, 453.09, 923.01'})
-    r.hmset('Jeff Bezo', {'Donation': '435.34'})
-    r.hmset('Mike Dell', {'Donation': '299.89, 98.01'})
-    r.hmset('Harry Potter', {'Donation': '999.34, 100'})
+    r.hmset('Bill Gates', {'Donation': '234.22, 45.24, 453.09, 923.01', 'Email': 'billgates@xyz.com'})
+    r.hmset('Jeff Bezo', {'Donation': '435.34', 'Email': 'jeffbezo@xyz.com'})
+    r.hmset('Mike Dell', {'Donation': '299.89, 98.01', 'Email': 'mikedell@xyz.com'})
+    r.hmset('Harry Potter', {'Donation': '999.34, 100', 'Email': 'harrypotter@xyz.com'})
 
 except Exception as e:
         print(f'Redis error: {e}')
@@ -131,7 +136,8 @@ selection_map = {
     "2": create_report,
     # "3": db.send_letters,
     "3": delete_donation,
-    "4": quit_program
+    "4": quit_program,
+    "5": find_email
     # "5": db.challenge_report,
     # "6": db.projections
 }
@@ -141,14 +147,15 @@ menu = {
     'op2': "Create a Report",
     # 'op3': "Send Letters To Everyone",
     'op3': "Delete a donation",
-    'op4': "Quit"
+    'op4': "Quit",
+    'op5': 'Find Donor Email'
     # 'op5': "Challenge",
     # 'op6': "Run Projections"
 }
 
 def prompt():
     return input("\nPlease choose the following options:\n1) {op1}.\n2) {op2}.\n3)"
-        " {op3}.\n4) {op4}.\n".format(**menu))
+        " {op3}.\n4) {op4}.\n5) {op5}.\n".format(**menu))
         # " {op3}.\n4) {op4}.\n5) {op5}.\n6) {op6}.\n".format(**menu))
 
 
