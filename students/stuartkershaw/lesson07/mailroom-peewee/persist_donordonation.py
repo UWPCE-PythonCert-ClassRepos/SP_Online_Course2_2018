@@ -145,12 +145,71 @@ def create_donation(donor, amount):
         database.close()
 
 
-def update_donation(donor, donation):
-    print('Updating donation {} for {}...'.format(donor, donation))
+def update_donation(donor, old_donation, new_donation):
+    """
+    Update donation amount
+    """
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    database = SqliteDatabase('mailroom.db')
+
+    logger.info('Working with Donation class')
+
+    logger.info('Updating Donation record...')
+
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+
+        with database.transaction():
+            update_donation = Donation.update(donation_amount=new_donation)\
+                .where(Donation.donation_donor == donor and Donation.donation_amount == old_donation)
+
+            update_donation.execute()
+
+            logger.info('Database update successful')
+
+    except Exception as e:
+        logger.info(f'Error updating {donor} donation to {new_donation}')
+        logger.info(e)
+
+    finally:
+        logger.info('database closes')
+        database.close()
 
 
 def delete_donation(donor, donation):
-    print('Deleting donation {} for {}...'.format(donor, donation))
+    """
+    Delete donation
+    """
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    database = SqliteDatabase('mailroom.db')
+
+    logger.info('Working with Donation class')
+
+    logger.info('Deleting Donation record...')
+
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+
+        with database.transaction():
+            donation = Donation.get(Donation.donation_donor == donor and Donation.donation_amount == donation)
+
+            donation.delete_instance()
+
+            logger.info('Database delete successful')
+
+    except Exception as e:
+        logger.info(f'Error updating {donation} for {donor}')
+        logger.info(e)
+
+    finally:
+        logger.info('database closes')
+        database.close()
 
 
 def get_donor_names():

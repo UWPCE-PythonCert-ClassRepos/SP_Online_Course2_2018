@@ -211,7 +211,7 @@ class DonorCli:
                             if not updated_value > 0:
                                 raise ValueError
                             else:
-                                update_donation(donor, updated_value)
+                                update_donation(donor, donation, updated_value)
                         except ValueError:
                             print('Oops, invalid selection...')
                             return
