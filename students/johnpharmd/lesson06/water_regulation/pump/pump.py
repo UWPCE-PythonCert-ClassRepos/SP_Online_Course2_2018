@@ -6,7 +6,7 @@ import urllib.request
 import urllib.error
 
 
-class Pump(object):
+class Pump():
     """
     Encapsulates the connection to an HTTP pump controller
     """

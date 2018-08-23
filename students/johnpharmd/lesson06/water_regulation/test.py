@@ -12,23 +12,48 @@ from waterregulation.controller import Controller
 from waterregulation.decider import Decider
 
 
+class SensorTests(unittest.TestCase):
+    """Unit tests for the Sensor class"""
+
+    def test_sensor_call(self):
+        """Tests whether fictional sensor replies to MagicMock call"""
+        sensor = Sensor(MagicMock(return_value='127.0.0.1'),
+                        MagicMock(return_value='514'))
+        sensor.measure = MagicMock(return_value=105)
+
+        # self.controller.tick()
+        self.assertTrue(sensor.measure())
+        # sensor.measure.assert_called_with('127.0.0.1', '514') - FAIL
+
+
 class DeciderTests(unittest.TestCase):
-    """
-    Unit tests for the Decider class
-    """
+    """Unit tests for the Decider class"""
 
     # TODO: write a test or tests for each of the behaviors defined for
     #       Decider.decide
 
-    def test_dummy(self):
+    def test_decider_decision(self):
+        """Tests if decider makes correct decisions, given water height in tank
+        and current pump action
         """
-        Just some example syntax that you might use
-        """
+        decider_dict = {'PUMP_OFF': 'maintain current level',
+                        'PUMP_IN': 'pump water in',
+                        'PUMP_OUT': 'pump water out'}
+        decider = Decider(120, 0.05)
+        self.assertEqual(decider.decide(105, 'PUMP_OFF', decider_dict),
+                         'pump water in')
+        self.assertEqual(decider.decide(126, 'PUMP_OFF', decider_dict),
+                         'maintain current level')
 
-        pump = Pump('127.0.0.1', 8000)
-        pump.set_state = MagicMock(return_value=True)
+    # def test_dummy(self):
+    #     """
+    #     Just some example syntax that you might use
+    #     """
 
-        self.fail("Remove this test.")
+    #     pump = Pump('127.0.0.1', 8000)
+    #     pump.set_state = MagicMock(return_value=True)
+
+    #     self.fail("Remove this test.")
 
 
 class ControllerTests(unittest.TestCase):
@@ -45,8 +70,3 @@ class ControllerTests(unittest.TestCase):
         self.decider = Decider(10, 0.05)
 
         self.controller = Controller(self.sensor, self.pump, self.decider)
-
-    def test_sensor_call(self):
-        self.sensor.measure = MagicMock(return_value=0)
-
-        self.controller.tick()

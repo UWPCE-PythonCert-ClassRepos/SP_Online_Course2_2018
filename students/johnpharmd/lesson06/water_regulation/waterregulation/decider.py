@@ -52,6 +52,8 @@ class Decider():
         """
 
         # TODO: Implement the properties of this method described above.
+        decider_dict = {'PUMP_OFF': 'maintain current level',
+                        'PUMP_IN': 'pump water in',
+                        'PUMP_OUT': 'pump water out'}
 
         return actions['PUMP_IN']
-
