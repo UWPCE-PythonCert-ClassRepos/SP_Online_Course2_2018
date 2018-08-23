@@ -32,17 +32,10 @@ if __name__ == '__main__':
     size = int(sys.argv[1])
     max_num = int(sys.argv[2])
     
-    #size = int(input('what is size of array? '))
-    #max_num = int(input('what is max num in array? '))
-
-    #print('building list')
     search_list = build_list(size, max_num)
-    #print(search_list)
        
     elem = search_list[random.randrange(size)]
  
-    #elem = int(input('what number would you like to look for? '))
-
     index = binary_search_recursive(search_list, elem)
 
     if index:
