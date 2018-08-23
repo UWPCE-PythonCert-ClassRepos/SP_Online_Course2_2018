@@ -7,8 +7,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def donor_input():
-        return input("Enter a donor name or input 'List'"+
-                     " for a list of donors\n>")
+        return input("Enter a donor name, input 'List'"+
+                     " for a list of donors, select 'Delete' to remove "+
+                     "a donor from the database, or 'Reenter' to change a donation\n>")
 
 def donation_prompt():
     return input("Enter a donation amount \n>")
@@ -122,6 +123,18 @@ def send_thankyou():
         if don_input.lower() == "list":
             list_donors()
             don_input = None
+        elif don_input.lower() == "delete":
+            list_donors()
+            remove = input("Enter a donor name to remove "+
+                     "a donor from the database\n>")
+            delete_donor(remove)
+            don_input = None
+        elif don_input.lower()== "reenter":
+            list_donors()
+            rename = input("Enter a donor name to change "+
+                     "a donation in the database\n>")
+            reenter_donation(rename)
+            don_input = None            
         
     donation = None
     while not donation:
@@ -159,6 +172,74 @@ def send_letters():
     for donor in Donors.select():
             with open(donor.donor_name + '.txt', 'w') as donorfh:
                 donorfh.write(send_thankyou_total(donor))
+
+
+def add_donor(donor):
+    database = SqliteDatabase('donor_database.db')
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        with database.transaction():
+            new_donor = Donors.create(donor_name = donor)
+            logger.info('Donor {} was added to the database'.format(donor))
+    except Exception as e:
+        logger.info('Error creating = {}'.format(donor))
+        logger.info(e)
+    finally:
+        logger.info('Updating Database')
+        update_donations()
+        logger.info('Database closes')
+        database.close()
+
+def delete_donor(donor):
+    database = SqliteDatabase('donor_database.db')
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        with database.transaction():
+            search = Donors.get(Donors.donor_name == donor)
+            search.delete_instance()
+            search_donation = Donations.get(Donations.d_name == donor)
+            search_donation.delete_instance()
+            logger.info('Donor {} was deleted from the database'.format(donor))
+    except Exception as e:
+        logger.info('Error deleting {} from database'.format(donor))
+        logger.info(e)
+    finally:
+        logger.info('Updating Database')
+        update_donations()
+        logger.info('Database closes')
+        database.close()
+
+def reenter_donation(donor):
+    old = float(input("Enter the old donation amount\n>"))
+    new = donation_prompt()
+    database = SqliteDatabase('donor_database.db')
+    try:
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        with database.transaction():
+            search = Donations.get((Donations.d_name_id == donor) &
+                                           (Donations.d_amount == old))
+            search.d_amount = new
+            search.save()
+            for donor in Donors:
+                x = Donations.select().where(Donations.d_name_id == donor)
+                number_of_donations = x.count()
+                total = decimal.Decimal('0.0')
+                for item in x.iterator():
+                    total += item.d_amount
+                donor.total_donation = total
+                donor.number_donation = number_of_donations
+                donor.ave_donation = total/number_of_donations
+                donor.save()
+    except Exception as e:
+        logger.info('Error changing donation for {} in database'.format(donor))
+        logger.info(e)
+    finally:
+        logger.info('Updating Database')
+        update_donations()
+        logger.info('Database closes')
+        database.close()
 
 def close_program():
     print('\nClosing Program\n')
