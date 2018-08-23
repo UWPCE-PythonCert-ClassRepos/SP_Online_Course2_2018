@@ -21,6 +21,7 @@ def showoff_databases():
 
     log.info("Mongodb example to use data from Furniture module, so get it")
     furniture = src.learn_data.get_furniture_data()
+    players = src.learn_data.get_player_data()
 
     src.mongodb_script.run_example(furniture)
 
@@ -28,7 +29,7 @@ def showoff_databases():
 
     src.redis_script.run_example()
     src.neo4j_script.run_example()
-    src.simple_script.run_example(furniture)
+    src.simple_script.run_example(players)
 
 
 if __name__ == '__main__':

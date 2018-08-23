@@ -67,3 +67,69 @@ def get_furniture_data():
         }
     ]
     return furniture_data
+
+
+def get_player_data():
+
+    player_data = [
+        {'team': 'Barcelona',
+         'forward': 'Messi',
+         'midfield': 'Busquets',
+         'defense': 'Pique',
+         'goalkeeper': 'Ter Stegen'},
+
+        {'team': 'Madrid',
+         'forward': 'Bale',
+         'midfield': 'Modric',
+         'defense': 'Ramos',
+         'goalkeeper': 'Courtois'},
+
+        {'team': 'Manchester United',
+         'forward': 'Lukaku',
+         'midfield': 'Pogba',
+         'defense': 'Smalling',
+         'goalkeeper': 'De Gea'},
+
+        {'team': 'Manchester City',
+         'forward': 'Aguero',
+         'midfield': 'De Bruyne',
+         'defense': 'Mendy',
+         'goalkeeper': 'Ederson'},
+
+        {'team': 'Liverpool',
+         'forward': 'Salah',
+         'midfield': 'Keita',
+         'defense': 'Lovren',
+         'goalkeeper': 'Alisson'},
+
+        {'team': 'Arsenal',
+         'forward': 'Ozil',
+         'midfield': 'Ramsey',
+         'defense': 'Xhaka',
+         'goalkeeper': 'Cech'},
+
+        {'team': 'Tottenham',
+         'forward': 'Kane',
+         'midfield': 'Alli',
+         'defense': 'Trippier',
+         'goalkeeper': 'Lloris'},
+
+        {'team': 'Chelsea',
+         'forward': 'Hazard',
+         'midfield': 'Wilian',
+         'defense': 'Cahill',
+         'goalkeeper': 'Caballero'},
+
+        {'team': 'AC Milan',
+         'forward': 'Higuian',
+         'midfield': 'Laxalt',
+         'defense': 'Zapata',
+         'goalkeeper': 'Donnarumma'},
+
+        {'team': 'Inter Milan',
+         'forward': 'Icardi',
+         'midfield': 'Asamoah',
+         'defense': 'Miranda',
+         'goalkeeper': 'Berni'}
+    ]
+    return player_data
