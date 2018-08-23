@@ -29,21 +29,46 @@ class SensorTests(unittest.TestCase):
 class DeciderTests(unittest.TestCase):
     """Unit tests for the Decider class"""
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Decider.decide
+    def setUp(self):
+        self.decider_dict = {'PUMP_OFF': 'maintain current level',
+                             'PUMP_IN': 'pump water in',
+                             'PUMP_OUT': 'pump water out'}
+        self.decider = Decider(120, 0.05)
 
-    def test_decider_decision(self):
-        """Tests if decider makes correct decisions, given water height in tank
-        and current pump action
+    def test_lowLevel_pumpOff(self):
+        """Tests if decider 'chooses' to pump in, given low level
+        and pump currently off
         """
-        decider_dict = {'PUMP_OFF': 'maintain current level',
-                        'PUMP_IN': 'pump water in',
-                        'PUMP_OUT': 'pump water out'}
-        decider = Decider(120, 0.05)
-        self.assertEqual(decider.decide(105, 'PUMP_OFF', decider_dict),
-                         'pump water in')
-        self.assertEqual(decider.decide(126, 'PUMP_OFF', decider_dict),
-                         'maintain current level')
+        self.assertEqual(self.decider.decide(105, 'PUMP_OFF',
+                         self.decider_dict), 'pump water in')
+
+    def test_hiLevel_pumpOff(self):
+        """Tests if decider 'chooses' to pump out, given high
+        level and pump currently off
+        """
+        self.assertEqual(self.decider.decide(140, 'PUMP_OFF',
+                         self.decider_dict), 'pump water out')
+
+    def test_okLevel_pumpOff(self):
+        """Tests if decider 'chooses' to keep pump off, given level
+        within margin and pump currently off
+        """
+        self.assertEqual(self.decider.decide(125, 'PUMP_OFF',
+                         self.decider_dict), 'maintain current level')
+
+    def test_hiLevel_pumpIn(self):
+        """Tests if decider 'chooses' to turn pump off, given high
+        level and pump currently in
+        """
+        self.assertEqual(self.decider.decide(130, 'PUMP_IN',
+                         self.decider_dict), 'maintain current level')
+
+    def test_lowLevel_pumpOut(self):
+        """Tests if decider 'chooses' to turn pump off, given low
+        level and pump currently out
+        """
+        self.assertEqual(self.decider.decide(110, 'PUMP_OUT',
+                         self.decider_dict), 'maintain current level')
 
     # def test_dummy(self):
     #     """
