@@ -17,13 +17,26 @@ class SensorTests(unittest.TestCase):
 
     def test_sensor_call(self):
         """Tests whether fictional sensor replies to MagicMock call"""
-        sensor = Sensor(MagicMock(return_value='127.0.0.1'),
-                        MagicMock(return_value='514'))
+        sensor = Sensor('127.0.0.1', 514)
         sensor.measure = MagicMock(return_value=105)
 
-        # self.controller.tick()
         self.assertTrue(sensor.measure())
-        # sensor.measure.assert_called_with('127.0.0.1', '514') - FAIL
+
+
+class PumpTests(unittest.TestCase):
+    """Unit tests for the Pump class"""
+
+    def setUp(self):
+        self.pump = Pump('127.0.0.1', 8000)
+
+    def test_pump_get_state(self):
+        """Tests whether pump state can be obtained"""
+        self.pump.get_state = MagicMock(return_value='PUMP_OFF')
+
+    def test_pump_set_state(self):
+        """Tests whether pump state can be set"""
+        self.pump.set_state = MagicMock(return_value='PUMP_OFF')
+        self.assertTrue(self.pump.set_state('PUMP_OFF'))
 
 
 class DeciderTests(unittest.TestCase):
@@ -70,16 +83,6 @@ class DeciderTests(unittest.TestCase):
         self.assertEqual(self.decider.decide(110, 'PUMP_OUT',
                          self.decider_dict), 'maintain current level')
 
-    # def test_dummy(self):
-    #     """
-    #     Just some example syntax that you might use
-    #     """
-
-    #     pump = Pump('127.0.0.1', 8000)
-    #     pump.set_state = MagicMock(return_value=True)
-
-    #     self.fail("Remove this test.")
-
 
 class ControllerTests(unittest.TestCase):
     """
@@ -92,6 +95,6 @@ class ControllerTests(unittest.TestCase):
     def setUp(self):
         self.sensor = Sensor('127.0.0.1', 514)
         self.pump = Pump('127.0.0.1', 8000)
-        self.decider = Decider(10, 0.05)
+        self.decider = Decider(120, 0.05)
 
         self.controller = Controller(self.sensor, self.pump, self.decider)
