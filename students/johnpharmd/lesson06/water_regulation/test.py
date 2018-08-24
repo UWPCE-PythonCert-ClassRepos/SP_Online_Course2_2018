@@ -32,6 +32,7 @@ class PumpTests(unittest.TestCase):
     def test_pump_get_state(self):
         """Tests whether pump state can be obtained"""
         self.pump.get_state = MagicMock(return_value='PUMP_OFF')
+        self.assertEqual(self.pump.get_state(), 'PUMP_OFF')
 
     def test_pump_set_state(self):
         """Tests whether pump state can be set"""
@@ -89,12 +90,18 @@ class ControllerTests(unittest.TestCase):
     Unit tests for the Controller class
     """
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Controller.tick
+    def test_controller_tick(self):
+        """Tests if, on each call to tick(), the controller object
+        queries each of the sensor, pump, and decider, then sets pump
+        to new state
+        """
+        sensor = Sensor('127.0.0.1', '514')
+        sensor.measure = MagicMock(return_value=105)
+        pump = Pump('127.0.0.1', '8000')
+        pump.get_state = MagicMock(return_value='PUMP_OFF')
+        pump.set_state = MagicMock(return_value='PUMP_IN')
+        decider = Decider(120, 0.05)
 
-    def setUp(self):
-        self.sensor = Sensor('127.0.0.1', 514)
-        self.pump = Pump('127.0.0.1', 8000)
-        self.decider = Decider(120, 0.05)
+        controller = Controller(sensor, pump, decider)
 
-        self.controller = Controller(self.sensor, self.pump, self.decider)
+        self.assertTrue(controller.tick())
