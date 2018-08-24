@@ -34,13 +34,13 @@ class Decider():
                 return actions['PUMP_IN']
             elif current_action == 'PUMP_OUT':
                 return actions['PUMP_OFF']
-        elif current_height > self.margin * self.target_height:
+        elif current_height > (1 + self.margin) * self.target_height:
             if current_action == 'PUMP_OFF':
                 return actions['PUMP_OUT']
             elif current_action == 'PUMP_IN':
                 return actions['PUMP_OFF']
         elif ((1 - self.margin) * self.target_height <= current_height <=
-              self.margin * self.target_height):
+              (1 + self.margin) * self.target_height):
             return actions['PUMP_OFF']
 
         # if current_action == 'PUMP_OFF':
