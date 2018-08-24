@@ -42,15 +42,6 @@ class Decider():
         elif ((1 - self.margin) * self.target_height <= current_height <=
               (1 + self.margin) * self.target_height):
             return actions['PUMP_OFF']
-
-        # if current_action == 'PUMP_OFF':
-        #     pass
-        # elif current_action == 'PUMP_IN':
-        #     pass
-        # else:
-        #     if current_height < (1 - self.margin) * self.target_height:
-        #         return actions['PUMP_OFF']
-
         """
         The *decide* method shall obey the following behaviors:
 
@@ -76,10 +67,3 @@ class Decider():
                                               actions['PUMP_OUT'],
                                               actions['PUMP_OFF']
         """
-
-        # TODO: Implement the properties of this method described above.
-        actions = {'PUMP_OFF': 'maintain current level',
-                   'PUMP_IN': 'pump water in',
-                   'PUMP_OUT': 'pump water out'}
-
-        return actions['PUMP_IN']
