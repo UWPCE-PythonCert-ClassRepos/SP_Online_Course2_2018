@@ -77,7 +77,7 @@ def login_neo4j_cloud():
 
     graphenedb_user = config["neo4j_cloud"]["user"]
     graphenedb_pass = config["neo4j_cloud"]["pw"]
-    graphenedb_url = 'bolt://hobby-opmhmhgpkdehgbkejbochpal.dbs.graphenedb.com:24786'
+    graphenedb_url = 'bolt://hobby-kkjkfebdkbaogbkefcbkfnbl.dbs.graphenedb.com:24786'
     driver = GraphDatabase.driver(graphenedb_url,
                                   auth=basic_auth(graphenedb_user, graphenedb_pass))
 
