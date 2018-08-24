@@ -35,10 +35,10 @@ class ModuleTests(unittest.TestCase):
             'PUMP_OUT': pump.PUMP_OUT,
             'PUMP_OFF': pump.PUMP_OFF,
         }
-        # self.assertEqual(controller.tick(),
-        #                  pump.set_state(decider.decide(sensor.measure(),
-        #                                                pump.get_state(),
-        #                                                actions)))
+
+        self.assertTrue(decider.target_height > sensor.measure())
         self.assertEqual(decider.decide(sensor.measure(),
-                                        pump.get_state(), actions),
-                         'PUMP_IN')
+                                        pump.get_state(), actions), 1)
+        self.assertTrue(pump.set_state(decider.decide(sensor.measure(),
+                                                      pump.get_state(),
+                                                      actions)))
