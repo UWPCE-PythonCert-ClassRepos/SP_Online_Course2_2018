@@ -1,5 +1,11 @@
-# nosql
+Lesson08 Working with Non-Relational DBs
+========================================
 
-python certificate nosql example
+1. nosql project
 
-All of the Python code is in the src directory.
+Work with mongo db, redis, and neo4j
+
+2. mailroom_db project
+
+implement mailroom application with mongo db backend and store some info in redis about donors
+

@@ -1,5 +1,9 @@
-#MailRoom assignment by Ross Martin
+MailRoom Application
+==================================
+
 08/12/2018
+
+This version has mongo as database backend and uses redis to lookup info about donors
 
 Prompts user for input action: send a thank you, create report or quit
 
