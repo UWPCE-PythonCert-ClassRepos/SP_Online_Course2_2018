@@ -8,11 +8,21 @@
 # #############################################################################
 
 
+import sys
 import collections
+import json_save.json_save.json_save_meta as js
 from collections import *
 
+donors_db = None
+json_file = 'donor_db.json'
 
-class Donor():
+class Donor(js.JsonSaveable):
+    _last = js.String()
+    _first = js.String()
+    _donations = js.List()
+    _num_gift = js.Int()
+    _avg = js.Float()
+
     # You’ll want a Donor class –
     # this will hold all the information about the donor
     # , and have attributes,
@@ -73,7 +83,9 @@ class Donor():
         self._donations.append(amount)
 
 
-class Donor_DB():
+class Donor_DB(js.JsonSaveable):
+    _donors_db = js.List()
+
     # You’ll then want a class that handles the collection of donors.
     # This will hold all the donor objects,
     #       but also methods to add a new donor,
@@ -83,7 +95,7 @@ class Donor_DB():
     # that generates reports about multiple donors.
     def __init__(self, donors=None):
         if donors is None:
-            self.donors_db = []
+            self._donors_db = []
         else:
             self._donors_db = donors
 
@@ -143,6 +155,15 @@ class Donor_DB():
             print (db_ret.donations)
             return self._donors_db[idx]
 
+    def quit(self):
+        print('quitting')
+        with open(json_file, 'w') as f:
+            f.write(self.to_json())
+        sys.exit(0)
+
+
+        
+
 
 # Remember that the user interaction code (anything with an input function)
 # should be outside of these “logic” or “model” classes.
@@ -162,12 +183,7 @@ class Donor_DB():
 # 4.	If a function contains a call to input() – it belongs outside of the logic classes – either stand alone in the module (like they are already) or perhaps all in a CLI class.
 
 
-d1 = Donor("Kate", "Spade", [100])
-d2 = Donor("Michael", "Kors", [100, 100])
-d3 = Donor("Tory", "Burch", [100, 100, 100])
-d4 = Donor("Stuart", "Weitzman", [100, 100, 100, 100])
-d5 = Donor("Kate", "Summerville", [100, 100, 100, 100, 100])
-donors_db = Donor_DB([d1, d2, d3, d4, d5])
+
 
 
 def send_thank():
@@ -215,6 +231,19 @@ def enter_dn_name():
 
 if __name__ == "__main__":
 
+    # initiliaze donors_db here
+    # ...
+    try:
+        with open(json_file) as f:
+            donors_db = js.from_json(f.read())
+    except IOError:
+        d1 = Donor("__Kate", "Spade", [100])
+        d2 = Donor("__Michael", "Kors", [100, 100])
+        d3 = Donor("__Tory", "Burch", [100, 100, 100])
+        d4 = Donor("__Stuart", "Weitzman", [100, 100, 100, 100])
+        d5 = Donor("__Kate", "Summerville", [100, 100, 100, 100, 100])
+        donors_db = Donor_DB([d1, d2, d3, d4, d5])
+
     main_prompt = ("\nSelect Options!!!\n"
                    "1. Send a Thank You \n"
                    "2. Create The ReportType\n"
@@ -225,7 +254,7 @@ if __name__ == "__main__":
     main_dispatch = {"1": send_thank,
                      "2": donors_db.create_report,
                      "3": donors_db.send_letters,
-                     "4": quit,
+                     "4": donors_db.quit,
                      }
     print("Dispatch :", main_dispatch)
 
