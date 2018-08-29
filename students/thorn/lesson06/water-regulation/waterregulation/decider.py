@@ -19,6 +19,9 @@ class Decider(object):
         """
         self.target_height = target_height
         self.margin = margin
+        # Margin relative heights:
+        self.below_margin_height = target_height * (1 - self.margin)
+        self.above_margin_height = target_height * (1 + self.margin)
 
     def decide(self, current_height, current_action, actions):
         """
@@ -46,37 +49,36 @@ class Decider(object):
 
         :param current_height: the current height of liquid in the tank
         :param current_action: the current action of the pump
-        :param actions: a dictionary containing the keys 'PUMP_IN', 'PUMP_OFF',
-                        and 'PUMP_OUT'
+        :param actions: a dictionary containing the keys 'PUMP_IN', 'PUMP_OFF', and 'PUMP_OUT'
         :return: The new action for the pump: one of actions['PUMP_IN'], actions['PUMP_OUT'], actions['PUMP_OFF']
         """
+        new_action = current_action
 
         # Pump off actions:
         if current_action == actions["PUMP_OFF"]:
-            # Current height below margin --> pump in
-            if current_height < self.margin:
+            # Current height below target - margin --> pump in
+            if current_height < self.below_margin_height:
                 new_action = actions["PUMP_IN"]
-            # Current height above margin --> pump out
-            if current_height > self.margin:
-                new_action = actions("PUMP_OUT")
-            # Current heigh within/on margin --> pump off
+            # Current height above target + margin --> pump out
+            elif current_height > self.above_margin_height:
+                new_action = actions["PUMP_OUT"]
+            # Current heigh within margin --> pump off
             else:
-                new_action = actions("PUMP_OFF")
+                new_action = actions["PUMP_OFF"]
+                
 
         # Pump in actions:
         elif current_action == actions["PUMP_IN"]:
             # Height above target --> pump off; else stay pump in
             if current_height > self.target_height:
                 new_action = actions["PUMP_OFF"]
-            else:
-                new_action = actions["PUMP_IN"]
+
 
         # Pump out actions:
         elif current_action == actions["PUMP_OUT"]:
             # Height below target --> pump off; else stay pump out
             if current_height < self.target_height:
                 new_action = actions["PUMP_OFF"]
-            else:
-                new_action = actions["PUMP_OUT"]
+
             
         return new_action
