@@ -1,0 +1,85 @@
+{
+    "__obj_type": "Donor_DB",
+    "_donors_db": [
+        {
+            "__obj_type": "Donor",
+            "_last": "Spade",
+            "_first": "__Kate",
+            "_donations": [
+                100
+            ],
+            "_num_gift": 1,
+            "_avg": 100.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_last": "Kors",
+            "_first": "__Michael",
+            "_donations": [
+                100,
+                100
+            ],
+            "_num_gift": 2,
+            "_avg": 100.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_last": "Burch",
+            "_first": "__Tory",
+            "_donations": [
+                100,
+                100,
+                100
+            ],
+            "_num_gift": 3,
+            "_avg": 100.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_last": "Weitzman",
+            "_first": "__Stuart",
+            "_donations": [
+                100,
+                100,
+                100,
+                100
+            ],
+            "_num_gift": 4,
+            "_avg": 100.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_last": "Summerville",
+            "_first": "__Kate",
+            "_donations": [
+                100,
+                100,
+                100,
+                100,
+                100
+            ],
+            "_num_gift": 5,
+            "_avg": 100.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_last": "Maymay",
+            "_first": "Baby",
+            "_donations": [
+                500
+            ],
+            "_num_gift": 1,
+            "_avg": 500.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_last": "Catcat",
+            "_first": "Baby",
+            "_donations": [
+                500
+            ],
+            "_num_gift": 1,
+            "_avg": 500.0
+        }
+    ]
+}
