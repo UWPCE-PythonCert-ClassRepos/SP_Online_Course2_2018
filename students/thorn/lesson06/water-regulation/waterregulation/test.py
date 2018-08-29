@@ -24,7 +24,7 @@ class DeciderTests(unittest.TestCase):
 
     def test_decider_actions(self):
         """ Decider action tests.
-        
+
         Note: margin tests are only required to activate pump, not to determine
         cessation.  I think.
         """
@@ -38,14 +38,14 @@ class DeciderTests(unittest.TestCase):
         # Set values to affect pump state out of margin range
         low = 80
         level = 100
-        high= 150
+        high = 150
         margin_low = 99
         margin_high = 101
 
         # Pump in state tests:
         # Low -> should be 1 to continue pump in
         self.assertEqual(1, decider.decide(low, actions['PUMP_IN'], actions))
-        # Level -> should be 1 to continue pump in 
+        # Level -> should be 1 to continue pump in
         self.assertEqual(1, decider.decide(level, actions['PUMP_IN'], actions))
         # High -> should be 0 to stop pumping
         self.assertEqual(0, decider.decide(high, actions['PUMP_IN'], actions))
@@ -54,44 +54,51 @@ class DeciderTests(unittest.TestCase):
         # Low -> should be 0 to stop pumping
         self.assertEqual(0, decider.decide(low, actions['PUMP_OUT'], actions))
         # Level -> should be -1 to continue pump out
-        self.assertEqual(-1, decider.decide(level, actions['PUMP_OUT'], actions))
+        self.assertEqual(-1, decider.decide(level, actions['PUMP_OUT'],
+                                            actions))
         # High -> should be -1 to continue pump out
-        self.assertEqual(-1, decider.decide(high, actions['PUMP_OUT'], actions))
+        self.assertEqual(-1, decider.decide(high, actions['PUMP_OUT'],
+                                            actions))
 
         # Pump off state tests:
         # Low -> pump should be 1 to pump in
         self.assertEqual(1, decider.decide(low, actions['PUMP_OFF'], actions))
         # Level -> pump should be 0 for staying off
-        self.assertEqual(0, decider.decide(level, actions['PUMP_OFF'], actions))
+        self.assertEqual(0, decider.decide(level, actions['PUMP_OFF'],
+                                           actions))
         # High  -> pump should be -1 for pumping out
-        self.assertEqual(-1, decider.decide(high, actions['PUMP_OFF'], actions))
+        self.assertEqual(-1, decider.decide(high, actions['PUMP_OFF'],
+                                            actions))
         # Margin Low -> pump should be 0 for staying off
-        self.assertEqual(0, decider.decide(margin_low, actions['PUMP_OFF'], actions))
+        self.assertEqual(0, decider.decide(margin_low, actions['PUMP_OFF'],
+                                           actions))
         # Margin high -> pump should be 0 for staying off
-        self.assertEqual(0, decider.decide(margin_high, actions['PUMP_OFF'], actions))
+        self.assertEqual(0, decider.decide(margin_high, actions['PUMP_OFF'],
+                                           actions))
 
 
 class ControllerTests(unittest.TestCase):
     """
-    Unit tests for the Controller class.  
+    Unit tests for the Controller class.
 
     In order:
         1. query the sensor for the current height of liquid in the tank
-        2. query the pump for its current state (pumping in, pumping out, or at rest)
-        3. query the decider for the next appropriate state of the pump, given the above
+        2. query the pump for its current state (pumping in, pumping out, or
+           at rest)
+        3. query the decider for the next appropriate state of the pump, given
+           the above
         4. set the pump to that new state
     """
 
-    def test_controller_tick(self):
+    def test_controller_tick(self):  # pylint: disable=no-self-use
         """ Controller's Tick function unit test. """
         sensor = Sensor('127.0.0.1', 8000)
         pump = Pump('127.0.0.1', 8000)
         decider = Decider(100, .05)
         controller = Controller(sensor, pump, decider)
-
         actions = {
-            'PUMP_IN': 1,
             'PUMP_OUT': -1,
+            'PUMP_IN': 1,
             'PUMP_OFF': 0
         }
         high_level = 150
@@ -106,4 +113,3 @@ class ControllerTests(unittest.TestCase):
         sensor.measure.assert_called_with()
         pump.get_state.assert_called_with()
         decider.decide.assert_called_with(150, pump.PUMP_IN, actions)
-

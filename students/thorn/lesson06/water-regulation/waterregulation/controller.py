@@ -3,7 +3,7 @@ Encapsulates command and coordination for the water-regulation module
 """
 
 
-class Controller(object):
+class Controller(object):  # pylint: disable=too-few-public-methods
     """
     Encapsulates command and coordination for the water-regulation module
     """
@@ -32,8 +32,10 @@ class Controller(object):
         On each call to tick, the controller shall:
 
           1. query the sensor for the current height of liquid in the tank
-          2. query the pump for its current state (pumping in, pumping out, or at rest)
-          3. query the decider for the next appropriate state of the pump, given the above
+          2. query the pump for its current state (pumping in, pumping out,
+             or at rest)
+          3. query the decider for the next appropriate state of the pump,
+             given the above
           4. set the pump to that new state
 
         :return: True if the pump has acknowledged its new state, else False
@@ -44,6 +46,7 @@ class Controller(object):
         pump_state = self.pump.get_state()
 
         # Get state returned by decider based on height and current state
-        to_state = self.decider.decide(liquid_height, pump_state, self.actions)
+        to_state = self.decider.decide(liquid_height, pump_state,
+                                       self.actions)
 
         return self.pump.set_state(to_state)
