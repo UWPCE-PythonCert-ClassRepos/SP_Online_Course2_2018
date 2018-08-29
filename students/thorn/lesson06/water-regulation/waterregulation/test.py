@@ -73,7 +73,13 @@ class DeciderTests(unittest.TestCase):
 
 class ControllerTests(unittest.TestCase):
     """
-    Unit tests for the Controller class
+    Unit tests for the Controller class.  
+
+    In order:
+        1. query the sensor for the current height of liquid in the tank
+        2. query the pump for its current state (pumping in, pumping out, or at rest)
+        3. query the decider for the next appropriate state of the pump, given the above
+        4. set the pump to that new state
     """
 
     def test_controller_tick(self):
@@ -83,4 +89,21 @@ class ControllerTests(unittest.TestCase):
         decider = Decider(100, .05)
         controller = Controller(sensor, pump, decider)
 
-        
+        actions = {
+            'PUMP_IN': 1,
+            'PUMP_OUT': -1,
+            'PUMP_OFF': 0
+        }
+        high_level = 150
+
+        # Test with high level, decider switch to pump out, state set, and tick
+        # called to assert called with.
+        sensor.measure = MagicMock(return_value=high_level)
+        pump.get_state = MagicMock(return_value=pump.PUMP_IN)
+        decider.decide = MagicMock(return_value=pump.PUMP_OUT)
+        pump.set_state = MagicMock(return_value=pump.PUMP_OUT)
+        controller.tick()
+        sensor.measure.assert_called_with()
+        pump.get_state.assert_called_with()
+        decider.decide.assert_called_with(150, pump.PUMP_IN, actions)
+
