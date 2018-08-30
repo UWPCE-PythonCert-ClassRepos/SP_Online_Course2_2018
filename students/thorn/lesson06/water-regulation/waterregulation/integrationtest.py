@@ -20,7 +20,7 @@ class ModuleTests(unittest.TestCase):
     Module tests for the water-regulation module
     """
 
-    def integration_test(self):  # pylint: disable=no-self-use,duplicate-code
+    def test_integration_test(self):  # pylint: disable=no-self-use,duplicate-code
         """ Testing the integration of waterregulation modules.
 
         Note: controller should return true if call to set pump state is
