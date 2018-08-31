@@ -3,6 +3,7 @@
 """
 
 import logging
+import db_printer
 from database_ex import *
 from datetime import datetime
 
@@ -155,3 +156,4 @@ if __name__ == "__main__":
     populate_people()
     populate_department()
     populate_jobs()
+    db_printer.printer()
