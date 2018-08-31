@@ -12,4 +12,4 @@ try:
         print(person)
 
 except Exception as e:
-    print(f"EXCEPTION {e}")
+    print(f

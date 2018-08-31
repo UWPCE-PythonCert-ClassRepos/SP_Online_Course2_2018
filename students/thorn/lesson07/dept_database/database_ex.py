@@ -22,6 +22,22 @@ class BaseModel(Model):
         database = database
 
 
+class Person(BaseModel):
+    """
+        This class defines Person, which maintains details of someone
+        for whom we want to research career to date.
+    """
+
+    logger.info('Note how we defined the class')
+
+    logger.info('Specify the fields in our model, their lengths and if mandatory')
+    logger.info('Must be a unique identifier for each person')
+
+    person_name = CharField(primary_key = True, max_length = 30)
+    lives_in_town = CharField(max_length = 40)
+    nickname = CharField(max_length = 20, null = True)
+
+
 class Department(BaseModel):
     """
         Department Class: defines the department in which a person held a job.
@@ -37,22 +53,6 @@ class Department(BaseModel):
     constraints=[Check('upper(substr(department_number, 1, 1) BETWEEN "A" and "Z" )')])
     department_name = CharField(max_length=30)
     department_manager = CharField(max_length=30)
-
-
-class Person(BaseModel):
-    """
-        This class defines Person, which maintains details of someone
-        for whom we want to research career to date.
-    """
-
-    logger.info('Note how we defined the class')
-
-    logger.info('Specify the fields in our model, their lengths and if mandatory')
-    logger.info('Must be a unique identifier for each person')
-
-    person_name = CharField(primary_key = True, max_length = 30)
-    lives_in_town = CharField(max_length = 40)
-    nickname = CharField(max_length = 20, null = True)
 
 
 class Job(BaseModel):
@@ -91,29 +91,35 @@ class PersonNumKey(BaseModel):
     lives_in_town = CharField(max_length = 40)
     nickname = CharField(max_length = 20, null = True)
 
-try: 
-    logger.debug("Creating database.")
-    database.create_tables([
-            Job,
-            Department,
-            Person,
-            PersonNumKey
-        ])
-    logger.debug("Database created.")
 
-# Remove existing DB
-except Exception as ex:
-    logger.error("Unable to create database.  Dropping existing db.")
-    database.close()
-    os.remove('personjob.db')
-    database.connect()
-    database.execute_sql('PRAGMA foreign_keys = ON;')
-    database.create_tables([
-            Job,
-            Department,
-            Person,
-            PersonNumKey
-        ])
-    logger.debug("Database created.")
-finally:
-    database.close()
+# Fill Database
+if __name__ == "__main__":
+    try: 
+        logger.debug("Creating database.")
+        database.create_tables([
+                Job,
+                Department,
+                Person,
+                PersonNumKey
+            ])
+        logger.debug("Database created.")
+
+    # Remove existing DB
+    except Exception as ex:
+        logger.error("Unable to create database.  Dropping existing db.")
+        # Close connection to prevent permissions error
+        database.close()
+        os.remove(r'C:\Users\Thomas\Downloads\python2\SP_Online_Course2_2018\students\thorn\lesson07\personjob.db')
+
+        # Reconnect and create DB
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        database.create_tables([
+                Job,
+                Department,
+                Person,
+                PersonNumKey
+            ])
+        logger.debug("Database created.")
+    finally:
+        database.close()
