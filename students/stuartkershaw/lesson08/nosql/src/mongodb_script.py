@@ -29,19 +29,20 @@ def run_example(furniture_items):
 
         log.info('Step 3: Find the products that are described as plastic')
         query = {'description': 'Plastic'}
-        results = furniture.find_one(query)
+        results = furniture.find(query)
 
         log.info('Step 4: Print the plastic products')
         print('Plastic products')
-        pprint.pprint(results)
+        for r in results:
+            pprint.pprint(r)
 
         log.info('Step 5: Delete the blue couch (actually deletes all blue couches)')
-        furniture.remove({"product": {"$eq": "Blue couch"}})
+        furniture.remove({"product_type": {"$eq": "Couch"}, "color": {"$eq": "Blue"}})
 
         log.info('Step 6: Check it is deleted with a query and print')
-        query = {'product': 'Blue couch'}
+        query = {'product_type': 'Couch', 'color': 'Blue'}
         results = furniture.find_one(query)
-        print('The blue couch is deleted, print should show none:')
+        print('The blue couches are deleted, print should show none:')
         pprint.pprint(results)
 
         log.info(
@@ -52,7 +53,25 @@ def run_example(furniture_items):
         log.info('Notice how we parse out the data from the document')
 
         for doc in cursor:
-            print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['product']} Stock: {doc['in_stock_quantity']}")
+            print(f"Cost: {doc['monthly_rental_cost']}, Product Type: {doc['product_type']}, Color: {doc['color']}, Stock: {doc['in_stock_quantity']}")
 
-        log.info('Step 8: Delete the collection so we can start over')
+        log.info(
+            'Step 8: Find all red products')
+
+        cursor = furniture.find({'color': {'$eq': 'Red'}})
+        print('Results of search')
+
+        for doc in cursor:
+            print(f"Product Type: {doc['product_type']}, Color: {doc['color']}, Description: {doc['description']}, Stock: {doc['in_stock_quantity']}")
+
+        log.info(
+            'Step 9: Find all red couches')
+
+        cursor = furniture.find({'color': {'$eq': 'Red'}, 'product_type': {'$eq': 'Couch'}})
+        print('Results of search')
+
+        for doc in cursor:
+            print(f"Product Type: {doc['product_type']}, Color: {doc['color']}, Description: {doc['description']}, Stock: {doc['in_stock_quantity']}")
+        
+        log.info('Step 10: Delete the collection so we can start over')
         db.drop_collection('furniture')

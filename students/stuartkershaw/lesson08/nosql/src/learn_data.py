@@ -10,40 +10,60 @@ def get_furniture_data():
 
     furniture_data = [
         {
-            'product': 'Red couch',
+            'product_type': 'Couch',
+            'color': 'Red',
             'description': 'Leather low back',
             'monthly_rental_cost': 12.99,
             'in_stock_quantity': 10
         },
         {
-            'product': 'Blue couch',
+            'product_type': 'Couch',
+            'color': 'Blue',
             'description': 'Cloth high back',
             'monthly_rental_cost': 9.99,
             'in_stock_quantity': 3
         },
         {
-            'product': 'Coffee table',
+            'product_type': 'Coffee Table',
+            'color': 'Brown',
             'description': 'Plastic',
             'monthly_rental_cost': 2.50,
             'in_stock_quantity': 25
         },
         {
-            'product': 'Red couch',
+            'product_type': 'Couch',
+            'color': 'Red',
             'description': 'Leather high back',
             'monthly_rental_cost': 15.99,
             'in_stock_quantity': 17
         },
         {
-            'product': 'Blue recliner',
+            'product_type': 'Recliner',
+            'color': 'Blue',
             'description': 'Leather high back',
             'monthly_rental_cost': 19.99,
             'in_stock_quantity': 6
         },
         {
-            'product': 'Chair',
+            'product_type': 'Chair',
+            'color': 'Brown',
             'description': 'Plastic',
             'monthly_rental_cost': 1.00,
             'in_stock_quantity': 45
-        }
+        },
+        {
+            'product_type': 'Recliner',
+            'color': 'Red',
+            'description': 'Leather high back',
+            'monthly_rental_cost': 19.99,
+            'in_stock_quantity': 6
+        },
+        {
+            'product_type': 'Couch',
+            'color': 'Green',
+            'description': 'Cloth high back',
+            'monthly_rental_cost': 15.99,
+            'in_stock_quantity': 3
+        },
     ]
     return furniture_data
