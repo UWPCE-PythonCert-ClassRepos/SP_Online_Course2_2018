@@ -19,16 +19,16 @@ def showoff_databases():
 
     log = utilities.configure_logger('default', '../logs/nosql_dev.log')
 
-    # log.info("Mongodb example to use data from Furniture module, so get it")
+    log.info("Mongodb example to use data from Furniture module, so get it")
     furniture = learn_data.get_furniture_data()
     flying_pokemon = learn_data.get_pokemon_flying_data()
 
-    # mongodb_script.run_example(furniture)
+    mongodb_script.run_example(furniture)
 
-    # log.info("Other databases use data embedded in the modules")
+    log.info("Other databases use data embedded in the modules")
 
-    # redis_script.run_example()
-    # neo4j_script.run_example()
+    redis_script.run_example()
+    neo4j_script.run_example()
     simple_script.run_example(flying_pokemon)
 
 
