@@ -8,6 +8,8 @@
 
 import logging
 from peewee import *
+from datetime import date
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -84,7 +86,7 @@ class Department(BaseModel):
     logger.info('Which job in the Department')
     job_name = ForeignKeyField(Job, related_name='was_held_by', null=False)
     logger.info('Number of days job was held')
-    days_job_held = IntegerField(null=False)
+    # days_job_held = IntegerField(null=False)
 
 
 class PersonNumKey(BaseModel):
@@ -133,8 +135,6 @@ def populate_db():
     logger.info('and the transaction tells the database to fail on error')
 
     try:
-        # database.connect()
-        # database.execute_sql('PRAGMA foreign_keys = ON;')
         for person in people:
             with database.transaction():
                 new_person = Person.create(
@@ -172,13 +172,11 @@ def populate_db():
         ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew'),
         ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew'),
         ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
-        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter'),
-        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter')
+        ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Peter'),
+        ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Peter')
         ]
 
     try:
-        # database.connect()
-        # database.execute_sql('PRAGMA foreign_keys = ON;')
         for job in jobs:
             with database.transaction():
                 new_job = Job.create(
@@ -191,8 +189,16 @@ def populate_db():
 
         logger.info('Reading and print all Job rows (note the value of person)...')
         for job in Job:
-            logger.info(f'{job.job_name} : {job.start_date} to ' +
-                        f'{job.end_date} for {job.person_employed}')
+            d1_list = [int(n) for n in job.start_date.split('-')]
+            date1 = date(d1_list[0], d1_list[1], d1_list[2])
+            d2_list = [int(n) for n in job.end_date.split('-')]
+            date2 = date(d2_list[0], d2_list[1], d2_list[2])
+
+            delta = abs(date1 - date2)
+            logger.info(f'{job.job_name} : {delta.days} days ' +
+                        f'for {job.person_employed}')
+            # logger.info(f'{job.job_name} : {job.start_date} to ' +
+            #             f'{job.end_date} for {job.person_employed}')
 
     except Exception as e:
         logger.info(f'Error creating = {job[JOB_NAME]}')
@@ -206,12 +212,14 @@ def populate_db():
     DEPARTMENT_NUMBER = 1
     DEPARTMENT_MANAGER_NAME = 2
     JOB_NAME = 3
-    DAYS_JOB_HELD = 4
+    # DAYS_JOB_HELD = 4
 
     departments = [
-               (),
-               (),
-               ()
+               ('Accounting and Finance', 'A371', 'Mark', 'Analyst'),
+               ('Production', 'P593', 'James', 'Senior analyst'),
+               ('Marketing', 'M739', 'Jerry', 'Senior business analyst'),
+               ('Information Technology', 'I735', 'Eric', 'Admin supervisor'),
+               ('Purchasing', 'P175', 'David', 'Admin manager')
                ]
 
     try:
@@ -221,8 +229,8 @@ def populate_db():
                     department_name=department[DEPARTMENT_NAME],
                     department_number=department[DEPARTMENT_NUMBER],
                     department_manager_name=department[DEPARTMENT_MANAGER_NAME],
-                    job_name=department[JOB_NAME],
-                    days_job_held=department[DAYS_JOB_HELD])
+                    job_name=department[JOB_NAME])
+                #     days_job_held=department[DAYS_JOB_HELD])
                 new_department.save()
 
         logger.info('Reading and print all Department rows ' +
@@ -233,7 +241,7 @@ def populate_db():
                         f'{department.job_name.end_date}')
 
     except Exception as e:
-        logger.info(f'Error creating = {job[JOB_NAME]}')
+        logger.info(f'Error creating = {department[DEPARTMENT_NAME]}')
         logger.info(e)
 
 
