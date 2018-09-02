@@ -1,0 +1,21 @@
+{
+    "__obj_type": "DonorCollection",
+    "donors": {
+        "__key_not_string": true,
+        "('Jimmy', 'Stewart')": [
+            50
+        ],
+        "('Cary', 'Grant')": [
+            30,
+            40
+        ],
+        "('Audrey', 'Hepburn')": [
+            80,
+            90,
+            100
+        ],
+        "('Harvey', 'Meow')": [
+            200.0
+        ]
+    }
+}

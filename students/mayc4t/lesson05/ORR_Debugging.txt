@@ -1,0 +1,285 @@
+PART 1# SIMPLE FUNCTION (ALRERADY COMMNETED OUT)
+========================================
+# #!/usr/bin/python 
+# import sys
+
+# def my_fun(n):
+#	if n == 2:
+#		return True
+#	return my_fun(n/2)
+
+#if __name__=='__main__':
+#	n = int(sys.argv[1])
+#	print(my_fun(n))
+
+
+
+PART 2: 
+========================================
+- Wrong logic: It does not have the base case for non-power of 2. 
+Therefore, it keeps calling itself until the RecursionError.
+Specifically, the fun(n) got called 994 times. 
+
+
+
+
+
+
+
+PART 3# TERMINAL DEBUGGING
+========================================
+lesson05 (master *=)$ python -m pdb recursive.py 15
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(2)<module>()
+-> import sys
+(Pdb) b recursive.py:7
+Breakpoint 1 at /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py:7
+(Pdb) help
+
+Documented commands (type help <topic>):
+========================================
+EOF    c          d        h         list      q        rv       undisplay
+a      cl         debug    help      ll        quit     s        unt      
+alias  clear      disable  ignore    longlist  r        source   until    
+args   commands   display  interact  n         restart  step     up       
+b      condition  down     j         next      return   tbreak   w        
+break  cont       enable   jump      p         retval   u        whatis   
+bt     continue   exit     l         pp        run      unalias  where    
+
+Miscellaneous help topics:
+==========================
+exec  pdb
+
+(Pdb) help list
+l(ist) [first [,last] | .]
+
+        List source code for the current file.  Without arguments,
+        list 11 lines around the current line or continue the previous
+        listing.  With . as argument, list 11 lines around the current
+        line.  With one argument, list 11 lines starting at that line.
+        With two arguments, list the given range; if the second
+        argument is less than the first, it is a count.
+
+        The current line in the current frame is indicated by "->".
+        If an exception is being debugged, the line where the
+        exception was originally raised or propagated is indicated by
+        ">>", if it differs from the current line.
+(Pdb) list
+  1  	#!/usr/bin/python
+  2  ->	import sys
+  3  	
+  4  	def my_fun(n):
+  5  		if n == 2:
+  6  			return True
+  7 B		return my_fun(n/2)
+  8  	
+  9  	if __name__=='__main__':
+ 10  		n = int(sys.argv[1])
+ 11  		print(my_fun(n))
+(Pdb) help l
+l(ist) [first [,last] | .]
+
+        List source code for the current file.  Without arguments,
+        list 11 lines around the current line or continue the previous
+        listing.  With . as argument, list 11 lines around the current
+        line.  With one argument, list 11 lines starting at that line.
+        With two arguments, list the given range; if the second
+        argument is less than the first, it is a count.
+
+        The current line in the current frame is indicated by "->".
+        If an exception is being debugged, the line where the
+        exception was originally raised or propagated is indicated by
+        ">>", if it differs from the current line.
+(Pdb) help
+
+Documented commands (type help <topic>):
+========================================
+EOF    c          d        h         list      q        rv       undisplay
+a      cl         debug    help      ll        quit     s        unt      
+alias  clear      disable  ignore    longlist  r        source   until    
+args   commands   display  interact  n         restart  step     up       
+b      condition  down     j         next      return   tbreak   w        
+break  cont       enable   jump      p         retval   u        whatis   
+bt     continue   exit     l         pp        run      unalias  where    
+
+Miscellaneous help topics:
+==========================
+exec  pdb
+
+(Pdb) help break
+b(reak) [ ([filename:]lineno | function) [, condition] ]
+        Without argument, list all breaks.
+
+        With a line number argument, set a break at this line in the
+        current file.  With a function name, set a break at the first
+        executable line of that function.  If a second argument is
+        present, it is a string specifying an expression which must
+        evaluate to true before the breakpoint is honored.
+
+        The line number may be prefixed with a filename and a colon,
+        to specify a breakpoint in another file (probably one that
+        hasn't been loaded yet).  The file is searched for on
+        sys.path; the .py suffix may be omitted.
+(Pdb) break
+Num Type         Disp Enb   Where
+1   breakpoint   keep yes   at /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py:7
+(Pdb) run
+Restarting recursive.py with arguments:
+	recursive.py 15
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(2)<module>()
+-> import sys
+(Pdb) run
+Restarting recursive.py with arguments:
+	recursive.py 15
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(2)<module>()
+-> import sys
+(Pdb) help
+
+Documented commands (type help <topic>):
+========================================
+EOF    c          d        h         list      q        rv       undisplay
+a      cl         debug    help      ll        quit     s        unt      
+alias  clear      disable  ignore    longlist  r        source   until    
+args   commands   display  interact  n         restart  step     up       
+b      condition  down     j         next      return   tbreak   w        
+break  cont       enable   jump      p         retval   u        whatis   
+bt     continue   exit     l         pp        run      unalias  where    
+
+Miscellaneous help topics:
+==========================
+exec  pdb
+
+(Pdb) help continue
+c(ont(inue))
+        Continue execution, only stop when a breakpoint is encountered.
+(Pdb) continue
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) print n
+*** SyntaxError: Missing parentheses in call to 'print'. Did you mean print(n)?
+(Pdb) print(n)
+15
+(Pdb) step
+--Call--
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) 
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) print n
+*** SyntaxError: Missing parentheses in call to 'print'. Did you mean print(n)?
+(Pdb) print(n)
+7.5
+(Pdb) print(n)
+7.5
+(Pdb) list
+  1  	#!/usr/bin/python
+  2  	import sys
+  3  	
+  4  	def my_fun(n):
+  5  ->		if n == 2:
+  6  			return True
+  7 B		return my_fun(n/2)
+  8  	
+  9  	if __name__=='__main__':
+ 10  		n = int(sys.argv[1])
+ 11  		print(my_fun(n))
+(Pdb) next
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) list
+  2  	import sys
+  3  	
+  4  	def my_fun(n):
+  5  		if n == 2:
+  6  			return True
+  7 B->		return my_fun(n/2)
+  8  	
+  9  	if __name__=='__main__':
+ 10  		n = int(sys.argv[1])
+ 11  		print(my_fun(n))
+[EOF]
+(Pdb) step
+--Call--
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) list
+  1  	#!/usr/bin/python
+  2  	import sys
+  3  	
+  4  ->	def my_fun(n):
+  5  		if n == 2:
+  6  			return True
+  7 B		return my_fun(n/2)
+  8  	
+  9  	if __name__=='__main__':
+ 10  		n = int(sys.argv[1])
+ 11  		print(my_fun(n))
+(Pdb) print (n)
+3.75
+(Pdb) cont
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) help cont
+c(ont(inue))
+        Continue execution, only stop when a breakpoint is encountered.
+(Pdb) list
+  2  	import sys
+  3  	
+  4  	def my_fun(n):
+  5  		if n == 2:
+  6  			return True
+  7 B->		return my_fun(n/2)
+  8  	
+  9  	if __name__=='__main__':
+ 10  		n = int(sys.argv[1])
+ 11  		print(my_fun(n))
+[EOF]
+(Pdb) print (n)
+3.75
+(Pdb) step
+--Call--
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) print (n)
+1.875
+(Pdb) list
+  1  	#!/usr/bin/python
+  2  	import sys
+  3  	
+  4  ->	def my_fun(n):
+  5  		if n == 2:
+  6  			return True
+  7 B		return my_fun(n/2)
+  8  	
+  9  	if __name__=='__main__':
+ 10  		n = int(sys.argv[1])
+ 11  		print(my_fun(n))
+(Pdb) continue
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) print(n)
+1.875
+(Pdb) continue
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) print(n)
+0.9375
+(Pdb) continue
+> /Users/Lily12A/SP_Online_Course2_2018/students/mayc4t/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) print(n)
+0.46875
+(Pdb) list
+  2  	import sys
+  3  	
+  4  	def my_fun(n):
+  5  		if n == 2:
+  6  			return True
+  7 B->		return my_fun(n/2)
+  8  	
+  9  	if __name__=='__main__':
+ 10  		n = int(sys.argv[1])
+ 11  		print(my_fun(n))
+[EOF]
+(Pdb) 
+

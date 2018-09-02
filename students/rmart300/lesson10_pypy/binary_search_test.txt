@@ -1,0 +1,18 @@
+(pypy_env) [smartin@fcdsqappprdg01 lesson10_pypy]$ py --version
+Python 3.6.1
+(pypy_env) [smartin@fcdsqappprdg01 lesson10_pypy]$ time py binary_search.py 1000000 100000000
+found 12684073 in list
+
+real    0m2.960s
+user    0m2.837s
+sys     0m0.085s
+(pypy_env) [smartin@fcdsqappprdg01 lesson10_pypy]$ pypy3.5-6.0.0-linux_x86_64-portable/bin/pypy3 --version
+Python 3.5.3 (fdd60ed87e941677e8ea11acf9f1819466521bf2, Apr 27 2018, 15:39:57)
+[PyPy 6.0.0 with GCC 7.2.0]
+(pypy_env) [smartin@fcdsqappprdg01 lesson10_pypy]$ time pypy3.5-6.0.0-linux_x86_64-portable/bin/pypy3 binary_search.py 1000000 100000000
+found 82610605 in list
+
+real    0m1.349s
+user    0m0.744s
+sys     0m0.133s
+
