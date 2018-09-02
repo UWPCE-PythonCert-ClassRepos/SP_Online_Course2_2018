@@ -1,14 +1,15 @@
 """
     create_pjd.py -- create person/job/department
     Modified from create_personjob.py, credit to UW Python 220
-    Simple database example with Peewee ORM, sqlite and Python
+    Simple database example with Peewee ORM, sqlite, and Python
     Here we define the schema
     Use logging for messages so they can be turned off
 """
 
 import logging
 from peewee import *
-from datetime import date
+import pjd_model
+from datetime import *
 
 
 logging.basicConfig(level=logging.INFO)
@@ -53,25 +54,6 @@ class Person(BaseModel):
     nickname = CharField(max_length=20, null=True)
 
 
-class Job(BaseModel):
-    """
-        This class defines Job, which maintains details of past Jobs
-        held by a Person.
-    """
-
-    logger.info('Now the Job class with a similar approach')
-    job_name = CharField(primary_key=True, max_length=30)
-    logger.info('Dates')
-    start_date = DateField(formats='YYYY-MM-DD')
-    end_date = DateField(formats='YYYY-MM-DD')
-    logger.info('Number')
-
-    salary = DecimalField(max_digits=7, decimal_places=2)
-    logger.info('Which person had the Job')
-    person_employed = ForeignKeyField(Person, related_name='was_filled_by',
-                                      null=False)
-
-
 class Department(BaseModel):
     """
         This class defines Department, which maintains details of a
@@ -83,10 +65,31 @@ class Department(BaseModel):
     logger.info('Letter followed by 3 digits')
     department_number = CharField(max_length=4)
     department_manager_name = CharField(max_length=30)
-    logger.info('Which job in the Department')
-    job_name = ForeignKeyField(Job, related_name='was_held_by', null=False)
+    # logger.info('Which job in the Department')
+    # job_name = ForeignKeyField(Job, related_name='was_held_by', null=False)
+
+
+class Job(BaseModel):
+    """
+        This class defines Job, which maintains details of past Jobs
+        held by a Person.
+    """
+
+    logger.info('Now the Job class with a similar approach')
+    job_name = CharField(primary_key=True, max_length=30)
+    logger.info('Department the job is in')
+    department_name = ForeignKeyField(Department, null=False)
+    logger.info('Dates')
+    start_date = DateField(formats='YYYY-MM-DD')
+    end_date = DateField(formats='YYYY-MM-DD')
+    logger.info('Number')
+
+    salary = DecimalField(max_digits=7, decimal_places=2)
+    logger.info('Which person had the Job')
+    person_employed = ForeignKeyField(Person, related_name='was_filled_by',
+                                      null=False)
     logger.info('Number of days job was held')
-    # days_job_held = IntegerField(null=False)
+    duration = IntegerField()
 
 
 class PersonNumKey(BaseModel):
@@ -156,24 +159,67 @@ def populate_db():
         logger.info('See how the database protects our data')
 
     finally:
-        logger.info('Database will now populate jobs')
+        logger.info('Database will now populate departments')
+
+    logger.info('Working with Department class')
+    logger.info('Creating Department records')
+
+    DEPARTMENT_NAME = 0
+    DEPARTMENT_NUMBER = 1
+    DEPARTMENT_MANAGER_NAME = 2
+
+    departments = [
+               ('Accounting and Finance', 'A371', 'Mark'),
+               ('Production', 'P593', 'James'),
+               ('Marketing', 'M739', 'Jerry'),
+               ('Information Technology', 'I735', 'Eric'),
+               ('Purchasing', 'P175', 'David')
+               ]
+
+    try:
+        for department in departments:
+            with database.transaction():
+                new_department = Department.create(
+                    department_name=department[DEPARTMENT_NAME],
+                    department_number=department[DEPARTMENT_NUMBER],
+                    department_manager_name=department[DEPARTMENT_MANAGER_NAME],
+                    )
+                new_department.save()
+
+        logger.info('Reading and print all Department rows.')
+        # '(note the value of job)...')
+        for department in Department:
+            logger.info(f'{department.department_name} : ' +
+                        f'{department.department_number}, ' +
+                        f'{department.department_manager_name}')
+
+    except Exception as e:
+        logger.info(f'Error creating = {department[DEPARTMENT_NAME]}')
+        logger.info(e)
 
     logger.info('Working with Job class')
-    logger.info('Creating Job records: just like Person. ' +
-                'We use the foreign key')
+    logger.info('Creating Job records. ' +
+                'We use the Department and Person foreign keys')
 
     JOB_NAME = 0
-    START_DATE = 1
-    END_DATE = 2
-    SALARY = 3
-    PERSON_EMPLOYED = 4
+    DEPARTMENT_NAME = 1
+    START_DATE = 2
+    END_DATE = 3
+    SALARY = 4
+    PERSON_EMPLOYED = 5
+    # DURATION = 6
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
-        ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Peter'),
-        ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Peter')
+        ('Analyst', 'Accounting and Finance', '2001-09-22', '2003-01-30',
+         65500, 'Andrew'),
+        ('Senior analyst', 'Production', '2003-02-01', '2006-10-22',
+         70000, 'Andrew'),
+        ('Senior business analyst', 'Marketing', '2006-10-23', '2016-12-24',
+         80000, 'Andrew'),
+        ('Admin supervisor', 'Information Technology', '2012-10-01',
+         '2014-11-10', 45900, 'Peter'),
+        ('Admin manager', 'Purchasing', '2014-11-14', '2018-01-05',
+         45900, 'Peter')
         ]
 
     try:
@@ -181,10 +227,13 @@ def populate_db():
             with database.transaction():
                 new_job = Job.create(
                     job_name=job[JOB_NAME],
+                    department_name=job[DEPARTMENT_NAME],
                     start_date=job[START_DATE],
                     end_date=job[END_DATE],
                     salary=job[SALARY],
-                    person_employed=job[PERSON_EMPLOYED])
+                    person_employed=job[PERSON_EMPLOYED],
+                    duration=abs(datetime.fromisoformat(job[START_DATE]) -
+                                 datetime.fromisoformat(job[END_DATE])).days)
                 new_job.save()
 
         logger.info('Reading and print all Job rows (note the value of person)...')
@@ -197,51 +246,9 @@ def populate_db():
             delta = abs(date1 - date2)
             logger.info(f'{job.job_name} : {delta.days} days ' +
                         f'for {job.person_employed}')
-            # logger.info(f'{job.job_name} : {job.start_date} to ' +
-            #             f'{job.end_date} for {job.person_employed}')
 
     except Exception as e:
         logger.info(f'Error creating = {job[JOB_NAME]}')
-        logger.info(e)
-
-    logger.info('Working with Department class')
-    logger.info('Creating Department records: just like Job. ' +
-                'We use the foreign key')
-
-    DEPARTMENT_NAME = 0
-    DEPARTMENT_NUMBER = 1
-    DEPARTMENT_MANAGER_NAME = 2
-    JOB_NAME = 3
-    # DAYS_JOB_HELD = 4
-
-    departments = [
-               ('Accounting and Finance', 'A371', 'Mark', 'Analyst'),
-               ('Production', 'P593', 'James', 'Senior analyst'),
-               ('Marketing', 'M739', 'Jerry', 'Senior business analyst'),
-               ('Information Technology', 'I735', 'Eric', 'Admin supervisor'),
-               ('Purchasing', 'P175', 'David', 'Admin manager')
-               ]
-
-    try:
-        for department in departments:
-            with database.transaction():
-                new_department = Department.create(
-                    department_name=department[DEPARTMENT_NAME],
-                    department_number=department[DEPARTMENT_NUMBER],
-                    department_manager_name=department[DEPARTMENT_MANAGER_NAME],
-                    job_name=department[JOB_NAME])
-                #     days_job_held=department[DAYS_JOB_HELD])
-                new_department.save()
-
-        logger.info('Reading and print all Department rows ' +
-                    '(note the value of job)...')
-        for department in Department:
-            logger.info(f'{department.job_name} : ' +
-                        f'{department.job_name.start_date} to ' +
-                        f'{department.job_name.end_date}')
-
-    except Exception as e:
-        logger.info(f'Error creating = {department[DEPARTMENT_NAME]}')
         logger.info(e)
 
 

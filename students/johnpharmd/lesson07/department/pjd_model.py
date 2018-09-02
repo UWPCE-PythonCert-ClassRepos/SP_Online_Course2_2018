@@ -1,12 +1,14 @@
 """
     pjd_model.py -- person/job/department model
     Modified from personjob_model.py, credit to UW Python 220
-    Simple database example with Peewee ORM, sqlite and Python
+    Simple database example with Peewee ORM, sqlite, and Python
     Here we define the schema
 
 """
 
 from peewee import *
+from datetime import *
+
 
 database = SqliteDatabase('pjd.db')
 database.connect()
@@ -28,18 +30,6 @@ class Person(BaseModel):
     nickname = CharField(max_length=20, null=True)
 
 
-class Job(BaseModel):
-    """
-        This class defines Job, which maintains details of past Jobs
-        held by a Person.
-    """
-    job_name = CharField(primary_key=True, max_length=30)
-    start_date = DateField(formats='YYYY-MM-DD')
-    end_date = DateField(formats='YYYY-MM-DD')
-    salary = DecimalField(max_digits=7, decimal_places=2)
-    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
-
-
 class Department(BaseModel):
     """
         This class defines Department, which maintains details of
@@ -48,7 +38,21 @@ class Department(BaseModel):
     department_name = CharField(primary_key=True, max_length=30)
     department_number = CharField(max_length=4)
     department_manager_name = CharField(max_length=30)
-    job_within = ForeignKeyField(Job, related_name='was_held_by', null=False)
+    # job_name = ForeignKeyField(Job, related_name='was_held_by', null=False)
+
+
+class Job(BaseModel):
+    """
+        This class defines Job, which maintains details of past Jobs
+        held by a Person.
+    """
+    job_name = CharField(primary_key=True, max_length=30)
+    department_name = ForeignKeyField(Department, null=False)
+    start_date = DateField(formats='YYYY-MM-DD')
+    end_date = DateField(formats='YYYY-MM-DD')
+    salary = DecimalField(max_digits=7, decimal_places=2)
+    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
+    duration = IntegerField()
 
 
 class PersonNumKey(BaseModel):
