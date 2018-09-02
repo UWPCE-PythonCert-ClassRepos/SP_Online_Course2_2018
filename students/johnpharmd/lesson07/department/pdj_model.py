@@ -10,7 +10,7 @@ from peewee import *
 from datetime import *
 
 
-database = SqliteDatabase('pjd.db')
+database = SqliteDatabase('pdj.db')
 database.connect()
 database.execute_sql('PRAGMA foreign_keys = ON;')
 
@@ -65,3 +65,6 @@ class PersonNumKey(BaseModel):
     person_name = CharField(max_length=30)
     lives_in_town = CharField(max_length=40)
     nickname = CharField(max_length=20, null=True)
+
+
+database.close()

@@ -8,7 +8,7 @@
 
 import logging
 from peewee import *
-import pjd_model
+import pdj_model
 from datetime import *
 
 
@@ -23,7 +23,7 @@ logger.info('First name and connect to a database (sqlite here)')
 
 logger.info('The next 3 lines of code are the only database specific code')
 
-database = SqliteDatabase('pjd.db')
+database = SqliteDatabase('pdj.db')
 database.connect()
 database.execute_sql('PRAGMA foreign_keys = ON;')  # needed for sqlite only
 
