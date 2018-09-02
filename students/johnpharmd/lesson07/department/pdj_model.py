@@ -52,7 +52,7 @@ class Job(BaseModel):
     end_date = DateField(formats='YYYY-MM-DD')
     salary = DecimalField(max_digits=7, decimal_places=2)
     person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
-    duration = IntegerField()
+    duration_in_days = IntegerField()
 
 
 class PersonNumKey(BaseModel):

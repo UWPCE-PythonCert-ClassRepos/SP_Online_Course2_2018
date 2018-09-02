@@ -89,7 +89,7 @@ class Job(BaseModel):
     person_employed = ForeignKeyField(Person, related_name='was_filled_by',
                                       null=False)
     logger.info('Number of days job was held')
-    duration = IntegerField()
+    duration_in_days = IntegerField()
 
 
 class PersonNumKey(BaseModel):
@@ -232,8 +232,8 @@ def populate_db():
                     end_date=job[END_DATE],
                     salary=job[SALARY],
                     person_employed=job[PERSON_EMPLOYED],
-                    duration=abs(datetime.fromisoformat(job[START_DATE]) -
-                                 datetime.fromisoformat(job[END_DATE])).days)
+                    duration_in_days=abs(datetime.fromisoformat(job[START_DATE]) -
+                                         datetime.fromisoformat(job[END_DATE])).days)
                 new_job.save()
 
         logger.info('Reading and print all Job rows (note the value of person)...')
