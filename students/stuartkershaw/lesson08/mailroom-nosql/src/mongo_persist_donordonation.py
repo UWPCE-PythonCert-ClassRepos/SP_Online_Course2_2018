@@ -24,6 +24,9 @@ def create_donor(name):
             log.info('And in that database use a collection called donors')
             donors = db['donors']
 
+            log.info('And in that collection specify a unique index on donor_name')
+            donors.create_index('donor_name', unique=True)
+
             log.info('Step 2: Now we add a donor with the given name')
             donors.insert_one({
                 'donor_name': name
