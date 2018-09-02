@@ -1,0 +1,31 @@
+mprof run ./trigrams.py 300
+mprof: Sampling memory every 0.1s
+running as a Python program...
+violent situation being given with the words which are too abrupt and difficult of approach the slopein the eighteenth a hundred francs he went on with a thousand 
+francs a month they fish up your coin you are cosettes father after a start you are acquainted with him everything encouraged and even uplifted at times the 
+spectators attention his name without waiting for dead beneath this pressure and made that thanks to the season and which was common to the left wing demanded 
+reinforcements there are fierce attitudes on the day of the staff that is all the undulations mount towards mont saint jean was cannonaded hougomont was burned 
+the wooden shoes on his way intermittent on account of the military salute to the eye of his head a heart needs a refuge and it is your master up asked jean valjean 
+fortunately it still she could say that i do pronounce it and javert gave it to all sense directed against himself suicide that mysterious power which emanates from
+the hospital and the parliament intervened and had seated himself drew a pistol on the wall being given we admit he had not been here today and she beside him and 
+into which was thrust between the bars of iron walked slowly up to his mind one day the last twenty hours one hour of this narrative the author of this girl how did
+you pick up your savior then have you it is when i saw them pass away people have already stated to those two months previously had without her being conscious of 
+it the man lion it frequently happened that jean valjean was a convict rose above this barricade as far as the city prison while waiting to be forgotten she is how all sufficient to
+Filename: ./trigrams.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    69     27.4 MiB     27.4 MiB   @profile
+    70                             def main():
+    71                                 """Main function."""
+    72     27.4 MiB      0.0 MiB       max_words = 200
+    73     27.4 MiB      0.0 MiB       if len(sys.argv) > 1:
+    74     27.4 MiB      0.0 MiB           try:
+    75     27.4 MiB      0.0 MiB               max_words = int(sys.argv[1])
+    76                                     except ValueError:
+    77                                         pass
+    78
+    79     27.4 MiB      0.0 MiB       corpus_path = pathlib.Path(os.path.join(os.getcwd(), 'Les_Miserables.txt'))
+    80    115.8 MiB     88.4 MiB       tri_dict = create_trigram_dict(corpus_path)
+    81    115.8 MiB      0.0 MiB       tri_text = create_trigram_text(tri_dict, max_words)
+    82    115.8 MiB      0.0 MiB       print(tri_text)

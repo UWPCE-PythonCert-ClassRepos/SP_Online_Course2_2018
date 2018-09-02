@@ -1,0 +1,71 @@
+Data from run of complicated_example.py:
+
+1 z: 2.4    i, j, k: 2, 3, 12
+... 
+285460 z: 22.03448275862069   i, j, k: 12 17 63
+...
+285818 z: 34.37931034482759   i, j, k: 12 17 997
+285819 z: 34.41379310344828   i, j, k: 12 17 998
+285820 z: 34.44827586206897   i, j, k: 12 17 999
+285821 z: 34.48275862068966   i, j, k: 12 17 1000
+
+Next i, j, k series is the one that causes zero division error: 12, 24, 12
+---------------------------------------------------------------------------------
+
+Here is a copy of my debugger output for recursive.py exercise:
+
+$ python -m pdb recursive.py 3
+> c:\git\sp_online_course2_2018\students\johnpharmd\lesson05\recursive.py(4)<mod
+ule>()
+-> import sys
+(Pdb) ll
+  1     #!/usr/bin/env python3
+  2
+  3     # recursive.py
+  4  -> import sys
+  5
+  6
+  7     def my_fun(n):
+  8         if n == 2:
+  9             return True
+ 10         return my_fun(n/2)
+ 11
+ 12
+ 13     if __name__ == '__main__':
+ 14         n = int(sys.argv[1])
+ 15         print(sys.argv)
+ 16         print(my_fun(n))
+(Pdb) b 10
+Breakpoint 1 at c:\git\sp_online_course2_2018\students\johnpharmd\lesson05\recur
+sive.py:10
+(Pdb) c
+['recursive.py', '3']
+> c:\git\sp_online_course2_2018\students\johnpharmd\lesson05\recursive.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+3
+(Pdb) n
+> c:\git\sp_online_course2_2018\students\johnpharmd\lesson05\recursive.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+1.5
+(Pdb) n
+> c:\git\sp_online_course2_2018\students\johnpharmd\lesson05\recursive.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.75
+(Pdb) n
+> c:\git\sp_online_course2_2018\students\johnpharmd\lesson05\recursive.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.375
+
+Conclusion: my_fun(), if it doesn't receive an integer n that is a power of 2,
+continues to divide n by 2 until a RecursionError occurs. In my debugger output
+above, I begin by inputting 3 for n on the command line. I then place a breakpoint
+on line 10, using "b 10", and then continue with "c". Alternating pretty printing
+of n with calling next, or "pp n" and "n", I find the error pattern.
+Since 3 is not an integer power of 2, my_fun() proceeds to divide it by 2,
+giving 1.5. Then 0.75, 0.375, etc.
+
+
