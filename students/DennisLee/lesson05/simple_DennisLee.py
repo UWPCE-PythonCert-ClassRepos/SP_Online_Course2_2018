@@ -1,4 +1,3 @@
-#simple.py
 import logging, logging.handlers
 import datetime
 import socket
@@ -19,7 +18,6 @@ console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
 
 dgram_handler = logging.handlers.DatagramHandler(sls.HOST, sls.PORT)
-# dgram_handler = logging.FileHandler('test.log')
 dgram_handler.setLevel(logging.ERROR)
 dgram_handler.setFormatter(dg_formatter)
 

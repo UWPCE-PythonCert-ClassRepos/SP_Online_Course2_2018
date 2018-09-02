@@ -21,14 +21,9 @@ class SyslogUDPHandler(socketserver.DatagramRequestHandler):
         data = self.request[0]
         data = bytes.decode(data, "utf-8", "ignore")
 
-        # try:
-        #     data = data.decode()
-        # except UnicodeDecodeError:
-        #     # The message was sent by a UDPHandler. It will be ugly.
-        #     pass
         socket = self.request[1]
-        # print( "%s : " % self.client_address[0], str(data))
-        print( "%s : " % self.client_address[0], str(data.encode("utf-8", "ignore")))
+        print("%s : " % self.client_address[0], 
+              str(data.encode("utf-8", "ignore")))
 
 if __name__ == "__main__":
     try:
