@@ -14,17 +14,21 @@ HOST, PORT = "127.0.0.1", 514
 import socketserver
 
 
-class SyslogUDPHandler(socketserver.BaseRequestHandler):
+class SyslogUDPHandler(socketserver.DatagramRequestHandler):
 
     def handle(self):
+        print("hello")
         data = self.request[0]
-        try:
-            data = data.decode()
-        except UnicodeDecodeError:
-            # The message was sent by a UDPHandler. It will be ugly.
-            pass
+        data = bytes.decode(data, "utf-8", "ignore")
+
+        # try:
+        #     data = data.decode()
+        # except UnicodeDecodeError:
+        #     # The message was sent by a UDPHandler. It will be ugly.
+        #     pass
         socket = self.request[1]
-        print( "%s : " % self.client_address[0], str(data))
+        # print( "%s : " % self.client_address[0], str(data))
+        print( "%s : " % self.client_address[0], str(data.encode("utf-8", "ignore")))
 
 if __name__ == "__main__":
     try:

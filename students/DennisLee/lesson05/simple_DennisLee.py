@@ -1,12 +1,13 @@
 #simple.py
 import logging, logging.handlers
 import datetime
-import syslogserver as ss
+import socket
+import syslogserver as sls
 
-ss_format = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
-format = f"%(asctime)s {ss_format}"
+dg_format = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
+format = f"%(asctime)s {dg_format}"
 
-ss_formatter = logging.Formatter(ss_format)
+dg_formatter = logging.Formatter(dg_format)
 formatter = logging.Formatter(format)
 
 file_handler = logging.FileHandler(datetime.date.today().isoformat() + '.log')
@@ -17,17 +18,23 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)          
 console_handler.setFormatter(formatter)
 
-system_handler = logging.handlers.SysLogHandler(('127.0.0.1', 514))
-system_handler.setLevel(logging.ERROR)
-system_handler.setFormatter(ss_formatter)
+dgram_handler = logging.handlers.DatagramHandler(sls.HOST, sls.PORT)
+# dgram_handler = logging.FileHandler('test.log')
+dgram_handler.setLevel(logging.ERROR)
+dgram_handler.setFormatter(dg_formatter)
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)                   
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)               
-logger.addHandler(system_handler)
+logger.addHandler(dgram_handler)
 
 def my_fun(n):
+    logging.critical("Test - critical")
+    logging.error("Test - error")
+    logging.warning("Test - warning")
+    logging.info("Test - info")
+    logging.debug("Test - debug")
     for i in range(0, n):
         logging.debug(i)
         if i == 50:
