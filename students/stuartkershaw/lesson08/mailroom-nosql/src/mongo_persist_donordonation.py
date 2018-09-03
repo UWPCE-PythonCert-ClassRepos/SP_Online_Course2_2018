@@ -18,30 +18,24 @@ def create_donor(name):
         database = login_database.login_mongodb_cloud()
 
         with database as client:
-            log.info('Step 1: We are going to use a database called mailroom')
             db = client['mailroom']
 
-            log.info('And in that database use a collection called donors')
             donors = db['donors']
 
-            log.info('And in that collection specify a unique index on donor_name')
-            donors.create_index('donor_name', unique=True)
-
-            log.info('Step 2: Now we add a donor with the given name')
             donors.insert_one({
+                '_id': name.replace(' ', '_').lower(),
                 'donor_name': name
             })
 
-            log.info('Step 3: Query to ensure the donor was created')
             query = {'donor_name': name}
             results = donors.find(query)
 
-            log.info('Step 4: Print the results')
-            print('Donor created.')
+            log.info('Donor created.')
+
             for r in results:
                 pprint.pprint(r)
 
-            db.drop_collection('donors')
+            # db.drop_collection('donors')
 
     except Exception as e:
         log.info(f'Error creating = {name}')
@@ -55,14 +49,80 @@ def update_donor(old_name, new_name):
     """
     Update donor name
     """
-    pass
+    log.info('Working with Mongo update_donor function')
+
+    log.info('Updating Donor record...')
+
+    try:
+        database = login_database.login_mongodb_cloud()
+
+        with database as client:
+            db = client['mailroom']
+
+            donors = db['donors']
+            donations = db['donations']
+
+            log.info('Add new Donor with updated name...')
+
+            donors.insert_one({
+                '_id': new_name.replace(' ', '_').lower(),
+                'donor_name': new_name
+            })
+
+            log.info('Point old Donor Donations to new Donor document...')
+
+            donations_query = {'donor_id': old_name.replace(' ', '_').lower()}
+            donations_update = {'$set': {'donor_id': new_name.replace(' ', '_').lower()}}
+
+            donations.update_many(donations_query, donations_update)
+
+            log.info('Remove old Donor...')
+
+            donor_query = {'_id': old_name.replace(' ', '_').lower()}
+
+            donors.remove(donor_query)
+
+    except Exception as e:
+        log.info(e)
+
+    finally:
+        log.info('Mongo update_donor complete')
 
 
 def delete_donor(name):
     """
     Delete donor
     """
-    pass
+    log.info('Working with Mongo delete_donor function')
+
+    log.info('Updating Donor record...')
+
+    try:
+        database = login_database.login_mongodb_cloud()
+
+        with database as client:
+            db = client['mailroom']
+
+            donors = db['donors']
+            donations = db['donations']
+
+            log.info('Remove old Donor...')
+
+            donor_query = {'_id': name.replace(' ', '_').lower()}
+
+            donors.remove(donor_query)
+
+            log.info('Remove old Donor Donations...')
+
+            donations_query = {'donor_id': name.replace(' ', '_').lower()}
+
+            donations.remove(donations_query)
+
+    except Exception as e:
+        log.info(e)
+
+    finally:
+        log.info('Mongo delete_donor complete')
 
 
 def create_donation(donor, amount):
@@ -77,28 +137,24 @@ def create_donation(donor, amount):
         database = login_database.login_mongodb_cloud()
 
         with database as client:
-            log.info('Step 1: We are going to use a database called mailroom')
             db = client['mailroom']
 
-            log.info('And in that database use a collection called donations')
             donations = db['donations']
 
-            log.info('Step 2: Now we add a donation with the given donor name and amount')
             donations.insert_one({
                 'donation_amount': amount,
-                'donor_name': donor
+                'donor_id': donor.replace(' ', '_').lower()
             })
 
-            log.info('Step 3: Query to ensure the donation was created')
             query = {'donation_amount': amount}
             results = donations.find(query)
 
-            log.info('Step 4: Print the results')
-            print('Donation created.')
+            log.info('Donor created.')
+
             for r in results:
                 pprint.pprint(r)
 
-            db.drop_collection('donations')
+            # db.drop_collection('donations')
 
     except Exception as e:
         log.info(f'Error creating = {donor, amount}')
@@ -126,11 +182,80 @@ def get_donor_names():
     """
     Get donor names from database
     """
-    pass
+    log.info('Working with Mongo get_donor_names function')
+
+    log.info('Querying Donor records...')
+
+    try:
+        database = login_database.login_mongodb_cloud()
+
+        with database as client:
+            donor_names = []
+            
+            db = client['mailroom']
+
+            donors = db['donors']
+
+            cursor = donors.find()
+
+            for doc in cursor:
+                donor_names.append(doc['donor_name'])
+
+    except Exception as e:
+        log.info(f'Error retrieving Donors')
+        log.info(e)
+
+    finally:
+        log.info('Mongo get_donor_names complete')
+
+        return donor_names
+
 
 
 def get_donor_donations():
     """
     Get donor donations from database
     """
-    pass
+    log.info('Working with Mongo get_donor_donations function')
+
+    log.info('Querying Donation records...')
+
+    try:
+        database = login_database.login_mongodb_cloud()
+
+        with database as client:
+            donor_donations = {}
+
+            db = client['mailroom']
+
+            donors = db['donors']
+            donations = db['donations']
+
+            cursor = donations.find()
+
+            for doc in cursor:
+
+                pprint.pprint(doc)
+
+                donor_query = {'_id': doc['donor_id']}
+
+                donor = donors.find_one(donor_query)
+                donor_name = donor['donor_name']
+
+                try:
+                    donor_donations\
+                        .setdefault(donor_name,
+                                    []).append(float(doc['donation_amount']))
+
+                except Exception as e:
+                    log.info(e)
+
+    except Exception as e:
+        log.info(e)
+
+    finally:
+        log.info('Mongo get_donor_donations complete')
+
+        pprint.pprint(donor_donations)
+
+        return donor_donations

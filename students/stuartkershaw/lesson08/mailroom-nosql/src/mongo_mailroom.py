@@ -14,6 +14,8 @@ class DonorList:
 
     def __init__(self):
         self._rollup = {}
+        self._donor_names = get_donor_names()
+        self._donor_donations = get_donor_donations()
 
     @property
     def rollup(self):
@@ -24,15 +26,22 @@ class DonorList:
 
     @property
     def donor_names(self):
-        return get_donor_names()
+        return self._donor_names
+
+    def update_donor_names(self):
+        self._donor_names = get_donor_names()
 
     @property
     def donor_donations(self):
-        return get_donor_donations()
+        return self._donor_donations
+
+    def update_donor_donations(self):
+        self._donor_donations = get_donor_donations()
 
     def add_donor(self, name):
         try:
             create_donor(name)
+            self.update_donor_names()
         except:
             pass
 
@@ -42,6 +51,7 @@ class DonorList:
 
         try:
             create_donation(donor, val)
+            self.update_donor_donations()
         except:
             pass
 
@@ -54,7 +64,7 @@ class DonorList:
         else:
             return "Donor not found."
 
-    def get_donations(self, name):
+    def get_donations_by_name(self, name):
         if not name:
             raise ValueError("Please provide a donor name.")
 
@@ -63,16 +73,13 @@ class DonorList:
         else:
             return "Donor not found."
 
-    def get_donor_names(self):
-        return [donor for donor in self.donor.names]
-
     def compose_thank_you(self, donor):
         if not donor:
             raise ValueError("Please provide a donor.")
 
         message_obj = {
             'donor_name': donor,
-            'donations': sum(self.get_donations(donor))
+            'donations': sum(self.get_donations_by_name(donor))
         }
 
         message = 'Dear {donor_name}, thanks so much '\
@@ -83,7 +90,7 @@ class DonorList:
 
     def generate_rollup(self):
         for donor in self.donor_names:
-            donations = self.get_donations(donor)
+            donations = self._donor_donations[donor]
 
             number = len(donations)
             total = int(sum(donations))
@@ -116,8 +123,6 @@ class DonorList:
         if not len(self.donor_names):
             print('The list of donors is empty.')
             return
-
-        self.generate_rollup()
 
         for donor in self.donor_names:
             with open(donor.replace(' ', '_') + '.txt', 'w') as outfile:
@@ -191,6 +196,8 @@ class DonorCli:
                             delete_donor(donor)
                         else:
                             print('Donor {} unchanged.'.format(donor))
+                    self.donorCollection.update_donor_names()
+                    self.donorCollection.update_donor_donations()
                     return
         else:
             while True:
@@ -222,10 +229,11 @@ class DonorCli:
                             delete_donation(donor, donation)
                         else:
                             print('Donation {} unchanged.'.format(donation))
+                    self.donorCollection.update_donor_donations()
                     return
 
     def select_donation(self, donor):
-        donations = self.donorCollection.get_donations(donor)
+        donations = self.donorCollection.get_donations_by_name(donor)
         range_donations = range(1, len(donations) + 1)
         donations_dict = dict(zip(range_donations, donations))
 
