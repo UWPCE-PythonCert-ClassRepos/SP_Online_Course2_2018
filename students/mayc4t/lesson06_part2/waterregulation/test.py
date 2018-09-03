@@ -10,6 +10,8 @@ from pump import Pump
 from sensor import Sensor
 
 from .decider import Decider
+from .controller import Controller  # noqa pylint: disable=unused-import
+from .integrationtest import do_tick
 
 
 class DeciderTests(unittest.TestCase):
@@ -113,3 +115,7 @@ class ControllerTests(unittest.TestCase):
         pump = Pump(ControllerTests.DUMMY_ADDR, ControllerTests.DUMMY_PORT)
         return_value = pump.set_state(12)
         self.assertEqual(return_value, False)
+
+    def test_tick(self):
+        """Test logic of sensor, pump."""
+        do_tick()

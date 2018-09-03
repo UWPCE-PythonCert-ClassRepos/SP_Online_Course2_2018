@@ -75,4 +75,4 @@ class Decider(object):
 
         raise ValueError('Invalid state: current_action:{} '
                          'current_height:{}'.format(
-                          current_action, current_height))
+                             current_action, current_height))
