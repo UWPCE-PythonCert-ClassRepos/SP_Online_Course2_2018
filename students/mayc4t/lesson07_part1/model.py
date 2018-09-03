@@ -24,6 +24,23 @@ class Person(BaseModel):
     lives_in_town = CharField(max_length = 40)
     nickname = CharField(max_length = 20, null = True)
 
+
+class Department(BaseModel):
+    """
+        This class defines Department, which has Dept_Number, Dept_names,
+         Dept_Manager and Duration.
+        held by a Person.
+    """
+    
+    dept_number = FixedCharField(
+        primary_key = True,
+        max_length = 4,
+        constraints=[
+            Check('upper(substr(dept_number, 1, 1)) BETWEEN "A" AND "Z"')])
+    dept_name = CharField(max_length = 30)
+    dept_manager = CharField(max_length = 30)
+
+
 class Job(BaseModel):
     """
         This class defines Job, which maintains details of past Jobs
@@ -34,6 +51,8 @@ class Job(BaseModel):
     end_date = DateField(formats = 'YYYY-MM-DD')
     salary = DecimalField(max_digits = 7, decimal_places = 2)
     person_employed = ForeignKeyField(Person, related_name='was_filled_by', null = False)
+    department = ForeignKeyField(Department, related_name='was_filled_by', null = False)
+
 
 class PersonNumKey(BaseModel):
     """
@@ -49,6 +68,7 @@ class PersonNumKey(BaseModel):
 if __name__=='__main__':
     database.create_tables([
             Job,
+            Department,
             Person,
             PersonNumKey
         ])

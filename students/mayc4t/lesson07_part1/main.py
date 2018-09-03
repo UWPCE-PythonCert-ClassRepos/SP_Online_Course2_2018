@@ -4,7 +4,7 @@
         (but running this program does not require it)
 """
 import logging
-from personjob_model import *
+from model import *
 
 def add_people(database, logger):
     logger.info('Working with Person class')
@@ -53,6 +53,47 @@ def add_people(database, logger):
         logger.info('database closes')
         database.close()
 
+
+def add_departments(database, logger):
+    logger.info('Working with Department class')
+    logger.info('Creating Department records: just like Job. We use the foreign key')
+
+    DEPARTMENT_NUMBER = 0
+    DEPARTMENT_NAME = 1
+    DEPARTMENT_MANAGER = 2
+
+    departments = [
+        ('R234', 'Research', 'Dumbledore'),
+        ('P213', 'Product', 'Ollivander'),
+        ('H852', 'HR', 'Bellatrix'),
+        ('A001', 'Accounting', 'Griphook'),
+        ('L634', 'Legal', 'Percy')
+        ]
+
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        for department in departments:
+            with database.transaction():
+                new_department = Department.create(
+                    dept_number = department[DEPARTMENT_NUMBER],
+                    dept_name = department[DEPARTMENT_NAME],
+                    dept_manager = department[DEPARTMENT_MANAGER])
+                new_department.save()
+
+        logger.info('Reading and print all Department rows...')
+        for department in Department:
+            logger.info(f'{department.dept_name} ({department.dept_number}) managed by ({department.dept_manager})')
+
+    except Exception as e:
+        logger.info(f'Error creating = {department[DEPARTMENT_NAME]}')
+        logger.info(e)
+
+    finally:
+        logger.info('database closes')
+        database.close()
+
+
 def add_jobs(database, logger):
     logger.info('Working with Job class')
     logger.info('Creating Job records: just like Person. We use the foreign key')
@@ -62,13 +103,14 @@ def add_jobs(database, logger):
     END_DATE = 2
     SALARY = 3
     PERSON_EMPLOYED = 4
+    DEPARTMENT = 5
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
-        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter'),
-        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter')
+        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew', 'R234'),
+        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'P213'),
+        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', 'L634'),
+        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter', 'H852'),
+        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter', 'A001')
         ]
 
     try:
@@ -81,7 +123,8 @@ def add_jobs(database, logger):
                     start_date = job[START_DATE],
                     end_date = job[END_DATE],
                     salary = job[SALARY],
-                    person_employed = job[PERSON_EMPLOYED])
+                    person_employed = job[PERSON_EMPLOYED],
+                    department = job[DEPARTMENT])
                 new_job.save()
 
         logger.info('Reading and print all Job rows (note the value of person)...')
@@ -110,7 +153,10 @@ def populate_db():
     # Populate the Person table
     add_people(database=database, logger=logger)
 
-    # Populate the Person table
+    # Populates the Departments table
+    add_departments(database, logger)
+
+    # Populate the Jobs table
     add_jobs(database=database, logger=logger)
 
 
