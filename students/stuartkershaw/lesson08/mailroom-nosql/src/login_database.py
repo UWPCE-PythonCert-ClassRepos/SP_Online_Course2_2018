@@ -61,21 +61,17 @@ def login_mongodb_cloud():
 #     return r
 
 
-# def login_neo4j_cloud():
-#     """
-#         connect to neo4j and login
+def login_neo4j_cloud():
+    """
+        connect to neo4j and login
 
-#     """
+    """
+    config.read(config_file)
 
-#     log.info('Here is where we use the connect to neo4j.')
-#     log.info('')
+    graphenedb_user = config["neo4j_cloud"]["user"]
+    graphenedb_pass = config["neo4j_cloud"]["pw"]
+    graphenedb_url = 'bolt://hobby-cbfkiifdhomcgbkelogijobl.dbs.graphenedb.com:24786'
+    driver = GraphDatabase.driver(graphenedb_url,
+                                  auth=basic_auth(graphenedb_user, graphenedb_pass))
 
-#     config.read(config_file)
-
-#     graphenedb_user = config["neo4j_cloud"]["user"]
-#     graphenedb_pass = config["neo4j_cloud"]["pw"]
-#     graphenedb_url = 'bolt://hobby-cbfkiifdhomcgbkelogijobl.dbs.graphenedb.com:24786'
-#     driver = GraphDatabase.driver(graphenedb_url,
-#                                   auth=basic_auth(graphenedb_user, graphenedb_pass))
-
-#     return driver
+    return driver
