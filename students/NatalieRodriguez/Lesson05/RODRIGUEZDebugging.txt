@@ -1,0 +1,165 @@
+Natalie Rodriguez
+August 20, 2018
+Debugging Exercise
+
+What is wrong with our logic?
+Why doesn't the function stop calling itself?
+
+The error is that there are no additional conditions in the function, such as an 'else' statement, or an additional 'if' 
+statement to indicate when the function should reply with 'False'. It doesn't stop calling itself for this same reason, and
+because it is a recursion, it will keep calling itself until the recursion limit is reached or the statement is True.
+In the case of this code, it would be useful to have a condition for when 'n' is less than (<) that the number that the
+equality statement is seeking so that the recursion will terminate.
+
+What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+
+The value of 'n' gets smaller and smaller and will never meet the condition, that is, to equal (==) 2. 
+
+
+
+Debugging Activity:
+
+natstr8@NatRod MINGW64 ~/GitHub/SP_Online_Course2_2018/students/NatalieRodriguez/Lesson05 (master)
+$ python -m pdb recursive.py 15
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(8)<module>()
+-> import sys
+(Pdb) ll
+  1     #Lesson 05 Practice Exercise to submit
+  2
+  3     #recursive.py
+  4
+  5     #this function should take the number n and return either true or false.
+  6
+  7
+  8  -> import sys
+  9
+ 10     def my_fun(n):
+ 11         #if n < 1:
+ 12             #return False
+ 13
+ 14         if n == 2:
+ 15             return True
+ 16
+ 17         return my_fun(n/2)
+ 18
+ 19     if __name__ == '__main__':
+ 20         n = int(sys.argv[1])
+ 21         print(my_fun(n))
+ 22
+ 23     #what are some other values of n that will return true? 8, 16, 32, 64, 128
+ 24     #What is the general rule? N is a power of 2.
+ 25     #what kind of numbers will this function return true for? powers of 2.
+ 26
+ 27     #a recursion error means the function keeps calling itself repeatedly
+ 28
+ 29     #use the debugger using an n of 15.
+ 30
+ 31     #there is no else for the 'if' statement, so rather than returning false, it
+ 32     #continues to run the recursion until it reaches the max number of recursions.
+ 33     
+ 34
+ 35
+ 36
+(Pdb) n
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(10)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(19)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(20)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(21)<module>()
+-> print(my_fun(n))
+(Pdb) pp n
+15
+(Pdb) ll
+  1     #Lesson 05 Practice Exercise to submit
+  2
+  3     #recursive.py
+  4
+  5     #this function should take the number n and return either true or false.
+  6
+  7
+  8     import sys
+  9
+ 10     def my_fun(n):
+ 11         #if n < 1:
+ 12             #return False
+ 13
+ 14         if n == 2:
+ 15             return True
+ 16
+ 17         return my_fun(n/2)
+ 18
+ 19     if __name__ == '__main__':
+ 20         n = int(sys.argv[1])
+ 21  ->     print(my_fun(n))
+ 22
+ 23     #what are some other values of n that will return true? 8, 16, 32, 64, 128
+ 24     #What is the general rule? N is a power of 2.
+ 25     #what kind of numbers will this function return true for? powers of 2.
+ 26
+ 27     #a recursion error means the function keeps calling itself repeatedly
+ 28
+ 29     #use the debugger using an n of 15.
+ 30
+ 31     #there is no else for the 'if' statement, so rather than returning false, it
+ 32     #continues to run the recursion until it reaches the max number of recursions.
+ 33     
+ 34
+ 35
+ 36
+(Pdb) s
+--Call--
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(10)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(14)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) n
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(17)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(10)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(14)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) b 14
+Breakpoint 1 at c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py:14
+(Pdb) c
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(14)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) c
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(14)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) c
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(14)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) c
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(14)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.46875
+(Pdb) c
+> c:\users\natstr8\github\sp_online_course2_2018\students\natalierodriguez\lesson05\recursive.py(14)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.234375
+(Pdb)
+
+
+

@@ -1,0 +1,124 @@
+The divide-by-2 function only stops when it gets to a specific value, the number 2. It continues to divide by 2 even if the number goes directly from a number greater than 2 to less than 2, or was originally seeded as a nonpositive number. If the number never becomes exactly 2, it converges on zero as the recursions continue. The function can be fixed by adding an elif clause that returns False if the absolute value of the number is less than, say, 2 or a smaller (positive) number.
+
+$ python -m pdb recursive.py 50
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2     def my_fun(n):
+  3         if n == 2:
+  4             return True
+  5         return my_fun(n/2)
+  6
+  7     if __name__ == '__main__':
+  8         n = int(sys.argv[1])
+  9         print(my_fun(n))
+(Pdb) n
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(2)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(7)<module>()
+-> if __name__ == '__main__':
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(8)<module>()
+-> n = int(sys.argv[1])
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(9)<module>()
+-> print(my_fun(n))
+(Pdb) pp n
+50
+(Pdb) s
+--Call--
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(2)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(3)my_fun()
+-> if n == 2:
+(Pdb) pp n
+50
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(5)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(2)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(3)my_fun()
+-> if n == 2:
+(Pdb) pp n
+25.0
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(5)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(2)my_fun()
+-> def my_fun(n):
+(Pdb)
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(3)my_fun()
+-> if n == 2:
+(Pdb) b 3, n <= 5
+Breakpoint 1 at c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py:3
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(5)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+12.5
+(Pdb) c
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(3)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.125
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(5)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(2)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(3)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.5625
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(5)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(2)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+0.78125
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(3)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(5)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(2)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(3)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.390625
+(Pdb) c
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(3)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.1953125
+(Pdb) c
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(3)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.09765625
+(Pdb) c
+> c:\personal\python220\sp_online_course2_2018\students\dennislee\lesson05\recursive.py(3)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.048828125
+(Pdb) q
