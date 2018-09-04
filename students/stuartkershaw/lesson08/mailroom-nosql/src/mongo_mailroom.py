@@ -144,6 +144,10 @@ class DonorCli:
     def donorCollection(self):
         return self._donorCollection
 
+    def set_donor_donations(self):
+        self.donorCollection.update_donor_names()
+        self.donorCollection.update_donor_donations()
+
     def set_donor(self):
         while True:
             try:
@@ -196,8 +200,7 @@ class DonorCli:
                             delete_donor(donor)
                         else:
                             print('Donor {} unchanged.'.format(donor))
-                    self.donorCollection.update_donor_names()
-                    self.donorCollection.update_donor_donations()
+                    self.set_donor_donations()
                     return
         else:
             while True:
@@ -229,8 +232,7 @@ class DonorCli:
                             delete_donation(donor, donation)
                         else:
                             print('Donation {} unchanged.'.format(donation))
-                    self.donorCollection.update_donor_names()
-                    self.donorCollection.update_donor_donations()
+                    self.set_donor_donations()
                     return
 
     def select_donation(self, donor):
