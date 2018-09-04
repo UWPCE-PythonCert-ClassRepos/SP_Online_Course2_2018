@@ -35,8 +35,6 @@ def create_donor(name):
             for r in results:
                 pprint.pprint(r)
 
-            # db.drop_collection('donors')
-
     except Exception as e:
         log.info(f'Error creating = {name}')
         log.info(e)
@@ -154,8 +152,6 @@ def create_donation(donor, amount):
             for r in results:
                 pprint.pprint(r)
 
-            # db.drop_collection('donations')
-
     except Exception as e:
         log.info(f'Error creating = {donor, amount}')
         log.info(e)
@@ -168,14 +164,73 @@ def update_donation(donor, old_donation, new_donation):
     """
     Update donation amount
     """
-    pass
+    log.info('Working with Mongo update_donation function')
+
+    log.info('Updating Donation record...')
+
+    try:
+        database = login_database.login_mongodb_cloud()
+
+        with database as client:
+            db = client['mailroom']
+
+            donations = db['donations']
+
+            log.info('Find the Donations to update...')
+
+            donation_query = {'donation_amount': old_donation}
+            donation_update = {'$set': {'donation_amount': new_donation}}
+
+            donations.update(donation_query, donation_update)
+
+    except Exception as e:
+        log.info(f'Error updating Donation = {donor, old_donation}')
+        log.info(e)
+
+    finally:
+        log.info('Mongo update_donation complete')
 
 
 def delete_donation(donor, donation):
     """
     Delete donation
     """
-    pass
+    log.info('Working with Mongo delete_donation function')
+
+    log.info('Deleting Donation record...')
+
+    try:
+        database = login_database.login_mongodb_cloud()
+
+        with database as client:
+            db = client['mailroom']
+
+            donors = db['donors']
+            donations = db['donations']
+
+            log.info('Find the Donations to update...')
+
+            donation_query = {'donation_amount': donation, 'donor_id': donor.replace(' ', '_').lower()}
+
+            donations.remove(donation_query, multi=False)
+
+            log.info('Check the Donor has Donations, otherwise remove Donor...')
+
+            donations_query = {'donor_id': donor.replace(' ', '_').lower()}
+
+            donations_count = donations.count_documents(donations_query)
+
+            if not donations_count > 0:
+                donor_query = {'_id': donor.replace(' ', '_').lower()}
+                donors.remove(donor_query)
+
+
+    except Exception as e:
+        log.info(f'Error deleting Donation = {donor, donation}')
+        log.info(e)
+
+    finally:
+        log.info('Mongo update_donation complete')
 
 
 def get_donor_names():
@@ -234,9 +289,6 @@ def get_donor_donations():
             cursor = donations.find()
 
             for doc in cursor:
-
-                pprint.pprint(doc)
-
                 donor_query = {'_id': doc['donor_id']}
 
                 donor = donors.find_one(donor_query)
@@ -255,7 +307,5 @@ def get_donor_donations():
 
     finally:
         log.info('Mongo get_donor_donations complete')
-
-        pprint.pprint(donor_donations)
 
         return donor_donations

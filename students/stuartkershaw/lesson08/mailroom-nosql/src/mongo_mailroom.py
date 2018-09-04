@@ -229,6 +229,7 @@ class DonorCli:
                             delete_donation(donor, donation)
                         else:
                             print('Donation {} unchanged.'.format(donation))
+                    self.donorCollection.update_donor_names()
                     self.donorCollection.update_donor_donations()
                     return
 
