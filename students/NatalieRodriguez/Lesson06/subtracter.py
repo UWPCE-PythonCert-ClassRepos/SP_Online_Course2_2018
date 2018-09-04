@@ -1,6 +1,6 @@
 #subtracter.py
 
-class subtracter(object):
+class Subtracter(object):
 
     @staticmethod
     def calc(operand_1, operand_2):

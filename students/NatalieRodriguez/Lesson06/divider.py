@@ -1,6 +1,6 @@
 #divider.py
 
-class divider(object):
+class Divider(object):
 
     @staticmethod
     def calc(operand_1, operand_2):
