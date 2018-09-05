@@ -44,9 +44,11 @@ class DonorDB:
                 donor = Donor.create(name = donor_name)
                 donor.save()
             logger.info(f"{donor_name} added to database.")
+
         except Exception as e:
             logger.error(f"{donor_name} not added to database.  {e}")
         finally:
+            self.recalculate_statistics(donor_name)
             self.database.close()
             
     def add_donation(self, donor_name, amount):
@@ -59,7 +61,7 @@ class DonorDB:
             with self.database.transaction():
                 donation = Donation.create(
                     donor = donor_name,
-                    donation_amount = amount
+                    donation_amt = amount
                 )
                 donation.save()
             logger.info(f"{donor_name} has donated {amount}.")
@@ -78,11 +80,17 @@ class DonorDB:
             self.database.execute_sql(self.fk)
             # Vars for calculations to be fed back into a query
             donation_sum = 0
-            counter = 0
 
-            for donation in Donation.select().where(Donation.donor == donor_name):
-                donation_sum += donation.donation_amt
-                counter += 1
+            # for donation in Donation.select().where(Donation.donor == donor_name):
+            #     donation_sum += donation.donation_amt
+            #     counter += 1
+            
+            x = Donation.select().where(Donation.donor == donor_name)
+            counter = x.count()
+            for item in x:
+                donation_sum += int(item.donation_amt)
+
+            logger.info(f"{donor_name} | {donation_sum} | {counter}")
 
             # Update donor totals
             with self.database.transaction():
@@ -90,7 +98,7 @@ class DonorDB:
                 donor.num_donations = counter
                 donor.total_donation_amt = donation_sum
                 donor.avg_donation = donation_sum / counter
-                donor.save
+                donor.save()
 
         except Exception as e:
             logger.error(e)
@@ -137,6 +145,8 @@ class DonorDB:
             with self.database.transaction():
                 donor = Donor.get(Donor.name == donor_name)
                 donor.delete_instance()
+                donation = Donation.get(Donation.donor == donor_name)
+                donation.delete_instance()
             logging.info(f"{donor_name} has been deleted.")
         except Exception as e:
             logger.error(f"Unable to delete {donor_name}.  {e}")
@@ -253,6 +263,11 @@ class DonorDB:
                 self.delete_donor()
             elif menu == '6':
                 self.send_letters()
+
+            # Hidden test
+            elif menu == '7':
+                name = self.get_name()
+                self.recalculate_statistics(name)
 
     
 if __name__ == "__main__":
