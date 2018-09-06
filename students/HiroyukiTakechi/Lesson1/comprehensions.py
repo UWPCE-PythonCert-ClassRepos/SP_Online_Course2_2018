@@ -10,8 +10,13 @@ music = pd.read_csv("featuresdf.csv")
 
 #[x for x in music.danceability if x > 0.8]
 
-results = [(a,d,l) for a,d,l in zip(music.artists, music.danceability, music.loudness) if d > 0.8 and l < -0.5]
+def get_danceability(result):
+    return -result[1]
 
-results2 = sorted(results, key=results.danceability) #this code is an issue, too.
-results.head()
+results = sorted([(a,d,l) for a,d,l in zip(music.artists, music.danceability, music.loudness) if d > 0.8 and l < -0.5], key=get_danceability)
+
+
+for i, result in enumerate(results):
+    if i < 5:
+        print(result)
 
