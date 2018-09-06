@@ -28,36 +28,114 @@ def get_donor_list():
     print([donor.last_name for donor in Donor])
 
 
-def add_or_remove_donor():
-    response = input('[A]dd or [r]emove donor? ')
+def query_donor_info():
+    title = input('Enter donor title: ')
+    last_name = input('Enter last name: ')
+    total_donation_amt = int(input('Enter total donation amount: '))
+    num_donations = int(input('Enter number of donations: '))
+    return title, last_name, total_donation_amt, num_donations
+
+
+def add_donor(**kwargs):
+    if kwargs:
+        Donor.create(kwargs)
+    else:
+        q_title = input('Enter donor title: ')
+        q_lastname = input('Enter last name: ')
+        q_donation = int(input('Donation amount (USD)?: '))
+        new_donor = Donor.create(
+                                 title=q_title,
+                                 last_name=q_lastname,
+                                 total_donation_amt=q_donation,
+                                 num_donations=1
+                                 )
+    new_donor.save()
+    print(q_title, q_lastname, 'added or updated')
+
+
+def update_or_remove_donor():
     q_title = input('Enter donor title: ')
     q_lastname = input('Enter last name: ')
-    if response.lower() == 'a':
-        q_donation = int(input('Donation amount (USD)?: '))
-        with database.transaction():
-            new_donor = Donor.create(
-                    title=q_title,
-                    last_name=q_lastname,
-                    total_donation_amt=q_donation,
-                    num_donations=1)
-            new_donor.save()
-            print(q_title, q_lastname, 'added as a Donor')
-    elif response.lower() == 'r':
-        for donor in Donor:
-            if donor.title == q_title and donor.last_name == q_lastname:
-                print(q_title, q_lastname, 'removed from Donors')
-                donor.delete_instance()
+    response = input('[U]pdate or [r]emove this donor?')
+    for donor in (Donor.select()
+                       .where((Donor.title == q_title) &
+                              (Donor.last_name == q_lastname))):
+        print(donor)
+        donor.delete_instance()
+        if response.lower() == 'u':
+            print('Re-enter values for each of the donor\'s fields')
+            add_donor(query_donor_info())
+        elif response == 'r':
+            print('Donor removed from database')
 
 
-def update_donor():
-    pass
+# def add_or_remove_donor():
+#     response = input('[A]dd or [r]emove donor? ')
+#     # query_donor_info()
+#     q_title = input('Enter donor title: ')
+#     q_lastname = input('Enter last name: ')
+#     if response.lower() == 'a':
+#         q_donation = int(input('Donation amount (USD)?: '))
+#         new_donor = Donor.create(
+#                                  title=q_title,
+#                                  last_name=q_lastname,
+#                                  total_donation_amt=q_donation,
+#                                  num_donations=1
+#                                  )
+#         new_donor.save()
+#         print(q_title, q_lastname, 'added as a Donor')
+#     elif response.lower() == 'r':
+#         for donor in Donor:
+#             if donor.title == q_title and donor.last_name == q_lastname:
+#                 print(q_title, q_lastname, 'removed from Donors')
+#                 donor.delete_instance()
 
 
-def get_donorgroup_report():
-    pass
+# def update_donor():
+#     q_title = input('Enter donor title: ')
+#     q_lastname = input('Enter last name: ')
+
+#     u_menu_dct = {'1': 'title',
+#                   '2': 'last_name',
+#                   '3': 'total_donation_amt',
+#                   '4': 'num_donations',
+#                   'q': 'break'}
+
+#     u_text = '\n'.join((
+#                         'Type in one of the following to update:',
+#                         '"title",',
+#                         '"last_name",',
+#                         '"total_donation_amt,',
+#                         '"num_donations", or',
+#                         '"q" to Return to Main Menu: '
+#                         ))
+#     while True:
+#         print('\nUpdate Menu:')
+#         response = input(u_text)
+#         print()
+#         try:
+#             if response == 'q':
+#                 print('Returning to Main Menu.')
+#                 break
+#             else:
+#                 # u_field = u_menu_dct[response].strip("'")
+#                 u_field_value = input('Enter new value for ' + response+': ')
+#                 for donor in (Donor.select()
+#                               .where((Donor.title == q_title) &
+#                                      (Donor.last_name == q_lastname))):
+#                     print('donor is', donor)
+#                     print('response is', response)
+#                     print('donor.response is',
+#                           donor.response)
+#                     donor.response = u_field_value
+#                     donor.save()
+#                 print('Value for', response, 'updated')
+
+#         except KeyError:
+#             print('\nThat selection is invalid. Please try again.')
 
 
-def get_report(self):
+def get_report():
     print()
     psv = ['Donor Name', '| Total Given', '| Num Gifts',
            '| Average Gift']
@@ -84,31 +162,31 @@ class UI():
     def __init__(self):
         database.create_tables([Donor])
         donors = Donor.select()
-        self.menu_dct = {'1': get_donor_list,
-                         '2': get_report,
-                         '3': add_or_remove_donor,
-                         '4': update_donor,
-                         'q': sys.exit}
-        self.main_text = '\n'.join((
-                                    'Choose from the following:',
-                                    '"1" - Get a List of Donors,',
-                                    '"2" - Create a Report,',
-                                    '"3" - Add or Remove a Donor,',
-                                    '"4" - Update a Donor, or',
-                                    '"q" to Quit: '
-                                  ))
+        menu_dct = {'1': get_donor_list,
+                    '2': get_report,
+                    '3': add_donor,
+                    '4': update_or_remove_donor,
+                    'q': sys.exit}
+        main_text = '\n'.join((
+                               'Choose from the following:',
+                               '"1" - Get a List of Donors,',
+                               '"2" - Create a Report,',
+                               '"3" - Add or Remove a Donor,',
+                               '"4" - Update a Donor, or',
+                               '"q" to Quit: '
+                               ))
         while True:
             print('\nMain Menu:')
-            response = input(self.main_text)
+            response = input(main_text)
             print()
             try:
                 if response == 'q':
                     database.close()
                     print('Program execution completed.')
-                if type(self.menu_dct[response]) != list:
-                    self.menu_dct[response]()
+                if type(menu_dct[response]) != list:
+                    menu_dct[response]()
                 else:
-                    print(self.menu_dct[response])
+                    print(menu_dct[response])
 
             except KeyError:
                 print('\nThat selection is invalid. Please try again.')
