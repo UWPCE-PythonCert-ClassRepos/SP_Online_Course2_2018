@@ -33,12 +33,16 @@ def query_donor_info():
     last_name = input('Enter last name: ')
     total_donation_amt = int(input('Enter total donation amount: '))
     num_donations = int(input('Enter number of donations: '))
-    return title, last_name, total_donation_amt, num_donations
+    query_dict = {'title': title, 'last_name': last_name,
+                  'total_donation_amt': total_donation_amt,
+                  'num_donations': num_donations}
+    return query_dict
 
 
 def add_donor(**kwargs):
     if kwargs:
-        Donor.create(kwargs)
+        updated_donor = Donor.create(**kwargs)
+        updated_donor.save()
     else:
         q_title = input('Enter donor title: ')
         q_lastname = input('Enter last name: ')
@@ -56,15 +60,16 @@ def add_donor(**kwargs):
 def update_or_remove_donor():
     q_title = input('Enter donor title: ')
     q_lastname = input('Enter last name: ')
-    response = input('[U]pdate or [r]emove this donor?')
+    response = input('[U]pdate or [r]emove this donor? ')
     for donor in (Donor.select()
                        .where((Donor.title == q_title) &
                               (Donor.last_name == q_lastname))):
-        print(donor)
+        print(donor.title, donor.last_name, donor.total_donation_amt,
+              donor.num_donations)
         donor.delete_instance()
         if response.lower() == 'u':
             print('Re-enter values for each of the donor\'s fields')
-            add_donor(query_donor_info())
+            add_donor(kwargs=query_donor_info().items())
         elif response == 'r':
             print('Donor removed from database')
 
@@ -171,8 +176,8 @@ class UI():
                                'Choose from the following:',
                                '"1" - Get a List of Donors,',
                                '"2" - Create a Report,',
-                               '"3" - Add or Remove a Donor,',
-                               '"4" - Update a Donor, or',
+                               '"3" - Add a Donor,',
+                               '"4" - Update or Remove a Donor, or',
                                '"q" to Quit: '
                                ))
         while True:
