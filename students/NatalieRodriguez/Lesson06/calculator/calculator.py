@@ -6,7 +6,7 @@
 from exceptions import InsufficientOperands
 
 
-class Calculator(object):
+class Calculator():
 
     def __init__(self, adder, subtracter, multiplier, divider):
         self.adder = adder
