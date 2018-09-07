@@ -17,7 +17,7 @@ class Donor(BaseModel):
         details of an individual donor.
     """
     title = CharField(max_length=10)
-    person_last_name = CharField(primary_key=True, max_length=30)
+    last_name = CharField(primary_key=True, max_length=30)
     total_donation_amt = IntegerField()
     num_donations = IntegerField()
 
