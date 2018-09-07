@@ -11,13 +11,6 @@ class BaseModel(Model):
         database = database
 
 
-# class DonorGroup(BaseModel):
-#     """
-#         This class defines instances for unique groups of donors.
-#     """
-#     group_name = CharField(primary_key=True, max_length=30)
-
-
 class Donor(BaseModel):
     """
         This class defines Donor instances, each of which maintains
