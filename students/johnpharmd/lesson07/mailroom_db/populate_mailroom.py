@@ -42,6 +42,7 @@ def query_donor_info():
 def add_donor(**kwargs):
     if kwargs:
         updated_donor = Donor.create(**kwargs)
+        print(updated_donor.title, updated_donor.last_name, 'updated')
         updated_donor.save()
     else:
         q_title = input('Enter donor title: ')
@@ -53,8 +54,8 @@ def add_donor(**kwargs):
                                  total_donation_amt=q_donation,
                                  num_donations=1
                                  )
-    new_donor.save()
-    print(q_title, q_lastname, 'added or updated')
+        new_donor.save()
+        print(q_title, q_lastname, 'added to database')
 
 
 def update_or_remove_donor():
@@ -69,7 +70,7 @@ def update_or_remove_donor():
         donor.delete_instance()
         if response.lower() == 'u':
             print('Re-enter values for each of the donor\'s fields')
-            add_donor(kwargs=query_donor_info().items())
+            add_donor(**query_donor_info())
         elif response == 'r':
             print('Donor removed from database')
 
