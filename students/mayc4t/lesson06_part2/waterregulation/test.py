@@ -10,8 +10,7 @@ from pump import Pump
 from sensor import Sensor
 
 from .decider import Decider
-from .controller import Controller  # noqa pylint: disable=unused-import
-from .integrationtest import do_tick
+from .controller import Controller
 
 
 class DeciderTests(unittest.TestCase):
@@ -48,22 +47,22 @@ class DeciderTests(unittest.TestCase):
         self.assertEqual(result, actions['PUMP_OFF'])
 
         # Case 4b: Pump: IN, height <= margin --> IN
-        idx = 10.5
-        while idx >= 5:
+        idx = 5.0
+        while idx <= 10.0:
             result = decider.decide(idx, actions['PUMP_IN'], actions)
             self.assertEqual(result, actions['PUMP_IN'])
-            idx -= 0.1
+            idx += 0.1
 
         # Case 5a: Pump: OUT, height < margin --> OFF
         result = decider.decide(5, actions['PUMP_OUT'], actions)
         self.assertEqual(result, actions['PUMP_OFF'])
 
         # Case 5b: Pump: OUT, height >= margin --> OUT
-        idx = 9.5
-        while idx <= 15:
+        idx = 15.0
+        while idx >= 10.0:
             result = decider.decide(idx, actions['PUMP_OUT'], actions)
             self.assertEqual(result, actions['PUMP_OUT'])
-            idx += 0.1
+            idx -= 0.1
 
 
 class Response(object):
@@ -118,4 +117,17 @@ class ControllerTests(unittest.TestCase):
 
     def test_tick(self):
         """Test logic of sensor, pump."""
-        do_tick()
+        sensor = Sensor(ControllerTests.DUMMY_ADDR, ControllerTests.DUMMY_PORT)
+        sensor.measure = MagicMock(return_value=10)
+        pump = Pump(ControllerTests.DUMMY_ADDR, ControllerTests.DUMMY_PORT)
+        pump.set_state = MagicMock(return_value=True)
+        pump.get_state = MagicMock(return_value=Pump.PUMP_IN)
+        decider = Decider(10, 0.05)
+        decider.decide = MagicMock(return_value=100)
+
+        controller = Controller(sensor, pump, decider)
+        controller.tick()
+
+        sensor.measure.assert_called_once_with()
+        pump.get_state.assert_called_once_with()
+        pump.set_state.assert_called_once_with(100)

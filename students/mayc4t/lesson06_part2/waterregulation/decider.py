@@ -63,12 +63,12 @@ class Decider(object):
         elif current_action == actions['PUMP_OFF']:
             return actions['PUMP_OFF']
         elif (current_action == actions['PUMP_IN'] and
-              current_height > hi_limit):
+              current_height > self.target_height):
             return actions['PUMP_OFF']
         elif current_action == actions['PUMP_IN']:
             return actions['PUMP_IN']
         elif (current_action == actions['PUMP_OUT'] and
-              current_height < lo_limit):
+              current_height < self.target_height):
             return actions['PUMP_OFF']
         elif current_action == actions['PUMP_OUT']:
             return actions['PUMP_OUT']
