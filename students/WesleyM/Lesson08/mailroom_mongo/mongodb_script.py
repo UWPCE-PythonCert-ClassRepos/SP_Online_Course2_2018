@@ -108,11 +108,19 @@ def send_letters(donor):
 def close_program(donor):
     print('\nClosing Program\n')
 
-def clear_database(donor_items):
+def delete_donor(donor):
     """
     mongodb data manipulation
     """
-
-    with login_database.login_mongodb_cloud() as client:
-        db = client['donors']
-        db.drop_collection('donor')
+    don_input = None
+    while not don_input:
+        don_input = donor_input()
+        if don_input.lower() == "list":
+            list_donors(donor)
+            don_input = None
+        else:
+            check = donor.count_documents({'name': don_input}) > 0
+            if check:
+                donor.delete_many({'name': don_input})
+            else:
+                print("{} is not in the donor database".format(don_input))

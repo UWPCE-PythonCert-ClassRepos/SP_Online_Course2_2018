@@ -4,7 +4,7 @@ import donor_db
 choices = {1: send_thankyou,
            2: create_report,
            3: send_letters,
-           4: clear_database,
+           4: delete_donor,
            5: close_program
            }
 
@@ -14,16 +14,16 @@ def user_input():
                            "1. Send a Thank You \n" +
                            "2. Create a Report \n"+
                            "3. Send Letter to Everyone \n"+
-                           "4. Reset the Database \n"+
+                           "4. Delete a Donor \n"+
                            "5. Quit\n"
                            ))
     except ValueError:
         print("\nEnter 1 to 'Send a Thank You', 2 to 'Create a Report',3 to 'Send Letter to Everyone', " +
-               "4 to 'Reset Database', or 5 to 'Quit'\n")
+               "4 to 'Delete a Donor', or 5 to 'Quit'\n")
     else:
         if action not in choices:
             print("\nEnter 1 to 'Send a Thank You', 2 to 'Create a Report',3 to 'Send Letter to Everyone', " +
-               "4 to 'Reset Database', or 5 to 'Quit'\n")
+               "4 to 'Delete a Donor', or 5 to 'Quit'\n")
     return action
 
 def main():
