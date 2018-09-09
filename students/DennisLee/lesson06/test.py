@@ -10,24 +10,18 @@ from calculator.exceptions import InsufficientOperands
 
 
 class AdderTests(TestCase):
-
     def test_adding(self):
         adder = Adder()
-
         for i in range(-10, 10):
             for j in range(-10, 10):
                 self.assertEqual(i + j, adder.calc(i, j))
 
-
 class SubtracterTests(TestCase):
-
     def test_subtracting(self):
         subtracter = Subtracter()
-
         for i in range(-10, 10):
             for j in range(-10, 10):
                 self.assertEqual(j - i, subtracter.calc(i, j))
-
 
 class MultiplierTests(TestCase):
 
@@ -46,10 +40,12 @@ class DividerTests(TestCase):
 
         for i in range(-10, 10):
             for j in range(-10, 10):
-                try:
+                if i != 0:
                     self.assertEqual(j / i, divider.calc(i, j))
-                except ZeroDivisionError:
-                    self.assertEqual(i, 0)
+                # Division by zero error occurs, which clears the stack
+                # and sets the current number to 0.
+                else:
+                    self.assertEqual(0, divider.calc(i, j))
 
 
 class CalculatorTests(TestCase):
@@ -105,28 +101,47 @@ class CalculatorTests(TestCase):
 
         self.divider.calc.assert_called_with(2, 1)
 
+    def test_divide_by_zero(self):
+        """
+        Returns zero (with cleared stack and error message) if a
+        division by zero is attempted.
+        """
+        self.calculator.enter_number(15)
+        self.calculator.enter_number(5)
+        self.calculator.enter_number(0)
+        result = self.calculator.divide()
+        self.assertEqual(result, 0)
 
 class ModuleTests(TestCase):
 
+    def setUp(self):
+        self.calculator = Calculator(Adder(), Subtracter(), Multiplier(), Divider())
+
     def test_module(self):
 
-        calculator = Calculator(Adder(), Subtracter(), Multiplier(), Divider())
+        self.calculator.enter_number(5)
+        self.calculator.enter_number(2)
 
-        calculator.enter_number(5)
-        calculator.enter_number(2)
+        self.calculator.multiply()
 
-        calculator.multiply()
+        self.calculator.enter_number(46)
 
-        calculator.enter_number(46)
+        self.calculator.add()
 
-        calculator.add()
+        self.calculator.enter_number(8)
 
-        calculator.enter_number(8)
+        self.calculator.divide()
 
-        calculator.divide()
+        self.calculator.enter_number(1)
 
-        calculator.enter_number(1)
-
-        result = calculator.subtract()
+        result = self.calculator.subtract()
 
         self.assertEqual(6, result)
+
+    def test_after_division_by_zero(self):
+        self.calculator.enter_number(15)
+        self.calculator.enter_number(5)
+        self.calculator.enter_number(3)
+        self.calculator.divide()
+        with self.assertRaises(InsufficientOperands):
+            self.calculator.subtract()

@@ -15,15 +15,17 @@ class Calculator(object):
         self.stack.insert(0, number)
 
     def _do_calc(self, operator):
+        result = "Mistake"
         try:
             result = operator.calc(self.stack[0], self.stack[1])
         except IndexError:
             raise InsufficientOperands
         except ZeroDivisionError:
-            print("\nDivision by zero error - try a different operation.\n")
-
-        self.stack = [result]
-        return result
+            print("\nDivision by zero error - resetting.\n")
+            result = 0
+        finally:
+            self.stack = [result]
+            return result
 
     def add(self):
         return self._do_calc(self.adder)
