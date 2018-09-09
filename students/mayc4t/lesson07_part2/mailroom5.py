@@ -91,7 +91,6 @@ class Donor(object):
 
 
 class Donor_DB(object):
-    #_donors_db = js.List()
 
     # You’ll then want a class that handles the collection of donors.
     # This will hold all the donor objects,
@@ -129,6 +128,63 @@ class Donor_DB(object):
         print("\t" + "_"*30 + " " + "_"*14 + "   " + "_"*12 + "   " + "_"*14)
         for dn_idx in sorted_list:
             print(dn_idx.__str__())
+
+    def update_donor(self):
+        # First, figure out which donor the user wants to update
+        print('')
+        for idx, donor in enumerate(self.names):
+            print(f'{idx + 1}: {donor}')
+        print('')
+
+        ans = int(input('Pick a donor: '))
+        print('')
+
+        if ans < 1 or ans > len(self.names):
+            print(f'{ans} is not valid\n')
+            return
+
+        idx = ans - 1
+        donor = self._donors_db[idx]
+
+        # Second, figure out which donation
+        print('')
+        for idx, donation in enumerate(donor._recorded_donations):
+            print(f'{idx + 1}: {donation}')
+        for idx, donation in enumerate(donor._donations):
+            print(f'{idx + 1 + len(donor._recorded_donations)}: {donation}')
+        print('')
+
+        ans = int(input('Pick a donation: '))
+        print('')
+
+        if ans < 1 or ans > len(donor.donations):
+            print(f'{ans} is not valid\n')
+            return
+
+        # Get the new donation
+        new_donation = int(input('New amount (0 to cancel): '))
+        print('')
+
+        # Two scenarios:
+        # 1. Update is to a donation that hasn't yet been written to the DB. In
+        #    this case, just update the corresponding entry in donor._donations
+        #    and be done.
+        # 2. Update is to a donation that exists in the DB. Here, we need to:
+        #    a. Update donor._recorded_donations
+        #    b. Update the DB, so that the entry doesn't becom stale
+
+        idx = ans - 1
+        if idx >= len(donor._recorded_donations):
+            print('Updating _donations')
+            idx -= len(donor._recorded_donations)
+            donor._donations[idx] = new_donation
+        else:
+            model.UpdateDonation(donor._last + ',' + donor._first,
+                                 donor._recorded_donations[idx], new_donation)
+            if new_donation:
+                donor._recorded_donations[idx] = new_donation
+            else:
+                del donor._recorded_donations[idx]
 
     def send_letters(self):
         for dn in self._donors_db:
@@ -253,13 +309,11 @@ if __name__ == "__main__":
                      .where(model.Donation.donor == donor_info.name))
             for donation in query:
                 donations.append(donation.donation)
-            print(f'--> {donor_info.name} {donations}')
             donor = Donor(donor_info.first_name, donor_info.last_name,
                           recorded_donation_list=donations)
             donors.append(donor)
         donors_db = Donor_DB(donors)
     except Exception as e:
-        print('???????????????????????????????????????????????????????????')
         model.database.close()
         model.CreateTables()
 
@@ -276,13 +330,15 @@ if __name__ == "__main__":
                    "1. Send a Thank You \n"
                    "2. Create The ReportType\n"
                    "3. Send letters to everyone\n"
-                   "4. Quit >> "
+                   "4. Make a change\n"
+                   "5. Quit >> "
                    )
 
     main_dispatch = {"1": send_thank,
                      "2": donors_db.create_report,
                      "3": donors_db.send_letters,
-                     "4": donors_db.quit,
+                     "4": donors_db.update_donor,
+                     "5": donors_db.quit,
                      }
     print("Dispatch :", main_dispatch)
 

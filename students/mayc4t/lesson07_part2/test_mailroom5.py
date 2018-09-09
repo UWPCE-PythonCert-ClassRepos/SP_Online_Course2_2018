@@ -33,6 +33,12 @@ donations = {
     'Gambino,Bob': [1, 2, 3, 4],
 }
 
+mutations = [
+    [(2, 101.01,),],
+    [(0, 50.00,),],
+    [],
+    [(0, 10), (1, 20), (2, 30), (3, 40),],
+]
 
 class TestMailroom(unittest.TestCase):
 
@@ -87,6 +93,85 @@ class TestMailroom(unittest.TestCase):
                          .where(model.Donation.donor == name))
                 for want, got in zip(donation_list, query):
                     self.assertEqual(want, got.donation)
+        except Exception as e:
+            self.assertTrue(False)
+        finally:
+            model.database.close()
+
+    def test_delete_donation(self):
+        self.test_save_donation()
+
+        try:
+            model.database.connect()
+            model.database.execute_sql('PRAGMA foreign_keys = ON;')
+
+            for (name, donation_list), mutation_spec in (
+                zip(donations.items(), mutations)):
+
+                query = (model.Donation
+                         .select()
+                         .join(model.DonorInfo)
+                         .where(model.Donation.donor == name))
+
+                skip = []
+                for mutation in mutation_spec:
+                    idx = mutation[0]
+                    query[idx].delete_instance()
+                    skip.append(idx)
+
+                want_indices = list(
+                    filter(lambda i: i not in skip,
+                                     list(range(len(donation_list)))))
+
+                # Run the query again, and validate that the entries got
+                # deleted as expected
+                query = (model.Donation
+                         .select()
+                         .join(model.DonorInfo)
+                         .where(model.Donation.donor == name))
+
+                self.assertEqual(len(query), len(want_indices))
+                for want_idx, donation in zip(want_indices, query):
+                    self.assertEqual(donation_list[want_idx],
+                                     donation.donation)
+        except Exception as e:
+            self.assertTrue(False)
+        finally:
+            model.database.close()
+
+    def test_update_donation(self):
+        self.test_save_donation()
+
+        try:
+            model.database.connect()
+            model.database.execute_sql('PRAGMA foreign_keys = ON;')
+
+            for (name, donation_list), mutation_spec in (
+                zip(donations.items(), mutations)):
+
+                query = (model.Donation
+                         .select()
+                         .join(model.DonorInfo)
+                         .where(model.Donation.donor == name))
+
+                want_list = donation_list
+                for mutation in mutation_spec:
+                    idx = mutation[0]
+                    new_donation = mutation[1]
+                    query[idx].donation = new_donation
+                    query[idx].save()
+                    want_list[idx] = new_donation
+
+                # Run the query again, and validate that the entries got
+                # deleted as expected
+                query = (model.Donation
+                         .select()
+                         .join(model.DonorInfo)
+                         .where(model.Donation.donor == name))
+
+                self.assertEqual(len(want_list), len(query))
+                for want, donation in zip(want_list, query):
+                    self.assertEqual(want, donation.donation)
         except Exception as e:
             self.assertTrue(False)
         finally:

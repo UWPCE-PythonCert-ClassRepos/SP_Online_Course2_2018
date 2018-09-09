@@ -76,3 +76,31 @@ def SaveDonation(name, donation):
         print(e)
     finally:
         database.close()
+
+def UpdateDonation(name, old_donation, new_donation):
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        with database.transaction():
+            query = (Donation
+                     .select()
+                     .join(DonorInfo)
+                     .where(Donation.donor == name)
+                     .where(Donation.donation == old_donation))
+
+            if len(query) == 0:
+                print(f'WARN: UpdateDonation failed to find record for'
+                      ' name={name} donation={old_donation}')
+            else:
+                row = query[0]
+                if new_donation:
+                    row.donation = new_donation
+                    row.save()
+                else:
+                    row.delete_instance()
+    except Exception as e:
+        print(f'failed to update "{name}" from {old_donation}'
+              f' to {new_donation}')
+        print(e)
+    finally:
+        database.close()
