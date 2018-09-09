@@ -1,8 +1,4 @@
-"""
-
-Integrated example for nosql databases
-
-"""
+"""Self-contained mongodb example."""
 
 import configparser
 from pathlib import Path
