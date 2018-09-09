@@ -23,9 +23,9 @@ class Calculator(object):
         except ZeroDivisionError:
             print("\nDivision by zero error - resetting.\n")
             result = 0
-        finally:
-            self.stack = [result]
-            return result
+
+        self.stack = [result]
+        return result
 
     def add(self):
         return self._do_calc(self.adder)

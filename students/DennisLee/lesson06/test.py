@@ -16,12 +16,14 @@ class AdderTests(TestCase):
             for j in range(-10, 10):
                 self.assertEqual(i + j, adder.calc(i, j))
 
+
 class SubtracterTests(TestCase):
     def test_subtracting(self):
         subtracter = Subtracter()
         for i in range(-10, 10):
             for j in range(-10, 10):
                 self.assertEqual(j - i, subtracter.calc(i, j))
+
 
 class MultiplierTests(TestCase):
 
@@ -42,10 +44,9 @@ class DividerTests(TestCase):
             for j in range(-10, 10):
                 if i != 0:
                     self.assertEqual(j / i, divider.calc(i, j))
-                # Division by zero error occurs, which clears the stack
-                # and sets the current number to 0.
                 else:
-                    self.assertEqual(0, divider.calc(i, j))
+                    with self.assertRaises(ZeroDivisionError):
+                        self.assertEqual(j / i, divider.calc(i, j))
 
 
 class CalculatorTests(TestCase):
@@ -112,10 +113,12 @@ class CalculatorTests(TestCase):
         result = self.calculator.divide()
         self.assertEqual(result, 0)
 
+
 class ModuleTests(TestCase):
 
     def setUp(self):
-        self.calculator = Calculator(Adder(), Subtracter(), Multiplier(), Divider())
+        self.calculator = Calculator(
+                Adder(), Subtracter(), Multiplier(), Divider())
 
     def test_module(self):
 
