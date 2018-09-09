@@ -17,6 +17,8 @@ class DonorList:
         self._donor_names = get_donor_names()
         self._donor_donations = get_donor_donations()
 
+        print(self._donor_donations)
+
     @property
     def rollup(self):
         return self._rollup
@@ -90,7 +92,7 @@ class DonorList:
 
     def generate_rollup(self):
         for donor in self.donor_names:
-            donations = self._donor_donations[donor]
+            donations = self.donor_donations[donor]
 
             number = len(donations)
             total = int(sum(donations))

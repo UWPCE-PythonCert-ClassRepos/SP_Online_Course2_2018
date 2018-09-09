@@ -17,10 +17,9 @@ def create_donor(name):
     try:
         driver = login_database.login_neo4j_cloud()
 
-        # with driver.session() as session:
-        #   session.run("MATCH (n) DETACH DELETE n")
-
         with driver.session() as session:
+            session.run("MATCH (n) DETACH DELETE n")
+
             log.info('Set constraint on donor.id.')
 
             constraint = "CREATE CONSTRAINT ON (donor:Donor) ASSERT donor.id IS UNIQUE"
@@ -63,7 +62,15 @@ def update_donor(old_name, new_name):
         driver = login_database.login_neo4j_cloud()
 
         with driver.session() as session:
-            pass
+            cyph = """MATCH (p:Donor { id: '%s' })
+                      SET p.donor_name = '%s'
+                      SET p.id = '%s'
+                      RETURN p
+                    """ % (old_name.replace(' ', '_').lower(), new_name, new_name.replace(' ', '_').lower())
+
+            session.run(cyph)
+
+            log.info('Donor name {} updated to {}.'.format(old_name, new_name))
 
     except Exception as e:
         log.info(e)
@@ -84,7 +91,14 @@ def delete_donor(name):
         driver = login_database.login_neo4j_cloud()
 
         with driver.session() as session:
-            pass
+          cyph = """MATCH (p:Donor { id: '%s' })
+                    DETACH DELETE p
+                  """ % (name.replace(' ', '_').lower())
+
+          session.run(cyph)
+
+          log.info('Donor {} deleted.'.format(name))
+
 
     except Exception as e:
         log.info(e)
@@ -246,16 +260,21 @@ def get_donor_donations():
         with driver.session() as session:
             donor_donations = {}
 
-            cyph = """MATCH (d:Donation)
-                      RETURN d.donation_amount as donation_amount, d.donor_id as donor_id
+            cyph = """MATCH (p:Donor)-[:GAVE]->(donorDonations)
+                      RETURN p.donor_name, donorDonations
                     """
             result = session.run(cyph)
 
             for record in result:
-                donor_id = record['donor_id']
-                donation_amount = record['donation_amount']
-
-
+                donor_name = record['p.donor_name']
+                for donation in record.values():
+                    try:
+                        donor_donations\
+                            .setdefault(donor_name,
+                                        []).append(float(donation['donation_amount']))
+                    
+                    except Exception as e:
+                        log.info(e)
 
     except Exception as e:
         log.info(e)
