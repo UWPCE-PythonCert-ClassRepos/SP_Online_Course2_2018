@@ -56,10 +56,12 @@ def run_mongodb_example():
         pprint.pprint(results)
 
         print('\nStep 5: Delete all blue couches.')
-        furniture.remove({"product": {"$eq": "Blue couch"}})
+        furniture.remove({"product": {"$eq": "Couch"},
+                          "color": {"$eq": "Blue"}})
 
         print('\nStep 6: Show no blue couches with a query and print.')
-        query = {'product': 'Blue couch'}
+        query = {'product': 'Couch',
+                 'color': 'Blue'}
         results = furniture.find_one(query)
         print('blue couch query returned:')
         pprint.pprint(results)
@@ -72,7 +74,19 @@ def run_mongodb_example():
                   f" product name: {doc['product']}"
                   f" Stock: {doc['in_stock_quantity']}")
 
-        print('\nStep 8: Delete furniture collection so we can start over.')
+        print('\nStep 8: Get all red products.')
+        query = {'color': 'Red'}
+        red_products = furniture.find(query)
+        for doc in red_products:
+            seed_data.print_furniture_item(doc)
+
+        print('\nStep 9: Get all couches (note, blue couches deleted above).')
+        query = {'product': 'Couch'}
+        couches = furniture.find(query)
+        for doc in couches:
+            seed_data.print_furniture_item(doc)
+
+        print('\nFinally: Delete furniture collection so we can start over.')
         db.drop_collection('furniture')
 
 if __name__ == '__main__':
