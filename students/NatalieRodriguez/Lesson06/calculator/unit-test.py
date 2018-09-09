@@ -16,7 +16,7 @@ from calculator.exceptions import InsufficientOperands
 
 class AdderTests(TestCase):
 
-    ''' this tests Adder'''
+    """ this tests Adder"""
 
     def test_adding(self):
         adder = Adder()
@@ -27,7 +27,7 @@ class AdderTests(TestCase):
 
 class SubtracterTests(TestCase):
 
-    ''' this tests Subtractor'''
+    """ this tests Subtractor"""
 
     def test_subtracting(self):
         subtracter = Subtracter()
@@ -39,7 +39,7 @@ class SubtracterTests(TestCase):
 
 class MultiplierTests(TestCase):
 
-    ''' this tests Multiplier'''
+    """this tests Multiplier"""
 
     def test_multiplier(self):
         multiplier = Multiplier()
@@ -51,7 +51,7 @@ class MultiplierTests(TestCase):
 
 class DividerTests(TestCase):
 
-    ''' this tests Divider'''
+    """ this tests Divider"""
 
     def test_divider(self):
         divider = Divider()
@@ -64,7 +64,7 @@ class DividerTests(TestCase):
 
 class CalculatorTests(TestCase):
 
-    ''' runs all the tests'''
+    """ runs all tests"""
 
     def setUp(self):
         self.adder = Adder()
@@ -116,27 +116,3 @@ class CalculatorTests(TestCase):
 
         self.divider.calc.assert_called_with(2, 4)
 
-class ModuleTests(TestCase):
-
-    def test_module(self):
-
-        calculator = Calculator(Adder(), Subtracter(), Multiplier(), Divider())
-
-        calculator.enter_number(5)
-        calculator.enter_number(2)
-
-        calculator.multiply()
-
-        calculator.enter_number(46)
-
-        calculator.add()
-
-        calculator.enter_number(8)
-
-        calculator.divide()
-
-        calculator.enter_number(1)
-
-        result = calculator.subtract()
-
-        self.assertEqual(6, result)

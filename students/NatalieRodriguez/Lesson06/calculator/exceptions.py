@@ -1,11 +1,10 @@
 #exceptions.py
 #unit testing the calculator
-#insufficient operands exception
+"""insufficient operands exception"""
 
 class InsufficientOperands(Exception):
 
-    '''this checks for insufficient operands'''
-
+    """this checks for insufficient operands"""
 
     pass
 
