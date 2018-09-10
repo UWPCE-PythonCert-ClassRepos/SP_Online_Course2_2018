@@ -230,7 +230,7 @@ def delete_donation(donor, donation):
         log.info(e)
 
     finally:
-        log.info('Mongo update_donation complete')
+        log.info('Mongo delete_donation complete')
 
 
 def get_donor_names():

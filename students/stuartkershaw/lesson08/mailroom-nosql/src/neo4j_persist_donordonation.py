@@ -18,7 +18,9 @@ def create_donor(name):
         driver = login_database.login_neo4j_cloud()
 
         with driver.session() as session:
-            session.run("MATCH (n) DETACH DELETE n")
+            # session.run("MATCH (n) DETACH DELETE n")
+
+            donor_id = name.replace(' ', '_').lower()
 
             log.info('Set constraint on donor.id.')
 
@@ -26,7 +28,7 @@ def create_donor(name):
 
             session.run(constraint)
 
-            cyph = "CREATE (p:Donor {donor_name:'%s', id:'%s'})" % (name, name.replace(' ', '_').lower())
+            cyph = "CREATE (p:Donor {donor_name:'%s', id:'%s'})" % (name, donor_id)
 
             session.run(cyph)
 
@@ -62,11 +64,21 @@ def update_donor(old_name, new_name):
         driver = login_database.login_neo4j_cloud()
 
         with driver.session() as session:
+            old_donor_id = old_name.replace(' ', '_').lower()
+            new_donor_id = new_name.replace(' ', '_').lower()
+
+            cyph = """MATCH (d:Donation { donor_id: '%s' })
+                      SET d.donor_id = '%s'
+                      RETURN d
+                    """ % (old_donor_id, new_donor_id)
+
+            session.run(cyph)
+
             cyph = """MATCH (p:Donor { id: '%s' })
                       SET p.donor_name = '%s'
                       SET p.id = '%s'
                       RETURN p
-                    """ % (old_name.replace(' ', '_').lower(), new_name, new_name.replace(' ', '_').lower())
+                    """ % (old_donor_id, new_name, new_donor_id)
 
             session.run(cyph)
 
@@ -91,13 +103,21 @@ def delete_donor(name):
         driver = login_database.login_neo4j_cloud()
 
         with driver.session() as session:
-          cyph = """MATCH (p:Donor { id: '%s' })
-                    DETACH DELETE p
-                  """ % (name.replace(' ', '_').lower())
+            donor_id = name.replace(' ', '_').lower()
 
-          session.run(cyph)
+            cyph = """MATCH (p:Donor { id: '%s' })
+                      DETACH DELETE p
+                    """ % (donor_id)
 
-          log.info('Donor {} deleted.'.format(name))
+            session.run(cyph)
+
+            cyph = """MATCH (d:Donation { donor_id: '%s' })
+                      DELETE d
+                    """ % (donor_id)
+
+            session.run(cyph)
+
+            log.info('Donor {} deleted.'.format(name))
 
 
     except Exception as e:
@@ -132,31 +152,25 @@ def create_donation(donor, amount):
                     """
             result = session.run(cyph)
 
-            log.info('Donations in database:')
-
-            for record in result:
-              print(record)
-
             log.info('Create Donor relationship')
 
-            cypher = """
-                MATCH (p:Donor {id:'%s'})
-                CREATE (p)-[gave:GAVE]->(d:Donation {donation_amount:'%s', donor_id:'%s'})
-                RETURN p
-            """ % (donor_id, amount, donor_id)
+            cypher = """MATCH (p:Donor {id:'%s'})
+                        CREATE (p)-[gave:GAVE]->(d:Donation {donation_amount:'%s', donor_id:'%s'})
+                        RETURN p
+                      """ % (donor_id, amount, donor_id)
+
             session.run(cypher)
 
             log.info('Print donation relationships.')
 
-            cyph = """
-            MATCH (donor {donor_name:'%s', id:'%s'})
-                    -[:GAVE]->(donationsGiven)
-            RETURN donationsGiven
-            """ % (donor, donor_id)
+            cyph = """MATCH (donor {donor_name:'%s', id:'%s'})
+                      -[:GAVE]->(donationsGiven)
+                      RETURN donationsGiven
+                    """ % (donor, donor_id)
 
             result = session.run(cyph)
 
-            print("{} {} has given:".format(donor, donor_id))
+            print("{} has given:".format(donor))
             
             for rec in result:
                 for gave in rec.values():
@@ -182,7 +196,21 @@ def update_donation(donor, old_donation, new_donation):
         driver = login_database.login_neo4j_cloud()
 
         with driver.session() as session:
-            pass
+            donor_id= donor.replace(' ', '_').lower()
+
+            try:
+                log.info('Updating Donation amount')
+
+                cyph = """MATCH (d:Donation { donor_id: '%s', donation_amount: '%s' })
+                        SET d.donation_amount = '%s'
+                        RETURN d
+                        """ % (donor_id, str(int(old_donation)), new_donation)
+
+                session.run(cyph)
+
+            except Exception as e:
+                log.info(f'Error updating Donation = {donor, old_donation}')
+                log.info(e)
 
     except Exception as e:
         log.info(f'Error updating Donation = {donor, old_donation}')
@@ -204,14 +232,61 @@ def delete_donation(donor, donation):
         driver = login_database.login_neo4j_cloud()
 
         with driver.session() as session:
-            pass
+            donor_id= donor.replace(' ', '_').lower()
+
+            try:
+                log.info('Deleting Donation relationship')
+
+                cyph = """MATCH (p:Donor {id: '%s'})-[g:GAVE]->(d:Donation {donation_amount: '%s'}) DELETE g, d
+                        """ % (donor_id, str(int(donation)))
+
+                session.run(cyph)
+                
+            except Exception as e:
+                log.info(f'Error deleting Donation Relationship = {donor, donation}')
+                log.info(e)
+
+            try:
+                log.info('Deleting Donation')
+
+                cypher = """MATCH (d:Donation {donor_id: '%s',donation_amount: '%s'}) DELETE d
+                          """ % (donor_id, str(int(donation)))
+
+                session.run(cypher)
+            
+            except Exception as e:
+                log.info(f'Error deleting Donation = {donor, donation}')
+                log.info(e)
+
+            try:
+                log.info('Check if Donor still has Donations, otherwise delete Donor')
+
+                cyph = """MATCH (Donor { id:'%s' })
+                          -[:GAVE]->(donationsGiven)
+                          RETURN donationsGiven
+                        """ % (donor_id)
+
+                result = session.run(cyph)
+                
+                if not len(result.values()) > 0:
+                    cyph = """MATCH (p:Donor { id: '%s' })
+                              DETACH DELETE p
+                            """ % (donor_id)
+
+                    session.run(cyph)
+
+                    log.info('Donor {} deleted.'.format(donor))
+
+            except Exception as e:
+                log.info(f'Error deleting Donor = {donor}')
+                log.info(e)
 
     except Exception as e:
         log.info(f'Error deleting Donation = {donor, donation}')
         log.info(e)
 
     finally:
-        log.info('Neo4j update_donation complete')
+        log.info('Neo4j delete_donation complete')
 
 
 def get_donor_names():
@@ -274,7 +349,7 @@ def get_donor_donations():
                                         []).append(float(donation['donation_amount']))
                     
                     except Exception as e:
-                        log.info(e)
+                        pass
 
     except Exception as e:
         log.info(e)

@@ -17,8 +17,6 @@ class DonorList:
         self._donor_names = get_donor_names()
         self._donor_donations = get_donor_donations()
 
-        print(self._donor_donations)
-
     @property
     def rollup(self):
         return self._rollup
