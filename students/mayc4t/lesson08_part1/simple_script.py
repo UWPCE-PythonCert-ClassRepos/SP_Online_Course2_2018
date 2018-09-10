@@ -107,5 +107,95 @@ def run_simple_example():
     run_csv()
     run_json()
 
+    print('\nStep 15: Create 10 rows of data, with 5 fields each.')
+    boots_data = {
+        'short-boots-wht5': {
+            'color': 'white',
+            'size': 5,
+            'serial-num': 12345,
+            'quantity': 4,
+            'price': 125,
+        },
+        'short-boots-wht6': {
+            'color': 'white',
+            'size': 6,
+            'serial-num': 12346,
+            'quantity': 10,
+            'price': 125,
+        },
+        'short-boots-wht7': {
+            'color': 'white',
+            'size': 7,
+            'serial-num': 12347,
+            'quantity': 25,
+            'price': 125,
+        },
+        'short-boots-wht8': {
+            'color': 'white',
+            'size': 8,
+            'serial-num': 12348,
+            'quantity': 20,
+            'price': 125,
+        },
+        'short-boots-wht9': {
+            'color': 'white',
+            'size': 9,
+            'serial-num': 12349,
+            'quantity': 5,
+            'price': 125,
+        },
+        'short-boots-blk5': {
+            'color': 'black',
+            'size': 5,
+            'serial-num': 52345,
+            'quantity': 2,
+            'price': 110,
+        },
+        'short-boots-blk6': {
+            'color': 'black',
+            'size': 6,
+            'serial-num': 52346,
+            'quantity': 5,
+            'price': 110,
+        },
+        'short-boots-blk7': {
+            'color': 'black',
+            'size': 7,
+            'serial-num': 52347,
+            'quantity': 15,
+            'price': 110,
+        },
+        'short-boots-blk8': {
+            'color': 'black',
+            'size': 8,
+            'serial-num': 52348,
+            'quantity': 10,
+            'price': 110,
+        },
+        'short-boots-blk9': {
+            'color': 'black',
+            'size': 9,
+            'serial-num': 52349,
+            'quantity': 2,
+            'price': 110,
+        },
+    }
+    
+    print('\nStep 16: Write and then read boots data with pickle.')
+    pickle.dump(boots_data, open('../data/boots_data.pkl', 'wb'))
+    read_data = pickle.load(open('../data/boots_data.pkl', 'rb'))
+    assert read_data == boots_data
+    pprint.pprint(read_data)
+    
+    print('\nStep 17: Write and then read data that pickle read with shelve.')
+    shelf_file = shelve.open('../data/boots_shelve.dat')
+    shelf_file['boots_key'] = read_data
+    read_items = shelf_file['boots_key']
+    assert read_items == read_data
+    pprint.pprint(read_items)
+    del shelf_file['boots_key']
+    shelf_file.close()
+
+
 if __name__ == '__main__':
     run_simple_example()
