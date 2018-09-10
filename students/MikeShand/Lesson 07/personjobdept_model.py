@@ -93,8 +93,8 @@ class Job(BaseModel):
     logger.info('Number')
     salary = DecimalField(max_digits = 7, decimal_places = 2)
     logger.info('Which person had the Job')
-    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null = False)
-    job_dept = ForeignKeyField(Department)
+    person_employed = ForeignKeyField(Person, db_column='person_employed', related_name='was_filled_by', null = False)
+    job_dept = ForeignKeyField(Department, db_column='job_dept')
 
 class PersonNumKey(BaseModel):
     """

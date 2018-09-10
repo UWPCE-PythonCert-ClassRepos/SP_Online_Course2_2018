@@ -16,7 +16,7 @@ logger.info('First name and connect to a database (sqlite here)')
 
 logger.info('The next 3 lines of code are the only database specific code')
 
-database = SqliteDatabase('personjobdept.db')
+database = SqliteDatabase('donors.db')
 database.connect()
 database.execute_sql('PRAGMA foreign_keys = ON;')
 
@@ -66,7 +66,7 @@ def populate_donors():
     DONOR_NAME = 0
     DONOR_NUM = 1
 
-    donors = [('Andy', 1),('Bill', 2),('Chuck', 3),]
+    donors = [('Andy', 1), ('Bill', 2), ('Chuck', 3)]
 
     try:
         database.connect()
@@ -74,8 +74,8 @@ def populate_donors():
         for donor in donors:
             with database.transaction():
                 new_donor = Donor.create(
-                    donor_name = donor[DONOR_NAME],
-                    donor_num = donor[DONOR_NUM]
+                    donor_name=donor[DONOR_NAME],
+                    donor_num=donor[DONOR_NUM]
 					)
             new_donor.save()
             logger.info('Database add successful')
@@ -133,7 +133,7 @@ def populate_donations():
 
             logger.info('Print the Person records we saved...')
         for donations in Donation:
-            logger.info(f'{donations.gift_value} from {donations.gift_donor}')
+            logger.info(f'{donations.donation_amount} from {donations.donor_name_two}')
 
     except Exception as e:
         logger.info(f'Error creating = {donation[GIFT_VALUE]}')

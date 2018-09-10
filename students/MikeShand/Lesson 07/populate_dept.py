@@ -332,7 +332,7 @@ def populate_jobs():
 
         for job in Job:
 
-            logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed} in {job.job_dept}')
+            logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed_id} in {job.job_dept_id}')
 
 
 
