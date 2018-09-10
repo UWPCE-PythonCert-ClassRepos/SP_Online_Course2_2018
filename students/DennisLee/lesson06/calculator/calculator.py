@@ -60,16 +60,16 @@ class Calculator(object):
                   by zero is attempted, the stack is cleared, and a
                   single zero is left in the stack.
         """
-        result = "Mistake"
         try:
             result = operator.calc(self.stack[0], self.stack[1])
         except IndexError:
             raise InsufficientOperands
         except ZeroDivisionError:
             print("\nDivision by zero error - resetting.\n")
+            self.stack = []
             result = 0
 
-        self.stack = [result]
+        self.stack.insert(0, result)
         return result
 
     def add(self):

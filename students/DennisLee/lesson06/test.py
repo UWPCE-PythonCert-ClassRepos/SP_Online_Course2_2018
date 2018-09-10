@@ -199,10 +199,10 @@ class ModuleTests(TestCase):
         """
         self.calculator.enter_number(15)
         self.calculator.enter_number(5)
-        self.calculator.enter_number(3)
+        self.calculator.enter_number(0)
         self.calculator.divide()
         with self.assertRaises(InsufficientOperands):
             self.calculator.subtract()
         self.calculator.enter_number(8)
-        result = self.calculator.add()
-        self.assertEqual(-9, result)
+        result = self.calculator.subtract()
+        self.assertEqual(-8, result)
