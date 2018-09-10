@@ -104,6 +104,77 @@ def run_neo4j_example():
             for friend in rec.values():
                 print(friend['first_name'], friend['last_name'])
 
+        print('\nStep 7: Add some new people.')
+        new_people = [('Apple', 'Tree'),
+                      ('Lucky', 'Dog'),
+                      ('Zeke', 'Zambini'),
+                      ('Blake', 'Lively'),
+                      ('Naomi', 'Watts'),
+                      ('Kale', 'Leaf'),]
+        colors = ['Red',
+                  'Orange',
+                  'Yellow',
+                  'Green',
+                  'Blue',
+                  'Purple']
+        favorite_colors_list = [['Red', 'Green'],
+                                ['Red', 'Orange'],
+                                ['Yellow', 'Blue'],
+                                ['Green'],
+                                ['Green'],
+                                ['Purple'],]
+        for first, last in new_people:
+            cyph = "CREATE (n:Person {first_name:'%s', last_name: '%s'})" % (
+                first, last)
+            session.run(cyph)
+
+        print('\nStep 8: Add some colors.')
+        for Color in colors:
+            cyph = "CREATE (n:Color {color:'%s'})" % (Color)
+            session.run(cyph)
+
+        print('\nStep 8: Link people to their favorite colors.')
+        for (first, last), favorite_colors in zip(new_people, favorite_colors_list):
+            print(f'{first} {last} likes {favorite_colors}')
+            for color in favorite_colors:
+                cypher = """
+                  MATCH (p:Person {first_name:'%s', last_name:'%s'})
+                  CREATE (p)-[favorite:FAVORITE]->(c:Color {color:'%s'})
+                  RETURN p
+                """ % (first, last, color)
+                session.run(cypher)
+
+        print('\nStep 9: For each color, list who has it as their favorite.')
+        for color in colors:
+            cyph = """
+              MATCH (color:Color)<-[favorite:FAVORITE]-(person:Person)
+              WHERE (color.color ='%s')
+              RETURN person
+              """ % (color)
+            result = session.run(cyph)
+            #print(f"People whose favorite color is {color}:")
+            people = []
+            for rec in result:
+                for person in rec.values():
+                    #print(f"{person['first_name']} {person['last_name']}")
+                    people.append(f"{person['first_name']} {person['last_name']}")
+            print(f'{color}: {people}')
+
+        # Can you also list all of the everyones favorite colors?
+        print("\nStep 10: List everyone's favorite colors")
+        for first, last in new_people:
+            cyph = """
+              MATCH (person {first_name:'%s', last_name:'%s'})
+                    -[:FAVORITE]->(colors)
+              RETURN colors
+              """ % (first, last)
+            result = session.run(cyph)
+            colors = []
+            for rec in result:
+                for color in rec.values():
+                    colors.append(color['color'])
+            print(f'{first} {last}: {colors}')
+
 
 if __name__ == '__main__':
     run_neo4j_example()
