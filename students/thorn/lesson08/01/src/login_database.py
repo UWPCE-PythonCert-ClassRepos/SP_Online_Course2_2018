@@ -10,7 +10,7 @@ from neo4j.v1 import GraphDatabase, basic_auth
 
 import utilities
 
-log = utilities.configure_logger('default', '../logs/login_databases_dev.log')
+log = utilities.configure_logger('default', r'../logs/login_databases_dev.log')
 config_file = Path(__file__).parent.parent / '.config/config.ini'
 config = configparser.ConfigParser()
 
