@@ -164,8 +164,6 @@ class Mailroom:
             for donor in self.donors.find():
                 with open(f"{donor['name']}_letter.txt", 'w+') as outfile:
                     outfile.write(letter.format(donor['name'], donor['donations']))
-                
-        
     
     @property
     def all_donors(self):
