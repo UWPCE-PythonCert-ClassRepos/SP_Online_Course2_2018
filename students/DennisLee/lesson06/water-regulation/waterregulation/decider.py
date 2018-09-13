@@ -50,24 +50,30 @@ class Decider(object):
                         and 'PUMP_OUT'
         :return: The new action for the pump: one of actions['PUMP_IN'], actions['PUMP_OUT'], actions['PUMP_OFF']
         """
-        if current_action == actions['PUMP_OFF']  # Condition 1
-            and current_height < self.target_height - self.margin:
+        # Condition 1
+        if (current_action == actions['PUMP_OFF']
+           ) and (current_height < self.target_height * (1 - self.margin)):
             result = actions['PUMP_IN']
-        elif current_action == actions['PUMP_OFF']  # Condition 2
-            and current_height > self.target_height + self.margin:
+        # Condition 2
+        elif (current_action == actions['PUMP_OFF']
+             ) and (current_height > self.target_height * (1 + self.margin)):
             result = actions['PUMP_OUT']
-        elif current_action == actions['PUMP_OFF']  # Condition 3
-            and abs(self.target_height - current_height) <= self.margin:
+        # Condition 3
+        elif (current_action == actions['PUMP_OFF']
+             ) and (abs(self.target_height - current_height) <=
+                    self.target_height * self.margin):
             result = current_action
-        elif current_action == actions['PUMP_IN']:  # Condition 4
+        # Condition 4
+        elif current_action == actions['PUMP_IN']:
             if current_height > self.target_height:
                 result = actions['PUMP_OFF']
             elif current_height <= self.target_height:
-                result=current_action
-        elif current_action == actions['PUMP_OUT']:  # Condition 5
+                result = current_action
+        # Condition 5
+        elif current_action == actions['PUMP_OUT']:
             if current_height < self.target_height:
                 result = actions['PUMP_OFF']
             elif current_height >= self.target_height:
-                result=current_action
+                result = current_action
 
         return result
