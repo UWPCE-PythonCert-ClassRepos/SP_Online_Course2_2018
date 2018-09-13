@@ -11,18 +11,14 @@ log = utilities.configure_logger('default', '../logs/redis.log')
 
 class Mailroom:
     """
-    Features:
-      - Add
-      - Update
-      - Delete
-      - Show specific donor info
-      - Show all donor info
+    Features: lookup data for validation
     """
 
     def __init__(self):
         try:
             self.r = login_database.login_redis_cloud()
             self.r.flushdb()
+            self.populate_db()
         except Exception as e:
             print(f"Redis error: {e}")
 
@@ -34,94 +30,87 @@ class Mailroom:
         # Get donors
         log.info("Populating donors.")
 
-        self.r.hmset('Thomas', {'donations': '500', 'email': 'thomas@thomas.com', 'city': 'Athens', 'state': 'GA', 'zip': '30606'})
+        self.r.hmset('Thomas', {'donations': '500', 'email': 'thomas@thomas.com', 'city': 'Athens', 'state': 'GA', 'zip': 30606})
 
-        self.r.hmset('Ted', {'donations': '1', 'email': 'ted@ted.com', 'city': 'Memphis', 'state': 'TN', 'zip': '38104'})
+        self.r.hmset('Ted', {'donations': '1', 'email': 'ted@ted.com', 'city': 'Memphis', 'state': 'TN', 'zip': 38104})
 
-        self.r.hmset("Bailey", {'donations': '1000', 'email': 'bailey@bailey.com', 'city': 'Washington', 'state': 'DC', 'zip': '12345'})
+        self.r.hmset("Bailey", {'donations': '1000', 'email': 'bailey@bailey.com', 'city': 'Washington', 'state': 'DC', 'zip': 12345})
 
     def get_donor(self):
-        return input("Enter a donor: ")
+        return input("Enter a donor: ").title()
 
-    def get_donation(self):
-        return int(input("Enter a donation amount: "))
+    def get_donor_info(self):
+        """ Returns all info about 1 donor. """
+        name = self.get_donor()
+        if name in self.all_donors:
+            person = self.r.hgetall(name)
+            print(f"Person: {name}")
+            for key, value in person.items():
+                print(f"{key}: {value}")
+        else:
+            print("Name not in database.")
 
-    # def add_donation(self):
-    #     """ Adds a donation to an existing donor.  Otherwise adds a new donor. """
-    #     input_donor = self.get_donor().title()
-    #     input_donation = self.get_donation()
+    def add_donation(self):
+        """ Adds a donation and/or donor. """
+        name = self.get_donor()
+        # Update existing
+        if name in self.all_donors:
+            input_donation = int(input("Please enter a donation: "))
+            donations = int(self.r.hget(name, 'donations'))
+            donations += input_donation
 
-    #     # Check for existing donor.  Update if found.
-    #     pass
+            self.r.hset(name, 'donations', str(donations))
+            print(self.r.hget(name, 'donations'))
+        # Create new
+        else:
+            print("New donor found.  Please enter the following information: ")
+            input_donation = str(input("Please enter a donation: "))  # should add value error checking by going from str to int to str
+            input_email = input("Please enter an email: ")
+            input_city = input("Please enter a city: ")
+            input_state = input("Please enter a state: ")
+            input_zip = input("Please enter the zipcode: ")
+            self.r.hmset(name, {'donations': input_donation, 'email':input_email, 'city': input_city, 'state': input_state, 'zip': input_zip})
 
-    # def update_donor(self):
-    #     """ Updates a donor's name. """
-    #     input_donor = self.get_donor()
-    #     input_donor = input_donor.title()
-    #     input_name = input("Please enter a new name: ")
-    #     input_name = input_name.title()
+    def get_donor_email(self):
+        """ Returns email from 1 donor. """
+        input_name = self.get_donor()
+        if input_name in self.all_donors:
+            print(self.r.hget(input_name, 'email'))
 
-    #     pass
+    def create_report(self):
+        """ Creates a formatted report with donor, donations, and email. """
+        # Base setup
+        line_out = ''
+        line_out += "{:<15} | {:^15} | {:^30}\n".format("Name", "Donations", "Email")
+        line_out += ("-"*65)
+        print(line_out)
 
-    # def delete_donor(self):
-    #     """ Deletes a donor. """
-    #     input_donor = self.get_donor()
-    #     input_donor = input_donor.title()
+        # Setup line format to recieve ordered donor info 
+        for name in self.all_donors:
+            line = "{:<15} | {:^15} | {:^30}".format(name, self.r.hget(name, 'donations'), self.r.hget(name, 'email'))
+            print(line)
 
-    #     pass
-
-    # def create_report(self):
-    #     """ Creates a formatted donor report. """
-    #     pass
-    #     # Base setup
-    #     line_out = ''
-    #     line_out += "Donor:                    | $    Total     |\
-    #        Donations   | $   Average   |\n"
-    #     line_out += ("-"*76) + '\n'
-    #     print(line_out)
-
-    #     for donor in self.donors.find():
-    #         print('{:<26}| ${:>14,.2f}|{:>15}| ${:>13,.2f}'.format()
-
-    # def send_letters(self, test_flag=True):
-    #     """
-    #     Writes letters.
-    #     CURRENTLY ONLY PRINTS (to prevent deleting them over and over).
-    #     """
-    #     pass
-    #     letter =\
-    #     """
-    #     Dear {},
-    #     Thank you for your generous donations of {}.
-    #                                 Sincerely,
-    #                                 The Team
-    #     """
-    #     if test_flag:
-    #         for donor in self.donors.find():
-    #             print(letter.format()
-    #     else:
-    #         for donor in self.donors.find():
-    #             with open(f"{donor['name']}_letter.txt", 'w+') as outfile:
-    #                 outfile.write(letter.format())
+    def delete_donor(self):
+        input_name = self.get_donor()
+        if input_name in self.all_donors:
+            self.r.delete(input_name)
 
     @property
     def all_donors(self):
         """ Class property list of all names. """
-        try:
-            r = login_database.login_redis_cloud()
-            return [item for item in r.keys()]
-        except Exception as e:
-            print("Redis error: {e}")
-
+        return [item for item in self.r.keys()]
 
     def list_donors(self):
         """ Prints all donors. """
-        print(self.all_donors)
+        for item in self.all_donors: print(item)
 
-    @property
-    def all_donors_and_donations(self):
-        """ Class property dict of all names and their donations. """
-        pass
+    def all_donors_all_donation(self):
+        """ Class property of all donors and donation. """
+        for name in self.all_donors:
+            person = self.r.hgetall(name)
+            print(f"Person: {name}")
+            for key, value in person.items():
+                print(f"{key}: {value}")
 
 
 
