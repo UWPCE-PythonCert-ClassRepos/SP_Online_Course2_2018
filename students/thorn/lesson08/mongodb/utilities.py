@@ -40,4 +40,3 @@ def configure_logger(name, log_path):
         'disable_existing_loggers': False
     })
     return logging.getLogger(name)
-

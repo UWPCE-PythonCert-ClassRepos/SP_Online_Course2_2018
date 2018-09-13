@@ -20,8 +20,9 @@ def login_mongodb_cloud():
         connect to mongodb and login
     """
 
-    log.info('Here is where we use the connect to mongodb.')
-    log.info('Note use of f string to embed the user & password (from the tuple).')
+    # log.info('Here is where we use the connect to mongodb.')
+    # log.info('Note use of f string to embed the user & password (from the tuple).')
+    log.info("Logging in.")
     try:
         config.read(config_file)
         user = config["mongodb_cloud"]["user"]
