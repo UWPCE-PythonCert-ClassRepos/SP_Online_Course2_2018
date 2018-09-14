@@ -62,14 +62,17 @@ class Mailroom:
         input_donor = self.get_donor()
         input_donor = input_donor.title()
 
-        pass
+        with self.driver.session() as session:
+            if input_donor in self.all_donors:
+                target = "MATCH (n:Person {name:'%s'}) DELETE n" % (input_donor)
+                session.run(target)
+                print(f"{input_donor} has been deleted.")
 
     def create_report(self):
         """ Creates a formatted donor report. """
         # Base setup
         line_out = ''
-        line_out += "Donor:                    | $    Total     |\
-           Donations   | $   Average   |\n"
+        line_out += "{:<15} | {:^15} | {:^15} | {:^15}\n".format("Name", "Donations", "# Donations", "Average")
         line_out += ("-"*76) + '\n'
         print(line_out)
         
@@ -83,18 +86,8 @@ class Mailroom:
                 sum_donations = sum(float(donation) for donation in donor[1])
                 avg_donation = sum_donations / num_donations
 
-        line_out = ''
-        line_out += "{:<15} | {:^15} | {:^30}\n".format("Name", "/Donations", "# Donations", )
-        line_out += ("-"*65)
-        print(line_out)
+                print("{:<15} | {:^15} | {:^15} | {:^15}".format(name, sum_donations, num_donations, avg_donation))
 
-        # Setup line format to recieve ordered donor info 
-        for name in self.all_donors:
-            line = "{:<15} | {:^15} | {:^30}".format(name, self.r.hget(name, 'donations'), self.r.hget(name, 'email'))
-            print(line)
-
-
-        
         
     def send_letters(self, test_flag=True):
         """ 
@@ -107,7 +100,17 @@ class Mailroom:
                                     Sincerely,
                                     The Team
         """
-        pass
+        with self.driver.session() as session:
+            donors = session.run("MATCH (n:Person) return n.name as name, n.donation as donation")
+
+            for donor in donors:
+                name = donor[0]
+                sum_donations = sum(float(donation) for donation in donor[1])
+                print(letter.format(name, sum_donations))
+            
+                if not test_flag:
+                    with open(f'{name}_thanks.txt', 'w+') as outfile:
+                        outfile.write(letter.format(name, sum_donations))
 
     @property
     def all_donors(self):
