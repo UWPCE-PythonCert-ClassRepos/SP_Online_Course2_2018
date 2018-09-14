@@ -111,6 +111,3 @@ class Mailroom:
             print(f"Person: {name}")
             for key, value in person.items():
                 print(f"{key}: {value}")
-
-
-
