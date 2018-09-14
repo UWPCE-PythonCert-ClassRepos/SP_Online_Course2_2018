@@ -115,7 +115,7 @@ class ControllerTests(unittest.TestCase):
         self.controller = Controller(self.sensor, self.pump, self.decider)
 
         # Dict of correct future pump actions based on the current pump
-        # action and the current height (based on target height of 100)
+        # action and the current height (using a target height of 100)
         self.outcomes_high_or_low = {
             # (current action, height): next action
             (self.pump.PUMP_IN, 90): self.pump.PUMP_IN,
