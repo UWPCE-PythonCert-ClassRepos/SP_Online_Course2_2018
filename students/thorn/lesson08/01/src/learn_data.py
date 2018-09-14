@@ -10,37 +10,29 @@ def assignment_furniture_data():
 
     furtniture_data = [
         {
-            'product': {
-                'type': 'couch',
-                'color': 'red',
-            },
+            'product type': 'couch',
+            'product color': 'red',
             'description': 'Leather low back',
             'monthly_rental_cost': 12.99,
             'in_stock_quantity': 10
         },
         {
-            'product': {
-                'type': 'couch',
-                'color': 'blue',
-            },
+            'product type': 'couch',
+            'product color': 'red',
             'description': 'Cloth high back',
             'monthly_rental_cost': 9.99,
             'in_stock_quantity': 3
         },
         {
-            'product': {
-                'type': 'coffee table',
-                'color': 'black',
-            },
+            'product type': 'coffee table',
+            'product color': 'black',
             'description': 'Wooden table',
             'monthly_rental_cost': 2.50,
             'in_stock_quantity': 25
         },
         {
-            'product': {
-                'type': 'chair',
-                'color': 'straw',
-            },
+            'product type': 'chair',
+            'product color': 'straw',
             'description': 'Straw chair',
             'monthly_rental_cost': 15.99,
             'in_stock_quantity': 17
