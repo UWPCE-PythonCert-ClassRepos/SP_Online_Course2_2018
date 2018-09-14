@@ -37,8 +37,43 @@ def update_furniture():
         furniture.update_many({'product_type': 'Red couch'},
                               {'$set': {'product_type': 'Couch'}})
 
-        log.info('Finally, printing all documents in furniture collection:\n')
+        log.info('Adding two new furniture items:\n')
+        new_furniture = [
+            {
+                'product_type': 'Lamp',
+                'description': 'Ceramic',
+                'monthly_rental_cost': 3.99,
+                'in_stock_quantity': 4,
+                'color': 'Red'
+            },
+            {
+                'product': 'Couch',
+                'description': 'Cloth low back',
+                'monthly_rental_cost': 6.99,
+                'in_stock_quantity': 3,
+                'color': 'Blue'
+            }
+        ]
+        furniture.insert_many(new_furniture)
+
+        log.info('Printing all documents in furniture collection:\n')
         for doc in furniture.find({}):
+            pprint.pprint(doc)
+            print()
+
+        log.info('Query for all red products')
+        query = {'color': 'Red'}
+        cursor = furniture.find(query)
+        print('Printing all red products:\n')
+        for doc in cursor:
+            pprint.pprint(doc)
+            print()
+
+        log.info('\nQuery for all couches')
+        query = {'product_type': 'Couch'}
+        cursor = furniture.find(query)
+        print('Printing all couches:\n')
+        for doc in cursor:
             pprint.pprint(doc)
             print()
 
