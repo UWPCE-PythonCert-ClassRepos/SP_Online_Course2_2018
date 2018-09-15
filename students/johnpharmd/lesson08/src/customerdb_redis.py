@@ -25,7 +25,7 @@ def choose_random_zip():
 
 def get_customer_data():
     while True:
-        response = input('Enter a customer name, or "q" to quit: ')
+        response = input('\nEnter a customer name, or "q" to quit: ')
         if response.lower() == 'q':
             break
         customer = 'customer:' + response
@@ -41,8 +41,6 @@ def run_example():
     """
 
     try:
-        names = ['Andrew', 'Peter', 'Susan', 'Pam', 'Steven', 'Charlotte']
-
         log.info('Caching data for each customer one by one')
         customer = 'customer:' + 'Andrew'
         r.set(customer + ':telephone', create_random_phone())
@@ -54,14 +52,25 @@ def run_example():
         r.set(customer + ':zip', choose_random_zip())
         log.info('Data cached for Peter')
 
-        # log.info('Caching data for six customers')
-        # for name in names:
-        #     customer = 'customer:' + name
-        #     phone = create_random_phone()
-        #     zip_code = choose_random_zip()
-        #     r.set(customer + ':telephone', phone)
-        #     r.set(customer + ':zip', zip_code)
-        #     log.info('Data cached for ', name)
+        customer = 'customer:' + 'Susan'
+        r.set(customer + ':telephone', create_random_phone())
+        r.set(customer + ':zip', choose_random_zip())
+        log.info('Data cached for Susan')
+
+        customer = 'customer:' + 'Pam'
+        r.set(customer + ':telephone', create_random_phone())
+        r.set(customer + ':zip', choose_random_zip())
+        log.info('Data cached for Pam')
+
+        customer = 'customer:' + 'Steven'
+        r.set(customer + ':telephone', create_random_phone())
+        r.set(customer + ':zip', choose_random_zip())
+        log.info('Data cached for Steven')
+
+        customer = 'customer:' + 'Charlotte'
+        r.set(customer + ':telephone', create_random_phone())
+        r.set(customer + ':zip', choose_random_zip())
+        log.info('Data cached for Charlotte')
 
         get_customer_data()
 
