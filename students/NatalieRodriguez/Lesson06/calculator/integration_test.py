@@ -15,21 +15,21 @@ from calculator.exceptions import InsufficientOperands
 
 
 class ModuleTests(TestCase):
-
+    """test for the integration of modules"""
     def test_module(self):
 
         calculator = Calculator(Adder(), Subtracter(), Multiplier(), Divider())
 
-        calculator.enter_number(7)
-        calculator.enter_number(3)
+        calculator.enter_number(5)
+        calculator.enter_number(2)
 
         calculator.multiply()
 
-        calculator.enter_number(24)
+        calculator.enter_number(46)
 
         calculator.add()
 
-        calculator.enter_number(5)
+        calculator.enter_number(8)
 
         calculator.divide()
 
@@ -37,4 +37,4 @@ class ModuleTests(TestCase):
 
         result = calculator.subtract()
 
-        self.assertEqual(8, result)
+        self.assertEqual(6, result)

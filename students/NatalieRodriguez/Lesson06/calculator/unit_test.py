@@ -1,6 +1,6 @@
 #unit_test.py
 
-'''this tests the entire calculator module'''
+"""this tests the entire calculator module"""
 
 
 from unittest import TestCase
@@ -42,6 +42,9 @@ class MultiplierTests(TestCase):
     """this tests Multiplier"""
 
     def test_multiplier(self):
+
+        """ test multiplier"""
+
         multiplier = Multiplier()
 
         for i in range(-10, 10):
@@ -67,6 +70,9 @@ class CalculatorTests(TestCase):
     """ runs all tests"""
 
     def setUp(self):
+
+        """ setup"""
+
         self.adder = Adder()
         self.subtracter = Subtracter()
         self.multiplier = Multiplier()
@@ -75,12 +81,18 @@ class CalculatorTests(TestCase):
         self.calculator = Calculator(self.adder, self.subtracter, self.multiplier, self.divider)
 
     def test_insufficient_operands(self):
+
+        """ test insufficient operands"""
+
         self.calculator.enter_number(0)
 
         with self.assertRaises(InsufficientOperands):
             self.calculator.add()
 
     def test_adder_call(self):
+
+        """ test adder"""
+
         self.adder.calc = MagicMock(return_value=0)
 
         self.calculator.enter_number(1)
@@ -90,6 +102,9 @@ class CalculatorTests(TestCase):
         self.adder.calc.assert_called_with(1, 2)
 
     def test_subtracter_call(self):
+
+        """ test subtracter"""
+
         self.subtracter.calc = MagicMock(return_value=0)
 
         self.calculator.enter_number(1)
@@ -99,20 +114,25 @@ class CalculatorTests(TestCase):
         self.subtracter.calc.assert_called_with(1, 2)
 
     def test_multiplier_call(self):
+
+        """ test multiplier"""
+
         self.multiplier.calc = MagicMock(return_value=0)
 
+        self.calculator.enter_number(1)
         self.calculator.enter_number(2)
-        self.calculator.enter_number(4)
         self.calculator.multiply()
 
-        self.multiplier.calc.assert_called_with(2, 4)
+        self.multiplier.calc.assert_called_with(1, 2)
 
     def test_divider_call(self):
+
+        """ test divider"""
+
         self.divider.calc = MagicMock(return_value=0)
 
+        self.calculator.enter_number(1)
         self.calculator.enter_number(2)
-        self.calculator.enter_number(4)
         self.calculator.divide()
 
-        self.divider.calc.assert_called_with(2, 4)
-
+        self.divider.calc.assert_called_with(1, 2)
