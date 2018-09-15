@@ -27,8 +27,9 @@ def run_example():
         for name in names:
             # r.set(customer, create_random_phone())
             # r.set(customer, choose_random_zip())
-            print('customer:' + name + ':telephone,', create_random_phone())
-            print('customer:' + name + ':zip,', choose_random_zip())
+            customer = 'customer:' + name
+            print(customer + ':telephone,', create_random_phone())
+            print(customer + ':zip,', choose_random_zip())
 
     except Exception as e:
         print(f'Redis error: {e}')
