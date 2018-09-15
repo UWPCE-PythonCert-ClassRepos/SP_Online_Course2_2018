@@ -18,19 +18,36 @@ def choose_random_zip():
     return rc(['98101', '98112', '98127', '98155'])
 
 
-def make_db():
-    names = ('Andrew', 'Peter', 'Susan', 'Pam', 'Steven', 'Charlotte')
-    r = login_database.login_redis_cloud()
+def get_customer_data():
+    response = input('Enter a customer name: ')
+    customer = 'customer:' + response
+    print('Here is the phone number for', response)
+    print(r.get(customer + ':telephone'))
+    print('And here is the zip for', response)
+    print(r.get(customer + ':zip'))
 
+
+def run_example():
+    
+    log = utilities.configure_logger('default', '../logs/customerdb_redis.log')
+    
     try:
+        log.info('Connect to Redis')
+        r = login_database.login_redis_cloud()
+        names = ('Andrew', 'Peter', 'Susan', 'Pam', 'Steven', 'Charlotte')    
+
+        log.info('Caching data for six customers')
         for name in names:
             customer = 'customer:' + name
             r.set(customer + ':telephone,', create_random_phone())
             r.set(customer + ':zip,', choose_random_zip())
+            log.info('Data cached for ', customer)
+
+        get_customer_data()
 
     except Exception as e:
         print(f'Redis error: {e}')
 
 
 if __name__ == '__main__':
-    make_db()
+    run_example()
