@@ -27,6 +27,9 @@ class Donor:
     def get_name(self):
         return "{0} {1}".format(*self.name)
 
+    def get_name_tuple(self):
+        return self.name
+
 
 # This is where things are saved
 donations = peewee.SqliteDatabase("donotions_db.db")
@@ -80,7 +83,8 @@ class DonorCollection:
             last_name = d.donor_name[d.last_name_index:]
             yield Donor(first_name, last_name, all_donations)
 
-    def add_donation(self, firstname, lastname, amount):
+    def get_donor(self, firstname, lastname):
+        # Helper function to get the donor data, if it exists
         name = firstname + lastname
         index = len(firstname)
         donors = DonorData.select().where(DonorData.donor_name == name)
@@ -94,5 +98,42 @@ class DonorCollection:
         else:
             # The donor exists, get the donor
             donor = donors.get()
+        return donor
 
+    def add_donation(self, firstname, lastname, amount):
+        donor = self.get_donor(firstname, lastname)
         Donations.create(amount=amount, donated_by=donor)
+
+    def delete_donor(self, firstname, lastname):
+        donor = self.get_donor(firstname, lastname)
+        # Delete all donations by this donor
+        for donation in donor.donations:
+            donation.delete_instance()
+        # Now delete the donor
+        donor.delete_instance()
+
+    def get_donations(self, firstname, lastname):
+        donor = self.get_donor(firstname, lastname)
+        donations_list = list()
+        for donation in donor.donations:
+            donations_list.append(donation.amount)
+        return donations_list
+
+    def delete_donation(self, firstname, lastname, delete_num):
+        donor = self.get_donor(firstname, lastname)
+        donations = donor.donations
+        donations[delete_num].delete_instance()
+
+    def change_donation(self, firstname, lastname, change_num, new_amount):
+        donor = self.get_donor(firstname, lastname)
+        donations = donor.donations
+        donations[change_num].amount = new_amount
+        donations[change_num].save()
+
+    def change_donor_name(self, firstname, lastname, new_first, new_last):
+        new_name = new_first + new_last
+        new_index = len(new_first)
+        donor = self.get_donor(firstname, lastname)
+        donor.donor_name = new_name
+        donor.last_name_index = new_index
+        donor.save()
