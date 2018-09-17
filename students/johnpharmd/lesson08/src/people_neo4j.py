@@ -36,8 +36,9 @@ def add_people():
 def add_colors():
     with driver.session() as session:
 
+        color_list = ['blue', 'red', 'green']
         log.info('Adding 3 colors')
-        for color in ['blue', 'red', 'green']:
+        for color in color_list:
             cyph = "CREATE (c:Color {name:'%s'})" % (color)
             session.run(cyph)
 
@@ -52,40 +53,36 @@ def add_colors():
 
 
 def match_people_colors():
-    person_list = []
     blue_list = [('Fred', 'Barnes'), ('Jonas', 'Salk'),
                  ('Rosalind', 'Franklin')]
-    red_list = []
-    green_list = []
-    for person in blue_list:
-        person_list.append(person)
+    red_list = [('Marie', 'Curie'), ('Nancy', 'Cooper'), ('Mary', 'Evans'),
+                ('Adam', 'Smith')]
+    green_list = [('Alice', 'Cooper'), ('Bob', 'Jones')]
+    color_list = [blue_list, red_list, green_list]
 
     with driver.session() as session:
 
         log.info('Associating people with their respective favorite color')
-        log.info('Start with blue')
-        for first, last in blue_list:
-            cypher = """
-              MATCH (p:Person {first_name:'%s', last_name:'%s'})
-              CREATE (p)-[favorite_color:COLOR]->(c:Color {name:'blue'})
-              RETURN p
-            """ % (first, last)
-        session.run(cypher)
-
-        print("Find everyone whose favorite color is blue?")
+        for _list in color_list:
+            for first, last in _list:
+                cypher = """
+                  MATCH (p:Person {first_name:'%s', last_name:'%s'})
+                  CREATE (p)-[favorite_color:COLOR]->(c:Color {name:'%s'})
+                  RETURN p
+                """ % (first, last, str(_list).strip('_list'))
+                session.run(cypher)
+        
+        # print("Find everyone whose favorite color is blue?")
 
         try:
-            for first, last in person_list:
-                cyph = """
-                  MATCH (p {first_name:'%s', last_name:'%s'})-[:COLOR]->(blue)
-                  RETURN p.first_name as first_name, p.last_name as last_name
-                """ % (first, last)
+            cyph = """
+              MATCH (blue:Color {name:'blue'})<-[:COLOR]-(p)
+              RETURN p.first_name as first_name, p.last_name as last_name
+            """
             result = session.run(cyph)
             print("\nBlue is the favorite color of these people:")
             for record in result:
-                print('record:', record)
-                # for person in record.values():
-                #     print(person['first_name'], person['last_name'])
+                print(record['first_name'], record['last_name'])
 
         except Exception as e:
             print(f'neo4j error: {e}')
