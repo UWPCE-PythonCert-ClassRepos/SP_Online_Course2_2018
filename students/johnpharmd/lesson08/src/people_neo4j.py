@@ -58,21 +58,34 @@ def match_people_colors():
     red_list = [('Marie', 'Curie'), ('Nancy', 'Cooper'), ('Mary', 'Evans'),
                 ('Adam', 'Smith')]
     green_list = [('Alice', 'Cooper'), ('Bob', 'Jones')]
-    color_list = [blue_list, red_list, green_list]
+    # color_list = [blue_list, red_list, green_list]
 
     with driver.session() as session:
 
         log.info('Associating people with their respective favorite color')
-        for _list in color_list:
-            for first, last in _list:
-                cypher = """
-                  MATCH (p:Person {first_name:'%s', last_name:'%s'})
-                  CREATE (p)-[favorite_color:COLOR]->(c:Color {name:'%s'})
-                  RETURN p
-                """ % (first, last, str(_list).strip('_list'))
-                session.run(cypher)
-        
-        # print("Find everyone whose favorite color is blue?")
+        # for lst in color_list:
+        #     color = str(lst).strip('_list')
+        for first, last in blue_list:
+            cypher = """
+              MATCH (p:Person {first_name:'%s', last_name:'%s'})
+              CREATE (p)-[favorite_color:COLOR]->(c:Color {name:'blue'})
+              RETURN p
+            """ % (first, last)
+            session.run(cypher)
+        for first, last in red_list:
+            cyph = """
+              MATCH (p:Person {first_name:'%s', last_name:'%s'})
+              CREATE (p)-[favorite_color:COLOR]->(c:Color {name:'red'})
+              RETURN p
+            """ % (first, last)
+            session.run(cyph)
+        for first, last in green_list:
+            cypher = """
+              MATCH (p:Person {first_name:'%s', last_name:'%s'})
+              CREATE (p)-[favorite_color:COLOR]->(c:Color {name:'green'})
+              RETURN p
+            """ % (first, last)
+            session.run(cypher)
 
         try:
             cyph = """
@@ -81,6 +94,24 @@ def match_people_colors():
             """
             result = session.run(cyph)
             print("\nBlue is the favorite color of these people:")
+            for record in result:
+                print(record['first_name'], record['last_name'])
+
+            cypher = """
+              MATCH (red:Color {name:'red'})<-[:COLOR]-(p)
+              RETURN p.first_name as first_name, p.last_name as last_name
+            """
+            result = session.run(cypher)
+            print("\nRed is the favorite color of these people:")
+            for record in result:
+                print(record['first_name'], record['last_name'])
+
+            cyph = """
+              MATCH (green:Color {name:'green'})<-[:COLOR]-(p)
+              RETURN p.first_name as first_name, p.last_name as last_name
+            """
+            result = session.run(cyph)
+            print("\nGreen is the favorite color of these people:")
             for record in result:
                 print(record['first_name'], record['last_name'])
 
