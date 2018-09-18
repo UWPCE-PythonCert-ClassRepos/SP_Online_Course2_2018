@@ -87,6 +87,11 @@ def match_people_colors():
             """ % (first, last)
             session.run(cypher)
 
+        query_people_colors()
+
+
+def query_people_colors():
+    with driver.session() as session:
         try:
             cyph = """
               MATCH (blue:Color {name:'blue'})<-[:COLOR]-(p)
@@ -114,6 +119,15 @@ def match_people_colors():
             print("\nGreen is the favorite color of these people:")
             for record in result:
                 print(record['first_name'], record['last_name'])
+
+            cypher = """
+              MATCH (n)-[:COLOR]->(c)
+              RETURN n.first_name as first_name, n.last_name as last_name, c.name as c
+            """
+            result = session.run(cypher)
+            print('\nHere is each person with their respective favorite color:')
+            for record in result:
+                print(record['first_name'], record['last_name'], ':', record['c'])
 
         except Exception as e:
             print(f'neo4j error: {e}')
