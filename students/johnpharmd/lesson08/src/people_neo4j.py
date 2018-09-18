@@ -35,9 +35,8 @@ def add_people():
 
 def add_colors():
     with driver.session() as session:
-
-        color_list = ['blue', 'red', 'green']
         log.info('Adding 3 colors')
+        color_list = ['blue', 'red', 'green']
         for color in color_list:
             cyph = "CREATE (c:Color {name:'%s'})" % (color)
             session.run(cyph)
@@ -58,13 +57,10 @@ def match_people_colors():
     red_list = [('Marie', 'Curie'), ('Nancy', 'Cooper'), ('Mary', 'Evans'),
                 ('Adam', 'Smith')]
     green_list = [('Alice', 'Cooper'), ('Bob', 'Jones')]
-    # color_list = [blue_list, red_list, green_list]
 
     with driver.session() as session:
-
         log.info('Associating people with their respective favorite color')
-        # for lst in color_list:
-        #     color = str(lst).strip('_list')
+
         for first, last in blue_list:
             cypher = """
               MATCH (p:Person {first_name:'%s', last_name:'%s'})
@@ -125,9 +121,11 @@ def query_people_colors():
               RETURN n.first_name as first_name, n.last_name as last_name, c.name as c
             """
             result = session.run(cypher)
-            print('\nHere is each person with their respective favorite color:')
+            print()
+            print('Here is each person with their respective favorite color:')
             for record in result:
-                print(record['first_name'], record['last_name'], ':', record['c'])
+                print(record['first_name'], record['last_name'],
+                      ':', record['c'])
 
         except Exception as e:
             print(f'neo4j error: {e}')
