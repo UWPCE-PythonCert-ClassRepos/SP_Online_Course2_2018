@@ -30,8 +30,8 @@ class Controller(object):
         """
         On each call to tick, the controller shall:
           1. query the sensor for the current height of liquid in the tank
-          2. query the pump for its current state (pumping in, pumping out, or at rest)
-          3. query the decider for the next appropriate state of the pump, given the above
+          2. query the pump for current state (pumping in, out, or rest)
+          3. query the decider for next approp. state of pump, given above
           4. set the pump to that new state
         :return: True if the pump has acknowledged its new state, else False
         """
