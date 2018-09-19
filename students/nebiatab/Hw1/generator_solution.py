@@ -1,4 +1,5 @@
 # Generators
+import itertools
 
 def doubler():
     for n in itertools.count():
@@ -9,7 +10,7 @@ def intsum():
         yield n
 
 def fib():
-    x = 0
+    x = 1
     y = 1
     while True:
         yield x
