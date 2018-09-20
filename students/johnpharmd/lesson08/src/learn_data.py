@@ -2,6 +2,49 @@
     Data for database demonstrations
 """
 
+import json
+
+
+def get_mailroom_data():
+    """
+        makes JSON object from mailroom donors_list, stores in txt file
+    """
+
+    donors_list = [
+       {
+            'last_name': 'Gates', 'title': 'Mr.', 'donations': 150000,
+            'num_donations': 3
+       },
+       {
+            'last_name': 'Brin', 'title': 'Mr.', 'donations': 150000,
+            'num_donations': 3
+       },
+       {
+            'last_name': 'Cerf', 'title': 'Mr.', 'donations': 50000,
+            'num_donations': 2
+       },
+       {
+            'last_name': 'Musk', 'title': 'Mr.', 'donations': 100000,
+            'num_donations': 1
+       },
+       {
+            'last_name': 'Berners-Lee', 'title': 'Mr.',
+            'donations': 50000, 'num_donations': 2
+       },
+       {
+            'last_name': 'Wojcicki', 'title': 'Ms.',
+            'donations': 125000, 'num_donations': 1
+       },
+       {
+            'last_name': 'Avey', 'title': 'Ms.', 'donations': 200000,
+            'num_donations': 2
+       }
+    ]
+    return donors_list
+    
+    # with open('mailroom_json.txt', 'w') as outfile:
+    #     return json.dump(donors_list, outfile, indent=4, sort_keys=True)
+
 
 def get_baseball_data():
     """
@@ -70,7 +113,6 @@ def get_baseball_data():
             'wins_in_last_ten': 3, 'streak': 'L2'
         }
     ]
-
     return baseball_data
 
 
