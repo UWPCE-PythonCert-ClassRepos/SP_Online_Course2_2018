@@ -9,11 +9,12 @@ choices = {1: send_thankyou,
 
 def user_input():
     try:
-        action = int(input("\nChoose one of four actions: \n"+
-                           "1. Send a Thank You \n" +
+        action = int(input("\nChoose an action: \n"+
+                           "1. Send a Thank You, Update or Remove a Donor \n" +
                            "2. Create a Report \n"+
                            "3. Send Thanks Yous to Everyone \n"+
-                           "4. Quit\n"
+                           "4. Quit \n"
+
                            ))
     except ValueError:
         print("\nEnter 1 to 'Send a Thank You', 2 to 'Create a Report',3 to 'Send Thank Yous to All Donors', " +
@@ -27,7 +28,7 @@ def user_input():
 def main():
     action = 0
 
-    while action != 4:
+    while action != 6:
         try:
             action = user_input()
             choices[action]()
@@ -36,3 +37,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    user_input()

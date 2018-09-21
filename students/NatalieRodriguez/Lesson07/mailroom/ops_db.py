@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def donor_input():
     return input("Enter a donor name, input 'List'" +
                  " for a list of donors, select 'Delete' to remove " +
-                 "a donor from the database, or 'Reenter' to change a donation.\n>")
+                 "a donor from the database, or 'Update' to change a donation.\n>")
 
 
 def donation_prompt():
@@ -136,7 +136,7 @@ def send_thankyou():
                            "a donor from the database.\n>")
             delete_donor(remove)
             don_input = None
-        elif don_input.lower() == "reenter":
+        elif don_input.lower() == "update":
             list_donors()
             rename = input("Enter a donor name to change " +
                            "a donation in the database.\n>")
@@ -185,7 +185,7 @@ def send_letters():
     for donor in Donors.select():
         with open(donor.donor_name + '.txt', 'w') as donorfh:
             donorfh.write(send_thankyou_total(donor))
-
+    logger.info('Thank yous generated.')
 
 def add_donor(donor):
     database = SqliteDatabase('donor_db.db')
@@ -259,3 +259,4 @@ def reenter_donation(donor):
 
 def close_program():
     print('\nClosing Donor Dashboard.\n')
+    raise SystemExit

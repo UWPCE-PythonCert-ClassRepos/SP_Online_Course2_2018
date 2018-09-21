@@ -17,7 +17,7 @@ def populate_donors():
 
     database = SqliteDatabase('donor_database.db')
 
-    logger.info('Working with Donor class')
+    logger.info('Working with Donor class:')
 
     DONOR_NAME = 0
     DONATION_TOTAL = 1
