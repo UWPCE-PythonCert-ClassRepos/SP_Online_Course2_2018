@@ -13,7 +13,7 @@ log = utilities.configure_logger('default', '../logs/mailroom_mdb.log')
 with login_database.login_mongodb_cloud() as client:
         db = client['dev']
         mailroom = db['mailroom']
-        mailroom.insert_many(get_mailroom_data())
+        # mailroom.insert_many(get_mailroom_data()) -- used for 1st init
 
 
 class Donor():
@@ -28,11 +28,24 @@ def get_donor_list():
 
 
 def query_donor_info():
-    pass
+    title = input('Enter donor title: ')
+    last_name = input('Enter last name: ')
+    total_donation_amt = int(input('Enter total donation amount: '))
+    num_donations = int(input('Enter number of donations: '))
+    query_dict = {'title': title, 'last_name': last_name,
+                  'total_donation_amt': total_donation_amt,
+                  'num_donations': num_donations}
+    return query_dict
 
 
-def add_donor():
-    pass
+def add_donor(*donor):
+    if donor:
+        updated_donor = mailroom.insert(donor)
+        print(updated_donor['title'], updated_donor['last_name'], 'updated')
+    else:
+        new_donor = query_donor_info()
+        new_donor = mailroom.insert(new_donor)
+        print(new_donor.title, new_donor.lastname, 'added to database')
 
 
 def update_or_remove_donor():
@@ -45,7 +58,6 @@ def get_report():
 
 class UI():
     def __init__(self):
-        # donors = Donor.select()
         menu_dct = {'1': get_donor_list,
                     '2': get_report,
                     '3': add_donor,
@@ -65,7 +77,6 @@ class UI():
             print()
             try:
                 if response.lower() == 'q':
-                    # database.close()
                     print('Program execution completed.')
                 menu_dct[response]()
 
