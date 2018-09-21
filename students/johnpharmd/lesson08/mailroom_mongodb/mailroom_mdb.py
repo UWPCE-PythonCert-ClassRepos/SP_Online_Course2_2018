@@ -49,7 +49,17 @@ def add_donor(*donor):
 
 
 def update_or_remove_donor():
-    pass
+    q_title = input('Enter donor title: ')
+    q_lastname = input('Enter last name: ')
+    response = input('[U]pdate or [r]emove this donor? ')
+    # TODO: add mongodb logic here to find donor in db
+        if response.lower() == 'u':
+            print('Re-enter values for each of the donor\'s fields')
+            updated_donor = query_donor_info()
+            add_donor(updated_donor)
+        elif response.lower() == 'r':
+            mailroom.remove(donor)
+            print('Donor removed from database')
 
 
 def get_report():
