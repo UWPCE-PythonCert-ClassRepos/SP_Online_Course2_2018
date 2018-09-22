@@ -9,11 +9,15 @@ def report():
     with login_mongodb_cloud() as client:
         db = client['dev']
         mailroom = db['mailroom']
-    
-    print('Last Name____Title__Total Donations__Number of Donations')
+
+    print('\nLast Name______Title__Total Donations__Number of Donations')
     donor_table = mailroom.find()
     for d in donor_table:
-        print(d['last_name'], 10 * ' ', d['title'], d['donations'], d['num_donations'])
+        long_tab = (15 - len(d['last_name']))*' '
+        short_tab = 3*' '
+        end_tab = 20*' '
+        print(d['last_name'], long_tab, d['title'], short_tab, d['donations'],
+              end_tab, d['num_donations'])
 
 
 if __name__ == '__main__':
