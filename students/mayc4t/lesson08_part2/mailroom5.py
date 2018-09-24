@@ -327,7 +327,7 @@ def init_donors_db():
     return donors_db
 
 
-def enter_main_loop(donors_db):
+def enter_main_loop():
     main_prompt = ("\nSelect Options!!!\n"
                    "1. Send a Thank You \n"
                    "2. Create The ReportType\n"

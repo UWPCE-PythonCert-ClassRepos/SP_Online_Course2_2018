@@ -147,5 +147,5 @@ if __name__ == "__main__":
     model.SaveDonation = SaveDonation
     model.UpdateDonation = UpdateDonation
 
-    donors_db = init_donors_db()
-    mailroom5.enter_main_loop(donors_db)
+    mailroom5.donors_db = init_donors_db()
+    mailroom5.enter_main_loop()
