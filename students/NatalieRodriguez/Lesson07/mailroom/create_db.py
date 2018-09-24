@@ -43,7 +43,7 @@ class Donations(BaseModel):
 
     logger.info('Creating Donation Class.')
 
-    d_name = ForeignKeyField(Donors, related_name='was_donated_by')
+    d_name = ForeignKeyField(Donors, related_name='was_donated_by:')
     d_amount = DecimalField(decimal_places=2, null=True)
 
 

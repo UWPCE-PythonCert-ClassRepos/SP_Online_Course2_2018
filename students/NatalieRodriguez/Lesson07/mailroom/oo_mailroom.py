@@ -61,7 +61,7 @@ class DonorDatabase:
         return sorted(self.get_all_donor_names())
 
     def donor_input(self):
-        return input("Enter a donor name or type 'List' for a list of donors.\n>")
+        return input("Enter a donor name or enter 'List' for a list of donors.\n>")
 
     def send_thankyou(self):
         don_input = None
@@ -89,7 +89,7 @@ class DonorDatabase:
             except ValueError:
                 print("Enter a donor name.")
 
-        print("Thank you {} for your donation of ${:.2f}"
+        print("Thank you {} for your donation of ${:.2f}."
               .format(don_input, donation))
 
     def donation_prompt(self):

@@ -148,7 +148,7 @@ def send_thankyou():
         try:
             donation = donation_prompt()
         except ValueError:
-            print("Enter donations numerically.")
+            print("Enter a monetary donation.")
 
     add_donor(don_input)
     add_donation((don_input, donation))
@@ -233,20 +233,20 @@ def reenter_donation(donor):
     try:
         database.execute_sql('PRAGMA foreign_keys = ON;')
         with database.transaction():
-            search = Donations.get((Donations.d_name_id == donor) &
+            search = Donations.get((Donations.d_name_id == donor_2) &
                                    (Donations.d_amount == old))
             search.d_amount = new
             search.save()
-            for donor in Donors:
-                x = Donations.select().where(Donations.d_name_id == donor)
+            for donor_2 in Donors:
+                x = Donations.select().where(Donations.d_name_id == donor_2)
                 number_of_donations = x.count()
                 total = decimal.Decimal('0.0')
                 for item in x.iterator():
                     total += item.d_amount
-                donor.total_donation = total
-                donor.number_donation = number_of_donations
-                donor.ave_donation = total / number_of_donations
-                donor.save()
+                donor_2.total_donation = total
+                donor_2.number_donation = number_of_donations
+                donor_2.ave_donation = total / number_of_donations
+                donor_2.save()
     except Exception as e:
         logger.info('Error changing donation amount for {} in database'.format(donor))
         logger.info(e)
