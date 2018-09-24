@@ -39,9 +39,10 @@ def get_one_donor_data():
             break
         else:
             donor = 'donor:' + q_last_name
-            print('title:', r.hget(donor, 'title'))
-            print('total donations:', r.hget(donor, 'donations'))
-            print('number of donations:', r.hget(donor, 'num_donations'))
+            print(r.hmget(donor, 'title', 'donations', 'num_donations'))
+            # print('title:', r.hget(donor, 'title'))
+            # print('total donations:', r.hget(donor, 'donations'))
+            # print('number of donations:', r.hget(donor, 'num_donations'))
 
 
 def get_donor_list():
