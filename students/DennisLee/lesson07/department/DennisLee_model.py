@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 db_name = 'DennisLee.db'
 logger.info(f'Import database {db_name}.')
 database = pw.SqliteDatabase(db_name)
-logger.info('Connecting.')
+logger.info('Connecting.\n')
 database.connect()
 database.execute_sql('PRAGMA foreign_keys = ON;')
 
@@ -36,7 +36,7 @@ class Person(BaseModel):
     person_name = pw.CharField(primary_key=True, max_length=30, null=False)
     logger.info("Adding lives_in_town field to Person table.")
     lives_in_town = pw.CharField(max_length=40)
-    logger.info("Adding nickname field to Person table.")
+    logger.info("Adding nickname field to Person table.\n")
     nickname = pw.CharField(max_length=20, null=True)
 
 class Department(BaseModel):
@@ -51,7 +51,7 @@ class Department(BaseModel):
     manager = pw.CharField(max_length=30)
     logger.info(
         "Adding department_number primary key field to Department table. "
-        "The field has four digits and must start with a letter."
+        "The field has four digits and must start with a letter.\n"
     )
     department_number = pw.CharField(
         primary_key=True,
@@ -78,7 +78,7 @@ class DeptJobs(BaseModel):
     logger.info("Adding job_name primary key field to DeptJobs table.")
     job_name = pw.CharField(primary_key=True, max_length=30, null=False)
     logger.info(
-        "Adding department_number foreign key field to DeptJobs table.")
+        "Adding department_number foreign key field to DeptJobs table.\n")
     department_number = pw.ForeignKeyField(Department)
 
 class Job(BaseModel):
@@ -93,14 +93,6 @@ class Job(BaseModel):
     start_date = pw.DateField(formats='YYYY-MM-DD', null=False)
     logger.info("Adding end_date field to Job table; default is current date.")
     end_date = pw.DateField(formats='YYYY-MM-DD', default=dt.date.today())
-    logger.info("Add duration field to Job table; the field is automatically "
-                "calculated from start_date and end_date.")
-    duration = pw.IntegerField(
-        default=pw.fn.cast(
-            pw.fn.JULIANDAY(end_date) - pw.fn.JULIANDAY(start_date) + 1
-            # , 'INTEGER'
-        )
-    )
     logger.info("Add salary field to Job table.")
     salary = pw.DecimalField(max_digits=7, decimal_places=2)
     logger.info("Add person_employed field to Job table; the field is "
@@ -111,5 +103,6 @@ class Job(BaseModel):
     class Meta:
         """This class defines a composite key as the primary key."""
         logger.info(
-            "Set primary key to combo of person_employed & start_date fields.")
+            "Set primary key to combo of person_employed & start_date fields.\n"
+        )
         primary_key = pw.CompositeKey('person_employed', 'start_date')

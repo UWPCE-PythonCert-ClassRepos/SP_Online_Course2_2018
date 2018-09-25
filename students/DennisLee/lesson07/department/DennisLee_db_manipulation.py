@@ -8,12 +8,11 @@ import logging
 import peewee as pw
 import DennisLee_model as mdl
 
-class manipulate_db:
+class ManipulateDb:
     """
     This class creates the database and performs database transactions.
     """
     def __init__(self):
-
         self.db_name = 'DennisLee.db'
 
         self.set_up_logging()
@@ -36,21 +35,21 @@ class manipulate_db:
 
     def open_database(self, db_file):
         """Open the database file."""
-        self.logger.info(f'\nImport database {db_file}.')
+        self.logger.info(f'Import database {db_file}.')
         self.database = pw.SqliteDatabase(db_file)
-        self.logger.info('Connecting.')
+        self.logger.info('Connecting.\n')
         self.database.connect()
         self.database.execute_sql('PRAGMA foreign_keys = ON;')
 
     def create_tables(self):
         """Create the tables in the database."""
-        self.logger.info("\nCreating the Person table.")
+        self.logger.info("Creating the Person table.")
         self.database.create_tables([mdl.Person])
         self.logger.info("Creating the Department table.")
         self.database.create_tables([mdl.Department])
         self.logger.info("Creating the DeptJobs table.")
         self.database.create_tables([mdl.DeptJobs])
-        self.logger.info("Creating the Job table.")
+        self.logger.info("Creating the Job table.\n")
         self.database.create_tables([mdl.Job])
 
     def fill_person_table(self):
@@ -64,7 +63,7 @@ class manipulate_db:
             ('Steven', 'Colchester', None),
             ('Sophia', 'Lynnwood', 'Soph')
         )
-        self.logger.info("\nAdd people to the Person table.")
+        self.logger.info("Add people to the Person table.")
         for person in people:
             try:
                 with self.database.transaction():
@@ -88,7 +87,7 @@ class manipulate_db:
             pw.fn.COUNT(mdl.Person.person_name)
         )
         person_count = person_query.scalar()
-        self.logger.info(f'Number of Person records: {person_count}.')
+        self.logger.info(f'Number of Person records: {person_count}.\n')
 
     def fill_department_table(self):
         """Fill the Department table with data."""
@@ -101,7 +100,7 @@ class manipulate_db:
             ('C96', 'Purgatory6', 'Watts Miname5'),  # Invalid-won't be added
             ('H40X', 'Purgatory8', 'Whose Whom')  # Ditto
         )
-        self.logger.info('\nAdd departments to the Department table.')
+        self.logger.info('Add departments to the Department table.')
         for dept in dept_details:
             try:
                 with self.database.transaction():
@@ -125,7 +124,7 @@ class manipulate_db:
             pw.fn.COUNT(mdl.Department.department_number)
         )
         dept_count = dept_query.scalar()
-        self.logger.info(f'Number of Department records: {dept_count}.')
+        self.logger.info(f'Number of Department records: {dept_count}.\n')
 
     def fill_deptjobs_table(self):
         """Fill the DeptJobs table with data."""
@@ -139,7 +138,7 @@ class manipulate_db:
             ('Admin supervisor', 'A147'),
             ('Admin manager', 'A147')
         )
-        self.logger.info("\nAdd departments and jobs to the DeptJobs table.")
+        self.logger.info("Add departments and jobs to the DeptJobs table.")
         for job in jobs_in_dept:
             try:
                 with self.database.transaction():
@@ -154,14 +153,14 @@ class manipulate_db:
                     f'Error creating = {job[DJ_JOBNAME]}, {job[DJ_DEPTNUM]}.'
                 )
                 self.logger.info(e)
-        self.logger.info('Read and print all DeptJob records we created.')
+        self.logger.info('Read and print all DeptJobs records we created.')
         for job in mdl.DeptJobs:
             self.logger.info(f'Added {job.job_name}: {job.department_number}.')
         dept_job_query = mdl.DeptJobs.select(
             pw.fn.COUNT(mdl.DeptJobs.job_name)
         )
         dept_job_count = dept_job_query.scalar()
-        self.logger.info(f'Number of DeptJob records: {dept_job_count}.')
+        self.logger.info(f'Number of DeptJobs records: {dept_job_count}.\n')
 
     def fill_job_table(self):
         """Fill the Job table with data."""
@@ -173,7 +172,7 @@ class manipulate_db:
             ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Peter'),
             ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Peter')
         )
-        self.logger.info('\nAdd jobs to the Job table.')
+        self.logger.info('Add jobs to the Job table.')
         for job in jobs:
             try:
                 with self.database.transaction():
@@ -199,41 +198,44 @@ class manipulate_db:
             )
         job_query = mdl.Job.select(pw.fn.COUNT(mdl.Job.person_employed))
         job_count = job_query.scalar()
-        self.logger.info(f'Number of Job records: {job_count}.')
+        self.logger.info(f'Number of Job records: {job_count}.\n')
 
     def get_all_job_stints(self):
         """Return info about each person's job."""
         self.logger.info(
-            "\nQuery for people's jobs, departments, managers, and durations."
+            "Query for people's jobs, departments, managers, and durations."
         )
         data_query = (mdl.Job.select(
             mdl.Job.person_employed,
-            mdl.Job.job_name,
+            mdl.Job.job_name.alias('job'),
             mdl.Department.department_name.alias('dept_name'),
-            mdl.Department.manager.alias('manager'),
-            mdl.Job.duration
-            # (
-            #     pw.fn.JULIANDAY(mdl.Job.end_date) -
-            #     pw.fn.JULIANDAY(mdl.Job.start_date) + 1
-            # ).alias('duration')
+            mdl.Department.manager.alias('mgr'),
+            (
+                pw.fn.JULIANDAY(mdl.Job.end_date) -
+                pw.fn.JULIANDAY(mdl.Job.start_date) + 1
+            ).alias('duration')
         ).join(mdl.DeptJobs).join(mdl.Department, pw.JOIN.LEFT_OUTER).where(
             mdl.Job.job_name == mdl.DeptJobs.job_name and
             mdl.DeptJobs.department_number == mdl.Department.department_number
         ).order_by(mdl.Department.department_name, pw.SQL('duration').desc()))
         self.logger.info(f"Length of data_query: {len(data_query)}.")
         for gig in data_query:
+            self.logger.info(vars(gig))
             self.logger.info(
                 f'Person {gig.person_employed} '
-                f'worked as a {gig.job_name} '
+                f'worked as a {gig.job} '
                 # f'in department {gig.dept_name} for '
-                # f'manager {gig.manager} '
+                # f'manager {gig.mgr} '
                 f'for a total of {gig.duration} days.'
             )
         data_count_query = pw.fn.COUNT(data_query)
         data_total = data_count_query.scalar()
-        self.logger.info(f'Number of job stints: {data_total}.')
+        self.logger.info(f'Number of job stints: {data_total}.\n')
 
     def close_database(self):
         """Close the database."""
-        self.logger.info("\nClose the database.")
+        self.logger.info("Close the database.\n")
         self.database.close()
+
+if __name__ == '__main__':
+    ManipulateDb()
