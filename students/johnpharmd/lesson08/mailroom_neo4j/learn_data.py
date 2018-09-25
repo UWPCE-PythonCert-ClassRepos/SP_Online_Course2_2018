@@ -5,7 +5,7 @@
 
 def get_mailroom_data():
     """
-        makes JSON object from mailroom donors_list, stores in txt file
+        makes dicts for each donor's data, then returns list of all
     """
 
     donors_list = [
