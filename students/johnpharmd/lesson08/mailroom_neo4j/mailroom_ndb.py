@@ -31,9 +31,7 @@ def populate_db():
 def get_all_donors():
     with driver.session() as session:
         cyph = """MATCH (p:Person)
-                  RETURN p.first_name as first_name, p.last_name as last_name,
-                  p.title as title, p.donations as donations, p.num_donations
-                  as num_donations
+                  RETURN p.first_name as first_name, p.last_name as last_name
                 """
         result = session.run(cyph)
         print("People in database:")
@@ -51,12 +49,14 @@ def get_one_donor_data():
             with driver.session() as session:
                 cyph = """
                 MATCH (p:Person {title:'%s', last_name:'%s'})
-                RETURN p.title as title, p.last_name as last_name
+                RETURN p.title as title, p.last_name as last_name,
+                p.donations as donations, p.num_donations as num_donations
                 """ % (title, last_name)
                 result = session.run(cyph)
                 print()
                 for d in result:
-                    print(d['title'], d['last_name'], '\n')
+                    print(d['title'], d['last_name'], d['donations'],
+                          d['num_donations'], '\n')
 
 
 class UI():
