@@ -45,17 +45,18 @@ class Department(BaseModel):
     department name, job name(s), and manager.
     """
     logger.info("Defining table: Department.")
-    logger.info("Adding department_name field to Department table.")
-    department_name = pw.CharField(max_length=40, null=False)
+    logger.info(
+        "Adding department_name primary key field to Department table.")
+    department_name = pw.CharField(max_length=40, null=False, primary_key=True)
     logger.info("Adding manager field to Department table.")
     manager = pw.CharField(max_length=30)
     logger.info(
-        "Adding department_number primary key field to Department table. "
+        "Adding department_number field to Department table. "
         "The field has four digits and must start with a letter.\n"
     )
     department_number = pw.CharField(
-        primary_key=True,
         max_length=4,
+        unique=True,
         constraints=[
             pw.Check('length(department_number) >= 4'),
             pw.Check('substr(department_number, 1) >= "A"'),
@@ -79,7 +80,8 @@ class DeptJobs(BaseModel):
     job_name = pw.CharField(primary_key=True, max_length=30, null=False)
     logger.info(
         "Adding department_number foreign key field to DeptJobs table.\n")
-    department_number = pw.ForeignKeyField(Department)
+    department_number = pw.ForeignKeyField(
+        Department, field=Department.department_number)
 
 class Job(BaseModel):
     """
@@ -89,6 +91,8 @@ class Job(BaseModel):
     logger.info("Defining table: Job.")
     logger.info("Adding job_name field to Job table.")
     job_name = pw.ForeignKeyField(DeptJobs)
+    logger.info("Adding dept_name field to Job table.")
+    dept_name = pw.ForeignKeyField(Department)
     logger.info("Adding start_date field to Job table.")
     start_date = pw.DateField(formats='YYYY-MM-DD', null=False)
     logger.info("Adding end_date field to Job table; default is current date.")
