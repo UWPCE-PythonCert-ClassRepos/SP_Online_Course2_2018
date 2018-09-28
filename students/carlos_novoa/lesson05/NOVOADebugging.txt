@@ -1,0 +1,106 @@
+No condition is specified to return False when 'n' is not a power of 2 and 'n' continues to be divided into smaller numbers. The fix was to return False and exit the loop when 'n' reaches a number smaller than the exponent.
+
+Below is my debugging log:
+
+DeFeNdogs-MacBook-Pro-4:lesson05 DeFeNdog$ python recoursive.py 15
+Traceback (most recent call last):
+  File "recoursive.py", line 15, in <module>
+    print(my_fun(n))
+  File "recoursive.py", line 10, in my_fun
+    return my_fun(n/2)
+  File "recoursive.py", line 10, in my_fun
+    return my_fun(n/2)
+  File "recoursive.py", line 10, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 994 more times]
+  File "recoursive.py", line 7, in my_fun
+    if n == 2:
+RecursionError: maximum recursion depth exceeded in comparison
+DeFeNdogs-MacBook-Pro-4:lesson05 DeFeNdog$ python -m pdb recursive.py 15
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(3)<module>()
+-> import sys
+(Pdb) ll
+  1     #!/usr/bin/env python3
+  2
+  3  -> import sys
+  4
+  5
+  6     def my_fun(n):
+  7         if n == 2:
+  8             return True
+  9
+ 10         return my_fun(n/2)
+ 11
+ 12
+ 13     if __name__ == '__main__':
+ 14         n = int(sys.argv[1])
+ 15         print(my_fun(n))
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(6)<module>()
+-> def my_fun(n):
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(13)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(14)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(15)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(6)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(7)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(6)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(7)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(6)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(7)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(6)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(7)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(6)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> /Users/DeFeNdog/Documents/UWProjects/SP_Online_Course2_2018/students/carlos_novoa/lesson05/recursive.py(7)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
