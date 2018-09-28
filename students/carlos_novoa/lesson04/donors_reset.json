@@ -1,0 +1,47 @@
+{
+    "__obj_type": "DonorData",
+    "data": [
+        {
+            "fname": "Jim",
+            "lname": "Halpert",
+            "donations": [
+                1.0
+            ]
+        },
+        {
+            "fname": "Pam",
+            "lname": "Beesley",
+            "donations": [
+                1000.0,
+                2000.0,
+                3000.0
+            ]
+        },
+        {
+            "fname": "Dwight",
+            "lname": "Shrute",
+            "donations": [
+                2.0,
+                3.0
+            ]
+        },
+        {
+            "fname": "Michael",
+            "lname": "Scott",
+            "donations": [
+                10.0,
+                20.0,
+                30.0
+            ]
+        },
+        {
+            "fname": "Andy",
+            "lname": "Bernard",
+            "donations": [
+                10.0,
+                20.0,
+                30.0
+            ]
+        }
+    ]
+}
