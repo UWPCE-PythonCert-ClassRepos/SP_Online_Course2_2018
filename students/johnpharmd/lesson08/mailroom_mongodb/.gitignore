@@ -1,12 +1,3 @@
-# Mac files
-.DS_Store
-
-# PyCharm files
-.idea/
-uw-venv
-*.zip
-*.csv
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -109,15 +100,17 @@ ENV/
 # mypy
 .mypy_cache/
 
-# VSCode project files
-.vscode/
-students/etwum/lesson01/featuresdf.csv
+.DS_Store
 
 #secrets
 .config/
 
-# vi swap files
-.*.swp
+prof/
+.pytest_cache/
+.idea/
 
-# secrets
-.config/
+test_results/
+logs/
+
+data/
+

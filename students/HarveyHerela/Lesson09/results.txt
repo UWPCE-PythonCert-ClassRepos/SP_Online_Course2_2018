@@ -1,0 +1,8 @@
+1 threads took about 61.34 seconds
+2 threads took about 26.55 seconds
+4 threads took about 22.92 seconds
+6 threads took about 10.62 seconds
+8 threads took about 6.57 seconds
+10 threads took about 8.31 seconds
+12 threads took about 6.15 seconds
+91 threads took about 1.62 seconds

@@ -2,8 +2,6 @@
     Data for database demonstrations
 """
 
-import json
-
 
 def get_mailroom_data():
     """
@@ -41,9 +39,6 @@ def get_mailroom_data():
        }
     ]
     return donors_list
-    
-    # with open('mailroom_json.txt', 'w') as outfile:
-    #     return json.dump(donors_list, outfile, indent=4, sort_keys=True)
 
 
 def get_baseball_data():
