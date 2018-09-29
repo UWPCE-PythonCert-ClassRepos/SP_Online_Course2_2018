@@ -14,12 +14,23 @@ NOTE: you need to register with the web site to get a KEY.
 """
 import time
 import requests
+import threading
 
 WORD = "trump"
 
 NEWS_API_KEY = "84d0483394c44f288965d7b366e54a74"
 
 base_url = 'https://newsapi.org/v1/'
+
+# global variables
+next_source = 0
+total_art_count = 0
+total_word_count = 0
+sources_mutex = threading.Lock()
+totals_mutex = threading.Lock()
+
+# 8 threads achieves a 8x speedup. More results in retry errors.
+NUM_THREADS = 8
 
 
 def get_sources():
@@ -72,15 +83,55 @@ def count_word(word, titles):
     return count
 
 
+def pick_source(sources):
+    """Returns an index pointing to a source to evaluate, or None when done."""
+    global next_source
+
+    with sources_mutex:
+        if next_source >= len(sources):
+            return None
+        next_source += 1
+        return next_source - 1
+
+
+def update_totals(art_count, word_count):
+    global total_art_count
+    global total_word_count
+
+    with totals_mutex:
+        total_art_count += art_count
+        total_word_count += word_count
+
+
+def eval_sources(sources):
+    while True:
+        # Pick a source to evaluate
+        source_idx = pick_source(sources)
+        if source_idx is None:
+            return
+        source = sources[source_idx]
+
+        # Evaluate the source
+        titles = get_articles(source)
+        art_count = len(titles)
+        word_count = count_word('trump', titles)
+
+        # Update global stats
+        update_totals(art_count, word_count)
+
+
 start = time.time()
 sources = get_sources()
 
-art_count = 0
-word_count = 0
-for source in sources:
-    titles = get_articles(source)
-    art_count += len(titles)
-    word_count += count_word('trump', titles)
+threads = []
+for idx in range(NUM_THREADS):
+    thread = threading.Thread(target = eval_sources, args = (sources, ))
+    thread.start()
+    threads.append(thread)
 
-print(WORD, "found {} times in {} articles".format(word_count, art_count))
+for thread in threads:
+    thread.join()
+
+print(WORD, "found {} times in {} articles".format(
+    total_word_count, total_art_count))
 print("Process took {:.0f} seconds".format(time.time() - start))
