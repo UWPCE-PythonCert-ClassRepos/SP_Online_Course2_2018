@@ -49,7 +49,7 @@ if __name__ == '__main__':
         news_queue.put(get_articles(*args))
 
 
-    sources = []
+    sources = get_sources()
     threads = []
 
     for s in sources:
