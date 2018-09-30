@@ -1,0 +1,2 @@
+What make me, me? I'm a Seattle native that ltakes full advantage of thall the ssummer sun we get. Secretly though, fall is my favorite time of year. The ccolors of the changing leaves are so pretty!
+What do I hope to get out of this course? Well, Python is not a requirement in my job role as a project manager but it is an interest of mine. I hope to learn more about how to use Python and satisfy my curiousity of the language.
