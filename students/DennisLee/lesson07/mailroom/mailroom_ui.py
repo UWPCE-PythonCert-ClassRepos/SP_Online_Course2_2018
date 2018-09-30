@@ -1,10 +1,17 @@
+"""
+This module implements the mailroom user interface.
+"""
+
 #!/usr/bin/env python3
 
-import mailroom_oo
 import os
+import mailroom_model as mdl
+import mailroom_oo
 
 class DonorUI():
-
+    """
+    This class contains the donor mailroom UI functionality.
+    """
     def __init__(self, coll):
         if isinstance(coll, mailroom_oo.DonorCollection):
             self.collection = coll
@@ -19,19 +26,20 @@ class DonorUI():
         """
         # create a dict of menu items/ menu text/ menu caller functions
         choices = {
-        '1': {'option': 'Send a thank you', 'function': self.send_thank_you},
-        '2': {'option': 'Create a report', 'function': self.collection.create_report},
-        '3': {'option': 'Send all letters', 'function': self.send_all_letters},
-        '4': {'option': 'Quit', 'function': self.exit_screen}
+            '1': {'option': 'Send a thank you', 'function': self.send_thank_you},
+            '2': {'option': 'Create a report', 'function': self.collection.create_report},
+            '3': {'option': 'Send all letters', 'function': self.send_all_letters},
+            '4': {'option': 'Quit', 'function': self.exit_screen}
         }
-        
+
         while True:  # Print the menu list (with numbered choices)
             print("\nMENU:")
             for k, v in choices.items():
                 print(k, v['option'])
             response = input("Type a menu selection number: ").strip()
-            self.call_menu_function(choices, response, 
-                    self.respond_to_bad_main_menu_choice, bad_choice=response)
+            self.call_menu_function(
+                choices, response,
+                self.respond_to_bad_main_menu_choice, bad_choice=response)
             if response == '4':  # Exit if "Quit" is chosen
                 return
 
@@ -41,20 +49,20 @@ class DonorUI():
         Call a menu function with a dict.
 
         :choice_dict:  Dict containing the `choice` string, with the dict
-                    value being a another dict that contains a 'function'
-                    key whose value is the function to call for `choice`.
+                       value being a another dict that contains a 'function'
+                       key whose value is the function to call for `choice`.
 
         :choice:  A string that may or may not be a key in the choice_dict
-                dictionary.
+                  dictionary.
 
         :unfound_key_handler:  The function to call if the specified choice
-                            is not a key in the dictionary.
+                               is not a key in the dictionary.
 
         :kwargs:  Additional keyword arguments to pass to the unfound key
-                handler.
+                  handler.
 
         :return:  `True` if a menu function was successfully called;
-                `False` otherwise (which also can be the desired result).
+                  `False` otherwise (which also can be the desired result).
         """
         try:  # Get the selection number and call helper function
             choice_dict[choice]['function']()
@@ -67,7 +75,7 @@ class DonorUI():
     def respond_to_bad_main_menu_choice(self, bad_choice):
         """
         Show error message if the user's main menu choice is invalid.
-        
+
         :bad_choice:  The menu choice string as entered by the user.
 
         :return:  None.
@@ -91,16 +99,16 @@ class DonorUI():
         :return:  None.
         """
         alt_choices = {  # Dict of functions to show donor list or to quit
-                '': {'function': self.exit_screen},
-                'quit': {'function': self.exit_screen},
-                'list': {'function': self.collection.print_donors}
+            '': {'function': self.exit_screen},
+            'quit': {'function': self.exit_screen},
+            'list': {'function': self.collection.print_donors}
         }
         # Get the donor name, show all donors, or quit
         response = input("\nType full donor name "
-                "(or 'list' to show all donors, or 'quit'): ").strip()
+                         "(or 'list' to show all donors, or 'quit'): ").strip()
 
-        self.call_menu_function(alt_choices, response, 
-                self.get_donation_amount, donor=response)
+        self.call_menu_function(alt_choices, response,
+                                self.get_donation_amount, donor=response)
         if response == 'list':
             self.send_thank_you()  # Still want to get a donor to thank
 
@@ -113,14 +121,15 @@ class DonorUI():
         :return:  None.
         """
         donation_choices = {  # Dict of functions if user wants to quit
-                '': {'function': self.exit_screen},
-                'quit': {'function': self.exit_screen}
+            '': {'function': self.exit_screen},
+            'quit': {'function': self.exit_screen}
         }
         donation = input(f"Type amount to donate (or type 'quit'): "
-                ).strip().lower()
+                        ).strip().lower()
         try:
-            self.call_menu_function(donation_choices, donation, 
-                    self.collection.add, name=donor, amount=donation)
+            self.call_menu_function(
+                donation_choices, donation,
+                self.collection.add, name=donor, amount=donation)
         except ValueError:
             print(f"'{donation}' is not a valid donation amount.")
 
@@ -134,44 +143,35 @@ class DonorUI():
         print('\nThe current directory is %s' % os.getcwd())
         new_dir = input('\nType the directory to save the letters in'
                         ' (blank entry defaults to the current directory): '
-                        ).strip()
+                       ).strip()
         try:
             self.collection.save_letters(new_dir)
         except FileNotFoundError:
             print(f"Can't open or create folder '{new_dir}' - exiting "
-                    "without creating the thank-you letters.")
+                  "without creating the thank-you letters.")
         except PermissionError:
             print(f"Not allowed to write to '{new_dir}'.")
         except OSError:
             print(f"Specified folder '{new_dir}' is not valid.")
 
 
-
-
-
 if __name__ == '__main__':
     # Initial donor list and the amounts they have donated
-    donor_history = {
-            'Red Herring': [65820.5, 31126.37, 15000, 2500],
-            'Papa Smurf': [210.64, 1000, 57.86, 2804.83, 351.22, 48],
-            'Pat Panda': [55324.4, 35570.53, 14920.50],
-            'Karl-Heinz Berthold': [3545.2, 10579.31],
-            'Mama Murphy': [156316.99, 8500.3, 12054.33, 600, 785.20],
-            'Daphne Dastardly': [82]
-    }
+    DH_NAME, DH_TOWN, DH_AMTS = 0, 1, 2
+    donor_history = (
+        ('Red Herring', 'Amarillo', [65820.5, 31126.37, 15000, 2500]),
+        ('Papa Smurf', 'Zurich', [210.64, 1000, 57.86, 2804.83, 351.22, 48]),
+        ('Pat Panda', 'Chengdu', [55324.4, 35570.53, 14920.50]),
+        ('Karl-Heinz Berthold', 'Bremen', [3545.2, 10579.31]),
+        ('Mama Murphy', 'Chicago', [156316.99, 8500.3, 12054.33, 600, 785.20]),
+        ('Daphne Dastardly', 'Gotham', [82])
+    )
 
-    coll = mailroom_oo.DonorCollection()
-    for name, amts in donor_history.items():
-        for amt in amts:
-            coll.add(name, amt)
+    donor_col = mailroom_oo.DonorCollection()
+    for donor in donor_history:
+        donor_col.add_or_update_donor(donor[DH_NAME], donor[DH_TOWN])
+        for amount in donor[DH_AMTS]:
+            donor_col.add_new_amount(donor[DH_NAME], amount)
 
-    # coll.print_donors()
-    # coll.create_report()
-    # for k, v in coll.donors.items():
-    #     print(v.form_letter)
-    # coll.save_letters()
-    
-    dui = DonorUI(coll)
+    dui = DonorUI(donor_col)
     dui.manage_donors()
-
-    del coll, dui, mailroom_oo
