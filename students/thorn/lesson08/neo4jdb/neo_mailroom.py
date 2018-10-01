@@ -51,11 +51,12 @@ class Mailroom:
                         print("Amount to add: ", donations)
                         
                         # Match on name and set new donation list
-                        session.run("MATCH (n:Person {name:'%s'}) SET n.donation = %a" % (input_donor, donations))
+                        session.run("MATCH (n:Person {name:'%s'}) SET n.donation = %a)" % (input_donor, donations)
             # New donor insert
             else:
                 print("Donor not found. Adding to database.")
-                session.run("create (n:Person) {name:'%s', donation'%s'}") % (input_donor, input_donation)
+                session.run("CREATE (n:Person {name:' %s', donation: '%s'})") % (input_donor, input_donation)
+
 
     def delete_donor(self):
         """ Deletes a donor. """
