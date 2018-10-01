@@ -61,6 +61,7 @@ if __name__ == "__main__":
     print(f'Current Threads: {THREADS}')
     threads = []
 
+    # Activate and join the threads
     for source in sources:
         thread = threading.Thread(target=get_articles, args=(source,))
         thread.start()
