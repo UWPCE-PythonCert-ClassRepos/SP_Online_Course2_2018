@@ -33,8 +33,8 @@ def login_mongodb_cloud():
     #print(user)
     #print(pw)
     #client = pymongo.MongoClient(f'mongodb+srv://{user}:{pw}''cluster0-fov53.mongodb.net/test,')
-    #client = pymongo.MongoClient(f'mongodb+srv://mike:<eudW3OW6KEkl7>@cluster0-fov53.mongodb.net/test?retryWrites=true')
-    #client = pymongo.MongoClient("mongodb://mike:eudW3OW6KEkl7@mycluster0-shard-00-00.mongodb.net:27017,mycluster0-shard-00-01.mongodb.net:27017,mycluster0-shard-00-02.mongodb.net:27017/admin?ssl=true&replicaSet=Mycluster0-shard-0&authSource=admin")
+    #client = pymongo.MongoClient(f'mongodb+srv://@cluster0-fov53.mongodb.net/test?retryWrites=true')
+    #client = pymongo.MongoClient("mongodb://@mycluster0-shard-00-00.mongodb.net:27017,mycluster0-shard-00-01.mongodb.net:27017,mycluster0-shard-00-02.mongodb.net:27017/admin?ssl=true&replicaSet=Mycluster0-shard-0&authSource=admin")
     client = pymongo.MongoClient(f"mongodb://{user}:{pw}@mycluster0-shard-00-00.mongodb.net:27017,mycluster0-shard-00-01.mongodb.net:27017,mycluster0-shard-00-02.mongodb.net:27017/admin?ssl=true&replicaSet=Mycluster0-shard-0&authSource=admin")
     return client
 
