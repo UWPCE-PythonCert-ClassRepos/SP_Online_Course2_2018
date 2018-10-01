@@ -21,9 +21,7 @@ class DonorCollection():
         self.database = pw.SqliteDatabase(mdl.db_name)
         self.logger.info('Connect to database.')
         self.connect_to_database()
-        self.logger.info('Drop existing tables.')
-        db_tables = self.database.get_tables()
-        self.database.drop_tables(db_tables)
+        self.create_tables()
 
     def __repr__(self):
         return "DonorCollection()"
@@ -34,7 +32,9 @@ class DonorCollection():
         log_formatter = logging.Formatter(log_format)
 
         file_handler = logging.FileHandler(
-            datetime.date.today().isoformat() + __name__ + '.log')
+            datetime.datetime.now().isoformat().replace(':', '-') + '_' +
+            __name__ + '.log'
+        )
         file_handler.setLevel(logging.INFO)
         file_handler.setFormatter(log_formatter)
 
@@ -50,17 +50,32 @@ class DonorCollection():
         self.logger.info('Allow foreign keys in database.')
         self.database.execute_sql('PRAGMA foreign_keys = ON;')
 
+    def create_tables(self):
+        """Create the tables in the database."""
+        self.logger.info("Creating the Person table.")
+        self.database.create_tables([mdl.Person])
+        self.logger.info("Creating the Donations table.\n")
+        self.database.create_tables([mdl.Donations])
+
+    def delete_data(self):
+        """Delete all data in the database tables."""
+        self.logger.info("Delete all data from the Donations table.")
+        mdl.Donations.delete()
+        self.logger.info("Delete all data from the Person table.")
+        mdl.Person.delete()
+
     def close_database(self):
         """Close the database."""
         self.logger.info('Close database.')
         self.database.close()
 
-    def print_donors(self):
+    def choose_donor(self):
         """
         Print the full list of donors.
 
         :return:  None.
         """
+        records = 0
         self.logger.info('Query the Person table for person names.')
         query = mdl.Person.select(
             mdl.Person.person_name
@@ -70,11 +85,14 @@ class DonorCollection():
             self.logger.info('Person table is empty.')
             print("\nNo donors to list.\n")
         else:
+            records = len(query)
             print("\nLIST OF DONORS:")
-            for record in query:
-                self.logger.info(f"Donor = {record.person_name}")
-                print("\t", record.person_name)
+            for i in range(1, records+1):
+                self.logger.info(f"Donor {i}= {query[i].person_name}")
+                print("\t", query[i].person_name)
             print("\n")
+            response = input("Type a donor name.")
+            return response.strip()
 
     def create_report(self):
         """
@@ -167,10 +185,10 @@ class DonorCollection():
             self.logger.info(f"The letter filenames are: {letters.keys()}")
             for filename, text in letters.items():
                 self.logger.info(f"Text contents for {filename}:")
-                self.logger.info(text)
                 lines = text.splitlines()
                 with open(filename, 'w') as f:
                     for line in lines:
+                        self.logger.info('Writing line: ' + line)
                         f.write(line + '\n')
             self.logger.info(f"Change current directory back to '{cur_dir}''.")
             os.chdir(cur_dir)
