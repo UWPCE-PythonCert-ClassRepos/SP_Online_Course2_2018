@@ -1,6 +1,6 @@
 
 def intsum(current=0, next_i=0):
-    """ 
+    """
     Adds the next integer to current int.
 
     0 + 1 + 2 + 3 + 4 + 5 + …
@@ -9,11 +9,11 @@ def intsum(current=0, next_i=0):
     while True:
         current += next_i
         next_i += 1
-        yield current       
+        yield current
 
 
 def doubler(number=1):
-    """ 
+    """
     Current is double the previous value.
     --> 1, 2, 4, 8, 16, 32,
     """
@@ -35,7 +35,7 @@ def fib(prev_i=0, next_i=1):
         fib_i = prev_i + next_i
         prev_i = next_i
         next_i = fib_i
-    
+
 
 def prime(number=2):
     """

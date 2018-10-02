@@ -18,7 +18,7 @@ console_handler.setFormatter(def_formatter)
 
 # Filehandler - warning and higher messages only, include current time
 # filename: {todays-date}.log
-# shares format with console/streamhandler
+shares format with console/streamhandler
 file_handler = logging.FileHandler(f'{today_date}.log')
 file_handler.setLevel(logging.WARNING)           
 file_handler.setFormatter(def_formatter)
