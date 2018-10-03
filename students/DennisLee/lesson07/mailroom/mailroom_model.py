@@ -28,4 +28,7 @@ class Donations(BaseModel):
     donor_name = pw.ForeignKeyField(Person)
     donation_amount = pw.DecimalField(
         max_digits=13, decimal_places=2, auto_round=True)
-    donation_id = pw.IntegerField(primary_key=True)
+    donation_date = pw.DateField(formats='YYYY-MM-DD', null=False)
+    class Meta:
+        """Define the primary key."""
+        primary_key = pw.CompositeKey('donor_name', 'donation_date')

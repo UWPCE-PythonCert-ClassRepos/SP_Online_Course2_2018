@@ -59,40 +59,33 @@ class DonorCollection():
 
     def delete_data(self):
         """Delete all data in the database tables."""
+        # Delete Donations table data
+        self.logger.info(
+            "Number of records in the Donations table: "
+            f"{len(mdl.Donations.select())}."
+        )
         self.logger.info("Delete all data from the Donations table.")
-        mdl.Donations.delete()
+        mdl.Donations.delete().execute()
+        self.logger.info(
+            "Number of records in the Donations table: "
+            f"{len(mdl.Donations.select())}."
+        )
+        # Delete Person table data
+        self.logger.info(
+            "Number of records in the Person table: "
+            f"{len(mdl.Person.select())}."
+        )
         self.logger.info("Delete all data from the Person table.")
-        mdl.Person.delete()
+        mdl.Person.delete().execute()
+        self.logger.info(
+            "Number of records in the Person table: "
+            f"{len(mdl.Person.select())}."
+        )
 
     def close_database(self):
         """Close the database."""
         self.logger.info('Close database.')
         self.database.close()
-
-    def choose_donor(self):
-        """
-        Print the full list of donors.
-
-        :return:  None.
-        """
-        records = 0
-        self.logger.info('Query the Person table for person names.')
-        query = mdl.Person.select(
-            mdl.Person.person_name
-        ).order_by(mdl.Person.person_name)
-        self.logger.info('Print person list - includes non-donating people.')
-        if not query:
-            self.logger.info('Person table is empty.')
-            print("\nNo donors to list.\n")
-        else:
-            records = len(query)
-            print("\nLIST OF DONORS:")
-            for i in range(1, records+1):
-                self.logger.info(f"Donor {i}= {query[i].person_name}")
-                print("\t", query[i].person_name)
-            print("\n")
-            response = input("Type a donor name.")
-            return response.strip()
 
     def create_report(self):
         """
@@ -103,7 +96,7 @@ class DonorCollection():
         self.logger.info('Print out donation stats for all donors.')
         query = mdl.Donations.select(
             mdl.Donations.donor_name,
-            pw.fn.COUNT(mdl.Donations.donation_id).alias('gifts'),
+            pw.fn.COUNT(mdl.Donations.donation_date).alias('gifts'),
             pw.fn.SUM(mdl.Donations.donation_amount).alias('total'),
             pw.fn.AVG(mdl.Donations.donation_amount).alias('average'),
             pw.fn.MAX(mdl.Donations.donation_amount).alias('largest'),
@@ -120,22 +113,24 @@ class DonorCollection():
             col_heads = (
                 'Donor name', 'Number of gifts', 'Total given',
                 'Average gift', 'Largest gift', 'Smallest gift')
-            col_head_str = ('{:<30s} | {:>15s}' + 4*' |  {:>12s}'
+            col_head_str = ('{:<30s} | {:>15s}' + 4*' |  {:>13s}'
                            ).format(*col_heads)
             head_borderline = (
-                '{:<30s} | {:>15s}' + 4*' |  {:>12s}'
+                '{:<30s} | {:>15s}' + 4*' | {:>14s}'
             ).format(
-                '-'*30, '-'*15, '-'*12, '-'*12, '-'*12, '-'*12
+                '-'*30, '-'*15, '-'*14, '-'*14, '-'*14, '-'*14
             )
-            data_str = '{:<30s} | {:>15d}' + 4*' | ${:>12,.2f}'
+            data_str = '{:<30s} | {:>15d}' + 4*' | ${:>13,.2f}'
             self.logger.info(col_head_str)
             self.logger.info(head_borderline)
             print('\n')
             print(col_head_str)
             print(head_borderline)
             for i in query:
-                data = (i.name, i.gifts, i.total,
-                        i.average, i.largest, i.smallest)
+                data = (i.donor_name.__str__(), i.gifts, i.total,
+                        i.average.__float__(), i.largest.__float__(),
+                        i.smallest.__float__())
+                self.logger.info(data)
                 self.logger.info(data_str.format(*data))
                 print(data_str.format(*data))
             print('\n')
@@ -225,7 +220,7 @@ class DonorCollection():
                 ).where(mdl.Person.person_name == clean_name)
                 updated_person.save()
 
-    def add_new_amount(self, donor, amount):
+    def add_new_amount(self, donor, amount, date):
         """
         Add a new donation with the specified donor name and amount.
         If the donor is not currently in the donation history, a new
@@ -235,32 +230,28 @@ class DonorCollection():
 
         :amount:  The amount given.
 
+        :date:  The date of the donation, in YYYY-MM-DD format.
+
         :return:  None.
         """
-        self.logger.info(f"Donor {donor} contributing {amount}.")
+        self.logger.info(f"Donor {donor} contributing {amount} on {date}.")
         amount = float(amount)
         if amount < 0.005:
             raise ValueError("The 'amount' argument must be at least $0.01.")
 
-        # Get a new donation ID value, then add donor name, donation
-        # amount, and donation ID to the Donations table
-        query = mdl.Donations.select(pw.fn.MAX(mdl.Donations.donation_id))
-        if not query:
-            value = 0
-        else:
-            value = query.scalar() + 1
-        self.logger.info(f"Donation ID is {value}.")
         with self.database.transaction():
             try:
                 single_donation = mdl.Donations.create(
                     donor_name=donor,
                     donation_amount=round(amount, 2),
-                    donation_id=value
+                    donation_date=date
                 )
             except Exception as e:
                 self.logger.info(e)
+                self.logger.info('Donation unsuccessful.')
             else:
                 single_donation.save()
+                self.logger.info('Successfully added donation.')
 
     @property
     def form_letter(self, name, index=-1):
@@ -275,10 +266,10 @@ class DonorCollection():
         self.logger.info(f"Creating form letter for {name}.")
         query = mdl.Donations.select(
             mdl.Donations.donation_amount,
-            mdl.Donations.donation_id
+            mdl.Donations.donation_date
         ).where(
             mdl.Donations.donor_name == name
-        ).order_by(mdl.Donations.donation_id)
+        ).order_by(mdl.Donations.donation_date)
         if not query:
             self.logger.info(f"{name} has not made a donation.")
             raise NameError(f"{name} not found.")

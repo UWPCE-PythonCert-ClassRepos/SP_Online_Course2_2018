@@ -5,6 +5,7 @@ This module implements the mailroom user interface.
 #!/usr/bin/env python3
 
 import os
+import mailroom_model as mdl
 import mailroom_oo
 
 class DonorUI():
@@ -30,7 +31,7 @@ class DonorUI():
             '3': {'option': 'Send all letters', 'function': self.send_all_letters},
             '4': {'option': 'Add donor', 'function': None},
             '5': {'option': 'Update donor', 'function': None},
-            '6': {'option': 'Delete donor', 'function': None},
+            '6': {'option': 'Delete donor', 'function': self.delete_donor_and_donations},
             '7': {'option': 'Delete all data', 'function': self.collection.delete_data},
             'Z': {'option': 'Quit', 'function': self.exit_screen}
         }
@@ -157,24 +158,98 @@ class DonorUI():
         except OSError:
             print(f"Specified folder '{new_dir}' is not valid.")
 
+    def delete_donor_and_donations(self):
+        """
+        Delete a donor from the Person table and their gifts from the
+        Donations table.
+
+        :return:  None.
+        """
+        donor_name = self.choose_donor()
+        if donor_name == '':
+            print("\nExiting without deleting a donor.\n")
+        else:
+            mdl.Donations.delete(
+            ).where(mdl.Donations.donor_name == donor_name).execute()
+            mdl.Person.delete(
+            ).where(mdl.Person.person_name == donor_name).execute()
+
+    def choose_donor(self):
+        """
+        Prompt for the user to select a donor from the full donor list.
+
+        :return:  None.
+        """
+        records, response, donor_list = 0, '', []
+        query = mdl.Person.select(
+            mdl.Person.person_name
+        ).order_by(mdl.Person.person_name)
+        if not query:
+            print("\nNo donors to list.\n")
+        else:
+            records = len(query)
+            print("\nLIST OF DONORS:")
+            for i in range(0, records):
+                donor_list.append(query[i].person_name)
+                print("\t", donor_list[-1])
+            print("\n")
+            while response not in donor_list:
+                response = input(
+                    "Type an existing donor name (or leave blank to exit)."
+                ).strip()
+                if response == '':
+                    break
+            return response.strip()
+
 
 if __name__ == '__main__':
     # Initial donor list and the amounts they have donated
-    DH_NAME, DH_TOWN, DH_AMTS = 0, 1, 2
-    donor_history = (
-        ('Red Herring', 'Amarillo', [65820.5, 31126.37, 15000, 2500]),
-        ('Papa Smurf', 'Zurich', [210.64, 1000, 57.86, 2804.83, 351.22, 48]),
-        ('Pat Panda', 'Chicago', [55324.4, 35570.53, 14920.50]),
-        ('Karl-Heinz Berthold', 'Bremen', [3545.2, 10579.31]),
-        ('Mama Murphy', 'Chicago', [156316.99, 8500.3, 12054.33, 600, 785.20]),
-        ('Daphne Dastardly', 'Gotham', [82])
+    DS_NAME, DS_TOWN = 0, 1
+    donor_specs = (
+        ('Red Herring', 'Amarillo'),
+        ('Tight Wad', 'Chicago'),
+        ('Papa Smurf', 'Zurich'),
+        ('Cheap Skate', 'Amarillo'),
+        ('Pat Panda', 'Chicago'),
+        ('Karl-Heinz Berthold', 'Bremen'),
+        ('Mama Murphy', 'Chicago'),
+        ('Daphne Dastardly', 'Gotham')
+    )
+
+    DG_NAME, DG_AMOUNT, DG_DATE = 0, 1, 2
+    donor_gifts = (
+        ('Papa Smurf', 48, '2018-06-29'),
+        ('Papa Smurf', 57.86, '2017-02-01'),
+        ('Daphne Dastardly', 82, '2017-09-22'),
+        ('Papa Smurf', 210.64, '2015-09-15'),
+        ('Papa Smurf', 351.22, '2018-01-01'),
+        ('Mama Murphy', 600, '2017-09-26'),
+        ('Mama Murphy', 785.2, '2018-03-03'),
+        ('Papa Smurf', 1000, '2016-11-12'),
+        ('Bill Dill', 2000, '2015-05-27'),
+        ('Red Herring', 2500, '2018-06-20'),
+        ('Papa Smurf', 2804.83, '2017-08-15'),
+        ('Karl-Heinz Berthold', 3545.2, '2018-01-31'),
+        ('Mama Murphy', 8500.3, '2014-12-12'),
+        ('Karl-Heinz Berthold', 10579.31, '2018-03-31'),
+        ('Mama Murphy', 12054.33, '2017-02-28'),
+        ('Pat Panda', 14920.5, '2018-03-12'),
+        ('Red Herring', 15000, '2017-12-31'),
+        ('Red Herring', 31126.37, '2017-08-31'),
+        ('Pat Panda', 35570.53, '2016-10-28'),
+        ('Pat Panda', 55324.4, '2014-05-25'),
+        ('Red Herring', 65820.5, '2017-05-03'),
+        ('Mama Murphy', 156316.99, '2013-07-30')
     )
 
     donor_col = mailroom_oo.DonorCollection()
-    for donor in donor_history:
-        donor_col.add_or_update_donor(donor[DH_NAME], donor[DH_TOWN])
-        for amount in donor[DH_AMTS]:
-            donor_col.add_new_amount(donor[DH_NAME], amount)
+    for donor in donor_specs:
+        donor_col.add_or_update_donor(donor[DS_NAME], donor[DS_TOWN])
+
+    for donor in donor_gifts:
+        donor_col.add_new_amount(
+            donor[DG_NAME], donor[DG_AMOUNT], donor[DG_DATE]
+        )
 
     dui = DonorUI(donor_col)
     dui.manage_donors()
