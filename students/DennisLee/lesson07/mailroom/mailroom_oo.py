@@ -75,6 +75,28 @@ class DonorCollection():
         self.logger.info(f"The donors are: {result}.")
         return result
 
+    def get_donors_who_donated(self):
+        """
+        Query the Person table for only donor who have given gifts.
+
+        :return:  The list of donors, sorted by name.
+        """
+        self.logger.info("Query for donor names.")
+        result = {}
+        names = mdl.Person.select(
+            mdl.Person.person_name,
+            mdl.Person.lives_in_town
+        ).join(
+            mdl.Donations
+        ).order_by(
+            mdl.Person.person_name
+        ).where(mdl.Person.person_name == mdl.Donations.donor_name)
+        if names:
+            for x in names:
+                result[x.person_name] = x.lives_in_town
+        self.logger.info(f"The generous donors are: {result}.")
+        return result
+
     def get_donor_info(self, name):
         """
         Query the Person table for a donor's personal information.
@@ -82,7 +104,7 @@ class DonorCollection():
 
         :name:  A string containing the donor name to retrieve.
 
-        :return:  
+        :return:  None.
         """
         self.logger.info(f"Get information about donor {name}.")
         result = {}
@@ -99,6 +121,7 @@ class DonorCollection():
         return result
 
     def update_donor(self, name, hometown):
+        """Change an existing donor's hometown."""
         self.logger.info(f"Set {name}'s hometown to {hometown}.")
         result = mdl.Person.update(
             lives_in_town=hometown
@@ -195,64 +218,15 @@ class DonorCollection():
                 print(data_str.format(*data))
             print('\n')
 
-    def save_letters(self, folder=""):
-        """
-        Save the donor thank-you letters to disk.
-
-        :folder:  The folder in which to save the files. If an invalid
-                  folder is specified or no folder is specified, the
-                  current folder is used. If the folder does not exist,
-                  the method attempts to create the folder and save
-                  the letters in the created folder.
-
-        :return:  The folder containing the thank-you letters.
-        """
-        cur_dir = os.getcwd()
-        if not folder:
-            folder = cur_dir
-        try:
-            self.logger.info(f'Create the "{folder}" directory, if necessary.')
-            os.mkdir(folder)
-        except FileExistsError:  # Okay if folder already exists
-            self.logger.info("Folder already exists.")
-        finally:  # Save each letter, with donor name in each file name
-            self.logger.info(f'Change current directory to "{folder}".')
-            os.chdir(folder)
-            folder = os.getcwd()  # Set folder name to the full OS path
-            self.logger.info(f'Current directory is now "{folder}".')
-
-            # Create dict of letter names+letter texts, then write files
-            self.logger.info("Get list of actual donors.")
-            query = mdl.Person.select(
-                mdl.Person.person_name
-            ).join(
-                mdl.Donations
-            ).where(
-                mdl.Person.person_name == mdl.Donations.donor_name
-            ).group_by(
-                mdl.Person.person_name
-            ).order_by(mdl.Person.person_name)
-            self.logger.info("Create dict of filenames and letter text.")
-            letters = {
-                f'_{i.person_name}.txt': self.form_letter(i.person_name)
-                for i in query
-            }
-            self.logger.info(f"The letter filenames are: {letters.keys()}")
-            for filename, text in letters.items():
-                self.logger.info(f"Text contents for {filename}:")
-                lines = text.splitlines()
-                with open(filename, 'w') as f:
-                    for line in lines:
-                        self.logger.info('Writing line: ' + line)
-                        f.write(line + '\n')
-            self.logger.info(f"Change current directory back to '{cur_dir}''.")
-            os.chdir(cur_dir)
-            self.logger.info(f"Return folder with the letters: '{folder}'.")
-            return folder
-
     def add_or_update_donor(self, donor, town):
         """
         Add a donor or update a donor's hometown in the Person table.
+
+        :donor:  The name of the donor to add or update.
+
+        :town:  The new or existing donor's new hometown.
+
+        :return:  None.
         """
         clean_name, clean_town = donor.strip(), town.strip()
         self.logger.info(
@@ -319,10 +293,58 @@ class DonorCollection():
                 single_donation.save()
                 self.logger.info('Successfully added donation.')
 
-    @property
+    def save_letters(self, folder=""):
+        """
+        Save the donor thank-you letters to disk.
+
+        :folder:  The folder in which to save the files. If an invalid
+                  folder is specified or no folder is specified, the
+                  current folder is used. If the folder does not exist,
+                  the method attempts to create the folder and save
+                  the letters in the created folder.
+
+        :return:  The folder containing the thank-you letters.
+        """
+        self.logger.info("Save thank-you letters.")
+        cur_dir, letters = os.getcwd(), {}
+        if not folder:
+            folder = cur_dir
+        try:
+            self.logger.info(f'Create the "{folder}" directory, if necessary.')
+            os.mkdir(folder)
+        except FileExistsError:  # Okay if folder already exists
+            self.logger.info("Folder already exists.")
+        finally:  # Save each letter, with donor name in each file name
+            self.logger.info(f'Change current directory to "{folder}".')
+            os.chdir(folder)
+            folder = os.getcwd()  # Set folder name to the full OS path
+            self.logger.info(f'Current directory is now "{folder}".')
+
+            # Create dict of letter names+letter texts, then write files
+            self.logger.info("Get list of actual donors.")
+            query = self.get_donors_who_donated()
+            self.logger.info("Create dict of filenames and letter text.")
+            for i in query:
+                letters[f'_{i}.txt'] = self.form_letter(i)
+            self.logger.info(f"The letter filenames are: {letters.keys()}")
+            for filename, text in letters.items():
+                self.logger.info(f"Text contents for {filename}:")
+                lines = text.splitlines()
+                with open(filename, 'w') as f:
+                    for line in lines:
+                        self.logger.info('Writing line: ' + line)
+                        f.write(line + '\n')
+            self.logger.info(f"Change current directory back to '{cur_dir}''.")
+            os.chdir(cur_dir)
+            self.logger.info(f"Return folder with the letters: '{folder}'.")
+            return folder
+
+    # @property
     def form_letter(self, name, index=-1):
         """
         Create a thank you form letter for a specific donation.
+
+        :name:  The name of the donor to send the letter to.
 
         :index:  An index to a certain gift within the donation history.
                  This value defaults to the most recent gift amount.
@@ -330,56 +352,57 @@ class DonorCollection():
         :return:  A string containing the filled-in form letter.
         """
         self.logger.info(f"Creating form letter for {name}.")
-        query = mdl.Donations.select(
+        query_all = mdl.Donations.select(
             mdl.Donations.donation_amount,
             mdl.Donations.donation_date
         ).where(
             mdl.Donations.donor_name == name
         ).order_by(mdl.Donations.donation_date)
-        if not query:
-            self.logger.info(f"{name} has not made a donation.")
-            raise NameError(f"{name} not found.")
-        query_count = len(query)
+        query_count = len(query_all)
         self.logger.info(f"Donor {name} has made {query_count} donations.")
 
         if index not in range(-query_count, query_count):
-            raise IndexError(f"Donor '{name}' has donated '{query_count}' "
+            self.logger.info(f"Donor '{name}' has donated '{query_count}' "
                              f"times, so gift # '{index}' is out of range.")
-        text = """\n\n\n
-                From:     Random Worthy Cause Foundation
-                To:       {0:s}
-                Subject:  Your generous donation
+        else:
+            text = """\n\n\n
+                    From:     Random Worthy Cause Foundation
+                    To:       {0:s}
+                    Subject:  Your generous donation
 
-                Dear {0:s},
+                    Dear {0:s},
 
-                We want to express our gratitude for your donation of ${1:,.2f}
-                {2:s}to the Random Worthy Cause Foundation.  To show our
-                appreciation, we have enclosed a set of address labels
-                and a custom tote bag that lets people know that you are a
-                generous supporter of our cause.
-                
-                Thank you again, and please think of us the next time you want
-                to give to a worthy cause.
+                    We want to express our gratitude for your donation of ${1:,.2f}
+                    {2:s}to the Random Worthy Cause Foundation.  To show our
+                    appreciation, we have enclosed a set of address labels
+                    and a custom tote bag that lets people know that you are a
+                    generous supporter of our cause.
+                    
+                    Thank you again, and please think of us the next time you
+                    want to give to a worthy cause.
 
-                Sincerely,
+                    Sincerely,
 
 
 
-                Mister E. Partner
-                Random Worthy Cause Foundation
+                    Mister E. Partner
+                    Random Worthy Cause Foundation
 
-                """
-        text = '\n'.join([line.lstrip() for line in text.splitlines()])
-        # If a donor has given before, add a parenthetical clause
-        # stating the total donation amount and number of donations
-        extra = ''
-        if query_count > 1:
-            query = mdl.Donations.select(
-                pw.fn.SUM(mdl.Donations.donation_amount)
-            )
-            donation_total = query.scalar()
-            self.logger.info(f"List total donations of ${donation_total}.")
-            extra = '(and total donations of ${0:,.2f} from {1:,d} gifts)' \
-                    '\n'.format(donation_total, query_count)
-
-        return text.format(name, query[index].donation_amount, extra)
+                    """
+            text = '\n'.join([line.lstrip() for line in text.splitlines()])
+            # If a donor has given before, add a parenthetical clause
+            # stating the total donation amount and number of donations
+            extra = ''
+            if query_count > 1:
+                query_sum = mdl.Donations.select(
+                    pw.fn.SUM(mdl.Donations.donation_amount)
+                ).where(mdl.Donations.donor_name == name)
+                donation_total = query_sum.scalar()
+                self.logger.info(f"List total donations of ${donation_total}.")
+                extra = '(and total donations of ${0:,.2f} from {1:,d} gifts)' \
+                        '\n'.format(donation_total, query_count)
+            self.logger.info(f"Text = {text}.")
+            self.logger.info(f"Extra = {extra}.")
+            self.logger.info(f"Name = {name}.")
+            self.logger.info(f"Donation amount = {query_all[index].donation_amount}.")
+            return text.format(name, query_all[index].donation_amount, extra)
