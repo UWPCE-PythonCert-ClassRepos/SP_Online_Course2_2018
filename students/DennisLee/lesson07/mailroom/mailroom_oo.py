@@ -19,7 +19,6 @@ class DonorCollection():
         self.logger = self.set_up_logging()
         self.logger.info(f'Import database {mdl.db_name}.')
         self.database = pw.SqliteDatabase(mdl.db_name)
-        self.logger.info('Connect to database.')
         self.connect_to_database()
         self.create_tables()
 
@@ -46,6 +45,7 @@ class DonorCollection():
 
     def connect_to_database(self):
         """Open the database file."""
+        self.logger.info('Connect to database.')
         self.database.connect()
         self.logger.info('Allow foreign keys in database.')
         self.database.execute_sql('PRAGMA foreign_keys = ON;')
@@ -57,6 +57,56 @@ class DonorCollection():
         self.logger.info("Creating the Donations table.\n")
         self.database.create_tables([mdl.Donations])
 
+    def get_donor_list(self):
+        """
+        Query the Person table for all potential donor names.
+
+        :return:  The list of donors, sorted by name.
+        """
+        self.logger.info("Query for donor names.")
+        result = {}
+        names = mdl.Person.select(
+            mdl.Person.person_name,
+            mdl.Person.lives_in_town
+        ).order_by(mdl.Person.person_name)
+        if names:
+            for x in names:
+                result[x.person_name] = x.lives_in_town
+        self.logger.info(f"The donors are: {result}.")
+        return result
+
+    def get_donor_info(self, name):
+        """
+        Query the Person table for a donor's personal information.
+        Right now the only available data is the name and hometown.
+
+        :name:  A string containing the donor name to retrieve.
+
+        :return:  
+        """
+        self.logger.info(f"Get information about donor {name}.")
+        result = {}
+        info = mdl.Person.select(
+            mdl.Person.person_name,
+            mdl.Person.lives_in_town
+        ).where(mdl.Person.person_name == name)
+        if len(info) == 1:
+            result = {
+                'donor': info[0].person_name,
+                'hometown': info[0].lives_in_town
+            }
+        self.logger.info(f"Donor info: {result}")
+        return result
+
+    def update_donor(self, name, hometown):
+        self.logger.info(f"Set {name}'s hometown to {hometown}.")
+        result = mdl.Person.update(
+            lives_in_town=hometown
+        ).where(mdl.Person.person_name == name).execute()
+        self.logger.info(f"Update result: {result}.")
+        new_info = self.get_donor_info(name)
+        self.logger.info(f"New donor info: {new_info}.")
+
     def delete_data(self):
         """Delete all data in the database tables."""
         # Delete Donations table data
@@ -67,7 +117,7 @@ class DonorCollection():
         self.logger.info("Delete all data from the Donations table.")
         mdl.Donations.delete().execute()
         self.logger.info(
-            "Number of records in the Donations table: "
+            "Number of records in the Donations table now: "
             f"{len(mdl.Donations.select())}."
         )
         # Delete Person table data
@@ -78,18 +128,28 @@ class DonorCollection():
         self.logger.info("Delete all data from the Person table.")
         mdl.Person.delete().execute()
         self.logger.info(
-            "Number of records in the Person table: "
+            "Number of records in the Person table now: "
             f"{len(mdl.Person.select())}."
         )
+
+    def delete_donor_data(self, name):
+        """
+        Delete a donor's donations from the Donations table and the
+        donor from the Person table.
+        """
+        self.logger.info(f"Deleting {name}'s donations.")
+        mdl.Donations.delete().where(mdl.Donations.donor_name == name).execute()
+        self.logger.info(f"Deleting {name} from donor list.")
+        mdl.Person.delete().where(mdl.Person.person_name == name).execute()
 
     def close_database(self):
         """Close the database."""
         self.logger.info('Close database.')
         self.database.close()
 
-    def create_report(self):
+    def create_gift_report(self):
         """
-        Print out statistics for the entire donor roster.
+        Print out donation statistics for the entire donor roster.
 
         :return:  None.
         """
@@ -204,21 +264,27 @@ class DonorCollection():
         ).where(mdl.Person.person_name == clean_name)
         if not query:
             self.logger.info(f"Person {clean_name} not in table - will add.")
-            with self.database.transaction():
-                new_person = mdl.Person.create(
-                    person_name=clean_name,
-                    lives_in_town=clean_town
-                )
-                new_person.save()
+            try:
+                with self.database.transaction():
+                    new_person = mdl.Person.create(
+                        person_name=clean_name,
+                        lives_in_town=clean_town
+                    )
+                    new_person.save()
+            except Exception as e:
+                self.logger.info(e)
         elif clean_town and query[0].lives_in_town != clean_town:
             self.logger.info(
                 f"Person {clean_name} is in table but with another hometown "
                 "update the record to change to the new hometown.")
-            with self.database.transaction():
-                updated_person = mdl.Person.update(
-                    lives_in_town=clean_town
-                ).where(mdl.Person.person_name == clean_name)
-                updated_person.save()
+            try:
+                with self.database.transaction():
+                    updated_person = mdl.Person.update(
+                        lives_in_town=clean_town
+                    ).where(mdl.Person.person_name == clean_name)
+                    updated_person.save()
+            except Exception as e:
+                self.logger.info(e)
 
     def add_new_amount(self, donor, amount, date):
         """

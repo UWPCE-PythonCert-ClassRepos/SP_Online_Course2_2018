@@ -19,7 +19,7 @@ class Person(BaseModel):
     for whom we want to research career to date.
     """
     person_name = pw.CharField(primary_key=True, max_length=30, null=False)
-    lives_in_town = pw.CharField(max_length=40)
+    lives_in_town = pw.CharField(max_length=40, default='N/A', null=False)
 
 class Donations(BaseModel):
     """

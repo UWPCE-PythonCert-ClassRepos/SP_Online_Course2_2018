@@ -5,7 +5,7 @@ This module implements the mailroom user interface.
 #!/usr/bin/env python3
 
 import os
-import mailroom_model as mdl
+# import mailroom_model as mdl
 import mailroom_oo
 
 class DonorUI():
@@ -27,10 +27,10 @@ class DonorUI():
         # create a dict of menu items/ menu text/ menu caller functions
         choices = {
             '1': {'option': 'Send a thank you', 'function': self.send_thank_you},
-            '2': {'option': 'Create a report', 'function': self.collection.create_report},
+            '2': {'option': 'Create gift report', 'function': self.collection.create_gift_report},
             '3': {'option': 'Send all letters', 'function': self.send_all_letters},
-            '4': {'option': 'Add donor', 'function': None},
-            '5': {'option': 'Update donor', 'function': None},
+            '4': {'option': 'Add donor', 'function': self.add_donor},
+            '5': {'option': 'Update donor', 'function': self.update_donor_info},
             '6': {'option': 'Delete donor', 'function': self.delete_donor_and_donations},
             '7': {'option': 'Delete all data', 'function': self.collection.delete_data},
             'Z': {'option': 'Quit', 'function': self.exit_screen}
@@ -158,6 +158,42 @@ class DonorUI():
         except OSError:
             print(f"Specified folder '{new_dir}' is not valid.")
 
+    def add_donor(self):
+        """
+        Add a new donor name to the donor list.
+
+        :return:  None.
+        """
+        name = input("Enter a new donor name: ").strip()
+        if self.collection.get_donor_info(name):
+            print(f"Donor {name} already exists - exiting.")
+        else:
+            town = input("Enter hometown (leave blank if unknown): ").strip()
+            if not town:
+                town = 'N/A'
+            print(f"\nAdding donor {name} with hometown {town}.\n")
+            self.collection.add_or_update_donor(name, town)
+
+    def update_donor_info(self):
+        """
+        Update a donor's information. For now, the only information
+        to update is the donor's hometown.
+
+        :return:  None.
+        """
+        donor_name = self.choose_donor()
+        if donor_name == '':
+            print("\nExiting without updating a donor.\n")
+        else:
+            info = self.collection.get_donor_info(donor_name)
+            print(f"\nDonor {info['donor']} lives in {info['hometown']}.\n")
+            new_town = input(
+                "Specify a new hometown (or leave blank to exit). " +
+                "Type N/A if the donor residence is unknown. "
+            ).strip()
+            if new_town:
+                self.collection.update_donor(donor_name, new_town)
+
     def delete_donor_and_donations(self):
         """
         Delete a donor from the Person table and their gifts from the
@@ -169,10 +205,8 @@ class DonorUI():
         if donor_name == '':
             print("\nExiting without deleting a donor.\n")
         else:
-            mdl.Donations.delete(
-            ).where(mdl.Donations.donor_name == donor_name).execute()
-            mdl.Person.delete(
-            ).where(mdl.Person.person_name == donor_name).execute()
+            self.collection.delete_donor_data(donor_name)
+            print(f"\nDonor {donor_name} has been deleted!\n")
 
     def choose_donor(self):
         """
@@ -180,22 +214,18 @@ class DonorUI():
 
         :return:  None.
         """
-        records, response, donor_list = 0, '', []
-        query = mdl.Person.select(
-            mdl.Person.person_name
-        ).order_by(mdl.Person.person_name)
-        if not query:
+        response = ''
+        donor_list = self.collection.get_donor_list()
+        if not donor_list:
             print("\nNo donors to list.\n")
         else:
-            records = len(query)
             print("\nLIST OF DONORS:")
-            for i in range(0, records):
-                donor_list.append(query[i].person_name)
-                print("\t", donor_list[-1])
+            for k, v in donor_list.items():
+                print(f"\t{k} (lives in {v})")
             print("\n")
             while response not in donor_list:
                 response = input(
-                    "Type an existing donor name (or leave blank to exit)."
+                    "Type an existing donor name (or leave blank to exit): "
                 ).strip()
                 if response == '':
                     break
