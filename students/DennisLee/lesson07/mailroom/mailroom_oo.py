@@ -274,9 +274,17 @@ class DonorCollection():
 
         :return:  None.
         """
-        self.logger.info(f"Donor {donor} contributing {amount} on {date}.")
+        self.logger.info(f"Donor '{donor}' giving '{amount}' on '{date}'.")
+        if not donor:
+            self.logger.info("Donor name is empty.")
+            raise ValueError("No donor name specified.")
+        try:
+            cnv_date = datetime.datetime.strptime(date, "%Y-%m-%d")
+        except ValueError:
+            self.logger.info(f"Problem with date format in {date}.")
         amount = float(amount)
         if amount < 0.005:
+            self.logger.info(f"Gift of {amount} must be at least one penny.")
             raise ValueError("The 'amount' argument must be at least $0.01.")
 
         with self.database.transaction():
@@ -284,7 +292,7 @@ class DonorCollection():
                 single_donation = mdl.Donations.create(
                     donor_name=donor,
                     donation_amount=round(amount, 2),
-                    donation_date=date
+                    donation_date=cnv_date
                 )
             except Exception as e:
                 self.logger.info(e)
@@ -339,7 +347,6 @@ class DonorCollection():
             self.logger.info(f"Return folder with the letters: '{folder}'.")
             return folder
 
-    # @property
     def form_letter(self, name, index=-1):
         """
         Create a thank you form letter for a specific donation.
@@ -401,8 +408,4 @@ class DonorCollection():
                 self.logger.info(f"List total donations of ${donation_total}.")
                 extra = '(and total donations of ${0:,.2f} from {1:,d} gifts)' \
                         '\n'.format(donation_total, query_count)
-            self.logger.info(f"Text = {text}.")
-            self.logger.info(f"Extra = {extra}.")
-            self.logger.info(f"Name = {name}.")
-            self.logger.info(f"Donation amount = {query_all[index].donation_amount}.")
             return text.format(name, query_all[index].donation_amount, extra)

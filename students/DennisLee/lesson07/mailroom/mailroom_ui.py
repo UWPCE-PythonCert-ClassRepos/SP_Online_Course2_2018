@@ -97,45 +97,21 @@ class DonorUI():
 
     def send_thank_you(self):
         """
-        Add new donations for new or existing donors, and send a thank-you
+        Add a new donation for an existing donor, and send a thank-you
         letter.
 
         :return:  None.
         """
-        alt_choices = {  # Dict of functions to show donor list or to quit
-            '': {'function': self.exit_screen},
-            'quit': {'function': self.exit_screen},
-            'list': {'function': self.collection.choose_donor}
-        }
-        # Get the donor name, show all donors, or quit
-        response = input("\nType full donor name "
-                         "(or 'list' to show all donors, or 'quit'): ").strip()
-
-        self.call_menu_function(alt_choices, response,
-                                self.get_donation_amount, donor=response)
-        if response == 'list':
-            self.send_thank_you()  # Still want to get a donor to thank
-
-    def get_donation_amount(self, person):
-        """
-        Ask user for a donation amount from the specified donor.
-
-        :person:  The name of the person to make the donation.
-
-        :return:  None.
-        """
-        donation_choices = {  # Dict of functions if user wants to quit
-            '': {'function': self.exit_screen},
-            'quit': {'function': self.exit_screen}
-        }
-        donation = input(f"Type amount to donate (or type 'quit'): "
-                        ).strip().lower()
+        name = self.choose_donor()
+        donation = input("\nType the amount to give (or leave blank to quit): ")
+        when = input("\nType the date of the donation, in YYYY-MM-DD format: "
+                    ).strip()
         try:
-            self.call_menu_function(
-                donation_choices, donation,
-                self.collection.add_new_amount, name=person, amount=donation)
+            self.collection.add_new_amount(name, donation, when)
+            print(f"\nDonor {name}'s gift of {donation} on {when} successfully added.\n")
+            print(self.collection.form_letter(name))
         except ValueError:
-            print(f"'{donation}' is not a valid donation amount.")
+            print("\nInvalid name, donation, or date - exiting.\n")
 
     def send_all_letters(self):
         """
