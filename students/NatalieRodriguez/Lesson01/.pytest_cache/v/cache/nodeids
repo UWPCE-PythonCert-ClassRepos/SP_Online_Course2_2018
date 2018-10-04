@@ -1,0 +1,8 @@
+[
+  "test_generator.py::test_sum_ints",
+  "test_generator.py::test_doubler",
+  "test_generator.py::test_fibonacci",
+  "test_generator.py::test_primes",
+  "test_generator.py::test_squared",
+  "test_generator.py::test_cubed"
+]

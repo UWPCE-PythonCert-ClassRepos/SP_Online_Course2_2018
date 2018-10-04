@@ -1,0 +1,11 @@
+{
+    "__obj_type": "DonorPersist",
+    "donors": {
+        "Luis Conejo": [
+            100
+        ],
+        "Kilian Mbappe": [
+            200
+        ]
+    }
+}

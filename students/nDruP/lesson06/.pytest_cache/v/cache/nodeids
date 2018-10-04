@@ -1,0 +1,12 @@
+[
+  "integration_test.py::ModuleTests::test_module",
+  "unit_test.py::AdderTests::test_adding",
+  "unit_test.py::SubtracterTests::test_subbing",
+  "unit_test.py::MultiplierTests::test_multiplier",
+  "unit_test.py::DividerTests::test_divider",
+  "unit_test.py::CalculatorTests::test_adder",
+  "unit_test.py::CalculatorTests::test_divider",
+  "unit_test.py::CalculatorTests::test_insufficient_operands",
+  "unit_test.py::CalculatorTests::test_multiplier",
+  "unit_test.py::CalculatorTests::test_subber"
+]
