@@ -1,0 +1,88 @@
+{
+    "__obj_type": "DonorsCollection",
+    "_donors": {
+        "__key_not_string": true,
+        "('Stephan', 'LeClerc')": {
+            "__obj_type": "Donor",
+            "_name": [
+                "Stephan",
+                "LeClerc"
+            ],
+            "_donations": [
+                10,
+                20,
+                30,
+                40
+            ]
+        },
+        "('Chris', 'Ping')": {
+            "__obj_type": "Donor",
+            "_name": [
+                "Chris",
+                "Ping"
+            ],
+            "_donations": [
+                12,
+                22,
+                32,
+                42
+            ]
+        },
+        "('James', 'Bond')": {
+            "__obj_type": "Donor",
+            "_name": [
+                "James",
+                "Bond"
+            ],
+            "_donations": [
+                13,
+                23,
+                33,
+                43
+            ]
+        },
+        "('Toto', 'Kotunio')": {
+            "__obj_type": "Donor",
+            "_name": [
+                "Toto",
+                "Kotunio"
+            ],
+            "_donations": [
+                10000.0
+            ]
+        },
+        "('Eric', 'Jurgen')": {
+            "__obj_type": "Donor",
+            "_name": [
+                "Eric",
+                "Jurgen"
+            ],
+            "_donations": [
+                12345.0
+            ]
+        },
+        "('Backup', 'User', '1')": {
+            "__obj_type": "Donor",
+            "_name": [
+                "Backup",
+                "User",
+                "1"
+            ],
+            "_donations": [
+                321.0
+            ]
+        },
+        "('Backup', 'User', '2')": {
+            "__obj_type": "Donor",
+            "_name": [
+                "Backup",
+                "User",
+                "2"
+            ],
+            "_donations": [
+                21314.0
+            ]
+        }
+    },
+    "rep": "Donor Name                              | Total Given       | Num Gifts| Average Gift      \n------------------------------------------------------------------------------------------\nBackup  User  2                          $          21314.00          1 $         21314.00\nEric  Jurgen                             $          12345.00          1 $         12345.00\nToto  Kotunio                            $          10000.00          1 $         10000.00\nBackup  User  1                          $            321.00          1 $           321.00\nJames  Bond                              $            112.00          4 $            28.00\nChris  Ping                              $            108.00          4 $            27.00\nStephan  LeClerc                         $            100.00          4 $            25.00\n"
+}
