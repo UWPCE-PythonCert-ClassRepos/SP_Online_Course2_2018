@@ -1,5 +1,5 @@
 """
-    mongodb example
+mongodb example
 """
 
 import pprint
@@ -35,24 +35,44 @@ def run_example(furniture_items):
         print('Plastic products')
         pprint.pprint(results)
 
-        log.info('Step 5: Delete the blue couch (actually deletes all blue couches)')
-        furniture.remove({"product": {"$eq": "Blue couch"}})
+        log.info(
+            'Step 5: Delete the blue couch (actually deletes all blue couches)'
+        )
+        # furniture.remove({"product": {"$eq": "Blue couch"}})
+        furniture.delete_many({'product_type': 'Couch', 'color': 'Blue'})
 
         log.info('Step 6: Check it is deleted with a query and print')
-        query = {'product': 'Blue couch'}
+        # query = {'product': 'Blue couch'}
+        query = {'product_type': 'Couch', 'color': 'Blue'}
         results = furniture.find_one(query)
         print('The blue couch is deleted, print should show none:')
         pprint.pprint(results)
 
-        log.info(
-            'Step 7: Find multiple documents, iterate though the results and print')
+        log.info('Step 7: Find multiple documents, '
+                 'iterate though the results and print')
 
-        cursor = furniture.find({'monthly_rental_cost': {'$gte': 15.00}}).sort('monthly_rental_cost', 1)
+        cursor = furniture.find({'monthly_rental_cost': {'$gte': 15.00}}
+                               ).sort('monthly_rental_cost', 1)
         print('Results of search')
         log.info('Notice how we parse out the data from the document')
 
         for doc in cursor:
-            print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['product']} Stock: {doc['in_stock_quantity']}")
+            print(f"Cost: {doc['monthly_rental_cost']}")
+            print(f"Product name: {doc['product_type']}")
+            print(f"Description: {doc['description']}")
+            print(f"Color: {doc['color']}")
+            print(f"Stock: {doc['in_stock_quantity']}")
 
-        log.info('Step 8: Delete the collection so we can start over')
+        log.info('Step 8: Find just the red-color products')
+        query = furniture.find({'color': {'$eq': 'Red'}})
+        print('Results of search should contain 2 couches and 1 recliner')
+        pprint.pprint(query)
+
+        log.info('Step 9: Find just the couches')
+        query = furniture.find({'product_type': {'$eq': 'Couch'}})
+        print('Results of search should contain 2 red couches, '
+              'a blue couch, and a black couch')
+        pprint.pprint(query)
+
+        log.info('Step 10: Delete the collection so we can start over')
         db.drop_collection('furniture')
