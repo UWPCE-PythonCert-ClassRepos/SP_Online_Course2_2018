@@ -1,8 +1,9 @@
 """
-    module that will login to the various demonstration databases consistently
+module that will login to the various demonstration databases consistently
 """
 
 import configparser
+import urllib
 from pathlib import Path
 import pymongo
 import redis
@@ -11,13 +12,15 @@ from neo4j.v1 import GraphDatabase, basic_auth
 import utilities
 
 log = utilities.configure_logger('default', '../logs/login_databases_dev.log')
-config_file = Path(__file__).parent.parent / '.config/config.ini'
-config = configparser.ConfigParser()
+config_file = Path(
+    __file__
+).parent.parent.parent.parent.parent / '.config/config.ini'
 
+config = configparser.ConfigParser()
 
 def login_mongodb_cloud():
     """
-        connect to mongodb and login
+    connect to mongodb and login
     """
 
     log.info('Here is where we use the connect to mongodb.')
@@ -30,18 +33,25 @@ def login_mongodb_cloud():
     except Exception as e:
         print(f'error: {e}')
 
-    client = pymongo.MongoClient(f'mongodb://{user}:{pw}'
-                                 '@cluster0-shard-00-00-wphqo.mongodb.net:27017,'
-                                 'cluster0-shard-00-01-wphqo.mongodb.net:27017,'
-                                 'cluster0-shard-00-02-wphqo.mongodb.net:27017/test'
-                                 '?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin')
+    client = pymongo.MongoClient(
+        urllib.parse.quote_plus(
+            f'mongodb://{user}:{pw}'
+            '@cluster0-shard-00-00-5pmzk.mongodb.net:27017,'
+            'cluster0-shard-00-01-5pmzk.mongodb.net:27017,'
+            'cluster0-shard-00-02-5pmzk.mongodb.net:27017'
+            '/test?ssl=true'
+            '&replicaSet=Cluster0-shard-0'
+            '&authSource=admin'
+            '&retryWrites=true'
+        )
+    )
 
     return client
 
 
 def login_redis_cloud():
     """
-        connect to redis and login
+    connect to redis and login
     """
     try:
         config.read(config_file)
@@ -66,8 +76,7 @@ def login_redis_cloud():
 
 def login_neo4j_cloud():
     """
-        connect to neo4j and login
-
+    connect to neo4j and login
     """
 
     log.info('Here is where we use the connect to neo4j.')
@@ -77,8 +86,16 @@ def login_neo4j_cloud():
 
     graphenedb_user = config["neo4j_cloud"]["user"]
     graphenedb_pass = config["neo4j_cloud"]["pw"]
-    graphenedb_url = 'bolt://hobby-opmhmhgpkdehgbkejbochpal.dbs.graphenedb.com:24786'
-    driver = GraphDatabase.driver(graphenedb_url,
-                                  auth=basic_auth(graphenedb_user, graphenedb_pass))
+    graphenedb_url = config["neo4j_cloud"]["connect"]
+    driver = GraphDatabase.driver(
+        graphenedb_url, auth=basic_auth(graphenedb_user, graphenedb_pass)
+    )
 
     return driver
+
+mongodb_client = login_mongodb_cloud()
+log.info(f"MongoDB client: {mongodb_client}")
+redis_client = login_redis_cloud()
+log.info(f"Redis client: {redis_client}")
+neo4j_client = login_neo4j_cloud()
+log.info(f"Neo4j client: {neo4j_client}")
