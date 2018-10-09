@@ -14,7 +14,7 @@ format = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 
 formatter2 = logging.Formatter(format)
 
-sys_handler = logging.handlers.DatagramHandler("127.0.0.1", 514)
+sys_handler = logging.handlers.SysLogHandler()
 sys_handler.setLevel(logging.ERROR)
 sys_handler.setFormatter(formatter2)
 
@@ -33,7 +33,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)                   # Add this line
 logger.addHandler(file_handler)
 logger.addHandler(console_handler) 
-logger.addHandler(sys_handler)             
+logger.addHandler(sys_handler)              # Add this line
 
 def my_fun(n):
     for i in range(0, n):
