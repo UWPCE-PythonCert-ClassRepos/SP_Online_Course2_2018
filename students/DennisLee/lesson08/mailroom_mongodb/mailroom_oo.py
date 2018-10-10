@@ -7,8 +7,7 @@ SQLite database setup for the donor information.
 import logging
 import os
 import datetime
-import pprint
-import login_database
+import mailroom_db_login
 
 
 class DonorCollection():
@@ -18,7 +17,7 @@ class DonorCollection():
         """Initialize the database and clear the data."""
         self.logger = self.set_up_logging()
         self.logger.info(f'Import donor database.')
-        self.client = login_database.login_mongodb_cloud()
+        self.client = mailroom_db_login.login_mongodb_cloud()
         self.database = None
         self.persons = None
         self.donations = None
