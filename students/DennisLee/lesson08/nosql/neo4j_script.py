@@ -47,73 +47,78 @@ def run_example():
         for record in result:
             print(record['first_name'], record['last_name'])
 
-        log.info('Step 4: Create some relationships')
-        log.info("Bob Jones likes Alice Cooper, Fred Barnes and Marie Curie")
+        log.info("Skipping steps 4 through 6 since the friend relationship "
+                 "creations cause duplicate person/color relationships later.")
 
-        for first, last in [("Alice", "Cooper"),
-                            ("Fred", "Barnes"),
-                            ("Marie", "Curie")]:
-            cypher = """
-              MATCH (p1:Person {first_name:'Bob', last_name:'Jones'})
-              CREATE (p1)-[friend:FRIEND]->(p2:Person {first_name:'%s', last_name:'%s'})
-              RETURN p1
-            """ % (first, last)
-            session.run(cypher)
+        # log.info('Step 4: Create some relationships')
+        # log.info("Bob Jones likes Alice Cooper, Fred Barnes and Marie Curie")
 
-        log.info("Step 5: Find all of Bob's friends")
-        cyph = """
-          MATCH (bob {first_name:'Bob', last_name:'Jones'})
-                -[:FRIEND]->(bobFriends)
-          RETURN bobFriends
-          """
-        result = session.run(cyph)
-        print("Bob's friends are:")
-        for rec in result:
-            for friend in rec.values():
-                print(friend['first_name'], friend['last_name'])
+        # for first, last in [("Alice", "Cooper"),
+        #                     ("Fred", "Barnes"),
+        #                     ("Marie", "Curie")]:
+        #     cypher = """
+        #       MATCH (p1:Person {first_name:'Bob', last_name:'Jones'})
+        #       CREATE (p1)-[friend:FRIEND]->(p2:Person {first_name:'%s', last_name:'%s'})
+        #       RETURN p1
+        #     """ % (first, last)
+        #     session.run(cypher)
 
-        log.info("Setting up Marie's friends")
+        # log.info("Step 5: Find all of Bob's friends")
+        # cyph = """
+        #   MATCH (bob {first_name:'Bob', last_name:'Jones'})
+        #         -[:FRIEND]->(bobFriends)
+        #   RETURN bobFriends
+        #   """
+        # result = session.run(cyph)
+        # print("Bob's friends are:")
+        # for rec in result:
+        #     for friend in rec.values():
+        #         print(friend['first_name'], friend['last_name'])
 
-        for first, last in [("Mary", "Evans"),
-                            ("Alice", "Cooper"),
-                            ('Fred', 'Barnes'),
-                            ]:
-            cypher = """
-              MATCH (p1:Person {first_name:'Marie', last_name:'Curie'})
-              CREATE (p1)-[friend:FRIEND]->(p2:Person {first_name:'%s', last_name:'%s'})
-              RETURN p1
-            """ % (first, last)
+        # log.info("Setting up Marie's friends")
 
-            session.run(cypher)
+        # for first, last in [("Mary", "Evans"),
+        #                     ("Alice", "Cooper"),
+        #                     ('Fred', 'Barnes'),
+        #                    ]:
+        #     cypher = """
+        #       MATCH (p1:Person {first_name:'Marie', last_name:'Curie'})
+        #       CREATE (p1)-[friend:FRIEND]->(p2:Person {first_name:'%s', last_name:'%s'})
+        #       RETURN p1
+        #     """ % (first, last)
 
-        log.info("Step 6: Find all of Marie's friends?")
-        cyph = """
-          MATCH (marie {first_name:'Marie', last_name:'Curie'})
-                -[:FRIEND]->(friends)
-          RETURN friends
-          """
-        result = session.run(cyph)
-        print("\nMarie's friends are:")
-        for rec in result:
-            for friend in rec.values():
-                print(friend['first_name'], friend['last_name'])
+        #     session.run(cypher)
+
+        # log.info("Step 6: Find all of Marie's friends?")
+        # cyph = """
+        #   MATCH (marie {first_name:'Marie', last_name:'Curie'})
+        #         -[:FRIEND]->(friends)
+        #   RETURN friends
+        #   """
+        # result = session.run(cyph)
+        # print("\nMarie's friends are:")
+        # for rec in result:
+        #     for friend in rec.values():
+        #         print(friend['first_name'], friend['last_name'])
 
         log.info("Step 7: Add more people")
         emcees = [
-                ('Bob', 'Barker'),
-                ('Tom', 'Kennedy'),
-                ('Regis', 'Philbin'),
-                ('Vicki', 'Lawrence')
+            ('Bob', 'Barker'),
+            ('Tom', 'Kennedy'),
+            ('Regis', 'Philbin'),
+            ('Vicki', 'Lawrence')
         ]
         for first, last in emcees:
             cyph = "CREATE (n:Person {first_name:'%s', last_name: '%s'})" % (
                 first, last)
             session.run(cyph)
-        people.extend(emcees)
+        people.extend(emcees)  # Add emcees to rest of people list
+        people.sort(key=lambda x: x[1])  # Sort people list by last name
 
         log.info("Step 8: Add colors")
         color_list = ['Red', 'White', 'Blue', 'Green',
                       'Purple', 'Orange', 'Yellow', 'Brown', 'Black']
+        color_list.sort()
         for color in color_list:
             cyph = "CREATE (c:Color {color: '%s'})" % color
             session.run(cyph)
@@ -187,24 +192,28 @@ def run_example():
 
         log.info("Step 10: List all people who like a color")
         for color in color_list:
-            cypher = (
-                "MATCH ((p)-[:LIKES]->(c:Color {color: '%s'})) "
-                "RETURN p" % color
-            )
+            cypher = """
+                MATCH ((p)-[:LIKES]->(c:Color {color: '%s'}))
+                RETURN p
+                ORDER BY p.last_name, p.first_name
+            """ % color
+
             result = session.run(cypher)
-            print(f"People who like {color}: ")
+            print(f"\nPeople who like {color}: ")
             for person in result:
                 for val in person.values():
                     print(f"\t{val['first_name']} {val['last_name']}")
 
         log.info("Step 11: List each person's color likes")
         for first, last in people:
-            cypher = (
-                "MATCH ((p {first_name:'%s', last_name:'%s'})-[:LIKES]->(c)) "
-                "RETURN c" % (first, last)
-            )
+            cypher = """
+                MATCH ((p {first_name:'%s', last_name:'%s'})-[:LIKES]->(c))
+                RETURN c
+                ORDER BY c.color
+            """ % (first, last)
+
             result = session.run(cypher)
-            print(f"{first} {last}'s favorite colors: ")
+            print(f"\n{first} {last}'s favorite colors: ")
             for color in result:
                 for val in color.values():
                     print(f"\t{val['color']}")
