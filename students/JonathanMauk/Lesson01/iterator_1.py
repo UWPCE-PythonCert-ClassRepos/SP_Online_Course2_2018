@@ -28,7 +28,7 @@ class IterateMe_1:
             raise StopIteration
 
 
-class IterateMe_2:
+class IterateMe_2(IterateMe_1):
     """
     Extension of IterateMe_1 to make it more like range().
     """
@@ -37,9 +37,6 @@ class IterateMe_2:
         self.current = start - step
         self.stop = stop
         self.step = step
-
-    def __iter__(self):
-        return self
 
     def __next__(self):
         self.current += self.step
@@ -51,21 +48,12 @@ class IterateMe_2:
 
 if __name__ == "__main__":
 
-    print("Testing the basic iterator:")
+    print("Testing IterateMe_1:")
     for i in IterateMe_1():
         print(i)
 
-    print("\nTesting the enhanced iterator:")
+    print("\nTesting IterateMe_2, as compared to IterateMe_1:")
     for i in IterateMe_2(20, 60, 5):
-        print(i)
-
-    print("\nMore testing:")
-    it = IterateMe_2(2, 20, 2)
-    for i in it:
-        if i > 10:
-            break
-        print(i)
-    for i in it:
         print(i)
 
     print("\nrange() testing:")
@@ -76,3 +64,15 @@ if __name__ == "__main__":
         print(i)
     for i in it:
         print(i)
+
+    print("\nIterateMe_2 with same inputs as previous range() testing:")
+    it = IterateMe_2(2, 20, 2)
+    for i in it:
+        if i > 10:
+            break
+        print(i)
+    for i in it:
+        print(i)
+
+# range() resets to the very beginning every time it is instantiated, making it an iterable rather than an iterator.
+# Because IterateMe_2 is an iterator, it restarts from the point that it breaks (12) rather than the beginning.
