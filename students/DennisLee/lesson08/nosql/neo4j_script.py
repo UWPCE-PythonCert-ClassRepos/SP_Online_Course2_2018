@@ -113,7 +113,7 @@ def run_example():
                 first, last)
             session.run(cyph)
         people.extend(emcees)  # Add emcees to rest of people list
-        people.sort(key=lambda x: x[1])  # Sort people list by last name
+        people.sort(key=lambda x: (x[1], x[0]))  # Sort people by last name
 
         log.info("Step 8: Add colors")
         color_list = ['Red', 'White', 'Blue', 'Green',
