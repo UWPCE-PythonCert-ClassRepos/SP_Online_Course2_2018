@@ -1,0 +1,124 @@
+What is wrong with our logic?
+There are many numbers where n will never be 2, because the division doesn't work out.  For example, 6/2 is 3, 3/2 is 1.5, and so on will never return true.  This is infinite recursion.
+
+Why doesn't the function stop calling itself?
+There are not enough conditions where it stops the recursion.  
+
+What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+It keeps getting smaller and smaller.
+
+
+
+Debugger Output:
+
+PS C:\Users\Stefan\Documents\SP_Online_Course2_2018\students\stefanjp1\lesson05> python -m pdb recursion.py 15
+
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3
+  4     def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+  9
+ 10     if __name__ == '__main__':
+ 11         n = int(sys.argv[1])
+ 12         print(my_fun(n))
+(Pdb) n
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(4)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(11)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(12)<module>()
+-> print(my_fun(n))
+(Pdb) pp n
+15
+(Pdb) s
+--Call--
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) ll
+  4  -> def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+(Pdb) n
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) n
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+7.5
+(Pdb) n
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+3.75
+(Pdb) n
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(8)my_fun()
+y(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(4)my_fun()
+on05\recursion.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+1.875
+(Pdb) exit
+PS C:\Users\Stefan\Documents\SP_Online_Course2_2018\students\stefanjp1\lesson05> python -m pdb recursion.py 15
+
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3
+  4     def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+  9
+ 10     if __name__ == '__main__':
+ 11         n = int(sys.argv[1])
+ 12         print(my_fun(n))
+(Pdb) b 5
+Breakpoint 1 at c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py:5
+(Pdb) condition 1 n < 2
+New condition set for breakpoint 1.
+(Pdb) continue
+> c:\users\stefan\documents\sp_online_course2_2018\students\stefanjp1\lesson05\recursion.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb)
+--KeyboardInterrupt--
+(Pdb)

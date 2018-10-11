@@ -1,0 +1,72 @@
+{
+    "__obj_type": "DonorDatabase",
+    "_donors": {
+        "Toni Morrison": {
+            "__obj_type": "Donor",
+            "name": "Toni Morrison",
+            "_donations": [
+                1000,
+                5000,
+                100
+            ],
+            "_total": 6100,
+            "_ave": 2033
+        },
+        "Mike McHargue": {
+            "__obj_type": "Donor",
+            "name": "Mike McHargue",
+            "_donations": [
+                12000,
+                5000,
+                2500
+            ],
+            "_total": 19500,
+            "_ave": 6500
+        },
+        "Flannery O'Connor": {
+            "__obj_type": "Donor",
+            "name": "Flannery O'Connor",
+            "_donations": [
+                38734,
+                6273,
+                67520
+            ],
+            "_total": 112527,
+            "_ave": 37509
+        },
+        "Angelina Davis": {
+            "__obj_type": "Donor",
+            "name": "Angelina Davis",
+            "_donations": [
+                74846,
+                38470,
+                7570,
+                50
+            ],
+            "_total": 120936,
+            "_ave": 30234
+        },
+        "Bell Hooks": {
+            "__obj_type": "Donor",
+            "name": "Bell Hooks",
+            "_donations": [
+                634547,
+                47498,
+                474729,
+                4567
+            ],
+            "_total": 1161341,
+            "_ave": 290335
+        }
+    },
+    "min_col_width": 12,
+    "def_pad": 7,
+    "col_sep": " | ",
+    "cols": [
+        "Donor Name",
+        "Total Given",
+        "Num Gifts",
+        "Average Gift"
+    ],
+    "thank_you_fmt": "\nDear {:s},\nThank you for your generous donation of ${:,.2f}.\n\t\tSincerely,\n\t\t  -Your conscience"
+}

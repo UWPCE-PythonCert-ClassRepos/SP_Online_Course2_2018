@@ -115,3 +115,9 @@ students/etwum/lesson01/featuresdf.csv
 
 #secrets
 .config/
+
+# vi swap files
+.*.swp
+
+# secrets
+.config/
