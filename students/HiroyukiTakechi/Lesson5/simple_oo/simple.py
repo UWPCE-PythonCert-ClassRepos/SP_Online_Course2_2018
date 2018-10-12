@@ -1,36 +1,38 @@
-#Lesson 5 Logging Assignment:
+#Lesson 5 Logging Assignment
 
 import logging
 from logging.handlers import SysLogHandler
-import sys
 from time import strftime
 
-syslog_handler = SysLogHandler(address='127.0.0.1', 514)
+#Output error message to Remote machine (with this address, this host machine)
+#SyslogHandler makes connection to syslogserver.py
+syslog_handler = SysLogHandler(address=('127.0.0.1', 514))
 syslog_handler.setLevel(logging.ERROR)
-app.logger.addHandler(syslog_handler)
 
-
+#format the date and time for the output
+#Output to file in this machine
+#only cares about warning
+#setLevel is let file handler know what to care.
 format = "%(asctime)s %(filename)s:%(lineno)-4d %(levelname)s %(message)s"
-file_Handler = logging.FileHandler(strftime("mylogfile_%H_%M_%m_%d_%Y.log"))
-
-
-# Create a "formatter" using our format string
+file_handler = logging.FileHandler(strftime("mylogfile_%H_%M_%m_%d_%Y.log"))
 formatter = logging.Formatter(format)
-
-# Create a log message handler that sends output to the file 'mylog.log'
-#file_handler = logging.FileHandler('mylog.log') 
-file_handler.setLevel(logging.WARNING)           # Add this line
+file_handler.setLevel(logging.WARNING)         
 file_handler.setFormatter(formatter)
 
-console_handler = logging.StreamHandler()        # Add this line
-console_handler.setLevel(logging.DEBUG)          # Add this line
-console_handler.setFormatter(formatter)          # Add this line
+#Output to the console (Terminal)
+#StreamHandler is output to console
+console_handler = logging.StreamHandler()        
+console_handler.setLevel(logging.ERROR)          
+console_handler.setFormatter(formatter)          
 
+#add handlers. Without adding, it doesn't execute. 
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)                   # Add this line
+logger.setLevel(logging.DEBUG)                   
 logger.addHandler(file_handler)
-logger.addHandler(console_handler)               # Add this line
+logger.addHandler(console_handler)               
+logger.addHandler(syslog_handler)
 
+#custom script
 def my_fun(n):
     for i in range(0,n):
         logging.debug(i)
