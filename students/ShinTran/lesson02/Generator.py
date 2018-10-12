@@ -14,12 +14,10 @@ music = pd.read_csv("featuresdf.csv")
 
 music_list = zip(music.artists, music.name)
 
-def get_name(table):
-    return table[1]
+fav = (x for x in music_list if x[0] == 'Martin Garrix')
 
-fav = sorted([x for x in music_list if x[0] == 'Martin Garrix'], key = get_name)
-
-print("Artist               Song Name           ")
+print("  Artist           Song Name             ")
 print("-----------------------------------------")
-for itr in fav:
-    print('{:20} {:20}'.format(*itr))
+print(next(fav))
+print(next(fav))
+print(next(fav))
