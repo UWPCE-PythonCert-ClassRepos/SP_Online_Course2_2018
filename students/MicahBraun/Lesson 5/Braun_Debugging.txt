@@ -1,0 +1,300 @@
+The function had no stopping point prior to this assignment to tell the recursive function
+to end its job. Without an explicit stop to tell the recursive function to terminate on 
+a False numbers (i.e. not a power of 2), it will continue indefinitely. I added an if-block 
+on line 6 to check for values less-than 2 to prevent this.
+
+C:\Users\mcbra>cd Desktop
+
+C:\Users\mcbra\Desktop>recursive.py
+
+C:\Users\mcbra\Desktop>python recursive.py 4
+True
+
+C:\Users\mcbra\Desktop>python recursive.py 2
+True
+
+C:\Users\mcbra\Desktop>python recursive.py 25
+Traceback (most recent call last):
+  File "recursive.py", line 14, in <module>
+    print(my_fun(n))
+  File "recursive.py", line 9, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 9, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 9, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 994 more times]
+  File "recursive.py", line 6, in my_fun
+    if n == 2:
+RecursionError: maximum recursion depth exceeded in comparison
+
+C:\Users\mcbra\Desktop>python -m pdb recursive.py 5
+> c:\users\mcbra\desktop\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3
+  4     # noinspection PyShadowingNames
+  5     def my_fun(n):
+  6         if n == 2:
+  7             return True
+  8
+  9         return my_fun(n/2)
+ 10
+ 11
+ 12     if __name__ == '__main__':
+ 13         n = int(sys.argv[1])
+ 14         print(my_fun(n))
+ 15
+ 16     # input("Enter a number to see if it's True or False: ")
+(Pdb) n
+> c:\users\mcbra\desktop\recursive.py(5)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\mcbra\desktop\recursive.py(12)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\mcbra\desktop\recursive.py(13)<module>()
+-> n = int(sys.argv[1])
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(14)<module>()
+-> print(my_fun(n))
+(Pdb) pp n
+5
+(Pdb) s
+--Call--
+> c:\users\mcbra\desktop\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+5
+(Pdb) s
+--Call--
+> c:\users\mcbra\desktop\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+2.5
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\mcbra\desktop\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+1.25
+(Pdb) s
+--Call--
+> c:\users\mcbra\desktop\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\mcbra\desktop\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\mcbra\desktop\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+0.15625
+(Pdb) quit
+
+C:\Users\mcbra\Desktop>python -m pdb recursive.py 5
+> c:\users\mcbra\desktop\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3
+  4     # noinspection PyShadowingNames
+  5     def my_fun(n):
+  6         if n == 2:
+  7             return True
+  8
+  9         return my_fun(n/2)
+ 10
+ 11
+ 12     if __name__ == '__main__':
+ 13         n = int(sys.argv[1])
+ 14         print(my_fun(n))
+ 15
+ 16     # input("Enter a number to see if it's True or False: ")
+(Pdb) quit
+
+C:\Users\mcbra\Desktop>recursive.py # > made edits to file in Pycharm to return False 
+
+C:\Users\mcbra\Desktop>python -m pdb recursive.py 5
+> c:\users\mcbra\desktop\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3
+  4     # noinspection PyShadowingNames
+  5     def my_fun(n):
+  6         if n < 2:
+  7             return False
+  8
+  9         if n == 2:
+ 10             return True
+ 11
+ 12         return my_fun(n/2)
+ 13
+ 14
+ 15     if __name__ == '__main__':
+ 16         n = int(sys.argv[1])
+ 17         print(my_fun(n))
+ 18
+ 19     # input("Enter a number to see if it's True or False: ")
+(Pdb) n
+> c:\users\mcbra\desktop\recursive.py(5)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\mcbra\desktop\recursive.py(15)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\mcbra\desktop\recursive.py(16)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\mcbra\desktop\recursive.py(17)<module>()
+-> print(my_fun(n))
+(Pdb) n
+False
+--Return--
+> c:\users\mcbra\desktop\recursive.py(17)<module>()->None
+-> print(my_fun(n))
+(Pdb) n
+--Return--
+> <string>(1)<module>()->None
+(Pdb) quit
+
+C:\Users\mcbra\Desktop>python -m pdb recursive.py 5
+> c:\users\mcbra\desktop\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3
+  4     # noinspection PyShadowingNames
+  5     def my_fun(n):
+  6         if n < 2:
+  7             return False
+  8
+  9         if n == 2:
+ 10             return True
+ 11
+ 12         return my_fun(n/2)
+ 13
+ 14
+ 15     if __name__ == '__main__':
+ 16         n = int(sys.argv[1])
+ 17         print(my_fun(n))
+ 18
+ 19     # input("Enter a number to see if it's True or False: ")
+(Pdb) n
+> c:\users\mcbra\desktop\recursive.py(5)<module>()
+-> def my_fun(n):
+(Pdb)
+> c:\users\mcbra\desktop\recursive.py(15)<module>()
+-> if __name__ == '__main__':
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(16)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\mcbra\desktop\recursive.py(17)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\mcbra\desktop\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(6)my_fun()
+-> if n < 2:
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(9)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(12)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\mcbra\desktop\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+2.5
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(6)my_fun()
+-> if n < 2:
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(9)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(12)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\mcbra\desktop\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+1.25
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(6)my_fun()
+-> if n < 2:
+(Pdb) s
+> c:\users\mcbra\desktop\recursive.py(7)my_fun()
+-> return False
+(Pdb) s
+--Return--
+> c:\users\mcbra\desktop\recursive.py(7)my_fun()->False
+-> return False
+(Pdb) s
+--Return--
+> c:\users\mcbra\desktop\recursive.py(12)my_fun()->False
+-> return my_fun(n/2)
+(Pdb) s
+--Return--
+> c:\users\mcbra\desktop\recursive.py(12)my_fun()->False
+-> return my_fun(n/2)
+(Pdb) s
+False
+--Return--
+> c:\users\mcbra\desktop\recursive.py(17)<module>()->None
+-> print(my_fun(n))
+(Pdb) s
+--Return--
+> <string>(1)<module>()->None
+(Pdb) s
+> c:\users\mcbra\appdata\local\programs\python\python37-32\lib\bdb.py(589)run()
+-> self.quitting = True
+(Pdb) s
+The program finished and will be restarted
+> c:\users\mcbra\desktop\recursive.py(1)<module>()
+-> import sys
+(Pdb) quit
