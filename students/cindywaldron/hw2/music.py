@@ -20,7 +20,7 @@ def energy_track_gen(energy):
     def energy_filter(music):
         my_list = [x for x in zip(music.artists, music.name, music.energy) if x[2]> energy]
         return my_list
-    return energy_filter(music)
+    return energy_filter
 
-print("\nEnergy Track List:")
-print(energy_track_gen(0.8))
+energy_closure = energy_track_gen(0.8)
+print(energy_closure(music))
