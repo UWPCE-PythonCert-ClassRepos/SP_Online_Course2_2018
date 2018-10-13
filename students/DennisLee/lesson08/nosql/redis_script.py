@@ -1,7 +1,7 @@
 """
 demonstrate use of Redis
 """
-
+import pprint
 import login_database
 import utilities
 
@@ -58,12 +58,16 @@ def run_example():
 
         log.info('Step 8: pull some data from the structure')
         cover_type = r.lindex('186675', 2)
-        log.info(f'Type of cover = {cover_type}')
+        log.info(f'Type of cover = {cover_type}')  # Should be 'leather'
 
         log.info('Step 9: load customer data')
         for customer, data in customers.items():
             r.rpush(customer, data[0])
             r.rpush(customer, data[1])
+        log.info(f'The DB keys are:')
+        key_list = r.keys()
+        key_list.sort()
+        pprint.pprint(key_list)
 
         log.info('Step 10: get zip code for Ellen Allen')
         zip_code = r.lindex('Ellen Allen', 1)

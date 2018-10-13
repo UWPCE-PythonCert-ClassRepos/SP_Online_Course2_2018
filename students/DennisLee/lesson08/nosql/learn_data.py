@@ -1,5 +1,5 @@
 """
-    Data for database demonstrations
+Data for database demonstrations
 """
 
 
