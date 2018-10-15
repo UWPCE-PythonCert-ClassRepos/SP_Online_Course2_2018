@@ -407,9 +407,6 @@ class DonorCollection():
         """
         gift_sum = 0.0
         clean_name, clean_date = strip_text(name), strip_text(donation_date)
-        self.logger.info(
-            f"Creating form letter for '{clean_name}', with specified "
-            f"donation date of '{clean_date}'.")
         donor_gift_keys = self.get_keys(
             self.build_pattern(self.prefix_donation, clean_name, '*')
         )
@@ -445,48 +442,48 @@ class DonorCollection():
                     f"'{clean_name}' did not donate on '{clean_date}'.")
                 return None
 
-            self.logger.info(
-                f"Send letter to {clean_name} about gift "
-                f"on {specific_gift_date} for amount {specific_gift_amount}."
-            )
-            text = """\n\n\n
-                    From:     Random Worthy Cause Foundation
-                    To:       {0:s} (phone # {1:s})
-                    Subject:  Your generous donation on {2:s}
+        self.logger.info(
+            f"Send letter to {clean_name} about gift "
+            f"on {specific_gift_date} for amount {specific_gift_amount}."
+        )
+        text = """\n\n\n
+                From:     Random Worthy Cause Foundation
+                To:       {0:s} (phone # {1:s})
+                Subject:  Your generous donation on {2:s}
 
-                    Dear {0:s},
+                Dear {0:s},
 
-                    We want to express our gratitude for your donation of ${3:,.2f}
-                    {4:s}to the Random Worthy Cause Foundation.  To show our
-                    appreciation, we have enclosed a set of address labels
-                    and a custom tote bag that lets people know that you are a
-                    generous supporter of our cause.
-                    
-                    Thank you again, and please think of us the next time you
-                    want to give to a worthy cause.
+                We want to express our gratitude for your donation of ${3:,.2f}
+                {4:s}to the Random Worthy Cause Foundation.  To show our
+                appreciation, we have enclosed a set of address labels
+                and a custom tote bag that lets people know that you are a
+                generous supporter of our cause.
+                
+                Thank you again, and please think of us the next time you
+                want to give to a worthy cause.
 
-                    Sincerely,
+                Sincerely,
 
 
 
-                    Mister E. Partner
-                    Random Worthy Cause Foundation
+                Mister E. Partner
+                Random Worthy Cause Foundation
 
-                    """
-            text = '\n'.join([line.lstrip() for line in text.splitlines()])
-            # If a donor has given before, add a parenthetical clause
-            # stating the total donation amount and number of donations
-            extra = ''
-            if donor_gift_count > 1:
-                self.logger.info(f"Also note total donations of ${gift_sum}.")
-                extra = '(and total donations of ${0:,.2f} from {1:,d} gifts)' \
-                        '\n'.format(gift_sum, donor_gift_count)
-            donor_name_key = self.build_pattern(self.prefix_person, clean_name)
-            phone_num = self.get_db_value(donor_name_key)
-            return text.format(
-                clean_name,
-                phone_num,
-                specific_gift_date,
-                specific_gift_amount,
-                extra
-            )
+                """
+        text = '\n'.join([line.lstrip() for line in text.splitlines()])
+        # If a donor has given before, add a parenthetical clause
+        # stating the total donation amount and number of donations
+        extra = ''
+        if donor_gift_count > 1:
+            self.logger.info(f"Also note total donations of ${gift_sum}.")
+            extra = '(and total donations of ${0:,.2f} from {1:,d} gifts)' \
+                    '\n'.format(gift_sum, donor_gift_count)
+        donor_name_key = self.build_pattern(self.prefix_person, clean_name)
+        phone_num = self.get_db_value(donor_name_key)
+        return text.format(
+            clean_name,
+            phone_num,
+            specific_gift_date,
+            specific_gift_amount,
+            extra
+        )
