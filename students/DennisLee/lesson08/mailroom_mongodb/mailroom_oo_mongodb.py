@@ -124,7 +124,7 @@ class DonorCollection():
         """
         self.logger.info("Query for donors who've actually donated.")
         result = []
-        names = self.donations.distinct('donor_name').sort('donor_name')
+        names = self.donations.distinct({'donor_name': {}}).sort('donor_name')
         if not names:
             self.logger.info("No donors found.")
         else:
@@ -151,7 +151,7 @@ class DonorCollection():
         result = {}
         info = self.persons.find_one({'person_name': clean_name})
 
-        if len(info) == 1:
+        if info:
             result = {
                 'person_name': info['person_name'],
                 'ssn': info['ssn']
@@ -167,33 +167,32 @@ class DonorCollection():
             f"{self.donations.count_documents({})}."
         )
         self.logger.info("Delete all data from the Donations collection.")
-        with self.database.transaction():
+        try:
+            self.donations.delete_many({})
+        except Exception as e:
+            self.logger.info(e)
+            self.logger.info('Donations collection deletion unsuccessful.')
+        else:
+            self.logger.info(
+                "Number of documents in the Donations collection now: "
+                f"{self.donations.count_documents({})}."
+            )
+            # Delete Persons collection data
+            self.logger.info(
+                "Number of documents in the Persons collection: "
+                f"{self.persons.count_documents({})}."
+            )
+            self.logger.info("Delete all data from the Persons collection.")
             try:
-                self.donations.delete_many({})
+                self.persons.delete_many({})
             except Exception as e:
                 self.logger.info(e)
-                self.logger.info('Donations collection deletion unsuccessful.')
+                self.logger.info('Persons collection deletion unsuccessful.')
             else:
                 self.logger.info(
-                    "Number of documents in the Donations collection now: "
-                    f"{self.donations.count_documents({})}."
-                )
-                # Delete Persons collection data
-                self.logger.info(
-                    "Number of documents in the Persons collection: "
+                    "Number of documents in the Persons collection now: "
                     f"{self.persons.count_documents({})}."
                 )
-                self.logger.info("Delete all data from the Persons collection.")
-                try:
-                    self.persons.delete_many({})
-                except Exception as e:
-                    self.logger.info(e)
-                    self.logger.info('Persons collection deletion unsuccessful.')
-                else:
-                    self.logger.info(
-                        "Number of documents in the Persons collection now: "
-                        f"{self.persons.count_documents({})}."
-                    )
 
     def delete_donor_data(self, name):
         """
@@ -207,32 +206,31 @@ class DonorCollection():
             f"{self.donations.count_documents({})}."
         )
         self.logger.info(f"Deleting donations from '{clean_name}'.")
-        with self.database.transaction():
+        try:
+            self.donations.delete_many({'donor_name': clean_name})
+        except Exception as e:
+            self.logger.info(e)
+        else:
+            self.logger.info(
+                "Number of documents in the Donations collection now: "
+                f"{self.donations.count_documents({})}."
+            )
+
+            # Delete donor from Persons collection
+            self.logger.info(
+                "Number of documents in the Persons collection: "
+                f"{self.persons.count_documents({})}."
+            )
+            self.logger.info(f"Deleting '{clean_name}' from donor list.")
             try:
-                self.donations.delete_many({'donor_name': clean_name})
+                self.persons.delete_one({'person_name': clean_name})
             except Exception as e:
                 self.logger.info(e)
             else:
                 self.logger.info(
-                    "Number of documents in the Donations collection now: "
-                    f"{self.donations.count_documents({})}."
-                )
-
-                # Delete donor from Persons collection
-                self.logger.info(
-                    "Number of documents in the Persons collection: "
+                    "Number of documents in the Persons collection now: "
                     f"{self.persons.count_documents({})}."
                 )
-                self.logger.info(f"Deleting '{clean_name}' from donor list.")
-                try:
-                    self.persons.delete_one({'person_name': clean_name})
-                except Exception as e:
-                    self.logger.info(e)
-                else:
-                    self.logger.info(
-                        "Number of documents in the Persons collection now: "
-                        f"{self.persons.count_documents({})}."
-                    )
 
     def close_database(self):
         """Close the database."""
@@ -307,7 +305,7 @@ class DonorCollection():
             f"with SS #{clean_ssn} to the Persons collection.")
         if not clean_name or not clean_ssn:
             print("Exiting - must enter a non-null donor name and SS #.")
-        with self.database.transaction():
+        else:
             try:
                 old_document = self.persons.find_one_and_update(
                     {'person_name': clean_name, 'ssn': {}},
@@ -354,38 +352,38 @@ class DonorCollection():
             amount = float(amount)
         except ValueError:
             self.logger.info(f"Specified gift amount must be a number.")
+            raise ValueError("A number was not specified for the gift amount.")
         if amount < 0.005:
             self.logger.info(f"Gift of '{amount}' must be at least one penny.")
             raise ValueError(
                 f"'{amount}' is invalid - must be at least $0.01.")
 
-        with self.database.transaction():
-            try:
-                old_document = self.donations.find_one_and_update(
-                    {
-                        'donor_name': clean_name,
-                        'donation_amount': {},
-                        'donation_date': str_date
-                    },
-                    {
-                        'donor_name': clean_name,
-                        'donation_amount': round(amount, 2),
-                        'donation_date': str_date
-                    },
-                    upsert=True
+        try:
+            old_document = self.donations.find_one_and_update(
+                {
+                    'donor_name': clean_name,
+                    'donation_amount': {},
+                    'donation_date': str_date
+                },
+                {
+                    'donor_name': clean_name,
+                    'donation_amount': round(amount, 2),
+                    'donation_date': str_date
+                },
+                upsert=True
+            )
+        except Exception as e:
+            self.logger.info(e)
+            self.logger.info('Donation unsuccessful.')
+        else:
+            self.logger.info('Successfully added donation.')
+            if old_document:
+                self.logger.info(
+                    f"Donor '{clean_name}' on '{clean_date}' - old amount "
+                    f"of '{old_document['donation_amont']}' replaced "
+                    f"with '{amount}'."
                 )
-            except Exception as e:
-                self.logger.info(e)
-                self.logger.info('Donation unsuccessful.')
-            else:
-                self.logger.info('Successfully added donation.')
-                if old_document:
-                    self.logger.info(
-                        f"Donor '{clean_name}' on '{clean_date}' - old amount "
-                        f"of '{old_document['donation_amont']}' replaced "
-                        f"with '{amount}'."
-                    )
-                return old_document
+            return old_document
 
     def save_letters(self, folder=""):
         """
