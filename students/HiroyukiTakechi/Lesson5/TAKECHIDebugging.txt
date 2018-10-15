@@ -1,0 +1,77 @@
+Lesson 5 Debugging Assignment (Hiroyuki Takechi)
+
+Question 1:
+
+-What is wrong with our logic?
+
+	The logic doesn't assume that the user might enter other than multiple of 2. 
+
+-Why doesn't the function stop calling itself?
+
+	Because there is no false statement as below.
+
+	def my_fun(n):
+		if n == 2:
+			return True
+		if n < 1:
+			return False
+
+-What's happening to the value of 'n' as the function gets deeper and deeper into recursion
+
+	n gets smaller than 1 by never-ending division
+
+
+Question 2: Copy-and-paste of your terminal debugging activity
+
+it's a Tuesday today and Tuesdays are bad for recursion.
+
+Below is my debugging log:
+
+Hiroyukis-MacBook-Pro-2:Lesson5 hiroyukitakechi$ python -m pdb recursive.py 15
+> /Users/hiroyukitakechi/SP_Online_Course2_2018/students/HiroyukiTakechi/Lesson5/recursive.py(3)<module>()
+-> import sys
+(Pdb) ll
+  1  	#lesson 5 assignment
+  2  	
+  3  ->	import sys
+  4  	
+  5  	def my_fun(n):
+  6  	    if n == 2:
+  7  	        return True
+  8  	
+  9  	    return my_fun(n/2)
+ 10  	
+ 11  	if __name__ == "__main__":
+ 12  	    n = int(sys.argv[1])
+ 13  	    print(my_fun(n))
+ 14  	
+(Pdb) b 6
+Breakpoint 1 at /Users/hiroyukitakechi/SP_Online_Course2_2018/students/HiroyukiTakechi/Lesson5/recursive.py:6
+(Pdb) c
+> /Users/hiroyukitakechi/SP_Online_Course2_2018/students/HiroyukiTakechi/Lesson5/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) c
+> /Users/hiroyukitakechi/SP_Online_Course2_2018/students/HiroyukiTakechi/Lesson5/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) c
+> /Users/hiroyukitakechi/SP_Online_Course2_2018/students/HiroyukiTakechi/Lesson5/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) c
+> /Users/hiroyukitakechi/SP_Online_Course2_2018/students/HiroyukiTakechi/Lesson5/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) c
+> /Users/hiroyukitakechi/SP_Online_Course2_2018/students/HiroyukiTakechi/Lesson5/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) 
+
+#This gives us an idea that we need to add the false statement. i.e. if n < 1, then return False to stop in case that the users enter multiples of other than 2. (i.e. 3)

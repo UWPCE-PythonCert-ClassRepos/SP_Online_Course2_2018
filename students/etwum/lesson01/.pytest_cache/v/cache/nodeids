@@ -1,0 +1,6 @@
+[
+  "test_generator.py::test_int_sum",
+  "test_generator.py::test_doubler",
+  "test_generator.py::test_fib",
+  "test_generator.py::test_prime"
+]

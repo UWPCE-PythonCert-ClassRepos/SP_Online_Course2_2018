@@ -1,0 +1,182 @@
+The problem with the logic of this code is the fact it will only return True if 2 is a factor of the number assigned to 
+n.  If it is, the function will continue to call itself, halving the number each time until producing 2.0, returning 
+True, and ending the call.  If the number is not divisible by 2, odd, less than 2, or containing decimal digits, it will
+keep halving itself until becoming smaller than 2, making the return condition impossible to achieve, causing the 
+function to call itself forever with no exit condition as the number gets smaller and smaller each run.
+
+----------------------------------------------------
+
+Debugging log:
+
+C:\Users\Thomas\Downloads\python2\SP_Online_Course2_2018\students\thorn\lesson05>python -m pdb recursive.py 4
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3
+  4     def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+  9
+ 10
+ 11     if __name__ == "__main__":
+ 12         n = int(sys.argv[1])
+ 13         print(my_fun(n))
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(4)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(11)<module>()
+-> if __name__ == "__main__":
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(12)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(13)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+4
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+2.0
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(6)my_fun()
+-> return True
+(Pdb) n
+--Return--
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(6)my_fun()->True
+-> return True
+(Pdb) s
+--Return--
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(8)my_fun()->True
+-> return my_fun(n/2)
+(Pdb) exit
+
+C:\Users\Thomas\Downloads\python2\SP_Online_Course2_2018\students\thorn\lesson05>python -m pdb recursive.py 7
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(4)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(11)<module>()
+-> if __name__ == "__main__":
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(12)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(13)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+7
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+3.5
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+1.75
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+0.875
+(Pdb) ll
+  4  -> def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+0.4375
+(Pdb) c
+Traceback (most recent call last):
+  File "C:\Users\Thomas\AppData\Local\Programs\Python\Python37-32\lib\pdb.py", line 1697, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Users\Thomas\AppData\Local\Programs\Python\Python37-32\lib\pdb.py", line 1566, in _runscript
+    self.run(statement)
+  File "C:\Users\Thomas\AppData\Local\Programs\Python\Python37-32\lib\bdb.py", line 585, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py", line 13, in <module>
+    print(my_fun(n))
+  File "c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py", line 4, in my_fun
+    def my_fun(n):
+  File "c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 979 more times]
+  File "c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py", line 5, in my_fun
+    if n == 2:
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\users\thomas\downloads\python2\sp_online_course2_2018\students\thorn\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb)

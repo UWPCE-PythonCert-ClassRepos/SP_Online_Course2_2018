@@ -1,0 +1,9 @@
+[
+  "test_donor.py::TestDonor::test_bad_init",
+  "test_donor.py::TestDonor::test_good_init",
+  "test_donor_collection.py::TestDonorCollection::test_validate_and_create_thank_you_bad_amount",
+  "test_donor_collection.py::TestDonorCollection::test_validate_and_create_thank_you_bad_name",
+  "test_donor_collection.py::TestDonorCollection::test_validate_and_create_thank_you_good_values",
+  "test_donor_collection.py::TestDonorCollection::test_write_letters",
+  "test_mailroom.py::TestDonorCollection::test_validate_user_selection"
+]

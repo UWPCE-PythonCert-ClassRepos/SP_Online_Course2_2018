@@ -1,0 +1,21 @@
+[
+  "test_donor.py::test_donor_name",
+  "test_donor.py::test_donor_history",
+  "test_donor.py::test_donor_add_donation",
+  "test_donor.py::test_donor_sum_donation",
+  "test_donor.py::test_donor_avg_donation",
+  "test_donor.py::test_donor_info",
+  "test_donor.py::test_challenge",
+  "test_donor_dict.py::test_donor_dict_names",
+  "test_donor_dict.py::test_donor_dict_histories",
+  "test_donor_dict.py::test_donors",
+  "test_donor_dict.py::test_donor_dict_add",
+  "test_donor_dict.py::test_all_donor_info",
+  "test_donor_dict.py::test_sort_by_name",
+  "test_donor_dict.py::test_sort_by_hist",
+  "test_donor_dict.py::test_sort_by_avg",
+  "test_donor_dict.py::test_sort_by_sum",
+  "test_donor_dict.py::test_getitem",
+  "test_donor_dict.py::test_len",
+  "test_donor_dict.py::test_keys"
+]

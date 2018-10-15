@@ -1,0 +1,37 @@
+{
+    "__obj_type": "Donor_list",
+    "donor_dictionary": [
+        {
+            "__obj_type": "Donor",
+            "name": "Ted Laws",
+            "donations": [
+                1000,
+                100
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Kristin Laws",
+            "donations": [
+                150,
+                152
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Andrew Crawford",
+            "donations": [
+                2000,
+                2000,
+                4000
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Beth Ross",
+            "donations": [
+                405
+            ]
+        }
+    ]
+}
