@@ -115,8 +115,8 @@ class DonorUI():
             self.collection.add_new_amount(name, donation, when)
             print(f"\nDonor {name}'s gift of {donation} on {when} successfully added.\n")
             print(self.collection.form_letter(name))
-        except ValueError:
-            print("\nInvalid name, donation, or date - exiting.\n")
+        except ValueError as ve:
+            print(ve)
 
     def send_all_letters(self):
         """
@@ -168,13 +168,13 @@ class DonorUI():
             print("\nExiting without updating a donor.\n")
         else:
             info = self.collection.get_donor_info(donor_name)
-            print(f"\nDonor {info['donor']}, phone # {info['hometown']}.\n")
+            print(f"\nDonor {info.keys()[0]}, phone # {info.values()[0]}.\n")
             phone_num = stripped_input(
                 "Specify a new phone number (or leave blank to exit). " +
                 "Type N/A if the donor phone number is unknown. "
             )
             if phone_num:
-                self.collection.update_donor(donor_name, phone_num)
+                self.collection.add_or_update_donor(donor_name, phone_num)
 
     def delete_donor_and_donations(self):
         """
@@ -192,9 +192,9 @@ class DonorUI():
 
     def choose_donor(self):
         """
-        Prompt for the user to select a donor from the full donor list.
+        Prompt for the user to type a donor from the full donor list.
 
-        :return:  None.
+        :return:  The name of an existing donor, or an empty string.
         """
         response = ''
         donor_list = self.collection.get_donor_list()
@@ -211,7 +211,7 @@ class DonorUI():
                 )
                 if response == '':
                     break
-            return response
+        return response
 
 
 if __name__ == '__main__':
@@ -240,7 +240,7 @@ if __name__ == '__main__':
         ('Mama Murphy', 600, '2017-09-26'),
         ('Mama Murphy', 785.2, '2018-03-03'),
         ('Papa Smurf', 1000, '2016-11-12'),
-        ('Bill Dill', 2000, '2015-05-27'),
+        ('Bill Dill', 2000, '2015-05-27'),  # Will be rejected -donor not in DB
         ('Red Herring', 2500, '2018-06-20'),
         ('Papa Smurf', 2804.83, '2017-08-15'),
         ('Karl-Heinz Berthold', 3545.2, '2018-01-31'),

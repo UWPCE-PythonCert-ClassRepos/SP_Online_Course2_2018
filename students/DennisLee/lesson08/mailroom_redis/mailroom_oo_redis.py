@@ -1,6 +1,6 @@
 """
-This module defines the mailroom functionality using a peewee and
-SQLite database setup for the donor information.
+This module defines the mailroom functionality using a Redis
+database setup for the donor information.
 """
 #!/usr/bin/env python3
 
@@ -65,6 +65,58 @@ class DonorCollection():
         self.logger.info("Connect to database.")
         self.database = mailroom_db_login.login_redis_cloud()
 
+    def build_pattern(self, record_type, str1, *additional_strs):
+        """
+        Return a database key pattern to use in a query.
+
+        :record_type:  The record type prefix (for persons or donations).
+
+        :str1:  A required string to join to the record type.  Can be a
+                wildcard ('*') or the first key name (f/a composite key.)
+
+        :additional_strs:  Additional strings to join to the key pattern.
+                           If specified, usually ends with a wildcard ('*')
+                           unless an exact key string is desired.
+
+        :return:  The string containing the database key pattern.
+        """
+        self.logger.info(f"Build DB key pattern with {record_type} and {str1}")
+        self.logger.info(
+            "If additional_strs is a string or string iterable, it's included "
+            f"(even f/an empty string). Here's its value: {additional_strs}.")
+        result = '_'.join([record_type, str1, *additional_strs])
+        self.logger.info(f"Here's the pattern: '{result}'.")
+        return result
+
+    def get_keys(self, pattern):
+        """
+        Return sorted list of database keys matched by the pattern.
+        """
+        self.logger.info(f"Scanning DB for key pattern {pattern}.")
+        result = self.database.keys(pattern)
+        if not result:
+            self.logger.info(f"No records found.")
+        else:
+            result.sort()
+            num_keys = len(result)
+            self.logger.info(
+                f"Found these {num_keys} key(s): {result}."
+            )
+        return result
+
+    def get_db_value(self, key):
+        """
+        Get the value associated with a database key.
+
+        :key:  The actual intended key name; no wildcards allowed.
+
+        :return:  The database key's value.
+        """
+        self.logger.info(f"Getting the value for this DB key: '{key}'.")
+        result = self.database.get(key)
+        self.logger.info(f"DB key '{key}' value: {result}.")
+        return result
+
     def get_donor_list(self):
         """
         Query the Person table for all potential donor names.
@@ -72,19 +124,12 @@ class DonorCollection():
         :return:  The list of person-phone dicts, sorted by name.
         """
         self.logger.info("Query for donor names.")
-        names, phone_nums, result = [], [], {}
-        key_list = self.database.keys('_'.join([self.prefix_person, '*']))
-        if not key_list:
-            self.logger.info("No donor names in the database.")
-        else:
-            key_list.sort()
-            self.logger.info(f"There are {len(key_list)} donors.")
-            self.logger.info(f"Here's the list: {key_list}.")
+        result = {}
+        key_pattern = self.build_pattern(self.prefix_person, '*')
+        key_list = self.get_keys(key_pattern)
+        if key_list:
             for key in key_list:
-                names.append(key.split('_')[1])  # Add just the person name
-                phone_nums.append(self.database.get(key))
-            if names:
-                result = dict(zip(names, phone_nums))
+                result[key.split('_')[1]] = self.get_db_value(key)
         self.logger.info(f"The donor-phone info is: {result}.")
         return result
 
@@ -93,18 +138,19 @@ class DonorCollection():
         self.logger.info("Get a list of donors who actually donated.")
         self.logger.info("Don't include donor names who haven't given yet.")
         result = None
-        donation_key_pattern = '_'.join([self.prefix_donation, '*'])
-        donation_key_list = self.database.keys(donation_key_pattern)
-        if not donation_key_list:
-            self.logger.info("No donations to report.")
-        else:
-            donation_key_list.sort()
-            clean_donors = set()
-            for key in donation_key_list:
-                clean_donors.add(key.split('_')[1])  # Add just the person name
-            self.logger.info(f"Total unique real donors: {len(clean_donors)}.")
-            self.logger.info(f"Unique real donor set: {clean_donors}.")
+        donation_key_pattern = self.build_pattern(self.prefix_donation, '*')
+        donation_key_list = self.get_keys(donation_key_pattern)
+        if donation_key_list:
+            clean_donors = set(
+                map(lambda x: x.split('_')[1], donation_key_list)
+            )
+            self.logger.info(f"Unique real donors: {len(clean_donors)}.")
+            self.logger.info(f"Clean donor set: {clean_donors}.")
+
             result = list(clean_donors)
+            result.sort()
+            self.logger.info(f"Unique real donors: {len(result)}.")
+            self.logger.info(f"Unique real donor list: {result}.")
         return result
 
     def get_donor_info(self, name):
@@ -118,49 +164,42 @@ class DonorCollection():
         """
         clean_name = strip_text(name)
         self.logger.info(f"Get information about donor '{clean_name}'.")
-        name_as_key = '_'.join([self.prefix_person, clean_name])
         result = {}
-        info = self.database.get(name_as_key)
-        if info:
+        name_as_key = self.build_pattern(self.prefix_person, clean_name)
+        info = self.get_db_value(name_as_key)
+        if info is not None:
             result = {name_as_key: info}
-        self.logger.info(f"Donor info: {result}")
+        self.logger.info(f"Donor info: {result}.")
         return result
 
-    def update_donor(self, name, other_info):
-        """Change an existing donor's phone number."""
-        clean_name = strip_text(name)
-        clean_info = strip_text(other_info)
-        self.logger.info(
-            f"Trying to set donor '{clean_name}' phone # to '{clean_info}'."
-        )
-        if not clean_name:
-            self.logger.info("No name specified - can't update donor info.")
-        elif not clean_info:
-            self.logger.info("No info specified - can't update donor.")
-        else:
-            self.logger.info(f"Set '{clean_name}' phone # to '{clean_info}'.")
-            name_as_key = '_'.join([self.prefix_person, clean_name])
-            self.database.set(name_as_key, clean_info)
-            result = {name_as_key: clean_info}
-            self.logger.info(f"New donor info: {result}.")
+    # def update_donor(self, name, other_info):
+    #     """Change an existing donor's phone number."""
+    #     clean_name = strip_text(name)
+    #     clean_info = strip_text(other_info)
+    #     self.logger.info(
+    #         f"Trying to set donor '{clean_name}' phone # to '{clean_info}'."
+    #     )
+    #     if not clean_name:
+    #         self.logger.info("No name specified - can't update donor info.")
+    #     elif not clean_info:
+    #         self.logger.info("No info specified - can't update donor.")
+    #     else:
+    #         name_as_key = self.build_pattern(self.prefix_person, clean_name)
+    #         self.database.set(name_as_key, clean_info)
+    #         result = {name_as_key: clean_info}
+    #         self.logger.info(f"New donor info: {result}.")
 
     def delete_data(self):
         """Delete all data in the database tables."""
 
         # Delete all donations
-        donation_key_pattern = '_'.join([self.prefix_donation, '*'])
+        donation_key_pattern = self.build_pattern(self.prefix_donation, '*')
         self.logger.info(
             f"Number of records in database: {self.database.dbsize()}.")
-        donations_to_delete = self.database.keys(donation_key_pattern)
-        if not donations_to_delete:
-            self.logger.info(
-                "No donations to delete. "
-                f"DB keys didn't match pattern '{donation_key_pattern}'."
-            )
-        else:
-            self.logger.info(f"Number of gifts: {len(donations_to_delete)}.")
+        donations_to_delete = self.get_keys(donation_key_pattern)
+        if donations_to_delete:
             self.logger.info("Delete all donations.")
-            self.database.delete(*tuple(donations_to_delete))
+            self.database.delete(*donations_to_delete)
             self.logger.info(
                 f"Number of records in DB now: {self.database.dbsize()}.")
             self.logger.info(
@@ -169,14 +208,11 @@ class DonorCollection():
             )
 
         # Delete all persons
-        person_key_pattern = '_'.join([self.prefix_person, '*'])
-        persons_to_delete = self.database.keys(person_key_pattern)
-        if not persons_to_delete:
-            self.logger.info("No persons to delete.")
-        else:
-            self.logger.info(f"Number of persons: {len(persons_to_delete)}.")
-            self.logger.info("Delete all data from the Donations table.")
-            self.database.delete(*tuple(persons_to_delete))
+        person_key_pattern = self.build_pattern(self.prefix_person, '*')
+        persons_to_delete = self.get_keys(person_key_pattern)
+        if persons_to_delete:
+            self.logger.info("Delete all persons.")
+            self.database.delete(*persons_to_delete)
             self.logger.info(
                 f"Number of records in DB now: {self.database.dbsize()}.")
             self.logger.info(
@@ -194,18 +230,17 @@ class DonorCollection():
         self.logger.info(
             f"Number of records in DB: {self.database.dbsize()}.")
         self.logger.info(f"Deleting '{clean_name}' donations.")
-        donation_key_pattern = '_'.join([self.prefix_donation, clean_name, ''])
-        person_donations = self.database.keys(donation_key_pattern)
-        if not person_donations:
-            self.logger.info(f"No donations given by {clean_name}.")
-        else:
+        donation_key_pattern = self.build_pattern(
+            self.prefix_donation, clean_name, '*')
+        person_donations = self.get_keys(donation_key_pattern)
+        if person_donations:
             self.logger.info(f"Found {len(person_donations)} donations.")
-            self.database.delete(*tuple(person_donations))
+            self.database.delete(*person_donations)
             self.logger.info(
                 f"Number of records in DB now: {self.database.dbsize()}.")
 
         self.logger.info(f"Deleting '{clean_name}' from donor list.")
-        person_as_key = '_'.join([self.prefix_person, clean_name])
+        person_as_key = self.build_pattern(self.prefix_person, clean_name)
         self.database.delete(person_as_key)
         self.logger.info(
             f"Number of records in database now: {self.database.dbsize()}.")
@@ -241,14 +276,15 @@ class DonorCollection():
             print(col_head_str)
             print(head_borderline)
 
+
+
             for donor in clean_donors:
-                donor_key_pattern = '_'.join(
-                    [self.prefix_donation, donor, '*']
-                )
-                donor_keys = self.database.keys(donor_key_pattern)
+                donor_key_pattern = self.build_pattern(
+                    self.prefix_donation, donor, '*')
+                donor_keys = self.get_keys(donor_key_pattern)
                 donor_gifts = []
                 for key in donor_keys:
-                    donor_amount = float(self.database.get(key))
+                    donor_amount = float(self.get_db_value(key))
                     donor_gifts.append(donor_amount)
                 data = (donor, len(donor_gifts), sum(donor_gifts),
                         1.0 * sum(donor_gifts) / len(donor_gifts),  # average
@@ -276,17 +312,17 @@ class DonorCollection():
             print("Exiting - must enter a non-null donor name and phone #.")
         else:
             self.database.set(
-                '_'.join([self.prefix_person, clean_name]),
+                self.build_pattern(self.prefix_person, clean_name),
                 clean_phone
             )
 
     def add_new_amount(self, donor, amount, date):
         """
         Add a new donation with the specified donor name and amount.
-        If the donor is not currently in the donation history, a new
-        entry is added. The key is formed using the donor and the date.
+        The donor must currently be in the donation history.
+        The key is formed using the donor and the date.
 
-        :name:  The name of the donor.
+        :name:  The name of the existing donor.
 
         :amount:  The amount given.
 
@@ -305,6 +341,7 @@ class DonorCollection():
             str_date = datetime.date.isoformat(cnv_date)
         except ValueError:
             self.logger.info(f"Problem with date format in {date}.")
+            raise ValueError(f"'{date}' is an invalid date format.")
 
         try:
             amount = float(amount)
@@ -312,12 +349,19 @@ class DonorCollection():
             self.logger.info(f"Specified gift amount must be a number.")
         if amount < 0.005:
             self.logger.info(f"Gift of {amount} must be at least one penny.")
-            raise ValueError("The 'amount' argument must be at least $0.01.")
+            raise ValueError(
+                f"'{amount}' is invalid - must be at least $0.01.")
 
-        self.database.set(
-            '_'.join([self.prefix_donation, clean_name, str_date]),
-            round(amount, 2)
-        )
+        self.logger.info(f"Make sure '{clean_name}' already in donor list.")
+        donor_key = self.build_pattern(self.prefix_person, clean_name)
+        if not self.get_db_value(donor_key):
+            self.logger.info(f"'{clean_name}' not in donor list - aborting.")
+        else:
+            self.logger.info("Adding the donation to the database.")
+            self.database.set(
+                self.build_pattern(self.prefix_donation, clean_name, str_date),
+                round(amount, 2)
+            )
 
     def save_letters(self, folder=""):
         """
@@ -381,8 +425,8 @@ class DonorCollection():
         """
         gift_sum, clean_name = 0.0, strip_text(name)
         self.logger.info(f"Creating form letter for {clean_name}.")
-        donor_gift_keys = self.database.keys(
-            '_'.join([self.prefix_donation, clean_name, '*'])
+        donor_gift_keys = self.get_keys(
+            self.build_pattern(self.prefix_donation, clean_name, '*')
         )
         if not donor_gift_keys:
             self.logger.info(f"No donations from {clean_name} yet.")
@@ -395,17 +439,18 @@ class DonorCollection():
         self.logger.info(f"Donor {clean_name} has made these donations:")
         for key in donor_gift_keys:
             gift_date = key.split('_')[2]
-            gift_amount = self.database.get(key)
+            gift_amount = self.get_db_value(key)
             gift_sum += float(gift_amount)
             self.logger.info(
                 f"\t{gift_date}: ${gift_amount} (cumulative: ${gift_sum})")
 
         if index not in range(-donor_gift_count, donor_gift_count):
             self.logger.info(f"Gift #'{index}' is out of range.")
+            return None
         else:
             specific_gift_date = donor_gift_keys[index].split('_')[2]
             specific_gift_amount = float(
-                self.database.get(donor_gift_keys[index])
+                self.get_db_value(donor_gift_keys[index])
             )
             self.logger.info(
                 f"Send letter to {clean_name} about gift "
@@ -413,13 +458,13 @@ class DonorCollection():
             )
             text = """\n\n\n
                     From:     Random Worthy Cause Foundation
-                    To:       {0:s}
-                    Subject:  Your generous donation on {1:s}
+                    To:       {0:s} (phone # {1:s})
+                    Subject:  Your generous donation on {2:s}
 
                     Dear {0:s},
 
-                    We want to express our gratitude for your donation of ${2:,.2f}
-                    {3:s}to the Random Worthy Cause Foundation.  To show our
+                    We want to express our gratitude for your donation of ${3:,.2f}
+                    {4:s}to the Random Worthy Cause Foundation.  To show our
                     appreciation, we have enclosed a set of address labels
                     and a custom tote bag that lets people know that you are a
                     generous supporter of our cause.
@@ -443,8 +488,11 @@ class DonorCollection():
                 self.logger.info(f"Also note total donations of ${gift_sum}.")
                 extra = '(and total donations of ${0:,.2f} from {1:,d} gifts)' \
                         '\n'.format(gift_sum, donor_gift_count)
+            donor_name_key = self.build_pattern(self.prefix_person, clean_name)
+            phone_num = self.get_db_value(donor_name_key)
             return text.format(
                 clean_name,
+                phone_num,
                 specific_gift_date,
                 specific_gift_amount,
                 extra
