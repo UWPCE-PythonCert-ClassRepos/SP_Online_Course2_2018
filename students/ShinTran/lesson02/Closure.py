@@ -12,19 +12,21 @@ Lesson 2 Assignment
 import pandas as pd
 
 music = pd.read_csv("featuresdf.csv")
-music_list = zip(music.artists, music.name, music.energy)
 
 def get_energy(table):
     return table[2]
 
-def filter_list(energy):
-    def high_energy():
-        comp = [y for y in music_list if y[2] >= energy]
-        return sorted(comp, key = get_energy, reverse = True)
-    return high_energy
+def filter_list(energy = 0.8):
+    music_list = zip(music.artists, music.name, music.energy)
+    tracks = [y for y in music_list if y[2] >= energy]
+    track_list = sorted(tracks, key = get_energy, reverse = True)
+    def print_list():
+        print("Artist               Song Name                                        Energy ")
+        print("-----------------------------------------------------------------------------")
+        for item in track_list:
+            print('{:20} {:45} {:10,.5f}'.format(*item))
+    return print_list
 
-print("Artist               Song Name                                        Energy ")
-print("-----------------------------------------------------------------------------")
-track_list = filter_list(0.8)
-for item in track_list():
-    print('{:20} {:45} {:10,.5f}'.format(*item))
+
+high_energy = filter_list(0.8)
+high_energy()
