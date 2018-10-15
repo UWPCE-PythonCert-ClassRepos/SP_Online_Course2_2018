@@ -5,8 +5,11 @@ This module implements the mailroom user interface.
 #!/usr/bin/env python3
 
 import os
-# import mailroom_model as mdl
-import mailroom_oo
+import mailroom_oo_mongodb as mailroom_oo
+
+def stripped_input(prompt):
+    """Return user input, with leading and trailing spaces removed."""
+    return input(prompt).strip()
 
 class DonorUI():
     """
@@ -40,7 +43,7 @@ class DonorUI():
             print("\nMENU:")
             for k, v in choices.items():
                 print(k, v['option'])
-            response = input("Type a menu selection number: ").strip()
+            response = stripped_input("Type a menu selection number: ")
             self.call_menu_function(
                 choices, response,
                 self.respond_to_bad_main_menu_choice, bad_choice=response)
@@ -103,15 +106,19 @@ class DonorUI():
         :return:  None.
         """
         name = self.choose_donor()
-        donation = input("\nType the amount to give (or leave blank to quit): ")
-        when = input("\nType the date of the donation, in YYYY-MM-DD format: "
-                    ).strip()
+        donation = stripped_input(
+            "\nType the amount to give (or leave blank to quit): "
+        )
+        when = stripped_input(
+            "\nType the date of the donation, in YYYY-MM-DD format: "
+        )
         try:
             self.collection.add_new_amount(name, donation, when)
-            print(f"\nDonor {name}'s gift of {donation} on {when} successfully added.\n")
-            print(self.collection.form_letter(name))
-        except ValueError:
-            print("\nInvalid name, donation, or date - exiting.\n")
+            print(f"\nDonor {name}'s gift of {donation} "
+                  f"on {when} successfully added.\n")
+            print(self.collection.form_letter(name, when))
+        except ValueError as ve:
+            print(ve)
 
     def send_all_letters(self):
         """
@@ -121,9 +128,10 @@ class DonorUI():
         """
         # Ask for the directory to save the letters to
         print('\nThe current directory is %s' % os.getcwd())
-        new_dir = input('\nType the directory to save the letters in'
-                        ' (blank entry defaults to the current directory): '
-                       ).strip()
+        new_dir = stripped_input(
+            '\nType the directory to save the letters in'
+            ' (blank entry defaults to the current directory): '
+        )
         try:
             self.collection.save_letters(new_dir)
         except FileNotFoundError:
@@ -140,15 +148,15 @@ class DonorUI():
 
         :return:  None.
         """
-        name = input("Enter a new donor name: ").strip()
+        name = stripped_input("Enter a new donor name: ")
         if self.collection.get_donor_info(name):
             print(f"Donor {name} already exists - exiting.")
         else:
-            town = input("Enter hometown (leave blank if unknown): ").strip()
-            if not town:
-                town = 'N/A'
-            print(f"\nAdding donor {name} with hometown {town}.\n")
-            self.collection.add_or_update_donor(name, town)
+            ssn = stripped_input("Enter social security number: ")
+            if not ssn:
+                ssn = 'N/A'
+            print(f"\nAdding donor '{name}' with SS #{ssn}.\n")
+            self.collection.add_or_update_donor(name, ssn)
 
     def update_donor_info(self):
         """
@@ -162,13 +170,13 @@ class DonorUI():
             print("\nExiting without updating a donor.\n")
         else:
             info = self.collection.get_donor_info(donor_name)
-            print(f"\nDonor {info['donor']} lives in {info['hometown']}.\n")
-            new_town = input(
-                "Specify a new hometown (or leave blank to exit). " +
-                "Type N/A if the donor residence is unknown. "
-            ).strip()
-            if new_town:
-                self.collection.update_donor(donor_name, new_town)
+            print(f"\nDonor {info['person_name']}, SS # {info['ssn']}.\n")
+            ssn = stripped_input(
+                "Specify a new phone number (or leave blank to exit). " +
+                "Type N/A if the donor phone number is unknown. "
+            )
+            if ssn:
+                self.collection.add_or_update_donor(donor_name, ssn)
 
     def delete_donor_and_donations(self):
         """
@@ -188,7 +196,7 @@ class DonorUI():
         """
         Prompt for the user to select a donor from the full donor list.
 
-        :return:  None.
+        :return:  The name of an existing donor, or an empty string.
         """
         response = ''
         donor_list = self.collection.get_donor_list()
@@ -197,33 +205,35 @@ class DonorUI():
         else:
             print("\nLIST OF DONORS:")
             for k, v in donor_list.items():
-                print(f"\t{k} (lives in {v})")
+                print(f"\t{k}: Social Security # {v}")
             print("\n")
             while response not in donor_list:
-                response = input(
+                response = stripped_input(
                     "Type an existing donor name (or leave blank to exit): "
-                ).strip()
+                )
                 if response == '':
                     break
-            return response.strip()
+        return response
 
 
 if __name__ == '__main__':
-    # Initial donor list and the amounts they have donated
-    DS_NAME, DS_TOWN = 0, 1
-    donor_specs = (
-        ('Red Herring', 'Amarillo'),
-        ('Tight Wad', 'Chicago'),
-        ('Papa Smurf', 'Zurich'),
-        ('Cheap Skate', 'Amarillo'),
-        ('Pat Panda', 'Chicago'),
-        ('Karl-Heinz Berthold', 'Bremen'),
-        ('Mama Murphy', 'Chicago'),
-        ('Daphne Dastardly', 'Gotham')
-    )
+    # Initial donor list w/possible keys (email address, phone number,
+    # social security number, and birthdate) - will use phone # only tho
+    DS_EMAIL, DS_PHONE, DS_SSN, DS_BIRTHDATE = 0, 1, 2, 3
+    DONOR_SPECS = {
+        'Red Herring': ('RedH@gmail.com', '468-135-0987', '372-98-0038', '1952-06-28'),
+        'Tight Wad': ('TWad@yahoo.com', '800-382-3864', '016-53-3487', '1985-11-30'),
+        'Papa Smurf': ('PapaSmurf@live.com', '369-486-0368', '833-46-3487', '1976-12-02'),
+        'Cheap Skate': ('NoCash@gandi.net', '245-748-4392', '467-43-1793', '1946-02-27'),
+        'Pat Panda': ('PatPan@excite.com', '682-843-4873', '324-32-2345', '1966-07-08'),
+        'Karl-Heinz Berthold': ('KHB@lufthansa.com', '296-348-9483', '248-45-4893', '23417'),
+        'Mama Murphy': ('MamaM@MamaMurphy.org', '748-938-8437', '238-09-9816', '23499'),
+        'Daphne Dastardly': ('Daphne@Dastardly.net', '554-382-1010', '073-53-4832', '43692')
+    }
 
+    # Initial donation amounts, with donor name and date of gift
     DG_NAME, DG_AMOUNT, DG_DATE = 0, 1, 2
-    donor_gifts = (
+    DONOR_GIFTS = (
         ('Papa Smurf', 48, '2018-06-29'),
         ('Papa Smurf', 57.86, '2017-02-01'),
         ('Daphne Dastardly', 82, '2017-09-22'),
@@ -232,7 +242,7 @@ if __name__ == '__main__':
         ('Mama Murphy', 600, '2017-09-26'),
         ('Mama Murphy', 785.2, '2018-03-03'),
         ('Papa Smurf', 1000, '2016-11-12'),
-        ('Bill Dill', 2000, '2015-05-27'),
+        ('Bill Dill', 2000, '2015-05-27'),  # Will be rejected -donor not in DB
         ('Red Herring', 2500, '2018-06-20'),
         ('Papa Smurf', 2804.83, '2017-08-15'),
         ('Karl-Heinz Berthold', 3545.2, '2018-01-31'),
@@ -248,14 +258,14 @@ if __name__ == '__main__':
         ('Mama Murphy', 156316.99, '2013-07-30')
     )
 
-    donor_col = mailroom_oo.DonorCollection()
-    for donor in donor_specs:
-        donor_col.add_or_update_donor(donor[DS_NAME], donor[DS_TOWN])
+    DONOR_COL = mailroom_oo.DonorCollection()
+    for donor_key, donor_value in DONOR_SPECS.items():
+        DONOR_COL.add_or_update_donor(donor_key, donor_value[DS_SSN])
 
-    for donor in donor_gifts:
-        donor_col.add_new_amount(
+    for donor in DONOR_GIFTS:
+        DONOR_COL.add_new_amount(
             donor[DG_NAME], donor[DG_AMOUNT], donor[DG_DATE]
         )
 
-    dui = DonorUI(donor_col)
-    dui.manage_donors()
+    DUI = DonorUI(DONOR_COL)
+    DUI.manage_donors()
