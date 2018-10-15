@@ -1,5 +1,5 @@
 """
-module that will login to the various demonstration databases consistently
+module that will sign in to the Redis database consistently
 """
 
 import configparser
