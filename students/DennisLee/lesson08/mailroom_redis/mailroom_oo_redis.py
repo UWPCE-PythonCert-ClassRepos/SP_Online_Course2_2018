@@ -393,19 +393,23 @@ class DonorCollection():
             self.logger.info(f"Return folder with the letters: '{folder}'.")
             return folder
 
-    def form_letter(self, name, index=-1):
+    def form_letter(self, name, donation_date=None):
         """
         Create a thank you form letter for a specific donation.
 
         :name:  The name of the donor to send the letter to.
 
-        :index:  An index to a certain gift within the donation history.
-                 This value defaults to the most recent gift amount.
+        :donation_date:  The date of the donation. If this value isn't
+                         specified, the form letter contains the most
+                         recent gift amount.
 
         :return:  A string containing the filled-in form letter.
         """
-        gift_sum, clean_name = 0.0, strip_text(name)
-        self.logger.info(f"Creating form letter for {clean_name}.")
+        gift_sum = 0.0
+        clean_name, clean_date = strip_text(name), strip_text(donation_date)
+        self.logger.info(
+            f"Creating form letter for '{clean_name}', with specified "
+            f"donation date of '{clean_date}'.")
         donor_gift_keys = self.get_keys(
             self.build_pattern(self.prefix_donation, clean_name, '*')
         )
@@ -425,14 +429,22 @@ class DonorCollection():
             self.logger.info(
                 f"\t{gift_date}: ${gift_amount} (cumulative: ${gift_sum})")
 
-        if index not in range(-donor_gift_count, donor_gift_count):
-            self.logger.info(f"Gift #'{index}' is out of range.")
-            return None
-        else:
-            specific_gift_date = donor_gift_keys[index].split('_')[2]
+        if not donation_date:
+            specific_gift_date = donor_gift_keys[-1].split('_')[2]
             specific_gift_amount = float(
-                self.get_db_value(donor_gift_keys[index])
+                self.get_db_value(donor_gift_keys[-1])
             )
+        else:
+            specific_gift_date = clean_date
+            specific_gift_key = self.build_pattern(
+                self.prefix_donation, clean_name, clean_date
+            )
+            specific_gift_amount = float(self.get_db_value(specific_gift_key))
+            if not specific_gift_amount:
+                self.logger.info(
+                    f"'{clean_name}' did not donate on '{clean_date}'.")
+                return None
+
             self.logger.info(
                 f"Send letter to {clean_name} about gift "
                 f"on {specific_gift_date} for amount {specific_gift_amount}."

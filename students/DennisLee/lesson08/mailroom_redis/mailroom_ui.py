@@ -107,14 +107,16 @@ class DonorUI():
         :return:  None.
         """
         name = self.choose_donor()
-        donation = input("\nType the amount to give (or leave blank to quit): ")
+        donation = stripped_input(
+            "\nType the amount to give (or leave blank to quit): "
+        )
         when = stripped_input(
             "\nType the date of the donation, in YYYY-MM-DD format: "
         )
         try:
             self.collection.add_new_amount(name, donation, when)
             print(f"\nDonor {name}'s gift of {donation} on {when} successfully added.\n")
-            print(self.collection.form_letter(name))
+            print(self.collection.form_letter(name, when))
         except ValueError as ve:
             print(ve)
 
