@@ -172,23 +172,6 @@ class DonorCollection():
         self.logger.info(f"Donor info: {result}.")
         return result
 
-    # def update_donor(self, name, other_info):
-    #     """Change an existing donor's phone number."""
-    #     clean_name = strip_text(name)
-    #     clean_info = strip_text(other_info)
-    #     self.logger.info(
-    #         f"Trying to set donor '{clean_name}' phone # to '{clean_info}'."
-    #     )
-    #     if not clean_name:
-    #         self.logger.info("No name specified - can't update donor info.")
-    #     elif not clean_info:
-    #         self.logger.info("No info specified - can't update donor.")
-    #     else:
-    #         name_as_key = self.build_pattern(self.prefix_person, clean_name)
-    #         self.database.set(name_as_key, clean_info)
-    #         result = {name_as_key: clean_info}
-    #         self.logger.info(f"New donor info: {result}.")
-
     def delete_data(self):
         """Delete all data in the database tables."""
 
@@ -275,8 +258,6 @@ class DonorCollection():
             print('\n')
             print(col_head_str)
             print(head_borderline)
-
-
 
             for donor in clean_donors:
                 donor_key_pattern = self.build_pattern(
