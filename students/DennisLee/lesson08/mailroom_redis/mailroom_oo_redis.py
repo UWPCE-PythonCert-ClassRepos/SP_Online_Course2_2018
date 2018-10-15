@@ -160,15 +160,15 @@ class DonorCollection():
 
         :name:  A string containing the donor name to retrieve.
 
-        :return:  A dict containing the donor name and their phone #.
+        :return:  A tuple containing the donor name and their phone #.
         """
         clean_name = strip_text(name)
         self.logger.info(f"Get information about donor '{clean_name}'.")
-        result = {}
+        result = tuple()
         name_as_key = self.build_pattern(self.prefix_person, clean_name)
         info = self.get_db_value(name_as_key)
         if info is not None:
-            result = {name_as_key: info}
+            result = (clean_name, info)
         self.logger.info(f"Donor info: {result}.")
         return result
 

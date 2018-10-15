@@ -168,7 +168,7 @@ class DonorUI():
             print("\nExiting without updating a donor.\n")
         else:
             info = self.collection.get_donor_info(donor_name)
-            print(f"\nDonor {info.keys()[0]}, phone # {info.values()[0]}.\n")
+            print(f"\nDonor {info[0]}, phone # {info[1]}.\n")
             phone_num = stripped_input(
                 "Specify a new phone number (or leave blank to exit). " +
                 "Type N/A if the donor phone number is unknown. "
@@ -218,7 +218,7 @@ if __name__ == '__main__':
     # Initial donor list w/possible keys (email address, phone number,
     # social security number, and birthdate) - will use phone # only tho
     DS_EMAIL, DS_PHONE, DS_SSN, DS_BIRTHDATE = 0, 1, 2, 3
-    donor_specs = {
+    DONOR_SPECS = {
         'Red Herring': ('RedH@gmail.com', '468-135-0987', '372-98-0038', '1952-06-28'),
         'Tight Wad': ('TWad@yahoo.com', '800-382-3864', '016-53-3487', '1985-11-30'),
         'Papa Smurf': ('PapaSmurf@live.com', '369-486-0368', '833-46-3487', '1976-12-02'),
@@ -231,7 +231,7 @@ if __name__ == '__main__':
 
     # Initial donation amounts, with donor name and date of gift
     DG_NAME, DG_AMOUNT, DG_DATE = 0, 1, 2
-    donor_gifts = (
+    DONOR_GIFTS = (
         ('Papa Smurf', 48, '2018-06-29'),
         ('Papa Smurf', 57.86, '2017-02-01'),
         ('Daphne Dastardly', 82, '2017-09-22'),
@@ -256,14 +256,14 @@ if __name__ == '__main__':
         ('Mama Murphy', 156316.99, '2013-07-30')
     )
 
-    donor_col = mailroom_oo.DonorCollection()
-    for donor_key, donor_value in donor_specs.items():
-        donor_col.add_or_update_donor(donor_key, donor_value[DS_PHONE])
+    DONOR_COL = mailroom_oo.DonorCollection()
+    for donor_key, donor_value in DONOR_SPECS.items():
+        DONOR_COL.add_or_update_donor(donor_key, donor_value[DS_PHONE])
 
-    for donor in donor_gifts:
-        donor_col.add_new_amount(
+    for donor in DONOR_GIFTS:
+        DONOR_COL.add_new_amount(
             donor[DG_NAME], donor[DG_AMOUNT], donor[DG_DATE]
         )
 
-    dui = DonorUI(donor_col)
-    dui.manage_donors()
+    DUI = DonorUI(DONOR_COL)
+    DUI.manage_donors()
