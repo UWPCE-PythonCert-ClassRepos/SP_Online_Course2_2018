@@ -287,49 +287,53 @@ class DonorCollection():
         :return:  None.
         """
         self.logger.info('Print out donation stats for all donors.')
-        query_spec = {
-            {
-                '$group': {
-                    'donor_name': {'$eq': '$donor_name'},
-                    'gifts': {'$count': '$donation_date'},
-                    'total': {'$sum': '$donation_amount'},
-                    'average': {'$avg': '$donation_amount'},
-                    'largest': {'$max': '$donation_amount'},
-                    'smallest': {'$min': '$donation_amount'}
-                }
-            }
-        }
-        query = self.donations.find(query_spec).sort('donor_name')
+        pipe = [
+            {'$match': {'donor_name': {'$ne': ''}}},
+            {'$group': {
+                '_id': '$donor_name',
+                'gifts': {'$sum': 1},
+                'total': {'$sum': '$donation_amount'},
+                'average': {'$avg': '$donation_amount'},
+                'largest': {'$max': '$donation_amount'},
+                'smallest': {'$min': '$donation_amount'}
+            }},
+            {'$sort': {'_id': 1}}
+        ]
+        query = self.donations.aggregate(pipe)
+        self.logger.info(f"Query is: {query}.")
 
-        if not query:
-            self.logger.info("No donations to report.")
-            print("\nNo donations from anyone yet.\n")
-        else:
-            self.logger.info(f"Total donors: {query.count_documents()}.")
-            col_heads = (
-                'Donor name', 'Number of gifts', 'Total given',
-                'Average gift', 'Largest gift', 'Smallest gift')
-            col_head_str = ('{:<30s} | {:>15s}' + 4*' |  {:>13s}'
-                           ).format(*col_heads)
-            head_borderline = (
-                '{:<30s} | {:>15s}' + 4*' | {:>14s}'
-            ).format(
-                '-'*30, '-'*15, '-'*14, '-'*14, '-'*14, '-'*14
+        data = []
+        for doc in query:
+            data.append(
+                (
+                    doc['_id'], doc['gifts'], doc['total'],
+                    doc['average'], doc['largest'], doc['smallest']
+                )
             )
-            data_str = '{:<30s} | {:>15d}' + 4*' | ${:>13,.2f}'
-            self.logger.info(col_head_str)
-            self.logger.info(head_borderline)
-            print('\n')
-            print(col_head_str)
-            print(head_borderline)
-            for i in query:
-                data = (i.donor_name.__str__(), i.gifts.__int__(),
-                        i.total.__float__(), i.average.__float__(),
-                        i.largest.__float__(), i.smallest.__float__())
-                self.logger.info(data)
-                self.logger.info(data_str.format(*data))
-                print(data_str.format(*data))
-            print('\n')
+            self.logger.info(f"Added ({data[-1]}).")
+        self.logger.info(f"Total donors: {len(data)}.")
+
+        col_heads = (
+            'Donor name', 'Number of gifts', 'Total given',
+            'Average gift', 'Largest gift', 'Smallest gift')
+        col_head_str = ('{:<30s} | {:>15s}' + 4*' |  {:>13s}'
+                        ).format(*col_heads)
+        head_borderline = (
+            '{:<30s} | {:>15s}' + 4*' | {:>14s}'
+        ).format(
+            '-'*30, '-'*15, '-'*14, '-'*14, '-'*14, '-'*14
+        )
+        data_str = '{:<30s} | {:>15d}' + 4*' | ${:>13,.2f}'
+        self.logger.info(col_head_str)
+        self.logger.info(head_borderline)
+        print('\n')
+        print(col_head_str)
+        print(head_borderline)
+        for doc in data:
+            row_string = data_str.format(*doc)
+            self.logger.info(row_string)
+            print(row_string)
+        print('\n')
 
     def add_or_update_donor(self, donor, ssn):
         """
