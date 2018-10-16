@@ -41,8 +41,8 @@ class DonorUI():
 
         while True:  # Print the menu list (with numbered choices)
             print("\nMENU:")
-            for k, v in choices.items():
-                print(k, v['option'])
+            for key, value in choices.items():
+                print(key, value['option'])
             response = stripped_input("Type a menu selection number: ")
             self.call_menu_function(
                 choices, response,
@@ -117,8 +117,8 @@ class DonorUI():
             print(f"\nDonor {name}'s gift of {donation} "
                   f"on {when} successfully added.\n")
             print(self.collection.form_letter(name, when))
-        except ValueError as ve:
-            print(ve)
+        except ValueError as verr:
+            print(verr)
 
     def send_all_letters(self):
         """
@@ -204,8 +204,8 @@ class DonorUI():
             print("\nNo donors to list.\n")
         else:
             print("\nLIST OF DONORS:")
-            for k, v in donor_list.items():
-                print(f"\t{k}: Social Security # {v}")
+            for key, value in donor_list.items():
+                print(f"\t{key}: Social Security # {value}")
             print("\n")
             while response not in donor_list:
                 response = stripped_input(
