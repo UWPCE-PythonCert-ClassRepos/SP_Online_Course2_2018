@@ -125,18 +125,28 @@ class DonorCollection():
 
         :pattern:  The query specification string.
 
-        :return:  The matching documents, sorted as specified.
+        :return:  A list of the matching documents (in dict form).
         """
         self.logger.info(
             f"Scanning collection '{collection.name}' for query '{pattern}', "
             f"sorting on '{sorter}'."
         )
-        result = collection.find(pattern).sort(sorter)
-        self.log_document_list(result)
+        query = collection.find(pattern).sort(sorter)
+        # Create an iterable version of the data
+        # The query result is an iterator, which can only be iterated once
+
+        result = self.log_document_list(query)
         return result
 
     def log_document_list(self, documents):
-        """Log count and values of a MongoDB query document list."""
+        """
+        Log count and values of a MongoDB query result.
+
+        :documents:  The result of a MongoDB query.
+        
+        :return:  A list of each document (in dict form).
+        """
+        result = []
         if not documents:
             self.logger.info(f"No documents found.")
         else:
@@ -144,6 +154,8 @@ class DonorCollection():
             self.logger.info(f"Found {num_docs} document(s):")
             for doc in documents:
                 self.logger.info(f"\t{doc}")
+                result.append(doc)
+        return result
 
     def get_donor_list(self):
         """

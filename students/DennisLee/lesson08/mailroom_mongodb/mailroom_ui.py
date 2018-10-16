@@ -279,32 +279,6 @@ if __name__ == '__main__':
     ]
 
     # Initial donation amounts, with donor name and date of gift
-    DG_NAME, DG_AMOUNT, DG_DATE = 0, 1, 2
-    # DONOR_GIFTS = [
-    #     ('Papa Smurf', 48, '2018-06-29'),
-    #     ('Papa Smurf', 57.86, '2017-02-01'),
-    #     ('Daphne Dastardly', 82, '2017-09-22'),
-    #     ('Papa Smurf', 210.64, '2015-09-15'),
-    #     ('Papa Smurf', 351.22, '2018-01-01'),
-    #     ('Mama Murphy', 600, '2017-09-26'),
-    #     ('Mama Murphy', 785.2, '2018-03-03'),
-    #     ('Papa Smurf', 1000, '2016-11-12'),
-    #     ('Bill Dill', 2000, '2015-05-27'),
-    #     ('Red Herring', 2500, '2018-06-20'),
-    #     ('Papa Smurf', 2804.83, '2017-08-15'),
-    #     ('Karl-Heinz Berthold', 3545.2, '2018-01-31'),
-    #     ('Mama Murphy', 8500.3, '2014-12-12'),
-    #     ('Karl-Heinz Berthold', 10579.31, '2018-03-31'),
-    #     ('Mama Murphy', 12054.33, '2017-02-28'),
-    #     ('Pat Panda', 14920.5, '2018-03-12'),
-    #     ('Red Herring', 15000, '2017-12-31'),
-    #     ('Red Herring', 31126.37, '2017-08-31'),
-    #     ('Pat Panda', 35570.53, '2016-10-28'),
-    #     ('Pat Panda', 55324.4, '2014-05-25'),
-    #     ('Red Herring', 65820.5, '2017-05-03'),
-    #     ('Mama Murphy', 156316.99, '2013-07-30')
-    # ]
-
     DONOR_GIFTS = [
         {'donor_name': 'Papa Smurf', 'donation_amount': 48, 'donation_date': '2018-06-29'},
         {'donor_name': 'Papa Smurf', 'donation_amount': 57.86, 'donation_date': '2017-02-01'},
@@ -330,15 +304,9 @@ if __name__ == '__main__':
         {'donor_name': 'Mama Murphy', 'donation_amount': 156316.99, 'donation_date': '2013-07-30'}
     ]
 
-
     DONOR_COL = mailroom_oo.DonorCollection()
     DONOR_COL.bulk_insert_donors(DONOR_SPECS)
     DONOR_COL.bulk_insert_gifts(DONOR_GIFTS)
-
-    # for donor in DONOR_GIFTS:
-    #     DONOR_COL.add_new_amount(
-    #         donor[DG_NAME], donor[DG_AMOUNT], donor[DG_DATE]
-    #     )
 
     DUI = DonorUI(DONOR_COL)
     DUI.manage_donors()
