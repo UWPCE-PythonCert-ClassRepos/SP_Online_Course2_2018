@@ -1,6 +1,6 @@
 """
-This module defines the mailroom functionality using a peewee and
-MongoDB database setup for the donor information.
+This module defines the mailroom functionality using a Neo4J
+database setup for the donor information.
 """
 #!/usr/bin/env python3
 
@@ -22,20 +22,23 @@ def strip_text(text):
         result = text.strip()
     return result
 
+
 class DonorCollection():
     """Contains methods and properties for an entire donor roster."""
 
     def __init__(self):
-        """Initialize the database and clear the data."""
+        """Set up logging & manage the Neo4J driver and its sessions."""
         self.logger = self.set_up_logging()
-        self.logger.info(f'Import donor database.')
-        self.client = mailroom_db_login.login_mongodb_cloud()
-        self.database = None
+        self.logger.info('This is the mailroom donor database '
+                         'functionality, implemented using Neo4J.')
+        self.driver = None
+        self.session = None
         self.persons = None
         self.donations = None
-        self.connect_to_database()
-        self.create_collections()
-        self.client.close()
+        self.connect_to_driver()
+        self.open_driver_session()
+        self.close_driver_session()
+        self.disconnect_from_driver()
 
     def __repr__(self):
         return "DonorCollection()"
@@ -59,120 +62,94 @@ class DonorCollection():
 
         return file_logger
 
-    def connect_to_database(self):
-        """Open the database file."""
-        self.logger.info("Connect to database.")
-        self.database = self.client['mr']
+    def connect_to_driver(self):
+        """Connect to the Neo4J database driver."""
+        self.logger.info("Connect to the Neo4J database driver.")
+        self.driver = mailroom_db_login.login_neo4j_cloud()
 
-    def create_collections(self):
-        """Create the collections in the database."""
-        self.logger.info("Creating the 'Persons' collection.")
-        self.persons = self.database['Persons']
-        self.logger.info("Creating the 'Donations' collection.\n")
-        self.donations = self.database['Donations']
+    def disconnect_from_driver(self):
+        """Disconnect from the Neo4J database driver."""
+        self.logger.info("Disconnect from the Neo4J database driver.")
+        self.driver.close()
+
+    def open_driver_session(self):
+        """Open a session with the Neo4J driver."""
+        self.logger.info("Open a Neo4J driver session.")
+        self.session = self.driver.session()
+
+    def close_driver_session(self):
+        """Close the Neo4J database driver session."""
+        self.logger.info('Close the database driver session.')
+        self.session.close()
 
     def bulk_insert_donors(self, list_of_dicts):
-        """Insert a bunch of donors into the Persons collection."""
-        self.logger.info(f"Bulk inserting into the Persons collection.")
+        """Insert a bunch of donors as Person vertices."""
+        self.logger.info(f"Bulk inserting as Person vertices.")
         self.logger.info(f"Here's the data: {list_of_dicts}.")
         for one_dict in list_of_dicts:
-            self.persons.update_one(
-                {
-                    'person_name': one_dict['person_name']
-                },
-                {'$set': {
-                    'person_name': one_dict['person_name'],
-                    'ssn': one_dict['ssn']
-                }},
-                upsert=True
-            )
-        docs = self.persons.find()
-        self.log_document_list(docs)
+            clean_dict = {}
+            clean_dict['person_name'] = strip_text(one_dict['person_name'])
+            clean_dict['ssn'] = strip_text(one_dict['ssn'])
+            self.logger.info(f"Merge create Person vertex for: {clean_dict}.")
+            cypher = """
+                MERGE (p:Person {person_name: '%(person_name)s'})
+                ON MATCH SET p.ssn = '%(ssn)s'
+            """ % clean_dict
+            self.session.run(cypher)
 
     def bulk_insert_gifts(self, list_of_dicts):
-        """Insert a bunch of gifts into the Donations collection."""
-        self.logger.info(f"Bulk inserting into the Donations collection.")
+        """Insert a bunch of gifts as Donation vertices."""
+        self.logger.info(f"Bulk inserting as Donation vertices.")
+        self.logger.info(f"Will also relate them to Person vertices.")
         self.logger.info(f"Here's the data: {list_of_dicts}.")
-        donors = self.persons.distinct('person_name')
-        donors.sort()
-        self.logger.info(
-            f"Donations must come from someone in the donor list: {donors}."
-        )
         for one_dict in list_of_dicts:
-            if one_dict['donor_name'] in donors:
-                self.donations.update_one(
-                    {
-                        'donor_name': one_dict['donor_name'],
-                        'donation_date': one_dict['donation_date']
-                    },
-                    {'$set': {
-                        'donor_name': one_dict['donor_name'],
-                        'donation_date': one_dict['donation_date'],
-                        'donation_amount': one_dict['donation_amount']
-                    }},
-                    upsert=True
+            clean_dict = {}
+            clean_dict['donor_name'] = strip_text(one_dict['donor_name'])
+            clean_dict['donation_date'] = strip_text(one_dict['donation_date'])
+            clean_dict['donation_amount'] = round(
+                float(one_dict['donation_amount']), 2
+            )
+            self.logger.info(
+                f"Create donation and relate to person for: {clean_dict}.")
+            cypher = """
+                CREATE (
+                    d:Donation {
+                        donation_date: '%(donation_date)s',
+                        donation_amount: %(donation_amount)s
+                    }
                 )
-        docs = self.donations.find()
-        self.log_document_list(docs)
-
-    def get_documents(self, collection, pattern={}, sorter={}):
-        """
-        Return sorted list of database documents matched by the pattern.
-
-        :collection:  The collection object (for persons or donations).
-
-        :sorter:  The collection field to sort on.
-
-        :pattern:  The query specification string.
-
-        :return:  A list of the matching documents (in dict form).
-        """
-        self.logger.info(
-            f"Scanning collection '{collection.name}' for query '{pattern}', "
-            f"sorting on '{sorter}'."
-        )
-        query = collection.find(pattern).sort(sorter)
-        # Create an iterable version of the data
-        # The query result is an iterator, which can only be iterated once
-
-        result = self.log_document_list(query)
-        return result
-
-    def log_document_list(self, documents):
-        """
-        Log count and values of a MongoDB query result.
-
-        :documents:  The result of a MongoDB query.
-        
-        :return:  A list of each document (in dict form).
-        """
-        result = []
-        if not documents:
-            self.logger.info(f"No documents found.")
-        else:
-            num_docs = documents.count()
-            self.logger.info(f"Found {num_docs} document(s):")
-            for doc in documents:
-                self.logger.info(f"\t{doc}")
-                result.append(doc)
-        return result
+                MATCH (p:Person {person_name: '%(donor_name)s'})
+                CREATE (p)-[gives:GIVES]->(d
+                    {
+                        donation_date: '%(donation_date)s',
+                        donation_amount: %(donation_amount)s
+                    }
+                )
+                RETURN p.person_name as donor_name,
+                       d.donation_date, d.donation_amount
+            """ % clean_dict
+            self.session.run(cypher)
 
     def get_donor_list(self):
         """
-        Query the Persons collection for all potential donor names.
+        Cypher the Persons vertices for all potential donor names.
 
         :return:  The list of person-social security number dicts,
                   sorted by name.
         """
-        self.logger.info("Query for donor names.")
-        result = {}
-        names = self.get_documents(self.persons, {}, 'person_name')
-        if not names:
-            self.logger.info("No donors found.")
+        self.logger.info("Cypher for donor names.")
+        cypher = """
+            MATCH (p:Person)
+            RETURN p
+            ORDER BY p.person_name
+        """
+        result = self.session.run(cypher)
+        self.logger.info(f"There are {len(result)} donor(s):")
+        if not result:
+            self.logger.info(f"No Person vertices at the moment.")
         else:
-            for doc in names:
-                result[doc['person_name']] = doc['ssn']
-        self.logger.info(f"There are {len(result)} donors: {result}.")
+            for val in result:
+                self.logger.info(f"\t{val['ssn']}: {val['person_name']}")
         return result
 
     def get_donors_who_donated(self):
@@ -181,19 +158,24 @@ class DonorCollection():
 
         :return:  The list of persons who've given, sorted by name.
         """
-        self.logger.info("Query for donors who've actually donated.")
-        names = self.donations.distinct('donor_name')
-        if not names:
-            self.logger.info("No donors found.")
-        else:
-            names.sort()
-            self.logger.info(f"Number of generous donors: {len(names)}")
-            self.logger.info(f"The generous donors are: {names}.")
-        return names
-
-    def get_donor_info(self, name):
+        self.logger.info("Cypher f/the names of donors who've already given.")
+        cypher = """
+            MATCH (p:Person)<-[:GIVES]-(d:Donation)
+            RETURN DISTINCT p.person_name
+            ORDER BY p.person_name
         """
-        Query the Persons collection for a donor's personal information.
+        result = self.session.run(cypher)
+        if not result:
+            self.logger.info(f"Nobody has donated yet.")
+        else:
+            self.logger.info(f"There are {len(result)} generous donor(s):")
+            for val in result:
+                self.logger.info(f"\t{val['person_name']}")
+        return result
+
+    def get_single_donor_info(self, name):
+        """
+        Cypher Persons vertices for a donor's personal information.
         Right now the only available data is the name and social
         security number (SSN).
 
@@ -201,96 +183,84 @@ class DonorCollection():
 
         :return:  A dict containing the donor name and the donor SSN.
         """
+        self.logger.info("Cypher for a person's information.")
         clean_name = strip_text(name)
-        self.logger.info(f"Get information about donor '{clean_name}'.")
-        result = {}
-        info = self.persons.find_one({'person_name': clean_name})
-
-        if info:
-            result = {
-                'person_name': info['person_name'],
-                'ssn': info['ssn']
-            }
-        self.logger.info(f"Donor info: {result}")
+        cypher = "MATCH (p:Person {person_name: '%s'}) RETURN p" % clean_name
+        result = self.session.run(cypher)
+        if not result:
+            self.logger.info(f"'{clean_name}' not a Person vertex.")
+        else:
+            self.logger.info(f"Here's the donor's information: {result}.")
         return result
 
     def delete_data(self):
-        """Delete all data in the database collections."""
-        # Delete Donations collection data
-        self.logger.info(
-            "Number of documents in the Donations collection: "
-            f"{self.donations.count_documents({})}."
-        )
-        self.logger.info("Delete all data from the Donations collection.")
-        try:
-            self.donations.delete_many({})
-        except Exception as exc:
-            self.logger.info(exc)
-            self.logger.info('Donations collection deletion unsuccessful.')
+        """Delete all data in the graph database."""
+        self.logger.info("Delete all data in the database.")
+
+        # Delete Donation vertices
+        cypher = "MATCH (d:Donation) RETURN d"
+        result = self.session.run(cypher)
+        if not result:
+            self.logger.info("No donations found.")
         else:
-            self.logger.info(
-                "Number of documents in the Donations collection now: "
-                f"{self.donations.count_documents({})}."
-            )
-            # Delete Persons collection data
-            self.logger.info(
-                "Number of documents in the Persons collection: "
-                f"{self.persons.count_documents({})}."
-            )
-            self.logger.info("Delete all data from the Persons collection.")
-            try:
-                self.persons.delete_many({})
-            except Exception as exc:
-                self.logger.info(exc)
-                self.logger.info('Persons collection deletion unsuccessful.')
-            else:
-                self.logger.info(
-                    "Number of documents in the Persons collection now: "
-                    f"{self.persons.count_documents({})}."
-                )
+            self.logger.info(f"Delete these {len(result)} donations:")
+            for val in result:
+                self.logger.info(f"\t{val}")
+            cypher = "MATCH (d:Donation) DETACH DELETE d"
+            self.session.run(cypher)
+
+        # Delete Person vertices
+        cypher = "MATCH (p:Person) RETURN p"
+        result = self.session.run(cypher)
+        if not result:
+            self.logger.info("No persons found.")
+        else:
+            self.logger.info(f"Delete these {len(result)} people:")
+            for val in result:
+                self.logger.info(f"\t{val}")
+            cypher = "MATCH (p:Person) DETACH DELETE p"
+            self.session.run(cypher)
 
     def delete_donor_data(self, name):
         """
-        Delete a donor's donations from the Donations collection and the
-        donor from the Persons collection.
+        Delete a donor's donations from the Donation vertices and the
+        Person vertex for the person. Also delete any connecting edges.
         """
-        # Delete Donations collection data from the donor
         clean_name = strip_text(name)
         self.logger.info(
-            "Number of documents in the Donations collection: "
-            f"{self.donations.count_documents({})}."
-        )
-        self.logger.info(f"Deleting donations from '{clean_name}'.")
-        try:
-            self.donations.delete_many({'donor_name': clean_name})
-        except Exception as exc:
-            self.logger.info(exc)
+            f"Delete donation and person entries for {clean_name}.")
+
+        # Delete Donation vertices for the donor
+        cypher = """
+            MATCH (d:Donation)<-[:GIVES]-(p:Person {person_name: %s})
+            RETURN d
+        """ % clean_name
+        result = self.session.run(cypher)
+        if not result:
+            self.logger.info("'{clean_name}' has not donated yet.")
         else:
             self.logger.info(
-                "Number of documents in the Donations collection now: "
-                f"{self.donations.count_documents({})}."
-            )
+                f"Delete these {len(result)} donations from '{clean_name}':")
+            for val in result:
+                self.logger.info(f"\t{val}")
+            cypher = """
+                MATCH (d:Donation)<-[:GIVES]-(p:Person {person_name: %s})
+                DETACH DELETE d
+            """ % clean_name
+            self.session.run(cypher)
 
-            # Delete donor from Persons collection
-            self.logger.info(
-                "Number of documents in the Persons collection: "
-                f"{self.persons.count_documents({})}."
-            )
-            self.logger.info(f"Deleting '{clean_name}' from donor list.")
-            try:
-                self.persons.delete_one({'person_name': clean_name})
-            except Exception as exc:
-                self.logger.info(exc)
-            else:
-                self.logger.info(
-                    "Number of documents in the Persons collection now: "
-                    f"{self.persons.count_documents({})}."
-                )
-
-    def close_database(self):
-        """Close the database."""
-        self.logger.info('Close database.')
-        self.database.close()
+        # Delete the Person vertex for the donor
+        cypher = "MATCH (p:Person {person_name: %s}) RETURN p" % clean_name
+        result = self.session.run(cypher)
+        if not result:
+            self.logger.info("'{clean_name}' is not a Person vertex.")
+        else:
+            self.logger.info(f"Delete the '{clean_name}' Person vertex.")
+            cypher = """
+                MATCH (p:Person {person_name: %s})
+                DETACH DELETE p
+            """ % clean_name
+            self.session.run(cypher)
 
     def create_gift_report(self):
         """
@@ -299,27 +269,26 @@ class DonorCollection():
         :return:  None.
         """
         self.logger.info('Print out donation stats for all donors.')
-        pipe = [
-            {'$match': {'donor_name': {'$ne': ''}}},
-            {'$group': {
-                '_id': '$donor_name',
-                'gifts': {'$sum': 1},
-                'total': {'$sum': '$donation_amount'},
-                'average': {'$avg': '$donation_amount'},
-                'largest': {'$max': '$donation_amount'},
-                'smallest': {'$min': '$donation_amount'}
-            }},
-            {'$sort': {'_id': 1}}
-        ]
-        query = self.donations.aggregate(pipe)
-        self.logger.info(f"Query is: {query}.")
+        cypher = """
+            MATCH (d:Donation)<-[:GIVES]-(p:Person)
+            ORDER BY p.person_name
+            RETURN p.person_name as donor_name,
+                   count(d) as gifts,
+                   sum(d.donation_amount) as total,
+                   avg(d.donation_amount) as average,
+                   max(d.donation_amount) as largest,
+                   min(d.donation_amount) as smallest
+        """
+        self.logger.info(f"Cypher spec is: {cypher}.")
+        result = self.session.run(cypher)
 
+        # Put the 6 data points into a tuple in display column order
         data = []
-        for doc in query:
+        for val in result:
             data.append(
                 (
-                    doc['_id'], doc['gifts'], doc['total'],
-                    doc['average'], doc['largest'], doc['smallest']
+                    val['donor_name'], val['gifts'], val['total'],
+                    val['average'], val['largest'], val['smallest']
                 )
             )
             self.logger.info(f"Added ({data[-1]}).")
@@ -329,7 +298,7 @@ class DonorCollection():
             'Donor name', 'Number of gifts', 'Total given',
             'Average gift', 'Largest gift', 'Smallest gift')
         col_head_str = ('{:<30s} | {:>15s}' + 4*' |  {:>13s}'
-                        ).format(*col_heads)
+                       ).format(*col_heads)
         head_borderline = (
             '{:<30s} | {:>15s}' + 4*' | {:>14s}'
         ).format(
@@ -341,44 +310,30 @@ class DonorCollection():
         print('\n')
         print(col_head_str)
         print(head_borderline)
-        for doc in data:
-            row_string = data_str.format(*doc)
+        for val in data:
+            row_string = data_str.format(*val)
             self.logger.info(row_string)
             print(row_string)
         print('\n')
 
     def add_or_update_donor(self, donor, ssn):
         """
-        Add or update a donor's SSN in the Persons collection.
+        Add or update a donor's SSN in the Person vertex.
 
         :donor:  The name of the donor to add or update.
 
         :ssn:  The new or existing donor's social security number.
 
-        :return:  The old document, if it exists; otherwise None.
+        :return:  The new or updated Person vertex.
         """
         clean_name, clean_ssn = strip_text(donor), strip_text(ssn)
-        old_document = None
         self.logger.info(
-            f"Add or update person '{clean_name}' "
-            f"with SS #{clean_ssn} to the Persons collection.")
-        if not clean_name or not clean_ssn:
-            print("Exiting - must enter a non-null donor name and SS #.")
-        else:
-            try:
-                old_document = self.persons.find_one_and_update(
-                    {'person_name': clean_name},
-                    {'$set': {'ssn': clean_ssn}},
-                    upsert=True
-                )
-            except Exception as exc:
-                self.logger.info(exc)
-                self.logger.info('Donor change/addition unsuccessful.')
-        if old_document:
-            self.logger.info(
-                f"Update made to '{clean_name}', overwriting the previous SSN "
-                "of '{clean_ssn}'.")
-        return old_document
+            f"Merge create Person vertex f/'{clean_name}' (SSN {clean_ssn}).")
+        cypher = """
+            MERGE (p:Person {person_name: '%s'})
+            ON MATCH SET p.ssn = '%s'
+        """ % clean_name, clean_ssn
+        self.session.run(cypher)
 
     def add_new_amount(self, donor, amount, date):
         """
@@ -392,11 +347,12 @@ class DonorCollection():
 
         :date:  The date of the donation, in YYYY-MM-DD format.
 
-        :return:  None.
+        :return:  The new Donation vertex.
         """
         clean_name, clean_date = strip_text(donor), strip_text(date)
         self.logger.info(
             f"Donor '{clean_name}' giving '{amount}' on '{clean_date}'.")
+
         if not donor:
             self.logger.info("Donor name is empty.")
             raise ValueError("No donor name specified.")
@@ -408,33 +364,31 @@ class DonorCollection():
             raise ValueError(f"'{date}' is an invalid date format.")
 
         try:
-            amount = float(amount)
+            clean_amount = float(amount)
         except ValueError:
             self.logger.info(f"Specified gift amount must be a number.")
             raise ValueError("A number was not specified for the gift amount.")
-        if amount < 0.005:
+        if clean_amount < 0.005:
             self.logger.info(f"Gift of '{amount}' must be at least one penny.")
             raise ValueError(
                 f"'{amount}' is invalid - must be at least $0.01.")
 
-        try:
-            old_document = self.donations.find_one_and_update(
-                {'donor_name': clean_name, 'donation_date': str_date},
-                {'$set': {'donation_amount': round(amount, 2)}},
-                upsert=True
+        cypher = """
+            CREATE (d:Donation {donation_date: '%s', donation_amount: %s})
+            MATCH (p:Person {person_name: '%s'})
+            CREATE (p)-[gives:GIVES]->(d
+                {donation_date: '%s', donation_amount: %s}
             )
-        except Exception as exc:
-            self.logger.info(exc)
-            self.logger.info('Donation unsuccessful.')
+            RETURN p.person_name as donor_name,
+                    d.donation_date, d.donation_amount
+        """ % str_date, clean_amount, clean_name, str_date, clean_amount
+        result = self.session.run(cypher)
+        if not result:
+            self.logger.info(f"Couldn't add the donation, probably because "
+                             f"'{clean_name}' isn't a Person vertex.")
         else:
-            self.logger.info('Successfully added donation.')
-            if old_document:
-                self.logger.info(
-                    f"Donor '{clean_name}' on '{clean_date}' - old amount "
-                    f"of '{old_document['donation_amont']}' replaced "
-                    f"with '{amount}'."
-                )
-            return old_document
+            self.logger.info("Donation successfully added.")
+        return result
 
     def save_letters(self, folder=""):
         """
@@ -465,12 +419,12 @@ class DonorCollection():
 
             # Create dict of letter names+letter texts, then write files
             self.logger.info("Get list of actual donors.")
-            query = self.get_donors_who_donated()
-            if not query:
+            real_donors = self.get_donors_who_donated()
+            if not real_donors:
                 self.logger.info("No donations yet, so no letters to send.")
             else:
                 self.logger.info("Create dict of filenames and letter text.")
-                for i in query:
+                for i in real_donors:
                     letters[f'_{i}.txt'] = self.form_letter(i)
                 self.logger.info(f"The letter filenames are: {letters.keys()}")
                 for filename, text in letters.items():
@@ -500,17 +454,18 @@ class DonorCollection():
         clean_name, clean_date = strip_text(name), strip_text(donation_date)
         gift_dict, specific_gift_date, specific_gift_amount = {}, None, 0.0
         self.logger.info(f"Creating form letter for {clean_name}.")
-        query_all = self.get_documents(
-            self.donations,
-            {'donor_name': clean_name},
-            [('donor_name', 1), ('donation_date', 1)]
-        )
 
-        for doc in query_all:
-            gift_dict[doc['donation_date']] = round(
-                float(doc['donation_amount']), 2)
-            self.logger.info(f"'{doc['donation_date']}' just assigned "
-                             f"to '{gift_dict[doc['donation_date']]}'.")
+        cypher = """
+            MATCH (d:Donation)<-[:GIVES]-(p:Person {person_name: %s})
+            RETURN d
+        """ % clean_name
+        rows = self.session.run(cypher)
+
+        for row in rows:
+            gift_dict[row['donation_date']] = round(
+                float(row['donation_amount']), 2)
+            self.logger.info(f"'{row['donation_date']}' just assigned "
+                             f"to '{gift_dict[row['donation_date']]}'.")
         if not gift_dict:
             self.logger.info(f"No donations from {clean_name} yet.")
             return ''
@@ -561,7 +516,7 @@ class DonorCollection():
             self.logger.info(f"Also note total donations of ${gift_sum}.")
             extra = '(and total donations of ${0:,.2f} from {1:,d} gifts)' \
                     '\n'.format(gift_sum, gift_count)
-        ssn = self.get_donor_info(clean_name)['ssn']
+        ssn = self.get_single_donor_info(clean_name)['ssn']
         return text.format(
             clean_name,
             ssn,

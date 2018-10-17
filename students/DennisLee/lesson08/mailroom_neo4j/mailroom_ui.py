@@ -5,7 +5,7 @@ This module implements the mailroom user interface.
 #!/usr/bin/env python3
 
 import os
-import mailroom_oo_mongodb as mailroom_oo
+import mailroom_oo_neo4j as mailroom_oo
 
 def stripped_input(prompt):
     """Return user input, with leading and trailing spaces removed."""
@@ -149,7 +149,7 @@ class DonorUI():
         :return:  None.
         """
         name = stripped_input("Enter a new donor name: ")
-        if self.collection.get_donor_info(name):
+        if self.collection.get_single_donor_info(name):
             print(f"Donor {name} already exists - exiting.")
         else:
             ssn = stripped_input("Enter social security number: ")
@@ -172,8 +172,8 @@ class DonorUI():
             info = self.collection.get_donor_info(donor_name)
             print(f"\nDonor {info['person_name']}, SS # {info['ssn']}.\n")
             ssn = stripped_input(
-                "Specify a new social security number (or leave blank to exit). " +
-                "Type N/A if the donor social security number is unknown. "
+                "Specify a new social security number (or leave blank "
+                "to exit). Type N/A if the donor SS number is unknown. "
             )
             if ssn:
                 self.collection.add_or_update_donor(donor_name, ssn)
