@@ -169,7 +169,7 @@ class DonorUI():
         if donor_name == '':
             print("\nExiting without updating a donor.\n")
         else:
-            info = self.collection.get_donor_info(donor_name)
+            info = self.collection.get_single_donor_info(donor_name)
             print(f"\nDonor {info['person_name']}, SS # {info['ssn']}.\n")
             ssn = stripped_input(
                 "Specify a new social security number (or leave blank "
