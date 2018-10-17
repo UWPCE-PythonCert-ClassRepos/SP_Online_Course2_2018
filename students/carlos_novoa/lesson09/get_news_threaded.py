@@ -9,10 +9,7 @@ import threading
 import queue
 
 
-# NEWS_API_KEY = "84d0483394c44f288965d7b366e54a74"
-# NEWS_API_KEY = "7beb90f2dcd5443483496acb43005122"  # My personal key
-NEWS_API_KEY = "b3050b95733a4c54bf5fd3299d824bc5"  # Personal key 2
-
+NEWS_API_KEY = "84d0483394c44f288965d7b366e54a74"
 base_url = 'https://newsapi.org/v1/'
 WORD = "Russia"
 TITLES = []
