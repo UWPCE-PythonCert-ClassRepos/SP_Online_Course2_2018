@@ -341,13 +341,16 @@ class DonorCollection():
         """
         clean_name, clean_ssn = strip_text(donor), strip_text(ssn)
         self.logger.info(
-            f"Merge create Person vertex f/'{clean_name}' (SSN {clean_ssn}).")
-        cypher = """
-            MERGE (p:Person {person_name: '%s'})
-            ON MATCH SET p.ssn = '%s'
-            ON CREATE SET p.ssn = '%s'
-        """ % (clean_name, clean_ssn, clean_ssn)
-        self.log_cypher_run(cypher)
+            f"Merge create Person vertex f/'{clean_name}' (SSN'{clean_ssn}').")
+        if not clean_name:
+            self.logger.info("No name given - can't add to donor list.")
+        else:
+            cypher = """
+                MERGE (p:Person {person_name: '%s'})
+                ON MATCH SET p.ssn = '%s'
+                ON CREATE SET p.ssn = '%s'
+            """ % (clean_name, clean_ssn, clean_ssn)
+            self.log_cypher_run(cypher)
 
     def add_new_amount(self, donor, amount, date):
         """

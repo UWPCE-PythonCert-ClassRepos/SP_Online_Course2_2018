@@ -150,11 +150,14 @@ class DonorUI():
 
         :return:  None.
         """
-        name = stripped_input("Enter a new donor name: ")
-        if self.collection.get_single_donor_info(name):
+        name = stripped_input("Enter a new donor name (leave blank to exit): ")
+        if not name:
+            return
+        elif self.collection.get_single_donor_info(name):
             print(f"Donor {name} already exists - exiting.")
         else:
-            ssn = stripped_input("Enter social security number: ")
+            ssn = stripped_input(
+                "Enter social security number (leave blank if unknown): ")
             if not ssn:
                 ssn = 'N/A'
             print(f"\nAdding donor '{name}' with SS #{ssn}.\n")
