@@ -161,8 +161,7 @@ class DonorCollection():
         """
         Query the Persons collection for all potential donor names.
 
-        :return:  The list of person-social security number dicts,
-                  sorted by name.
+        :return:  The dict of person key /social security number values.
         """
         self.logger.info("Query for donor names.")
         result = {}
