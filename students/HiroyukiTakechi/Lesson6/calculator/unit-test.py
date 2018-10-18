@@ -62,6 +62,7 @@ class CalculatorTests(TestCase):
 
         self.subtracter.calc.assert_called_with(1, 2)
 
+#Added: 
 
 class MultiplierTests(TestCase):
 
@@ -79,10 +80,11 @@ class DividerTests(TestCase):
 
         for i in range (-10,10):
             for j in range(-10,10):
-                self.assertEqual(i / j, divider.calc(i, j))
+                if j != 0:
+                    self.assertEqual(i / j, divider.calc(i, j))
 
 
 
 
 
-                
+
