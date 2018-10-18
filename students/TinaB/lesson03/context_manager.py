@@ -16,6 +16,7 @@ raise a suitable error. Since this is a simulation you need do nothing more
 than print what is happening with the doors and pumps, like this:
 """
 
+
 class Locke:
 
     def __init__(self, boats):
@@ -24,8 +25,10 @@ class Locke:
     def __enter__(self):
         return self
 
-    def __exit__(self, *args):
-        return None
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type is ValueError:
+            print(exc_val) 
+        return True
 
     def move_boats_through(self, num_boats):
         if num_boats < self.boats:
@@ -55,5 +58,3 @@ if __name__ == "__main__":
     # Too many boats through a small locke will raise an exception
     with small_locke as locke:
         locke.move_boats_through(boats)
-
-
