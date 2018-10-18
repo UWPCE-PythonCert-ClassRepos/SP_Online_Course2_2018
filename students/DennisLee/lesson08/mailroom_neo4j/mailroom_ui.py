@@ -48,6 +48,8 @@ class DonorUI():
                 choices, response,
                 self.respond_to_bad_main_menu_choice, bad_choice=response)
             if response == 'Z':  # Exit if "Quit" is chosen
+                self.collection.close_driver_session()
+                self.collection.disconnect_from_driver()
                 return
 
     def call_menu_function(
@@ -205,7 +207,7 @@ class DonorUI():
         else:
             print("\nLIST OF DONORS:")
             for key, value in donor_list.items():
-                print(f"\t{key}: Social Security # {value}")
+                print(f"\t{key}  (SS #{value})")
             print("\n")
             while response not in donor_list:
                 response = stripped_input(
