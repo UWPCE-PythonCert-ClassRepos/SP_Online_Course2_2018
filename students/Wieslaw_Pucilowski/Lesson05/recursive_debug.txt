@@ -1,0 +1,151 @@
+1. What is wrong with our logic?
+
+my_fun() is defined int that way, that it stops - returns, when value n == 2,
+if value -s different from 2, my_fun is called with new argument n/2.
+
+def my_fun(n):
+    if n == 2:
+        return True
+    return my_fun(n/2)
+
+so condition to return and quit my_fun(n) is n == 2. But this will only work for powers of 2 as shown below
+
+wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson05/Debuggin$ python3 -m pdb recursive.py 4
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3     def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6         return my_fun(n/2)
+  7
+  8     if __name__ == '__main__':
+  9         n = int(sys.argv[1])
+ 10         print(my_fun(n))
+(Pdb) b 5
+Breakpoint 1 at /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py:5
+(Pdb) condition 1 n <= 2
+New condition set for breakpoint 1.
+(Pdb) c
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(5)my_fun()
+-> return True
+(Pdb) p n
+2.0
+(Pdb) s
+--Return--
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(5)my_fun()->True
+-> return True
+
+
+
+in the case of number not being power of 2, this condition is never met. This leads to the infinite recursion.
+n < 2 is constantly devided by 2 and my_fun(n/2) is called.
+
+<comp>:/mnt/c/UW_Python_2/Lesson05/Debuggin$ python3 -m pdb recursive.py 5
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3     def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6         return my_fun(n/2)
+  7
+  8     if __name__ == '__main__':
+  9         n = int(sys.argv[1])
+ 10         print(my_fun(n))
+(Pdb) b 4
+Breakpoint 1 at /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py:4
+(Pdb) condition 1 n <= 2
+New condition set for breakpoint 1.
+(Pdb) c
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) p n
+1.25
+(Pdb) s
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) p n
+0.625
+(Pdb) c
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) p n
+0.3125
+(Pdb) c
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) p n
+0.15625
+(Pdb)
+
+
+In order to fix the logic, an extra condition for non power 2 numbers must be added
+
+<comp>:/mnt/c/UW_Python_2/Lesson05/Debuggin$ cat recursive.py
+import sys
+
+def my_fun(n):
+    if n == 2:
+        return True
+    elif n < 2:
+        return False
+    return my_fun(n/2)
+
+if __name__ == '__main__':
+    n = int(sys.argv[1])
+    print(my_fun(n))
+
+
+<comp>:/mnt/c/UW_Python_2/Lesson05/Debuggin$ python3 recursive.py 1024
+True
+<comp>:/mnt/c/UW_Python_2/Lesson05/Debuggin$ python3 recursive.py 1025
+False
+
+wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson05/Debuggin$ python3 -m pdb recursive.py 1025
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3     def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6         elif n < 2:
+  7             return False
+  8         return my_fun(n/2)
+  9
+ 10     if __name__ == '__main__':
+ 11         n = int(sys.argv[1])
+ 12         print(my_fun(n))
+(Pdb) b 4
+Breakpoint 1 at /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py:4
+(Pdb) condition 1 n < 2
+New condition set for breakpoint 1.
+(Pdb) c
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) p n
+1.0009765625
+(Pdb) s
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(6)my_fun()
+-> elif n < 2:
+(Pdb) s
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(7)my_fun()
+-> return False
+(Pdb) s
+--Return--
+> /mnt/c/UW_Python_2/Lesson05/Debuggin/recursive.py(7)my_fun()->False
+-> return False
+(Pdb)
