@@ -185,13 +185,14 @@ class DonorCollection():
         """
         self.logger.info("Cypher f/the names of donors who've already given.")
         cypher = """
-            MATCH (p:Person)<-[:GIVES]-(d:Donation)
-            RETURN DISTINCT p.person_name
-            ORDER BY p.person_name
+            MATCH (p:Person)-[:GIVES]->(d:Donation)
+            RETURN DISTINCT p.person_name as person_name
+            ORDER BY person_name
         """
         result = self.log_cypher_run(cypher)
         ite = self.log_iterator_results(result)
-        return ite
+        donors_as_list = map(lambda x: x['person_name'], ite)
+        return donors_as_list
 
     def get_single_donor_info(self, name):
         """
@@ -468,7 +469,7 @@ class DonorCollection():
         """
         clean_name, clean_date = strip_text(name), strip_text(donation_date)
         gift_dict, specific_gift_date, specific_gift_amount = {}, None, 0.0
-        self.logger.info(f"Creating form letter for {clean_name} "
+        self.logger.info(f"Creating form letter for '{clean_name}' "
                          f"for their gift on '{clean_date}'.")
 
         cypher = """
@@ -484,7 +485,7 @@ class DonorCollection():
             self.logger.info(f"'{row['donation_date']}' just assigned "
                              f"to '{gift_dict[row['donation_date']]}'.")
         if not gift_dict:
-            self.logger.info(f"No donations from {clean_name} yet.")
+            self.logger.info(f"No donations from '{clean_name}' yet.")
             return ''
         self.logger.info(
             f"Donor '{clean_name}' has made {len(gift_dict)} gifts total: "
