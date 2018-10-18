@@ -12,7 +12,7 @@ LOG = mailroom_utilities.configure_logger(
 )
 CONFIG_FILE = Path(
     __file__
-).parent / '.config/config.ini'
+).parent.parent / '.config/config.ini'
 
 CONFIG = configparser.ConfigParser()
 
