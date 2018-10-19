@@ -5,7 +5,8 @@ This module implements the mailroom user interface.
 #!/usr/bin/env python3
 
 import os
-import mailroom_oo_mongodb as mailroom_oo
+# import mailroom_model as mdl
+import mailroom_oo_redis as mailroom_oo
 
 def stripped_input(prompt):
     """Return user input, with leading and trailing spaces removed."""
@@ -41,8 +42,8 @@ class DonorUI():
 
         while True:  # Print the menu list (with numbered choices)
             print("\nMENU:")
-            for key, value in choices.items():
-                print(key, value['option'])
+            for k, v in choices.items():
+                print(k, v['option'])
             response = stripped_input("Type a menu selection number: ")
             self.call_menu_function(
                 choices, response,
@@ -114,11 +115,10 @@ class DonorUI():
         )
         try:
             self.collection.add_new_amount(name, donation, when)
-            print(f"\nDonor {name}'s gift of {donation} "
-                  f"on {when} successfully added.\n")
+            print(f"\nDonor {name}'s gift of {donation} on {when} successfully added.\n")
             print(self.collection.form_letter(name, when))
-        except ValueError as verr:
-            print(verr)
+        except ValueError as ve:
+            print(ve)
 
     def send_all_letters(self):
         """
@@ -152,11 +152,11 @@ class DonorUI():
         if self.collection.get_donor_info(name):
             print(f"Donor {name} already exists - exiting.")
         else:
-            ssn = stripped_input("Enter social security number: ")
-            if not ssn:
-                ssn = 'N/A'
-            print(f"\nAdding donor '{name}' with SS #{ssn}.\n")
-            self.collection.add_or_update_donor(name, ssn)
+            phone_num = stripped_input("Enter phone number: ")
+            if not phone_num:
+                phone_num = 'N/A'
+            print(f"\nAdding donor {name} with phone #{phone_num}.\n")
+            self.collection.add_or_update_donor(name, phone_num)
 
     def update_donor_info(self):
         """
@@ -170,13 +170,13 @@ class DonorUI():
             print("\nExiting without updating a donor.\n")
         else:
             info = self.collection.get_donor_info(donor_name)
-            print(f"\nDonor {info['person_name']}, SS # {info['ssn']}.\n")
-            ssn = stripped_input(
-                "Specify a new social security number (or leave blank to exit). " +
-                "Type N/A if the donor social security number is unknown. "
+            print(f"\nDonor {info[0]}, phone # {info[1]}.\n")
+            phone_num = stripped_input(
+                "Specify a new phone number (or leave blank to exit). " +
+                "Type N/A if the donor phone number is unknown. "
             )
-            if ssn:
-                self.collection.add_or_update_donor(donor_name, ssn)
+            if phone_num:
+                self.collection.add_or_update_donor(donor_name, phone_num)
 
     def delete_donor_and_donations(self):
         """
@@ -194,7 +194,7 @@ class DonorUI():
 
     def choose_donor(self):
         """
-        Prompt for the user to select a donor from the full donor list.
+        Prompt for the user to type a donor from the full donor list.
 
         :return:  The name of an existing donor, or an empty string.
         """
@@ -204,8 +204,8 @@ class DonorUI():
             print("\nNo donors to list.\n")
         else:
             print("\nLIST OF DONORS:")
-            for key, value in donor_list.items():
-                print(f"\t{key}: Social Security # {value}")
+            for k, v in donor_list.items():
+                print(f"\t{k}: phone # {v}")
             print("\n")
             while response not in donor_list:
                 response = stripped_input(
@@ -218,95 +218,54 @@ class DonorUI():
 
 if __name__ == '__main__':
     # Initial donor list w/possible keys (email address, phone number,
-    # social security number, and birthdate) - will use SS # only though
-    DONOR_SPECS = [
-        {
-            'person_name': 'Red Herring',
-            'email': 'RedH@gmail.com',
-            'phone': '468-135-0987',
-            'ssn': '372-98-0038',
-            'birthdate': '1952-06-28'
-        },
-        {
-            'person_name': 'Tight Wad',
-            'email': 'TWad@yahoo.com',
-            'phone': '800-382-3864',
-            'ssn': '016-53-3487',
-            'birthdate': '1985-11-30'
-        },
-        {
-            'person_name': 'Papa Smurf',
-            'email': 'PapaSmurf@live.com',
-            'phone': '369-486-0368',
-            'ssn': '833-46-3487',
-            'birthdate': '1976-12-02'
-        },
-        {
-            'person_name': 'Cheap Skate',
-            'email': 'NoCash@gandi.net',
-            'phone': '245-748-4392',
-            'ssn': '467-43-1793',
-            'birthdate': '1946-02-27'
-        },
-        {
-            'person_name': 'Pat Panda',
-            'email': 'PatPan@excite.com',
-            'phone': '682-843-4873',
-            'ssn': '324-32-2345',
-            'birthdate': '1966-07-08'
-        },
-        {
-            'person_name': 'Karl-Heinz Berthold',
-            'email': 'KHB@lufthansa.com',
-            'phone': '296-348-9483',
-            'ssn': '248-45-4893',
-            'birthdate': '1964-02-10'
-        },
-        {
-            'person_name': 'Mama Murphy',
-            'email': 'MamaM@MamaMurphy.org',
-            'phone': '748-938-8437',
-            'ssn': '238-09-9816',
-            'birthdate': '1964-05-02'
-        },
-        {
-            'person_name': 'Daphne Dastardly',
-            'email': 'Daphne@Dastardly.net',
-            'phone': '554-382-1010',
-            'ssn': '073-53-4832',
-            'birthdate': '1990-06-30'
-        }
-    ]
+    # social security number, and birthdate) - will use phone # only tho
+    DS_EMAIL, DS_PHONE, DS_SSN, DS_BIRTHDATE = 0, 1, 2, 3
+    DONOR_SPECS = {
+        'Red Herring': ('RedH@gmail.com', '468-135-0987', '372-98-0038', '1952-06-28'),
+        'Tight Wad': ('TWad@yahoo.com', '800-382-3864', '016-53-3487', '1985-11-30'),
+        'Papa Smurf': ('PapaSmurf@live.com', '369-486-0368', '833-46-3487', '1976-12-02'),
+        'Cheap Skate': ('NoCash@gandi.net', '245-748-4392', '467-43-1793', '1946-02-27'),
+        'Pat Panda': ('PatPan@excite.com', '682-843-4873', '324-32-2345', '1966-07-08'),
+        'Karl-Heinz Berthold': ('KHB@lufthansa.com', '296-348-9483', '248-45-4893', '23417'),
+        'Mama Murphy': ('MamaM@MamaMurphy.org', '748-938-8437', '238-09-9816', '23499'),
+        'Daphne Dastardly': ('Daphne@Dastardly.net', '554-382-1010', '073-53-4832', '43692')
+    }
 
     # Initial donation amounts, with donor name and date of gift
-    DONOR_GIFTS = [
-        {'donor_name': 'Papa Smurf', 'donation_amount': 48, 'donation_date': '2018-06-29'},
-        {'donor_name': 'Papa Smurf', 'donation_amount': 57.86, 'donation_date': '2017-02-01'},
-        {'donor_name': 'Daphne Dastardly', 'donation_amount': 82, 'donation_date': '2017-09-22'},
-        {'donor_name': 'Papa Smurf', 'donation_amount': 210.64, 'donation_date': '2015-09-15'},
-        {'donor_name': 'Papa Smurf', 'donation_amount': 351.22, 'donation_date': '2018-01-01'},
-        {'donor_name': 'Mama Murphy', 'donation_amount': 600, 'donation_date': '2017-09-26'},
-        {'donor_name': 'Mama Murphy', 'donation_amount': 785.2, 'donation_date': '2018-03-03'},
-        {'donor_name': 'Papa Smurf', 'donation_amount': 1000, 'donation_date': '2016-11-12'},
-        {'donor_name': 'Bill Dill', 'donation_amount': 2000, 'donation_date': '2015-05-27'},  # Will be rejected - not in donor list
-        {'donor_name': 'Red Herring', 'donation_amount': 2500, 'donation_date': '2018-06-20'},
-        {'donor_name': 'Papa Smurf', 'donation_amount': 2804.83, 'donation_date': '2017-08-15'},
-        {'donor_name': 'Karl-Heinz Berthold', 'donation_amount': 3545.2, 'donation_date': '2018-01-31'},
-        {'donor_name': 'Mama Murphy', 'donation_amount': 8500.3, 'donation_date': '2014-12-12'},
-        {'donor_name': 'Karl-Heinz Berthold', 'donation_amount': 10579.31, 'donation_date': '2018-03-31'},
-        {'donor_name': 'Mama Murphy', 'donation_amount': 12054.33, 'donation_date': '2017-02-28'},
-        {'donor_name': 'Pat Panda', 'donation_amount': 14920.5, 'donation_date': '2018-03-12'},
-        {'donor_name': 'Red Herring', 'donation_amount': 15000, 'donation_date': '2017-12-31'},
-        {'donor_name': 'Red Herring', 'donation_amount': 31126.37, 'donation_date': '2017-08-31'},
-        {'donor_name': 'Pat Panda', 'donation_amount': 35570.53, 'donation_date': '2016-10-28'},
-        {'donor_name': 'Pat Panda', 'donation_amount': 55324.4, 'donation_date': '2014-05-25'},
-        {'donor_name': 'Red Herring', 'donation_amount': 65820.5, 'donation_date': '2017-05-03'},
-        {'donor_name': 'Mama Murphy', 'donation_amount': 156316.99, 'donation_date': '2013-07-30'}
-    ]
+    DG_NAME, DG_AMOUNT, DG_DATE = 0, 1, 2
+    DONOR_GIFTS = (
+        ('Papa Smurf', 48, '2018-06-29'),
+        ('Papa Smurf', 57.86, '2017-02-01'),
+        ('Daphne Dastardly', 82, '2017-09-22'),
+        ('Papa Smurf', 210.64, '2015-09-15'),
+        ('Papa Smurf', 351.22, '2018-01-01'),
+        ('Mama Murphy', 600, '2017-09-26'),
+        ('Mama Murphy', 785.2, '2018-03-03'),
+        ('Papa Smurf', 1000, '2016-11-12'),
+        ('Bill Dill', 2000, '2015-05-27'),  # Will be rejected -donor not in DB
+        ('Red Herring', 2500, '2018-06-20'),
+        ('Papa Smurf', 2804.83, '2017-08-15'),
+        ('Karl-Heinz Berthold', 3545.2, '2018-01-31'),
+        ('Mama Murphy', 8500.3, '2014-12-12'),
+        ('Karl-Heinz Berthold', 10579.31, '2018-03-31'),
+        ('Mama Murphy', 12054.33, '2017-02-28'),
+        ('Pat Panda', 14920.5, '2018-03-12'),
+        ('Red Herring', 15000, '2017-12-31'),
+        ('Red Herring', 31126.37, '2017-08-31'),
+        ('Pat Panda', 35570.53, '2016-10-28'),
+        ('Pat Panda', 55324.4, '2014-05-25'),
+        ('Red Herring', 65820.5, '2017-05-03'),
+        ('Mama Murphy', 156316.99, '2013-07-30')
+    )
 
     DONOR_COL = mailroom_oo.DonorCollection()
-    DONOR_COL.bulk_insert_donors(DONOR_SPECS)
-    DONOR_COL.bulk_insert_gifts(DONOR_GIFTS)
+    for donor_key, donor_value in DONOR_SPECS.items():
+        DONOR_COL.add_or_update_donor(donor_key, donor_value[DS_PHONE])
+
+    for donor in DONOR_GIFTS:
+        DONOR_COL.add_new_amount(
+            donor[DG_NAME], donor[DG_AMOUNT], donor[DG_DATE]
+        )
 
     DUI = DonorUI(DONOR_COL)
     DUI.manage_donors()
