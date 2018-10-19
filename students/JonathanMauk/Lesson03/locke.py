@@ -13,7 +13,7 @@ class Locke:
         print("Closing the doors.\nRestarting the pumps.")
         return self
 
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_value, tb):
         print("Stopping the pumps.\nOpening the doors.\nBoats exiting locke.")
         return self
 
