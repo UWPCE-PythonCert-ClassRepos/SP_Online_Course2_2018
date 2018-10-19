@@ -4,13 +4,16 @@ class Locke:
         self.capacity = capacity
 
     def __enter__(self):
-        return self
-
-    def __exit__(self):
+        print("Stopping the pumps.\nOpening the doors.")
         return self
 
     def move_boats_through(self):
         return self
+
+    def __exit__(self):
+        print("Closing the doors.\nRestarting the pumps.")
+        return self
+
 
 
 if __name__ == "__main__":
