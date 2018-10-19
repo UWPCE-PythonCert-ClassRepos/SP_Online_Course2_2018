@@ -12,4 +12,4 @@ high_energy_list = songs_by_energy()  # Using default value of 0.8.
 high_energy_query = high_energy_list(music)  # Running data set through our closure.
 
 for songs in high_energy_query:
-    print(songs)
+    print(f"-   Artist: {songs[0]}\n\tTitle: {songs[1]}\n\tEnergy: {songs[2]}")
