@@ -4,12 +4,13 @@ class Locke:
         self.capacity = capacity
 
     def __enter__(self):
-        print("Stopping the pumps.\nOpening the doors.\nBoats entering locke.")
+        print("Stopping the pumps.\nOpening the doors.")
         return self
 
     def move_boats_through(self, boats_count):
+        print(f"{boats_count} boats entering locke with a capacity of {self.capacity}.")
         if boats_count > self.capacity:
-            raise Exception("Too many boats. Locke has a capacity of {self.capacity}. Please try again.")
+            raise OverflowError(f"Error: Locke has capacity of {self.capacity}, {boats_count} were sent in. Try again.")
         print("Closing the doors.\nRestarting the pumps.")
         return self
 
@@ -25,8 +26,8 @@ if __name__ == "__main__":
     boats = 8
 
     # Should raise an exception.
-    # with small_locke as locke:
-    #     locke.move_boats_through(boats)
+    with small_locke as locke:
+        locke.move_boats_through(boats)
 
     # Should run without any issues--this fills but does not exceed capacity.
     with medium_locke as locke:
