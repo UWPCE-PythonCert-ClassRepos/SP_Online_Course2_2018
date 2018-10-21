@@ -1,0 +1,4 @@
+{
+  "mailroom_json_test.py::test_load": true,
+  "mailroom_json_test.py::test_write_files": true
+}

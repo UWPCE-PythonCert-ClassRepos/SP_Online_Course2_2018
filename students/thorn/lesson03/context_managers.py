@@ -24,7 +24,7 @@ class Locke:
 
     def __enter__(self):
         return self
-    
+
     def move_boats_through(self, new_boats):
         # if new boats + current boats > capacity --> raise error
         self.locke_boats += new_boats
@@ -32,7 +32,7 @@ class Locke:
             raise ValueError(f"Locke is over capacity.\n\t\tLocke Size: {self.capacity}\n\t\tTotal Boats: {self.locke_boats}")
         else:
             print("*Stopping Pumps*\n*Opening Doors*\n*Closing Doors*\n*Restarting Pumps*")
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         if not exc_type:
             print("Boats succesfully moved through the Locke.")

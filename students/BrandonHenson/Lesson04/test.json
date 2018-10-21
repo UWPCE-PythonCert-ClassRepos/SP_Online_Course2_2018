@@ -1,0 +1,46 @@
+{
+    "__obj_type": "Donor_list",
+    "donor_dictionary": [
+        {
+            "__obj_type": "Donor",
+            "name": "Luis Henson",
+            "donations": [
+                9006.49,
+                3116.72,
+                5200
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Alicia Henson",
+            "donations": [
+                21.47,
+                1500
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Michael Green",
+            "donations": [
+                2400.54
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Brandon Henson Jr",
+            "donations": [
+                355.42,
+                579.31
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Kaiya Henson",
+            "donations": [
+                636.9,
+                850.13,
+                125.23
+            ]
+        }
+    ]
+}

@@ -1,0 +1,5 @@
+[MASTER]
+disable=too-few-public-methods
+[SIMILARITIES]
+ignore-imports=yes
+min-similarity-lines=7
