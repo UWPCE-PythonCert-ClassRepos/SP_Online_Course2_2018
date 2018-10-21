@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import logging
 import datetime
+from logging.handlers import SysLogHandler
 
 date_today = str(datetime.datetime.today())[:10]
 
@@ -19,7 +20,7 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter1)
 
-server_handler = logging.SysLogHandler()
+server_handler = SysLogHandler(address=('127.0.0.1', 514))
 server_handler.setLevel(logging.ERROR)
 server_handler.setFormatter(formatter2)
 
@@ -27,6 +28,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
+logger.addHandler(server_handler)
 
 
 def my_fun(n):
