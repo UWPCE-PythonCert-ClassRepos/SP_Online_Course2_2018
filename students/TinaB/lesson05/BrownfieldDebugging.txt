@@ -1,0 +1,255 @@
+Lesson 5 assignment
+
+In the lesson content, we asked you to spend 5-10 minutes on your own debugging the recursion error exercise code. After doing so, please provide:
+
+In very general terms, use a couple of sentences to address the problem with our code. For example, give your best guess or insight on the following questions:
+
+1 What is wrong with our logic?
+2 Why doesn't the function stop calling itself?
+3 What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+4 A copy-and-paste of your terminal debugging activity.
+
+1 & 2
+There is no condition in the code which says return False. Without this additional conditional statement the code doesn't know when it should stop or return False. 
+So it doesn't stop when it gets a number that is not a power of two. It will keep running until it meets the condition or it hits a recursion error (maximum recursion exceeded). The way the code is written it will not stop trying to meet the condition. 
+This is why we needed to add the statement that if n < 1 return false to make this work correctly.
+
+3. 
+The value of n keeps getting smaller and smaller. It will never meet the n == 2 condition. It just keeps running. This is why we need to add the additional conditional statement.
+
+
+
+
+
+4. Debugging Activity
+sea-brownfit-m1:lesson05 brownfit$ python -m pdb recursive.py 16
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(3)<module>()
+-> import sys
+(Pdb) ll
+  1  	#!/usr/bin/env python3
+  2  	
+  3  ->	import sys
+  4  	
+  5  	def my_fun(n):
+  6  	    if n == 2:
+  7  	        return True
+  8  	    return my_fun(n/2)
+  9  	
+ 10  	if __name__ == '__main__':
+ 11  	    n=int(sys.argv[1])
+ 12  	    print(my_fun(n))
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(5)<module>()
+-> def my_fun(n):
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(11)<module>()
+-> n=int(sys.argv[1])
+(Pdb) s
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(12)<module>()
+-> print(my_fun(n))
+(Pdb) pp n
+16
+(Pdb) s
+--Call--
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+16
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+8.0
+(Pdb) ll
+  5  	def my_fun(n):
+  6  ->	    if n == 2:
+  7  	        return True
+  8  	    return my_fun(n/2)
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) ppn
+*** NameError: name 'ppn' is not defined
+(Pdb) pp n
+4.0
+(Pdb) ll
+  5  ->	def my_fun(n):
+  6  	    if n == 2:
+  7  	        return True
+  8  	    return my_fun(n/2)
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+4.0
+(Pdb) n
+--Return--
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(8)my_fun()->True
+-> return my_fun(n/2)
+(Pdb) pp n
+4.0
+(Pdb) n
+--Return--
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(8)my_fun()->True
+-> return my_fun(n/2)
+(Pdb) n
+--Return--
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(8)my_fun()->True
+-> return my_fun(n/2)
+(Pdb) pp n
+16
+(Pdb) ll
+  5  	def my_fun(n):
+  6  	    if n == 2:
+  7  	        return True
+  8  ->	    return my_fun(n/2)
+(Pdb) n
+True
+--Return--
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(12)<module>()->None
+-> print(my_fun(n))
+(Pdb) n
+--Return--
+> <string>(1)<module>()->None
+(Pdb) n
+The program finished and will be restarted
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(3)<module>()
+-> import sys
+(Pdb) exit
+
+sea-brownfit-m1:lesson05 brownfit$ python -m pdb recursive.py 
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(3)<module>()
+-> import sys
+(Pdb) exit
+sea-brownfit-m1:lesson05 brownfit$ python -m pdb recursive.py 15
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(3)<module>()
+-> import sys
+(Pdb) ll
+  1  	#!/usr/bin/env python3
+  2  	
+  3  ->	import sys
+  4  	
+  5  	def my_fun(n):
+  6  	    if n == 2:
+  7  	        return True
+  8  	    return my_fun(n/2)
+  9  	
+ 10  	if __name__ == '__main__':
+ 11  	    n=int(sys.argv[1])
+ 12  	    print(my_fun(n))
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(5)<module>()
+-> def my_fun(n):
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(11)<module>()
+-> n=int(sys.argv[1])
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(12)<module>()
+-> print(my_fun(n))
+(Pdb) pp n
+15
+(Pdb) ll
+  1  	#!/usr/bin/env python3
+  2  	
+  3  	import sys
+  4  	
+  5  	def my_fun(n):
+  6  	    if n == 2:
+  7  	        return True
+  8  	    return my_fun(n/2)
+  9  	
+ 10  	if __name__ == '__main__':
+ 11  	    n=int(sys.argv[1])
+ 12  ->	    print(my_fun(n))
+(Pdb) s
+--Call--
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) b 6
+Breakpoint 1 at /Users/brownfit/Documents/python220/lesson05/recursive.py:6
+(Pdb) c
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) c
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) c
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) c
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.46875
+(Pdb) c
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.234375
+(Pdb) c
+> /Users/brownfit/Documents/python220/lesson05/recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.1171875
+(Pdb) ll
+  5  	def my_fun(n):
+  6 B->	    if n == 2:
+  7  	        return True
+  8  	    return my_fun(n/2)
+(Pdb) quit
+sea-brownfit-m1:lesson05 brownfit$ python recursive.py 16
+True
+sea-brownfit-m1:lesson05 brownfit$ python recursive.py 4
+True
+sea-brownfit-m1:lesson05 brownfit$ python recursive.py 15
+False
+sea-brownfit-m1:lesson05 brownfit$ python recursive.py 22
+False
+sea-brownfit-m1:lesson05 brownfit$ 
+
