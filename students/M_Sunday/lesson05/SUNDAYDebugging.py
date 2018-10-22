@@ -1,3 +1,9 @@
+The issue with the logic is that the logical comparison of n to 2 is used as a terminating expression, yet the program has no dependencies that the user entry is a multiple of 2. Therefore, the terminating expression is ineffective for half of all entry numbers. In an application where the program must stop at 2, we could either make the terminating expression be n<=2 or add logic for acceptable entry values.
+
+
+
+
+
 C:\Users\mmsunday\Desktop\School\UW - Python Programming\SP_Online_Course2_2018\students\M_Sunday\lesson05>python recursive.py 10
 > c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(14)<module>()
 -> n = int(sys.argv[1])
