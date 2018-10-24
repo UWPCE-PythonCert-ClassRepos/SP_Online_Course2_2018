@@ -1,0 +1,80 @@
+The issue with the logic is that the logical comparison of n to 2 is used as a terminating expression, yet the program has no dependencies that the user entry is a multiple of 2. Therefore, the terminating expression is ineffective for half of all entry numbers. In an application where the program must stop at 2, we could either make the terminating expression be n<=2 or add logic for acceptable entry values.
+
+
+
+
+
+C:\Users\mmsunday\Desktop\School\UW - Python Programming\SP_Online_Course2_2018\students\M_Sunday\lesson05>python recursive.py 10
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(14)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(15)<module>()
+-> print(my_fun(n))
+(Pdb) p n
+10
+(Pdb) s
+--Call--
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(6)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(7)my_fun()
+-> if n == 2:
+(Pdb) p n
+10
+(Pdb) n
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(6)my_fun()
+-> def my_fun(n):
+(Pdb) p n
+5.0
+(Pdb) n
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(7)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(6)my_fun()
+-> def my_fun(n):
+(Pdb) p n
+2.5
+(Pdb) n
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(7)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\mmsunday\desktop\school\uw - python programming\sp_online_course2_2018\students\m_sunday\lesson05\recursive.py(6)my_fun()
+-> def my_fun(n):
+(Pdb) p n
+1.25
+(Pdb) c
+Traceback (most recent call last):
+  File "recursive.py", line 15, in <module>
+    print(my_fun(n))
+  File "recursive.py", line 9, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 9, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 9, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 6, in my_fun
+    def my_fun(n):
+  File "recursive.py", line 9, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 9, in my_fun
+    return my_fun(n/2)
+  File "recursive.py", line 9, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 990 more times]
+  File "recursive.py", line 7, in my_fun
+    if n == 2:
+RecursionError: maximum recursion depth exceeded in comparison
+
+C:\Users\mmsunday\Desktop\School\UW - Python Programming\SP_Online_Course2_2018\students\M_Sunday\lesson05>

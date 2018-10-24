@@ -5,7 +5,7 @@ This module implements the mailroom user interface.
 #!/usr/bin/env python3
 
 import os
-import mailroom_oo_mongodb as mailroom_oo
+import mailroom_oo_neo4j as mailroom_oo
 
 def stripped_input(prompt):
     """Return user input, with leading and trailing spaces removed."""
@@ -48,6 +48,8 @@ class DonorUI():
                 choices, response,
                 self.respond_to_bad_main_menu_choice, bad_choice=response)
             if response == 'Z':  # Exit if "Quit" is chosen
+                self.collection.close_driver_session()
+                self.collection.disconnect_from_driver()
                 return
 
     def call_menu_function(
@@ -148,11 +150,14 @@ class DonorUI():
 
         :return:  None.
         """
-        name = stripped_input("Enter a new donor name: ")
-        if self.collection.get_donor_info(name):
+        name = stripped_input("Enter a new donor name (leave blank to exit): ")
+        if not name:
+            return
+        elif self.collection.get_single_donor_info(name):
             print(f"Donor {name} already exists - exiting.")
         else:
-            ssn = stripped_input("Enter social security number: ")
+            ssn = stripped_input(
+                "Enter social security number (leave blank if unknown): ")
             if not ssn:
                 ssn = 'N/A'
             print(f"\nAdding donor '{name}' with SS #{ssn}.\n")
@@ -169,11 +174,11 @@ class DonorUI():
         if donor_name == '':
             print("\nExiting without updating a donor.\n")
         else:
-            info = self.collection.get_donor_info(donor_name)
+            info = self.collection.get_single_donor_info(donor_name)
             print(f"\nDonor {info['person_name']}, SS # {info['ssn']}.\n")
             ssn = stripped_input(
-                "Specify a new social security number (or leave blank to exit). " +
-                "Type N/A if the donor social security number is unknown. "
+                "Specify a new social security number (or leave blank "
+                "to exit). Type N/A if the donor SS number is unknown. "
             )
             if ssn:
                 self.collection.add_or_update_donor(donor_name, ssn)
@@ -205,7 +210,7 @@ class DonorUI():
         else:
             print("\nLIST OF DONORS:")
             for key, value in donor_list.items():
-                print(f"\t{key}: Social Security # {value}")
+                print(f"\t{key}  (SS #{value})")
             print("\n")
             while response not in donor_list:
                 response = stripped_input(
