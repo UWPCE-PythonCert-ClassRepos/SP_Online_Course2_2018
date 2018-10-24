@@ -1,7 +1,7 @@
 """
 ORIGINAL AUTHOR: INSTRUCTOR
 CO-AUTHOR: Micah Braun
-PROJECT NAME: unit-test.py
+PROJECT NAME: integrationtest.py
 DATE CREATED: File originally created by instructor, date unknown
 UPDATED: 10/18/2018
 PURPOSE: Lesson 6
@@ -9,11 +9,11 @@ DESCRIPTION: Tests for Calculator class and its methods.
 """
 
 from unittest import TestCase
-from calculator.adder import Adder
-from calculator.subtracter import Subtracter
-from calculator.multiplier import Multiplier
-from calculator.divider import Divider
-from calculator.calculator import Calculator
+from .adder import Adder
+from .subtracter import Subtracter
+from .multiplier import Multiplier
+from .divider import Divider
+from .calculator import Calculator
 
 
 class ModuleTests(TestCase):
