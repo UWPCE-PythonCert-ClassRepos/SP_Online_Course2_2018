@@ -75,7 +75,7 @@ class Donor:
 @js.json_save
 class DonorCollection:
 
-    donor_dict = js.List()
+    donor_dict = js.Dict()
 
     def __init__(self, donors):
         self.donor_dict = donors
@@ -162,30 +162,17 @@ class DonorCollection:
     def save_json(self):
         """Saves the donor dictionary into a json file"""
         json_string = json.dumps(self.to_json_compat())
-        '''
-        temp_dict = {}
-        for k, v in self.donor_dict.items():
-            temp_dict[k] = v._donations
-        json_string = json.dumps(temp_dict)
-        '''
         with open('Data.json', 'w') as file:
             file.write(json_string)
         print("Your file has been generated.")
 
     def load_json(self):
+        global donor_dict
         """Loads donor information from a json file"""
-        self.donor_dict = {}
-        with open('Data.json','r') as data_load:
-            json_string = data_load.read()
-            json_data = json.loads(json_string)
-            for k, v in json_data.items():
-                first = k.split()[0]
-                last = k.split()[1]
-                dtns = v
-                #print("key is: {} value is: {}".format(k, v))
-                self.donor_dict[k] = Donor(first, last, dtns)
+        with open('Data1.json','r') as data_load:
+            json_data = json.load(data_load)
+        donor_dict = self.from_json_dict(json_data)
         print("Donors have been loaded.")
-
 
 
 # Outside the donor collection class
@@ -201,8 +188,8 @@ def main_prompt():
         4) Multiply donations by a factor\n\
         5) Save to Json file\n\
         6) Load from Json file\n\
-        7) Quit\n\
-        Please type 1, 2, 3, 4, 5, 6, or 7: ")
+        0) Quit\n\
+        Please type 1, 2, 3, 4, 5, 6, or 0: ")
     return response
 
 def action(switch_dict):
@@ -260,6 +247,6 @@ if __name__ == "__main__":
         '4': dc.challenge,
         '5': dc.save_json,
         '6': dc.load_json,
-        '7': sys.exit
+        '0': sys.exit
     }
     action(switch_dict)
