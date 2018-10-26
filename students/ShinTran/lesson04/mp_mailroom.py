@@ -167,11 +167,11 @@ class DonorCollection:
         print("Your file has been generated.")
 
     def load_json(self):
-        global donor_dict
+        #global donor_dict
         """Loads donor information from a json file"""
         with open('Data1.json','r') as data_load:
             json_data = json.load(data_load)
-        donor_dict = self.from_json_dict(json_data)
+        self.donor_dict = self.from_json_dict(json_data).donor_dict
         print("Donors have been loaded.")
 
 
