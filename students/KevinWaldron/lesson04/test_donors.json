@@ -1,0 +1,14 @@
+{
+    "__obj_type": "Donors",
+    "_donors": [
+        {
+            "__obj_type": "Donor",
+            "_name": "Json Donor 1",
+            "_donations": [
+                4.50,
+                3.45
+            ],
+            "_total_donations": 7.95
+        }
+    ]
+}
