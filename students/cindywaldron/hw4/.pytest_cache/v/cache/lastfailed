@@ -1,0 +1,4 @@
+{
+  "load_save_json_test.py::MyJsonTest::test_load": true,
+  "load_save_json_test.py::test_load2": true
+}
