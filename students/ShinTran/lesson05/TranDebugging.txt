@@ -1,0 +1,132 @@
+'''
+Shin Tran
+Python 220
+Lesson 5 Assignment
+'''
+
+
+1.
+
+The problem with the logic is that the function doesn't return false for any cases. It only returns true if the number is an exponent of 2, otherwise, it'll recurse an infinite number of times. As the function gets deeper into the recursion, it'll decrease in value infinitely, but will never reach zero.
+
+2. 
+
+Here's the ideal situaiton where the parameter is an exponent of 2:
+
+Admin@Admin-PC MINGW64 ~/Desktop/Python 220/SP_Online_Course2_2018/students/ShinTran/lesson05 (master)
+$ python -m pdb recursive.py 8
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(5)<module>()
+-> '''
+(Pdb) ll
+  1     '''
+  2     Shin Tran
+  3     Python 220
+  4     Lesson 5 Assignment
+  5  -> '''
+  6
+  7     import sys
+  8
+  9     # recursive.py
+ 10
+ 11     def my_fun(n):
+ 12         if n == 2:
+ 13             return True
+ 14
+ 15         return my_fun(n/2)
+ 16
+ 17     if __name__ == '__main__':
+ 18         n = int(sys.argv[1])
+ 19         print(my_fun(n))
+(Pdb) b 12
+Breakpoint 1 at c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py:12
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+8
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) c
+True
+The program finished and will be restarted
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(5)<module>()
+-> '''
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+8
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+4.0
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+2.0
+(Pdb) c
+True
+The program finished and will be restarted
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(5)<module>()
+-> '''
+(Pdb) exit
+
+Here's the non-ideal situaiton where the parameter isn't an exponent of 2:
+
+Admin@Admin-PC MINGW64 ~/Desktop/Python 220/SP_Online_Course2_2018/students/ShinTran/lesson05 (master)
+$ python -m pdb recursive.py 15
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(5)<module>()
+-> '''
+(Pdb) b 12
+Breakpoint 1 at c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py:12
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.46875
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.234375
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.1171875
+(Pdb) c
+> c:\\desktop\python 220\sp_online_course2_2018\students\shintran\lesson05\recursive.py(12)my_fun()
+-> if n == 2:
+(Pdb) exit
+
