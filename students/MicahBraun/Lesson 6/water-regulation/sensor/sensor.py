@@ -2,12 +2,13 @@
 AUTHOR: Instrucor
 PROJECT NAME: sensor.py
 DATE CREATED: 10/19/2018
-UPDATED: 10/22/2018
+LAST-UPDATED: 10/29/2018
 PURPOSE: Lesson 6
 DESCRIPTION: File provides a sensor proxy to gather
 data from.
 """
 import urllib.request
+import urllib.error
 
 
 class Sensor:

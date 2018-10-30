@@ -13,7 +13,7 @@ operations (addition, subtraction, multiplication,
 division).
 """
 
-from calculator.exceptions import InsufficientOperands
+from .exceptions import InsufficientOperands
 
 
 class Calculator:

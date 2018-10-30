@@ -2,15 +2,15 @@
 AUTHOR: Micah Braun
 PROJECT NAME: integrationtest.py (for waterregulation modules)
 DATE CREATED: 10/19/2018
-UPDATED: 10/22/2018
+LAST-UPDATED: 10/29/2018
 PURPOSE: Lesson 6
 DESCRIPTION: Integration test combining both Controller
 and Decider class functions to test for proper behavior.
 """
 import unittest
 from unittest.mock import MagicMock
-from waterregulation.pump import Pump
-from waterregulation.sensor import Sensor
+from pump.pump import Pump
+from sensor.sensor import Sensor
 from waterregulation.controller import Controller
 from waterregulation.decider import Decider
 

@@ -10,12 +10,12 @@ DESCRIPTION: Tests for Calculator class and its methods.
 
 from unittest import TestCase
 from unittest.mock import MagicMock
-from .adder import Adder
-from .subtracter import Subtracter
-from .multiplier import Multiplier
-from .divider import Divider
-from .calculator import Calculator
-from .exceptions import InsufficientOperands
+from calculator.adder import Adder
+from calculator.subtracter import Subtracter
+from calculator.multiplier import Multiplier
+from calculator.divider import Divider
+from calculator.calculator import Calculator
+from calculator.exceptions import InsufficientOperands
 
 
 class AdderTests(TestCase):
@@ -48,7 +48,11 @@ class MultiplierTests(TestCase):
 
 
 class DividerTests(TestCase):
-    pass
+    def test_division(self):
+        divider = Divider()
+        for i in range(1, 10):
+            for j in range(1, 10):
+                self.assertEqual(i/j, divider.calc(i, j))
 
 
 class CalculatorTests(TestCase):
@@ -58,29 +62,24 @@ class CalculatorTests(TestCase):
         self.subtracter = Subtracter()
         self.multiplier = Multiplier()
         self.divider = Divider()
-
-        self.calculator = Calculator(self.adder, self.subtracter, self.multiplier, self.divider)
+        self.calculator = Calculator(
+            self.adder, self.subtracter, self.multiplier, self.divider)
 
     def test_insufficient_operands(self):
         self.calculator.enter_number(0)
-
         with self.assertRaises(InsufficientOperands):
             self.calculator.add()
 
     def test_adder_call(self):
         self.adder.calc = MagicMock(return_value=0)
-
         self.calculator.enter_number(1)
         self.calculator.enter_number(2)
         self.calculator.add()
-
         self.adder.calc.assert_called_with(1, 2)
 
     def test_subtracter_call(self):
         self.subtracter.calc = MagicMock(return_value=0)
-
         self.calculator.enter_number(1)
         self.calculator.enter_number(2)
         self.calculator.subtract()
-
         self.subtracter.calc.assert_called_with(1, 2)

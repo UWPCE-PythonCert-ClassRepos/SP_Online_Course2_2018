@@ -2,7 +2,7 @@
 AUTHOR: Micah Braun
 PROJECT NAME: decider.py
 DATE CREATED: 10/19/2018
-UPDATED: 10/22/2018
+LAST-UPDATED: 10/29/2018
 PURPOSE: Lesson 6
 DESCRIPTION: File provides the 'brain' for the pump,
 dictating when and under what conditions to change

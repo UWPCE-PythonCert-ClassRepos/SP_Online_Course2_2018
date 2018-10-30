@@ -2,7 +2,7 @@
 AUTHOR: Micah Braun
 PROJECT NAME: test_run.py (for waterregulation modules)
 DATE CREATED: 10/19/2018
-UPDATED: 10/22/2018
+LAST-UPDATED: 10/29/2018
 PURPOSE: Lesson 6
 DESCRIPTION: Unittests for Pump, Sensor, Controller,
 and Decider classes and their modules to check for
@@ -10,10 +10,11 @@ proper functionality.
 """
 import unittest
 from unittest.mock import MagicMock
-from pump import Pump
-from sensor import Sensor
-from controller import Controller
-from decider import Decider
+from pump.pump import Pump
+from sensor.sensor import Sensor
+
+from waterregulation.controller import Controller
+from waterregulation.decider import Decider
 
 
 class DeciderTests(unittest.TestCase):
@@ -98,8 +99,8 @@ class ControllerTests(unittest.TestCase):
         """
         self.assertEqual(100, self.sensor.measure())            # 1
         self.assertEqual(0, self.pump.get_state())              # 2
-        self.assertEqual(0, self.decider.decide(100,
-                         0, self.actions))                      # 3
+        self.assertEqual(
+            0, self.decider.decide(100, 0, self.actions))       # 3
         self.assertEqual(True, self.pump.set_state
                          (self.actions['PUMP_OFF']))            # 4
         self.assertTrue(self.sensor.measure() == float(100))    # 5

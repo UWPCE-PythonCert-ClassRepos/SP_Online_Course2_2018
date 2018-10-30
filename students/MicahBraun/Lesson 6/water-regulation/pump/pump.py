@@ -3,7 +3,7 @@ FROM: Original file given by Instructor
 AUTHOR: Micah Braun
 PROJECT NAME: pump.py
 DATE CREATED: 10/19/2018
-UPDATED: 10/22/2018
+LAST-UPDATED: 10/29/2018
 PURPOSE: Lesson 6
 DESCRIPTION: Pump class relays pump behavior (get and
 set state modules for waterregulation package).

@@ -2,7 +2,7 @@
 AUTHOR: Micah Braun
 PROJECT NAME: controller.py
 DATE CREATED: 10/19/2018
-UPDATED: 10/22/2018
+LAST-UPDATED: 10/29/2018
 PURPOSE: Lesson 6
 DESCRIPTION: File provides the organization to the
 package telling the groups of modules what to do
@@ -39,8 +39,9 @@ class Controller:
           4. set the pump to that new state
         """
         try:
-            self.pump.set_state(self.decider.decide(self.sensor.measure(),
-                                self.pump.get_state(), self.actions))
+            self.pump.set_state(
+                self.decider.decide(self.sensor.measure(),
+                                    self.pump.get_state(), self.actions))
         except TypeError:
             return False
 
