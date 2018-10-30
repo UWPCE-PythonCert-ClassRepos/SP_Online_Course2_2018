@@ -1,0 +1,18 @@
+[
+  "json_save/test_json_save_meta.py::test_hasattr",
+  "json_save/test_json_save_meta.py::test_simple_save",
+  "json_save/test_json_save_meta.py::test_list_attr",
+  "json_save/test_json_save_meta.py::test_nested",
+  "json_save/test_json_save_meta.py::test_save_load_simple",
+  "json_save/test_json_save_meta.py::test_save_load_nested",
+  "json_save/test_json_save_meta.py::test_from_json_dict",
+  "json_save/test_json_save_meta.py::test_from_json",
+  "json_save/test_json_save_meta.py::test_from_json_file",
+  "json_save/test_json_save_meta.py::test_dict",
+  "json_save/test_json_save_meta.py::test_from_json_dict2",
+  "json_save/test_json_save_meta.py::test_eq",
+  "json_save/test_json_save_meta.py::test_not_eq",
+  "json_save/test_json_save_meta.py::test_not_eq_reconstruct",
+  "json_save/test_json_save_meta.py::test_not_valid",
+  "json_save/test_json_save_meta.py::test_not_valid_class_not_instance"
+]
