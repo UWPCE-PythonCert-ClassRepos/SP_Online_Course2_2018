@@ -7,6 +7,7 @@ class Donor(js.JsonSaveable):
     """Container for a single donor's data, and methods to access/manipulate that data."""
     name = js.String()
     donations = js.List()
+
     def __init__(self, name, donations=None):
         self._name = name
         if donations is None:
@@ -32,15 +33,13 @@ class Donor(js.JsonSaveable):
 
 class DonorDatabase(js.JsonSaveable):
     """Class and methods for donors in aggregate."""
+    donors = js.List()
+
     def __init__(self, donors=None):
         if donors:
             self._donors = donors
         else:
             self._donors = []
-
-    @property
-    def donors(self):
-        return self._donors
 
     def list_donors(self):
         """List all donors by name. Called by thank_you() menu."""
