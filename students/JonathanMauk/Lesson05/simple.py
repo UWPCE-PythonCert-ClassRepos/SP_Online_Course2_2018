@@ -34,6 +34,7 @@ console_handler.setFormatter(formatter)
 
 syslog_handler = SysLogHandler(address=('127.0.0.1', 514))
 syslog_handler.setLevel(logging.ERROR)
+syslog_handler.setFormatter(formatter2)
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)                   
