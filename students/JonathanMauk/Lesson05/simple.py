@@ -8,11 +8,18 @@
 # 3. You want ERROR and higher messages logged to a syslog server. The syslog server will be appending its own time
 #    stamps to the messages that it receives, so DO NOT include the current time in the format of the log messages
 #    that you send to the server.
+#
+# To complete this assignment, you will need to create:
+#
+# 1. A second instance of Formatter. Because the three different destinations for your log messages require two
+#    different formats (one with time stamps and one without), you'll need two different instances of Formatter.
+# 2. A third Handler, to send messages to the syslog server.
 
 import logging
 import datetime
 
-format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
+format1 = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
+format2 = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 
 formatter = logging.Formatter(format)
 
