@@ -187,25 +187,25 @@ class DonorDatabase(js.JsonSaveable):
 #
 # donor_db = DonorDatabase([donor1, donor2, donor3, donor4, donor5])
 
-def mailroom():
+def mailroom(ddb):
     """Generate main menu options and activate other functions."""
     while True:
         selection = input('MAILROOM v0.6: Metaprogramming Edition\n------------------------' +
-                          '\nChoose an option:\n1) Send a thank you' +
-                          '\n2) Create a report\n3) Send letters to everyone\n4) Quit\n> ')
-        menu_dict = {'1': thank_you, '2': report_printing, '3': thank_all, '4': quit_program}
+                          '\nChoose an option:\n1) Send a thank you letter' +
+                          '\n2) Create a report\n3) Send letters to everyone'
+                          '\n4) Choose database'
+                          '\n5) Quit\n> ')
+        menu_dict = {'1': ddb.thank_you, '2': ddb.report_printing, '3': ddb.thank_all,
+                     '4': ddb.load_from_json, '5': ddb.quit_program}
         try:
             menu_dict.get(selection)()
         except TypeError:
-            print("Invalid value. Enter a number from 1-4.")
+            print("Invalid value. Enter a number from 1-5.")
             pass
 
 
-def quit_program():
-    """Quit Mailroom program."""
-    print("Exiting...")
-    sys.exit()
-
-
 if __name__ == "__main__":
-    mailroom()
+    with open('donor_database.json', 'r') as ddb:
+        data = ddb.read()
+    donor_db = js.from_json(data)
+    mailroom(donor_db)
