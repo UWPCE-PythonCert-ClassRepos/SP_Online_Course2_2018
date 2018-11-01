@@ -19,7 +19,7 @@ import logging
 import datetime
 
 format1 = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
-format2 = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
+format2 = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 
 formatter1 = logging.Formatter(format1)
 formatter2 = logging.Formatter(format2)
