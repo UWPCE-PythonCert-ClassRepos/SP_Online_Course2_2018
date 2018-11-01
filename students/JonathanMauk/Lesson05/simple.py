@@ -24,9 +24,9 @@ format2 = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 formatter1 = logging.Formatter(format1)
 formatter2 = logging.Formatter(format2)
 
-file_handler = logging.FileHandler('mylog.log')
+file_handler = logging.FileHandler(f'{datetime.date.today()}.log')
 file_handler.setLevel(logging.WARNING)           
-file_handler.setFormatter(formatter)
+file_handler.setFormatter(formatter1)
 
 console_handler = logging.StreamHandler()        
 console_handler.setLevel(logging.DEBUG)          
