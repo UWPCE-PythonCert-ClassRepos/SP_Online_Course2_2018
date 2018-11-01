@@ -184,6 +184,15 @@ class DonorDatabase(js.JsonSaveable):
             data = dbf.read()
         return js.from_json(data)
 
+    @classmethod
+    def quit_program(cls):
+        """Quit Mailroom program."""
+        user_input = input("Save database changes to donor_database.json? (Y/N)")
+        if user_input.lower() == ('y' or 'yes'):
+            cls.save_to_json('donor_database.json')
+        print("Exiting...")
+        sys.exit()
+
 
 # donor1 = Donor("John Smith", [18774.48, 8264.47, 7558.71])
 # donor2 = Donor("Jane Doe", [281918.99, 8242.13])
