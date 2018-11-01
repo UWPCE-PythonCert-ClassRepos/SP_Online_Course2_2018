@@ -21,7 +21,8 @@ import datetime
 format1 = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 format2 = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 
-formatter = logging.Formatter(format)
+formatter1 = logging.Formatter(format1)
+formatter2 = logging.Formatter(format2)
 
 file_handler = logging.FileHandler('mylog.log')
 file_handler.setLevel(logging.WARNING)           
