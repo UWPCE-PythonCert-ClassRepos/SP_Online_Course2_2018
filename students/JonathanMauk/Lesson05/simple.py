@@ -32,10 +32,13 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)          
 console_handler.setFormatter(formatter)          
 
+syslog_handler = SysLogHandler()
+
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)                   
 logger.addHandler(file_handler)
-logger.addHandler(console_handler)               
+logger.addHandler(console_handler)
+logger.addHandler(syslog_handler)
 
 
 def my_fun(n):
