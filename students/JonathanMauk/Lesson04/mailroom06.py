@@ -14,18 +14,6 @@ class Donor(js.JsonSaveable):
         else:
             self._donations = donations
 
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, val):
-        self._name = val
-
-    @property
-    def donations(self):
-        return self._donations
-
     def append_donations(self, amt):
         try:
             self.donations.append(float(amt))
