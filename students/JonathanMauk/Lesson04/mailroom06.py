@@ -58,6 +58,12 @@ class DonorDatabase(js.JsonSaveable):
             report = report + f'{k: <26}| ${total_given:>10.2f} |{num_gifts:^11}| ${average_gifts:>11.2f}\n'
         return report
 
+    def save_to_json(self):
+        return self
+
+    def load_from_json(self):
+        return self
+
 
 donor1 = Donor("John Smith", [18774.48, 8264.47, 7558.71])
 donor2 = Donor("Jane Doe", [281918.99, 8242.13])
