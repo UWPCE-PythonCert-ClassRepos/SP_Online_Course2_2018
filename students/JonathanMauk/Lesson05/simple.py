@@ -30,7 +30,7 @@ file_handler.setFormatter(formatter1)
 
 console_handler = logging.StreamHandler()        
 console_handler.setLevel(logging.DEBUG)          
-console_handler.setFormatter(formatter)          
+console_handler.setFormatter(formatter1)
 
 syslog_handler = SysLogHandler(address=('127.0.0.1', 514))
 syslog_handler.setLevel(logging.ERROR)
