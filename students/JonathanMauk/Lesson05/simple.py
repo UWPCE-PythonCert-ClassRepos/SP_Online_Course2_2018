@@ -17,6 +17,7 @@
 
 import logging
 import datetime
+from logging.handlers import SysLogHandler
 
 format1 = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 format2 = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
