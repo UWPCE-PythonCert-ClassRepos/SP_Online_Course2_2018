@@ -205,7 +205,7 @@ def mailroom(ddb):
 
 
 if __name__ == "__main__":
-    with open('donor_database.json', 'r') as ddb:
-        data = ddb.read()
+    with open('donor_database.json', 'r') as db:
+        data = db.read()
     donor_db = js.from_json(data)
     mailroom(donor_db)
