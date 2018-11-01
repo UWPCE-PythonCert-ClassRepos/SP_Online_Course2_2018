@@ -32,7 +32,7 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)          
 console_handler.setFormatter(formatter)          
 
-syslog_handler = SysLogHandler()
+syslog_handler = SysLogHandler(address=('127.0.0.1', 514))
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)                   
