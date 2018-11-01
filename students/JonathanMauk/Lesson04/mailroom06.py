@@ -172,8 +172,11 @@ class DonorDatabase(js.JsonSaveable):
             with open('{:s}.txt'.format(donor.name), 'w') as f:
                 f.write(letter)
 
-    def save_to_json(self):
-        return self
+    @classmethod
+    def save_to_json(cls, filename):
+        donor_to_json = donor_db.to_json()
+        with open(filename, 'w') as dbf:
+            dbf.write(donor_to_json)
 
     @classmethod
     def load_from_json(cls, filename):
