@@ -8,6 +8,6 @@ def my_fun(n):
     return my_fun(n/2)
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     num = int(sys.argv[1])
     print(my_fun(num))
