@@ -7,7 +7,8 @@
             "donations": [
                 18774.48,
                 8264.47,
-				7558.71
+                7558.71,
+                1234567.0
             ]
         },
         {
@@ -15,7 +16,8 @@
             "name": "Jane Doe",
             "donations": [
                 281918.99,
-                8242.13
+                8242.13,
+                1234567.0
             ]
         },
         {
@@ -23,22 +25,29 @@
             "name": "Alan Smithee",
             "donations": [
                 181.97,
-				955.16
+                955.16
             ]
         },
         {
             "__obj_type": "Donor",
             "name": "Tom D.A. Harry",
             "donations": [
-                67.10,
+                67.1,
                 500.98
             ]
         },
-		{
+        {
             "__obj_type": "Donor",
             "name": "Joe Shmoe",
             "donations": [
                 200.01
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Jonathan Mauk",
+            "donations": [
+                1234567.0
             ]
         }
     ]

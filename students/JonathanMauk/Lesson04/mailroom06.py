@@ -187,7 +187,7 @@ class DonorDatabase(js.JsonSaveable):
     @classmethod
     def quit_program(cls):
         """Quit Mailroom program."""
-        user_input = input("Save database changes to donor_database.json? (Y/N)")
+        user_input = input("Save database changes to donor_database.json? (Y/N)\n> ")
         if user_input.lower() == ('y' or 'yes'):
             cls.save_to_json('donor_database.json')
         print("Exiting...")
