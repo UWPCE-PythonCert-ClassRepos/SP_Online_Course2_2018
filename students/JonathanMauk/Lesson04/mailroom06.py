@@ -3,7 +3,7 @@ import sys
 import json_save.json_save.json_save_meta as js
 
 
-class Donor:
+class Donor(js.JsonSaveable):
     """Container for a single donor's data, and methods to access/manipulate that data."""
     def __init__(self, name, donations=None):
         self._name = name
@@ -40,7 +40,7 @@ class Donor:
         return self.sum_donations() / self.number_donations()
 
 
-class DonorDatabase:
+class DonorDatabase(js.JsonSaveable):
     """Class and methods for donors in aggregate."""
     def __init__(self, donors=None):
         if donors:
