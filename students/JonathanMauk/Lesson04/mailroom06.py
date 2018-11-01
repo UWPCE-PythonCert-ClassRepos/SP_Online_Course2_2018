@@ -5,6 +5,8 @@ import json_save.json_save.json_save_meta as js
 
 class Donor(js.JsonSaveable):
     """Container for a single donor's data, and methods to access/manipulate that data."""
+    name = js.String()
+    donations = js.List()
     def __init__(self, name, donations=None):
         self._name = name
         if donations is None:
