@@ -9,11 +9,11 @@ class Donor(js.JsonSaveable):
     donations = js.List()
 
     def __init__(self, name, donations=None):
-        self._name = name
+        self.name = name
         if donations is None:
-            self._donations = []
+            self.donations = []
         else:
-            self._donations = donations
+            self.donations = donations
 
     def append_donations(self, amt):
         try:
@@ -37,9 +37,9 @@ class DonorDatabase(js.JsonSaveable):
 
     def __init__(self, donors=None):
         if donors:
-            self._donors = donors
+            self.donors = donors
         else:
-            self._donors = []
+            self.donors = []
 
     def list_donors(self):
         """List all donors by name. Called by thank_you() menu."""
