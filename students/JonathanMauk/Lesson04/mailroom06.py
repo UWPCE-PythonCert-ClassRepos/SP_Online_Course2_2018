@@ -175,8 +175,11 @@ class DonorDatabase(js.JsonSaveable):
     def save_to_json(self):
         return self
 
-    def load_from_json(self):
-        return self
+    @classmethod
+    def load_from_json(cls, filename):
+        with open(filename, 'r') as dbf:
+            data = dbf.read()
+        return js.from_json(data)
 
 
 # donor1 = Donor("John Smith", [18774.48, 8264.47, 7558.71])
@@ -192,20 +195,15 @@ def mailroom(ddb):
     while True:
         selection = input('MAILROOM v0.6: Metaprogramming Edition\n------------------------' +
                           '\nChoose an option:\n1) Send a thank you letter' +
-                          '\n2) Create a report\n3) Send letters to everyone'
-                          '\n4) Choose database'
-                          '\n5) Quit\n> ')
-        menu_dict = {'1': ddb.thank_you, '2': ddb.report_printing, '3': ddb.thank_all,
-                     '4': ddb.load_from_json, '5': ddb.quit_program}
+                          '\n2) Create a report\n3) Send letters to everyone\n4) Quit\n> ')
+        menu_dict = {'1': ddb.thank_you, '2': ddb.report_printing, '3': ddb.thank_all, '4': ddb.quit_program}
         try:
             menu_dict.get(selection)()
         except TypeError:
-            print("Invalid value. Enter a number from 1-5.")
+            print("Invalid value. Enter a number from 1-4.")
             pass
 
 
 if __name__ == "__main__":
-    with open('donor_database.json', 'r') as db:
-        data = db.read()
-    donor_db = js.from_json(data)
+    donor_db = DonorDatabase.load_from_json('donor_database.json')
     mailroom(donor_db)
