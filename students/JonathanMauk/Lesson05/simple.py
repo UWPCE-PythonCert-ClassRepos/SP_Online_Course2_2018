@@ -1,5 +1,16 @@
-# logging.py
+# simple.py
+#
+# To complete this assignment, modify simple.py to satisfy the following goals:
+#
+# 1. You want ALL log messages logged to the console. The format of these messages should include the current time.
+# 2. You want WARNING and higher messages logged to a file named { current-date }.log.
+#    The format of these messages should include the current time.
+# 3. You want ERROR and higher messages logged to a syslog server. The syslog server will be appending its own time
+#    stamps to the messages that it receives, so DO NOT include the current time in the format of the log messages
+#    that you send to the server.
+
 import logging
+import datetime
 
 format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 
