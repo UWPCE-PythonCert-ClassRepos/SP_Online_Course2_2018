@@ -1,0 +1,6 @@
+C:\Users\bjwarren\Documents\SchoolProjects\python220\SP_Online_Course2_2018\students\imaStudent\lesson05\simple\simple>syslogserver.py
+127.0.0.1 :  <11>simple.py:42  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+127.0.0.1 :  <11>simple.py:42  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+127.0.0.1 :  <11>simple.py:42  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+127.0.0.1 :  <11>simple.py:42  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+127.0.0.1 :  <11>simple.py:42  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
