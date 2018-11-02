@@ -48,7 +48,8 @@ class Decider(object):
         :param current_action: the current action of the pump
         :param actions: a dictionary containing the keys 'PUMP_IN', 'PUMP_OFF',
                         and 'PUMP_OUT'
-        :return: The new action for the pump: one of actions['PUMP_IN'], actions['PUMP_OUT'], actions['PUMP_OFF']
+        :return: The new action for the pump: one of actions['PUMP_IN'], actions['PUMP_OUT'],
+                 actions['PUMP_OFF']
         """
 
         next_action = current_action
