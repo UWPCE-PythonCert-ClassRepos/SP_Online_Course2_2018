@@ -18,7 +18,7 @@ def populate_people():
 
     database = SqliteDatabase('personjobdept.db')
 
-    logger.info('Working with Person class')
+    logger.info('Working with Person class.')
 
     PERSON_NAME = 0
     LIVES_IN_TOWN = 1
@@ -63,6 +63,52 @@ def populate_people():
         database.close()
 
 
+def populate_departments():
+    """
+        Add Department data to database.
+    """
+
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    database = SqliteDatabase('personjobdept.db')
+
+    logger.info('Working with Department class.')
+
+    DEPT_NUMBER = 0
+    DEPT_NAME = 1
+    DEPT_MANAGER = 2
+
+    departments = [
+        ('A105', 'Accounting', 'Amanda Gillis'),
+        ('B205', 'Business Analytics', 'Portia Rossellini'),
+        ('H305', 'Human Resources', 'James O\'Hare')
+    ]
+
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        for department in departments:
+            with database.transaction():
+                new_department = Department.create(
+                    dept_number=department[DEPT_NUMBER],
+                    dept_name=department[DEPT_NAME],
+                    dept_manager=department[DEPT_MANAGER])
+                new_department.save()
+
+        logger.info('Reading and print all Department rows...')
+        for saved_dept in Department:
+            logger.info(f'{saved_dept.dept_number}: {saved_dept.dept_name} is managed by {saved_dept.dept_manager}.')
+
+    except Exception as e:
+        logger.info(f'Error creating = {department[DEPT_NAME]}')
+        logger.info(e)
+
+    finally:
+        logger.info('database closes')
+        database.close()
+
+
 def populate_jobs():
     """
         Add Jobs data to database.
@@ -84,11 +130,11 @@ def populate_jobs():
     DEPARTMENT = 5
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
-        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter'),
-        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter')
+        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew', 'A105'),
+        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'A105'),
+        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', 'B205'),
+        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter', 'H305'),
+        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter', 'H305')
     ]
 
     # Little function to calculate duration in days between hire and end dates.
@@ -113,8 +159,10 @@ def populate_jobs():
                 new_job.save()
 
         logger.info('Reading and print all Job rows (note the value of person)...')
-        for job in Job:
-            logger.info(f'{job.job_name}: {job.start_date} to {job.end_date} for {job.person_employed}')
+        for saved_job in Job:
+            logger.info(f'{saved_job.job_name}: {saved_job.start_date} to {saved_job.end_date} '
+                        f'({saved_job.duration} days) for {saved_job.person_employed} '
+                        f'in department {saved_job.department}.')
 
     except Exception as e:
         logger.info(f'Error creating = {job[JOB_NAME]}')
@@ -125,53 +173,7 @@ def populate_jobs():
         database.close()
 
 
-def populate_departments():
-    """
-        Add Department data to database.
-    """
-
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
-
-    database = SqliteDatabase('personjobdept.db')
-
-    logger.info('Working with Department class.')
-
-    DEPT_NUMBER = 0
-    DEPT_NAME = 1
-    DEPT_MANAGER = 2
-
-    departments = [
-        ('A105', 'Accounting', 'Amanda Gillis'),
-        ('B205', 'Business Analytics', 'Portia Rossellini'),
-        ('H305', 'Human Resources', 'James O\'Hare'),
-    ]
-
-    try:
-        database.connect()
-        database.execute_sql('PRAGMA foreign_keys = ON;')
-        for department in departments:
-            with database.transaction():
-                new_department = Department.create(
-                    dept_number=department[DEPT_NUMBER],
-                    dept_name=department[DEPT_NAME],
-                    dept_manager=department[DEPT_MANAGER])
-                new_department.save()
-
-        logger.info('Reading and print all Department rows...')
-        for dept in Department:
-            logger.info(f'{dept.dept_number}: {dept.dept_name} is managed by {dept.dept_manager}.')
-
-    except Exception as e:
-        logger.info(f'Error creating = {dept[DEPT_NAME]}')
-        logger.info(e)
-
-    finally:
-        logger.info('database closes')
-        database.close()
-
-
 if __name__ == '__main__':
     populate_people()
-    populate_jobs()
     populate_departments()
+    populate_jobs()

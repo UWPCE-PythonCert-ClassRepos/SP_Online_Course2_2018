@@ -47,6 +47,22 @@ class Person(BaseModel):
     nickname = CharField(max_length=20, null=True)
 
 
+class Department(BaseModel):
+    """
+        This class defines Department, which maintains details of which
+        Departments a person has worked under.
+    """
+
+    logger.info('Now the Department class.')
+    dept_number = CharField(primary_key=True, max_length=4,
+                            constraints=[Check('upper(substr(dept_number, 1, 1) BETWEEN "A" AND "Z" )')])
+    logger.info('Department number.')
+    dept_name = CharField(max_length=30, null=False)
+    logger.info('Department name.')
+    dept_manager = CharField(max_length=30, null=False)
+    logger.info('Department manager.')
+
+
 class Job(BaseModel):
     """
         This class defines Job, which maintains details of past Jobs
@@ -67,22 +83,6 @@ class Job(BaseModel):
     person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
     job_dept = ForeignKeyField(Department, related_name='in_department', null=False)
     logger.info('Job\'s department.')
-
-
-class Department(BaseModel):
-    """
-        This class defines Department, which maintains details of which
-        Departments a person has worked under.
-    """
-
-    logger.info('Now the Department class.')
-    dept_number = CharField(primary_key=True, max_length=4,
-                            constraints=[Check('upper(substr(dept_number, 1, 1) BETWEEN "A" AND "Z" )')])
-    logger.info('Department number.')
-    dept_name = CharField(max_length=30, null=False)
-    logger.info('Department name.')
-    dept_manager = CharField(max_length=30, null=False)
-    logger.info('Department manager.')
 
 
 class PersonNumKey(BaseModel):
