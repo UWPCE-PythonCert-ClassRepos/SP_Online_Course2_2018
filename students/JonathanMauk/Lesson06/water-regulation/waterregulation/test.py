@@ -30,7 +30,13 @@ class DeciderTests(unittest.TestCase):
         scen6 = di.decide(125, actions['PUMP_OFF'], actions)
         scen7 = di.decide(75, actions['PUMP_OFF'], actions)
 
-        self.assertEqual()
+        self.assertEqual(actions['PUMP_OUT'], scen1)
+        self.assertEqual(actions['PUMP_IN'], scen2)
+        self.assertEqual(actions['PUMP_OFF'], scen3)
+        self.assertEqual(actions['PUMP_OFF'], scen4)
+        self.assertEqual(actions['PUMP_IN'], scen5)
+        self.assertEqual(actions['PUMP_OFF'], scen6)
+        self.assertEqual(actions['PUMP_OUT'], scen7)
 
     # def test_dummy(self):
     #     """
