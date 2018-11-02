@@ -20,15 +20,15 @@ class ModuleTests(unittest.TestCase):
     def test_integration(self):
         """Integration test combining controller and decider."""
 
-        di = Decider(100, 0.05)
-        pi = Pump('127.0.0.1', '8000')
-        si = Sensor('127.0.0.2', '8000')
-        ci = Controller(si, pi, di)
-        ci.pump.set_state = MagicMock(return_value=True)
+        d_i = Decider(100, 0.05)
+        p_i = Pump('127.0.0.1', '8000')
+        s_i = Sensor('127.0.0.2', '8000')
+        c_i = Controller(s_i, p_i, d_i)
+        c_i.pump.set_state = MagicMock(return_value=True)
 
         for water_level in range(75, 125, 5):
-            for action in ci.actions.values():
-                ci.sensor.measure = MagicMock(return_value=water_level)  # Measuring water level.
-                ci.pump.get_state = MagicMock(return_value=di.decide(water_level,
-                                                                     action, ci.actions))  # Checking pump state.
-                ci.tick()
+            for action in c_i.actions.values():
+                c_i.sensor.measure = MagicMock(return_value=water_level)  # Measuring water level.
+                c_i.pump.get_state = MagicMock(return_value=d_i.decide(water_level,
+                                               action, c_i.actions))  # Checking pump state.
+                c_i.tick()

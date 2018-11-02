@@ -63,18 +63,18 @@ class ControllerTests(unittest.TestCase):
     def test_tick(self):
         """Test method for controller.tick method."""
 
-        di = Decider(100, 0.05)
-        pi = Pump('127.0.0.1', '8000')
-        si = Sensor('127.0.0.2', '8000')
-        ci = Controller(si, pi, di)
+        d_i = Decider(100, 0.05)
+        p_i = Pump('127.0.0.1', '8000')
+        s_i = Sensor('127.0.0.2', '8000')
+        c_i = Controller(s_i, p_i, d_i)
 
-        di.decide = MagicMock(return_value=pi.PUMP_OUT)
-        pi.get_state = MagicMock(return_value=pi.PUMP_OFF)
-        si.measure = MagicMock(return_value=90)
-        pi.set_state = MagicMock(return_value=True)
+        d_i.decide = MagicMock(return_value=p_i.PUMP_OUT)
+        p_i.get_state = MagicMock(return_value=p_i.PUMP_OFF)
+        s_i.measure = MagicMock(return_value=90)
+        p_i.set_state = MagicMock(return_value=True)
 
-        ci.tick()
+        c_i.tick()
 
-        di.decide.assert_called_with(90, pi.PUMP_OFF, actions)
-        pi.get_state.assert_called_with()
-        si.measure.assert_called_with()
+        d_i.decide.assert_called_with(90, p_i.PUMP_OFF, actions)
+        p_i.get_state.assert_called_with()
+        s_i.measure.assert_called_with()
