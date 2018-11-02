@@ -2,5 +2,7 @@
 
 
 class InsufficientOperands(Exception):
-    """Class to raise exception when number of operands does not match needed number (2)."""
+    """
+    Raise exception when number of operands does not match needed number (2).
+    """
     pass
