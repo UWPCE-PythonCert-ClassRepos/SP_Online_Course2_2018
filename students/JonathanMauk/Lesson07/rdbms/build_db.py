@@ -5,6 +5,7 @@
 """
 import logging
 from create_personjobdept import *
+from datetime import datetime
 
 
 def populate_people():
@@ -88,6 +89,12 @@ def populate_jobs():
         ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter'),
         ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter')
     ]
+
+    # Little function to calculate duration in days between hire and end dates.
+    def duration(first_date, second_date):
+        first_date = datetime.strptime(first_date, '%Y-%m-%d')
+        second_date = datetime.strptime(second_date, '%Y-%m-%d')
+        return abs((second_date - first_date).days)
 
     try:
         database.connect()
