@@ -32,15 +32,6 @@ class DonorDatabase:
         return report
 
 
-donor1 = Donor("John Smith", [18774.48, 8264.47, 7558.71])
-donor2 = Donor("Jane Doe", [281918.99, 8242.13])
-donor3 = Donor("Alan Smithee", [181.97, 955.16])
-donor4 = Donor("Tom D.A. Harry", [67.10, 500.98])
-donor5 = Donor("Joe Shmoe", [200.01])
-
-donor_db = DonorDatabase([donor1, donor2, donor3, donor4, donor5])
-
-
 def thank_you():
     """Module with three functions:
     1) Append donation to record (if existing donor) or create a new record in database (if not an existing donor.

@@ -21,7 +21,7 @@ class Donor(BaseModel):
     Class for individual donors.
     """
     logger.info('Creating Donor class.')
-    donor_name = CharField(primary_key=True)
+    donor_name = CharField(primary_key=True, null=False)
     sum_donations = FloatField(null=True)
     number_donations = IntegerField(null=True)
     avg_donations = FloatField(null=True)
