@@ -53,37 +53,26 @@ class DonorDatabase:
         finally:
             self.database.close()
 
-    def add_new_donor(self, donor):
+    def create_report(self):
         """
-        Add new donor.
-        :param donor: Name of donor.
+        Returns report of donors and their donations.
         """
         try:
             self.database.connect()
             self.database.execute_sql('PRAGMA foreign_keys = ON;')
-            with self.database.transaction():
-                new_donor = Donor.create(
-                    donor_name=donor
-                )
-                new_donor.save()
-                logger.info('Database add successful.')
+            for donor in Donor.select():
+                k = donor.donor_name
+                num_gifts = donor.number_donations
+                total_given = donor.sum_donations
+                average_gifts = donor.avg_donations
+                print(f'{k: <26}| ${total_given:>10.2f} |{num_gifts:^11}| ${average_gifts:>11.2f}')
 
         except Exception as e:
-            logger.info('Unable to add donor. Please try again.')
+            logger.info('Unable to create report. Please try again.')
             logger.info(e)
 
         finally:
             self.database.close()
-
-    def create_report(self):
-        report = ""
-        for donor in self.donors:
-            k = donor.name
-            num_gifts = donor.number_donations()
-            total_given = donor.sum_donations()
-            average_gifts = donor.avg_donations()
-            report = report + f'{k: <26}| ${total_given:>10.2f} |{num_gifts:^11}| ${average_gifts:>11.2f}\n'
-        return report
 
 
 def thank_you():
@@ -120,7 +109,7 @@ def report_printing():
     while True:
         print('Donor Name' + ' ' * 16 + '| Total Given | Num Gifts | Average Gift')
         print('-' * 66)
-        print(donor_db.create_report())
+        donor_db.create_report()
         print('Returning to main menu...\n')
         return
 
