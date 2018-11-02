@@ -58,5 +58,9 @@ class Decider(object):
                 next_action = actions['PUMP_IN']
             elif current_height > self.target_height + self.target_height * self.margin:
                 next_action = actions['PUMP_OUT']
+            else:
+                next_action = actions['PUMP_OFF']
+                
+
 
         return next_action
