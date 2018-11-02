@@ -11,6 +11,12 @@ from sensor import Sensor
 from .controller import Controller
 from .decider import Decider
 
+actions = {
+    'PUMP_IN': 1,
+    'PUMP_OFF': 0,
+    'PUMP_OUT': -1
+}
+
 
 class DeciderTests(unittest.TestCase):
     """
@@ -19,12 +25,6 @@ class DeciderTests(unittest.TestCase):
 
     def test_decider(self):
         """Method for DeciderTests. Should test every decider scenario."""
-
-        actions = {
-            'PUMP_IN': 1,
-            'PUMP_OFF': 0,
-            'PUMP_OUT': -1
-        }
 
         di = Decider(100, 0.05)
 
@@ -65,3 +65,16 @@ class ControllerTests(unittest.TestCase):
 
         di = Decider(100, 0.05)
         pi = Pump('127.0.0.1', '8000')
+        si = Sensor('127.0.0.2', '8000')
+        ci = Controller(si, pi, di)
+
+        di.decide = MagicMock(return_value=pi.PUMP_OUT)
+        pi.get_state = MagicMock(return_value=pi.PUMP_OFF)
+        si.measure = MagicMock(return_value=90)
+        pi.set_state = MagicMock(return_value=True)
+
+        ci.tick()
+
+        di.decide.assert_called_with(90, pi.PUMP_OFF, actions)
+        pi.get_state.assert_called_with()
+        si.measure.assert_called_with()
