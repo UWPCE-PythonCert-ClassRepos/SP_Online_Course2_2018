@@ -16,6 +16,7 @@ donor_list = {
         'Joe Shmoe': [200.01]
         }
 
+
 def populate_donors():
     """
     Populates donors in database using Donor class from mailroom_model.
@@ -26,23 +27,28 @@ def populate_donors():
     try:
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
-        for donor, donations in donor_list:
+        for donor, donations in donor_list.items():
             with database.transaction():
                 new_donor = Donor.create(
                     donor_name=donor,
                     sum_donations=sum(donations),
                     number_donations=len(donations),
-                    avg_donations=len(val)
+                    avg_donations=sum(donations)/len(donations)
                     )
                 new_donor.save()
                 logger.info('Database add successful.')
         logger.info('Printing records just added...')
         for saved_donor in Donor:
-            logger.info(f'{saved_donor.donor_name} has donated {saved_donor.number_donations} times, for a total'
+            logger.info(f'{saved_donor.donor_name} has donated {saved_donor.number_donations} times, for a total '
                         f'amount of ${saved_donor.sum_donations} and an average of ${saved_donor.avg_donations}.')
+
     except Exception as e:
         logger.info(f'Unable to add donor to database.')
         logger.info(e)
+
+    finally:
+        logger.info('Closing database.')
+        database.close()
 
 
 def population_donations():
