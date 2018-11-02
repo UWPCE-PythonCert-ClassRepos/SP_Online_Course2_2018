@@ -134,8 +134,34 @@ def populate_departments():
     departments = [
         ('A105', 'Accounting', 'Amanda Gillis'),
         ('B205', 'Business Analytics', 'Portia Rossellini'),
-        ('H305', 'Human Resources', 'James O\'Keefe'),
+        ('H305', 'Human Resources', 'James O\'Hare'),
     ]
 
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        for department in departments:
+            with database.transaction():
+                new_department = Department.create(
+                    dept_number=department[DEPT_NUMBER],
+                    dept_name=department[DEPT_NAME],
+                    dept_manager=department[DEPT_MANAGER])
+                new_department.save()
+
+        logger.info('Reading and print all Department rows...')
+        for dept in Department:
+            logger.info(f'{dept.dept_number}: {dept.dept_name} is managed by {dept.dept_manager}.')
+
+    except Exception as e:
+        logger.info(f'Error creating = {job[JOB_NAME]}')
+        logger.info(e)
+
+    finally:
+        logger.info('database closes')
+        database.close()
+
+
 if __name__ == '__main__':
-    populate_db()
+    populate_people()
+    populate_jobs()
+    populate_departments()
