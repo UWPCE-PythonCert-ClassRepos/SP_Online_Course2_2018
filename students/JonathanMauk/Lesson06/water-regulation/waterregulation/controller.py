@@ -39,6 +39,6 @@ class Controller(object):
         :return: True if the pump has acknowledged its new state, else False
         """
 
-        # TODO: Implement the above-defined behaviors
+        height = self.sensor.measure()
 
         return None
