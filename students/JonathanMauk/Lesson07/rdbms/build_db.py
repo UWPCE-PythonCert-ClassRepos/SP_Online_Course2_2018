@@ -4,6 +4,7 @@
         (but running this program does not require it)
 """
 import logging
+import pprint
 from create_personjobdept import *
 from datetime import datetime
 
@@ -175,7 +176,34 @@ def populate_jobs():
         database.close()
 
 
+def p_printer():
+    """
+    Prints a list using pretty print that shows all of the departments a person worked in for every job they ever had.
+    """
+
+    database = SqliteDatabase('personjobdept.db')
+    logger.info('Pretty printing list of all departments each person has worked in.')
+
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+
+        logger.info('Querying database.')
+        db_query = (Job.select(Job.person_employed, Job.job_name, Job.job_dept))
+        for ind in db_query:
+            pers = [ind.person_employed, ind.job_name, ind.job_dept]
+            pp = pprint.PrettyPrinter()
+            pp.pprint(pers)
+
+    except Exception as e:
+        logger.info(e)
+
+    finally:
+        database.close()
+
+
 if __name__ == '__main__':
     populate_people()
     populate_departments()
     populate_jobs()
+    p_printer()
