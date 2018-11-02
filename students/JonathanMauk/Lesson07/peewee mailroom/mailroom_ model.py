@@ -35,7 +35,7 @@ class Donation(BaseModel):
     donation_amount = FloatField()
     donor_name = ForeignKeyField(Donor, related_name='donated by')
 
-    
+
 # class Donor:
 #     """Container for a single donor's data, and methods to access/manipulate that data."""
 #     def __init__(self, name, donations=None):
