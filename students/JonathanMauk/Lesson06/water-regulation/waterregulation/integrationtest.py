@@ -17,7 +17,11 @@ class ModuleTests(unittest.TestCase):
     Module tests for the water-regulation module
     """
 
-    # TODO: write an integration test that combines controller and decider,
-    #       using a MOCKED sensor and pump.
+    def test_integration(self):
+        """Integration test combining controller and decider."""
 
-    pass
+        di = Decider(100, 0.05)
+        pi = Pump('127.0.0.1', '8000')
+        si = Sensor('127.0.0.2', '8000')
+        ci = Controller(si, pi, di)
+
