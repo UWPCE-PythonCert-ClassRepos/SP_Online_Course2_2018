@@ -18,6 +18,8 @@ class Calculator(object):
             result = operator.calc(self.stack[0], self.stack[1])
         except IndexError:
             raise InsufficientOperands
+        except ZeroDivisionError:
+            result = 0
 
         self.stack = [result]
         return result
