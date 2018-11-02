@@ -2,8 +2,10 @@ import os
 import sys
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
+
+from mailroom_model import Donor, Donation, SqliteDatabase
 
 
 class DonorDatabase:
@@ -92,7 +94,7 @@ def thank_you():
     user_input = input('Enter a donor\'s full name, or type \'list\' for a full list. ' +
                        'Type \'e\' to exit and return to the main menu.\n> ').title()
     if user_input.lower() == 'list':
-        print(donor_db.list_donors())
+        donor_db.list_donors()
         thank_you()
     elif user_input.lower() == 'e':
         mailroom()
@@ -103,29 +105,14 @@ def thank_you():
             print("Error: donations can only be entered as numbers and decimals.")
             print("Returning to previous menu...")
             thank_you()
-        donor_list = donor_db.list_donors()
-        for donor in donor_db.donors:
-            if user_input in donor_list and donor.name != user_input:
-                continue
-            elif user_input in donor_list and donor.name == user_input:
-                donor.append_donations(donation)
-                print("Existing donor found.")
-                print("Appending the amount of {0} to {1}'s file...".format(donation, user_input))
-                print("Printing thank you email...")
-                print("---------------------------")
-                print(create_letter(0, user_input, donation))
-                print("---------------------------")
-                print("Returning to thank you letter menu...")
-                thank_you()
-            else:
-                donor_db.add_new_donor(Donor(user_input, [donation]))
-                print("New donor detected. Creating record for {0}...".format(user_input))
-                print("Printing thank you email...")
-                print("---------------------------")
-                print(create_letter(1, user_input, donation))
-                print("---------------------------")
-                print("Returning to thank you letter menu...")
-                thank_you()
+        donor_db.append_donation(user_input, donation)
+        print("Appending the amount of {0} to {1}'s file...".format(donation, user_input))
+        print("Printing thank you email...")
+        print("---------------------------")
+        print(create_letter(0, user_input, donation))
+        print("---------------------------")
+        print("Returning to thank you letter menu...")
+        thank_you()
 
 
 def report_printing():
@@ -144,18 +131,6 @@ def create_letter(donor_status, donor_name, donation_amt):
         letter_text = '''
         Dear {0},
 
-            Thank you for your very kind donation of ${1:.2f}, and for your continuing support.
-
-            Your generous contribution will be put to very good use.
-
-                           Sincerely,
-                              -The Team
-                              '''.format(donor_name, donation_amt)
-        return letter_text
-    elif donor_status == 1:
-        letter_text = '''
-        Dear {0},
-
             Thank you for your very kind donation of ${1:.2f}.
 
             Your generous contribution will be put to very good use.
@@ -164,17 +139,6 @@ def create_letter(donor_status, donor_name, donation_amt):
                               -The Team
                               '''.format(donor_name, donation_amt)
         return letter_text
-    elif donor_status == 2:
-        return('''
-        Dear {0},
-
-            Thank you for your very kind contribution(s) totaling ${1:.2f}.
-
-            We would like you to know that your generous donation(s) will be put to very good use.
-
-                           Sincerely,
-                              -The Team
-                              '''.format(donor_name, donation_amt))
 
 
 # def thank_all():
@@ -196,6 +160,9 @@ def create_letter(donor_status, donor_name, donation_amt):
 #         letter = create_letter(2, name, donation)
 #         with open('{:s}.txt'.format(donor.name), 'w') as f:
 #             f.write(letter)
+
+
+donor_db = DonorDatabase(SqliteDatabase('donors.db'))
 
 
 def mailroom():
