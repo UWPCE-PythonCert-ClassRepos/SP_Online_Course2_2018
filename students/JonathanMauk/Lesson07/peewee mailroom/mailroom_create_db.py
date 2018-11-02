@@ -40,7 +40,8 @@ def populate_donors():
         logger.info('Printing records just added...')
         for saved_donor in Donor:
             logger.info(f'{saved_donor.donor_name} has donated {saved_donor.number_donations} times, for a total '
-                        f'amount of ${saved_donor.sum_donations} and an average of ${saved_donor.avg_donations}.')
+                        f'amount of ${saved_donor.sum_donations:>.2f} and an average of '
+                        f'${saved_donor.avg_donations:>.2f}.')
 
     except Exception as e:
         logger.info(f'Unable to add donor to database.')
