@@ -7,9 +7,9 @@ import logging
 from create_personjobdept import *
 
 
-def populate_db():
+def populate_people():
     """
-        Add data to database.
+        Add Person data to database.
     """
 
     logging.basicConfig(level=logging.INFO)
@@ -61,6 +61,17 @@ def populate_db():
         logger.info('database closes')
         database.close()
 
+
+def populate_jobs():
+    """
+            Add Jobs data to database.
+        """
+
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    database = SqliteDatabase('personjobdept.db')
+
     logger.info('Working with Job class')
     logger.info('Creating Job records: just like Person. We use the foreign key')
 
@@ -76,7 +87,7 @@ def populate_db():
         ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
         ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter'),
         ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter')
-        ]
+    ]
 
     try:
         database.connect()
@@ -84,11 +95,11 @@ def populate_db():
         for job in jobs:
             with database.transaction():
                 new_job = Job.create(
-                    job_name = job[JOB_NAME],
-                    start_date = job[START_DATE],
-                    end_date = job[END_DATE],
-                    salary = job[SALARY],
-                    person_employed = job[PERSON_EMPLOYED])
+                    job_name=job[JOB_NAME],
+                    start_date=job[START_DATE],
+                    end_date=job[END_DATE],
+                    salary=job[SALARY],
+                    person_employed=job[PERSON_EMPLOYED])
                 new_job.save()
 
         logger.info('Reading and print all Job rows (note the value of person)...')
@@ -102,6 +113,9 @@ def populate_db():
     finally:
         logger.info('database closes')
         database.close()
+
+def populate_departments():
+
 
 
 if __name__ == '__main__':
