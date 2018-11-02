@@ -52,10 +52,36 @@ def populate_donors():
         database.close()
 
 
-def population_donations():
+def populate_donations():
     """
     Populates donations in database using Donation class from mailroom_model.
     """
+
+    logger.info('Adding donations to database...')
+
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        for donor, donations in donor_list.items():
+            with database.transaction():
+                for item in donations:
+                    donation = Donation.create(
+                        donation_amount=item,
+                        donor_name=donor
+                        )
+                donation.save()
+                logger.info('Database add successful.')
+        logger.info('Printing records just added...')
+        for saved_donation in Donation:
+            logger.info(f'Donation in the amount of {saved_donation.donation_amount} from {saved_donation.donor_name}.')
+
+    except Exception as e:
+        logger.info(f'Unable to add donation to database.')
+        logger.info(e)
+
+    finally:
+        logger.info('Closing database.')
+        database.close()
 
 
 # donor1 = Donor("John Smith", [18774.48, 8264.47, 7558.71])
@@ -68,3 +94,4 @@ def population_donations():
 
 if __name__ == "__main__":
     populate_donors()
+    populate_donations()
