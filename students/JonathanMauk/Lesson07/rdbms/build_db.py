@@ -81,6 +81,7 @@ def populate_jobs():
     END_DATE = 2
     SALARY = 3
     PERSON_EMPLOYED = 4
+    DEPARTMENT = 5
 
     jobs = [
         ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew'),
@@ -107,7 +108,8 @@ def populate_jobs():
                     end_date=job[END_DATE],
                     duration=employment_duration(job[END_DATE], job[START_DATE]),
                     salary=job[SALARY],
-                    person_employed=job[PERSON_EMPLOYED])
+                    person_employed=job[PERSON_EMPLOYED],
+                    department=job[DEPARTMENT])
                 new_job.save()
 
         logger.info('Reading and print all Job rows (note the value of person)...')
