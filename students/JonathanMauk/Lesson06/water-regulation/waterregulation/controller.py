@@ -40,6 +40,7 @@ class Controller(object):
         """
 
         height = self.sensor.measure()
-        state = self.pump.getstate()
+        state = self.pump.get_state()
+        next_state = self.decider.decide(height, state, self.actions)
 
         return None
