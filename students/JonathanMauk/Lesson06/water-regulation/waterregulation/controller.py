@@ -40,5 +40,6 @@ class Controller(object):
         """
 
         height = self.sensor.measure()
+        state = self.pump.getstate()
 
         return None
