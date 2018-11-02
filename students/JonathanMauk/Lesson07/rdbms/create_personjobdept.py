@@ -53,7 +53,7 @@ class Job(BaseModel):
         held by a Person.
     """
 
-    logger.info('Now the Job class with a similar approach')
+    logger.info('Now the Job class with a similar approach.')
     job_name = CharField(primary_key=True, max_length=30)
     logger.info('Dates')
     start_date = DateField(formats='YYYY-MM-DD')
@@ -71,7 +71,14 @@ class Department(BaseModel):
         Departments a person has worked under.
     """
 
-    
+    logger.info('Now the Department class.')
+    dept_number = CharField(primary_key=True, max_length=4)
+    logger.info('Department number.')
+    dept_name = CharField(max_length=30)
+    logger.info('Department name.')
+    dept_manager = CharField(max_length=30)
+    logger.info('Department manager.')
+
 
 
 class PersonNumKey(BaseModel):
