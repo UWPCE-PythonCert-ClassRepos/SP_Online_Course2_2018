@@ -45,13 +45,10 @@ if __name__ == "__main__":
     boats = 5
 
     with large_locke as locke:
-        # print("\nTest #1")
         locke.move_boats_through(boats)
 
     with small_locke as locke:
-        # print("\nTest #2")
         locke.move_boats_through(boats)
 
     with medium_locke as locke:
-        # print("\nTest #1")
         locke.move_boats_through(boats)
