@@ -104,7 +104,7 @@ def populate_jobs():
 
         logger.info('Reading and print all Job rows (note the value of person)...')
         for job in Job:
-            logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed}')
+            logger.info(f'{job.job_name}: {job.start_date} to {job.end_date} for {job.person_employed}')
 
     except Exception as e:
         logger.info(f'Error creating = {job[JOB_NAME]}')
@@ -153,7 +153,7 @@ def populate_departments():
             logger.info(f'{dept.dept_number}: {dept.dept_name} is managed by {dept.dept_manager}.')
 
     except Exception as e:
-        logger.info(f'Error creating = {job[JOB_NAME]}')
+        logger.info(f'Error creating = {dept[DEPT_NAME]}')
         logger.info(e)
 
     finally:
