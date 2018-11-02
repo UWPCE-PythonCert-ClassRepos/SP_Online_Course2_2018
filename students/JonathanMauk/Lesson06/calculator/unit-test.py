@@ -38,7 +38,7 @@ class MultiplierTests(TestCase):
                 self.assertEqual(i * j, multiplier.calc(i, j))
 
 
-class DividerTest(TestCase):
+class DividerTests(TestCase):
     def test_dividing(self):
         divider = Divider()
 
