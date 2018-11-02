@@ -17,17 +17,19 @@ logger.info('First name and connect to a database (sqlite here)')
 
 logger.info('The next 3 lines of code are the only database specific code')
 
-database = SqliteDatabase('personjob.db')
+database = SqliteDatabase('personjobdept.db')
 database.connect()
-database.execute_sql('PRAGMA foreign_keys = ON;') # needed for sqlite only
+database.execute_sql('PRAGMA foreign_keys = ON;')  # needed for sqlite only
 
 logger.info('This means we can easily switch to a different database')
 logger.info('Enable the Peewee magic! This base class does it all')
 logger.info('By inheritance only we keep our model (almost) technology neutral')
 
+
 class BaseModel(Model):
     class Meta:
         database = database
+
 
 class Person(BaseModel):
     """
@@ -40,9 +42,10 @@ class Person(BaseModel):
     logger.info('Specify the fields in our model, their lengths and if mandatory')
     logger.info('Must be a unique identifier for each person')
 
-    person_name = CharField(primary_key = True, max_length = 30)
-    lives_in_town = CharField(max_length = 40)
-    nickname = CharField(max_length = 20, null = True)
+    person_name = CharField(primary_key=True, max_length=30)
+    lives_in_town = CharField(max_length=40)
+    nickname = CharField(max_length=20, null=True)
+
 
 class Job(BaseModel):
     """
@@ -50,16 +53,26 @@ class Job(BaseModel):
         held by a Person.
     """
 
-    logger.info('Now the Job class with a simlar approach')
-    job_name = CharField(primary_key = True, max_length = 30)
+    logger.info('Now the Job class with a similar approach')
+    job_name = CharField(primary_key=True, max_length=30)
     logger.info('Dates')
-    start_date = DateField(formats = 'YYYY-MM-DD')
-    end_date = DateField(formats = 'YYYY-MM-DD')
+    start_date = DateField(formats='YYYY-MM-DD')
+    end_date = DateField(formats='YYYY-MM-DD')
     logger.info('Number')
 
-    salary = DecimalField(max_digits = 7, decimal_places = 2)
+    salary = DecimalField(max_digits=7, decimal_places=2)
     logger.info('Which person had the Job')
-    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null = False)
+    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
+
+
+class Department(BaseModel):
+    """
+        This class defines Department, which maintains details of which
+        Departments a person has worked under.
+    """
+
+    
+
 
 class PersonNumKey(BaseModel):
     """
@@ -70,9 +83,10 @@ class PersonNumKey(BaseModel):
     logger.info('An alternate Person class')
     logger.info("Note: no primary key so we're give one 'for free'")
 
-    person_name = CharField(max_length = 30)
-    lives_in_town = CharField(max_length = 40)
-    nickname = CharField(max_length = 20, null = True)
+    person_name = CharField(max_length=30)
+    lives_in_town = CharField(max_length=40)
+    nickname = CharField(max_length=20, null=True)
+
 
 database.create_tables([
         Job,
