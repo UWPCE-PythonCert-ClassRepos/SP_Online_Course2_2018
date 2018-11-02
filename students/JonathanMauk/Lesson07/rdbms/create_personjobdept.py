@@ -66,6 +66,7 @@ class Job(BaseModel):
     logger.info('Which person had the Job.')
     person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
     job_dept = ForeignKeyField(Department, related_name='in_department', null=False)
+    logger.info('Job\'s department.')
 
 
 class Department(BaseModel):
@@ -75,13 +76,13 @@ class Department(BaseModel):
     """
 
     logger.info('Now the Department class.')
-    dept_number = CharField(primary_key=True, max_length=4)
+    dept_number = CharField(primary_key=True, max_length=4,
+                            constraints=[Check('upper(substr(dept_number, 1, 1) BETWEEN "A" AND "Z" )')])
     logger.info('Department number.')
     dept_name = CharField(max_length=30, null=False)
     logger.info('Department name.')
     dept_manager = CharField(max_length=30, null=False)
     logger.info('Department manager.')
-
 
 
 class PersonNumKey(BaseModel):
