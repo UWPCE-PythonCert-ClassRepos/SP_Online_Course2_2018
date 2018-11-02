@@ -26,15 +26,15 @@ class DeciderTests(unittest.TestCase):
     def test_decider(self):
         """Method for DeciderTests. Should test every decider scenario."""
 
-        di = Decider(100, 0.05)
+        d_i = Decider(100, 0.05)
 
-        scen1 = di.decide(125, actions['PUMP_OFF'], actions)
-        scen2 = di.decide(75, actions['PUMP_OFF'], actions)
-        scen3 = di.decide(100, actions['PUMP_OFF'], actions)
-        scen4 = di.decide(125, actions['PUMP_IN'], actions)
-        scen5 = di.decide(75, actions['PUMP_IN'], actions)
-        scen6 = di.decide(75, actions['PUMP_OUT'], actions)
-        scen7 = di.decide(125, actions['PUMP_OFF'], actions)
+        scen1 = d_i.decide(125, actions['PUMP_OFF'], actions)
+        scen2 = d_i.decide(75, actions['PUMP_OFF'], actions)
+        scen3 = d_i.decide(100, actions['PUMP_OFF'], actions)
+        scen4 = d_i.decide(125, actions['PUMP_IN'], actions)
+        scen5 = d_i.decide(75, actions['PUMP_IN'], actions)
+        scen6 = d_i.decide(75, actions['PUMP_OUT'], actions)
+        scen7 = d_i.decide(125, actions['PUMP_OFF'], actions)
 
         self.assertEqual(actions['PUMP_OUT'], scen1)
         self.assertEqual(actions['PUMP_IN'], scen2)
