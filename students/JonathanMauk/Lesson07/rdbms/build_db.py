@@ -49,7 +49,7 @@ def populate_people():
 
         logger.info('Print the Person records we saved...')
         for saved_person in Person:
-            logger.info(f'{saved_person.person_name} lives in {saved_person.lives_in_town} ' + \
+            logger.info(f'{saved_person.person_name} lives in {saved_person.lives_in_town} ' +
                         f'and likes to be known as {saved_person.nickname}')
 
     except Exception as e:
@@ -64,8 +64,8 @@ def populate_people():
 
 def populate_jobs():
     """
-            Add Jobs data to database.
-        """
+        Add Jobs data to database.
+    """
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
@@ -114,9 +114,28 @@ def populate_jobs():
         logger.info('database closes')
         database.close()
 
+
 def populate_departments():
+    """
+        Add Department data to database.
+    """
 
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
+    database = SqliteDatabase('personjobdept.db')
+
+    logger.info('Working with Department class.')
+
+    DEPT_NUMBER = 0
+    DEPT_NAME = 1
+    DEPT_MANAGER = 2
+
+    departments = [
+        ('A105', 'Accounting', 'Amanda Gillis'),
+        ('B205', 'Business Analytics', 'Portia Rossellini'),
+        ('H305', 'Human Resources', 'James O\'Keefe'),
+    ]
 
 if __name__ == '__main__':
     populate_db()
