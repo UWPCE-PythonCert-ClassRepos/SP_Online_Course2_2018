@@ -91,7 +91,7 @@ def populate_jobs():
     ]
 
     # Little function to calculate duration in days between hire and end dates.
-    def duration(first_date, second_date):
+    def employment_duration(first_date, second_date):
         first_date = datetime.strptime(first_date, '%Y-%m-%d')
         second_date = datetime.strptime(second_date, '%Y-%m-%d')
         return abs((second_date - first_date).days)
@@ -105,6 +105,7 @@ def populate_jobs():
                     job_name=job[JOB_NAME],
                     start_date=job[START_DATE],
                     end_date=job[END_DATE],
+                    duration=employment_duration(job[END_DATE], job[START_DATE]),
                     salary=job[SALARY],
                     person_employed=job[PERSON_EMPLOYED])
                 new_job.save()
