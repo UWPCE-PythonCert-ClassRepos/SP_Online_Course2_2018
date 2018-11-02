@@ -24,6 +24,7 @@ class ModuleTests(unittest.TestCase):
         pi = Pump('127.0.0.1', '8000')
         si = Sensor('127.0.0.2', '8000')
         ci = Controller(si, pi, di)
+        ci.pump.set_state = MagicMock(return_value=True)
 
         for water_level in range(75, 125, 5):
             for action in ci.actions.values():
