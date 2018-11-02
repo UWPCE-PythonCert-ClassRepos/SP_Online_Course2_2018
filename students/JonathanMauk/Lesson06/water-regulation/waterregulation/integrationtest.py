@@ -28,8 +28,10 @@ class ModuleTests(unittest.TestCase):
 
         for water_level in range(75, 125, 5):
             for action in c_i.actions.values():
-                c_i.sensor.measure = MagicMock(return_value=water_level)  # Measuring water level.
-                c_i.pump.get_state = MagicMock(return_value=d_i.decide(water_level,
-                                                                       action, c_i.actions))
+                # Measuring water level.
+                c_i.sensor.measure = MagicMock(return_value=water_level)
                 #  Checking pump state.
+                c_i.pump.get_state = MagicMock(return_value=d_i.decide
+                                               (water_level, action,
+                                                c_i.actions))
                 c_i.tick()
