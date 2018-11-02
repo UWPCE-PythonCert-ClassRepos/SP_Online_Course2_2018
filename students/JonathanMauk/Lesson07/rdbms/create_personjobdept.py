@@ -39,8 +39,8 @@ class Person(BaseModel):
 
     logger.info('Note how we defined the class')
 
-    logger.info('Specify the fields in our model, their lengths and if mandatory')
-    logger.info('Must be a unique identifier for each person')
+    logger.info('Specify the fields in our model, their lengths and if mandatory.')
+    logger.info('Must be a unique identifier for each person.')
 
     person_name = CharField(primary_key=True, max_length=30)
     lives_in_town = CharField(max_length=40)
@@ -55,14 +55,17 @@ class Job(BaseModel):
 
     logger.info('Now the Job class with a similar approach.')
     job_name = CharField(primary_key=True, max_length=30)
-    logger.info('Dates')
+    logger.info('Dates.')
     start_date = DateField(formats='YYYY-MM-DD')
     end_date = DateField(formats='YYYY-MM-DD')
-    logger.info('Number')
+    logger.info('Number.')
+    duration = IntegerField()
+    logger.info('Duration of job.')
 
     salary = DecimalField(max_digits=7, decimal_places=2)
-    logger.info('Which person had the Job')
+    logger.info('Which person had the Job.')
     person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
+    job_dept = ForeignKeyField(Department, related_name='in_department', null=False)
 
 
 class Department(BaseModel):
@@ -74,9 +77,9 @@ class Department(BaseModel):
     logger.info('Now the Department class.')
     dept_number = CharField(primary_key=True, max_length=4)
     logger.info('Department number.')
-    dept_name = CharField(max_length=30)
+    dept_name = CharField(max_length=30, null=False)
     logger.info('Department name.')
-    dept_manager = CharField(max_length=30)
+    dept_manager = CharField(max_length=30, null=False)
     logger.info('Department manager.')
 
 
