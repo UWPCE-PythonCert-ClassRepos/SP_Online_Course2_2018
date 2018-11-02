@@ -20,6 +20,12 @@ class DeciderTests(unittest.TestCase):
     def test_decider(self):
         """Method for DeciderTests. Should test every decider scenario."""
 
+        actions = {
+            'PUMP_IN': 1,
+            'PUMP_OFF': 0,
+            'PUMP_OUT': -1
+        }
+
         di = Decider(100, 0.05)
 
         scen1 = di.decide(125, actions['PUMP_OFF'], actions)
@@ -27,8 +33,8 @@ class DeciderTests(unittest.TestCase):
         scen3 = di.decide(100, actions['PUMP_OFF'], actions)
         scen4 = di.decide(125, actions['PUMP_IN'], actions)
         scen5 = di.decide(75, actions['PUMP_IN'], actions)
-        scen6 = di.decide(125, actions['PUMP_OFF'], actions)
-        scen7 = di.decide(75, actions['PUMP_OFF'], actions)
+        scen6 = di.decide(75, actions['PUMP_OUT'], actions)
+        scen7 = di.decide(125, actions['PUMP_OFF'], actions)
 
         self.assertEqual(actions['PUMP_OUT'], scen1)
         self.assertEqual(actions['PUMP_IN'], scen2)
@@ -54,7 +60,8 @@ class ControllerTests(unittest.TestCase):
     Unit tests for the Controller class.
     """
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Controller.tick
+    def test_tick(self):
+        """Test method for controller.tick method."""
 
-    pass
+        di = Decider(100, 0.05)
+        pi = Pump('127.0.0.1', '8000')
