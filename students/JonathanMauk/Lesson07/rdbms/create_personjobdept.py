@@ -57,9 +57,9 @@ class Department(BaseModel):
     dept_number = CharField(primary_key=True, max_length=4,
                             constraints=[Check('upper(substr(dept_number, 1, 1) BETWEEN "A" AND "Z" )')])
     logger.info('Department number.')
-    dept_name = CharField(max_length=30, null=False)
+    dept_name = CharField(max_length=30)
     logger.info('Department name.')
-    dept_manager = CharField(max_length=30, null=False)
+    dept_manager = CharField(max_length=30)
     logger.info('Department manager.')
 
 
@@ -100,8 +100,9 @@ class PersonNumKey(BaseModel):
 
 
 database.create_tables([
-        Job,
         Person,
+        Department,
+        Job,
         PersonNumKey
     ])
 

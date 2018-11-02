@@ -83,7 +83,7 @@ def populate_departments():
         ('A105', 'Accounting', 'Amanda Gillis'),
         ('B205', 'Business Analytics', 'Portia Rossellini'),
         ('H305', 'Human Resources', 'James O\'Hare')
-    ]
+        ]
 
     try:
         database.connect()
@@ -95,6 +95,7 @@ def populate_departments():
                     dept_name=department[DEPT_NAME],
                     dept_manager=department[DEPT_MANAGER])
                 new_department.save()
+                logger.info('Database add successful.')
 
         logger.info('Reading and print all Department rows...')
         for saved_dept in Department:
@@ -133,8 +134,8 @@ def populate_jobs():
         ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew', 'A105'),
         ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'A105'),
         ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', 'B205'),
-        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter', 'H305'),
-        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter', 'H305')
+        ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Peter', 'H305'),
+        ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Peter', 'H305')
     ]
 
     # Little function to calculate duration in days between hire and end dates.
@@ -155,14 +156,15 @@ def populate_jobs():
                     duration=employment_duration(job[END_DATE], job[START_DATE]),
                     salary=job[SALARY],
                     person_employed=job[PERSON_EMPLOYED],
-                    department=job[DEPARTMENT])
+                    job_dept=job[DEPARTMENT])
                 new_job.save()
+                logger.info('Database add successful')
 
         logger.info('Reading and print all Job rows (note the value of person)...')
         for saved_job in Job:
             logger.info(f'{saved_job.job_name}: {saved_job.start_date} to {saved_job.end_date} '
                         f'({saved_job.duration} days) for {saved_job.person_employed} '
-                        f'in department {saved_job.department}.')
+                        f'in department {saved_job.job_dept}.')
 
     except Exception as e:
         logger.info(f'Error creating = {job[JOB_NAME]}')
