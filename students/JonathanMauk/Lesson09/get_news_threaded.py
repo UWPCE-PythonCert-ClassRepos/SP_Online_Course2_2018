@@ -12,6 +12,8 @@ https://newsapi.org
 import threading
 import requests
 
+from queue import Queue
+
 NEWS_API_KEY = "5e3dca56fa674afe9b01464c3bd308e8"
 
 WORD = "war"
@@ -66,20 +68,20 @@ def count_word(word, titles):
     return count
 
 
-# create the objects to hold the data
-sources = []
-titles = []
+if __name__ == "__main__":
+    news_queue = Queue()
 
-# get the sources -- this is essentially synchronous
-loop.run_until_complete(get_sources(sources))
+    def add_news_queue(*args):
+        news_queue.put(get_articles(*args))
 
-# run the loop for the articles
-jobs = asyncio.gather(*(get_articles(source) for source in sources))
-loop.run_until_complete(jobs)
-loop.close()
+    # create the objects to hold the data
+    sources = get_sources()
+    threads = []
 
-art_count = len(titles)
-word_count = count_word(WORD, titles)
+    for item in sources:
+        thread = threading.Thread(target=add_news_queue, args=(item,))
+        thread.start()
+        threads.append(thread)
 
-print(f'found {WORD}, {word_count} times in {art_count} articles')
-print(f'Process took {(time.time() - start):.0f} sec.')
+    for t in threads:
+        t.join()
