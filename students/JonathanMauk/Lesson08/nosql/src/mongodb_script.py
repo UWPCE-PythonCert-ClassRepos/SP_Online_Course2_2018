@@ -27,13 +27,19 @@ def run_example(furniture_items):
         log.info('Step 2: Now we add data from the dictionary above')
         furniture.insert_many(furniture_items)
 
-        log.info('Step 3: Find the products that are described as plastic')
-        query = {'description': 'Plastic'}
+        log.info('Step 3: Find the products that are described as red')
+        query = {'product color': 'Red'}
         results = furniture.find_one(query)
+        print('Red products')
+        for item in results:
+            pprint.pprint(item)
 
-        log.info('Step 4: Print the plastic products')
-        print('Plastic products')
-        pprint.pprint(results)
+        log.info('Step 4: Print the couches')
+        print('The couches')
+        query = {'product type': 'Couch'}
+        results = furniture.find_one(query)
+        for item in results:
+            pprint.pprint(item)
 
         log.info('Step 5: Delete the blue couch (actually deletes all blue couches)')
         furniture.remove({"product": {"$eq": "Blue couch"}})
