@@ -11,13 +11,12 @@ https://newsapi.org
 
 import threading
 import requests
-import queue
-import time
 
 NEWS_API_KEY = "5e3dca56fa674afe9b01464c3bd308e8"
 
 WORD = "war"
 base_url = 'https://newsapi.org/v1/'
+
 
 def get_sources():
     """
@@ -66,11 +65,6 @@ def count_word(word, titles):
             count += 1
     return count
 
-
-start = time.time()
-
-# start up a loop:
-loop = asyncio.get_event_loop()
 
 # create the objects to hold the data
 sources = []
