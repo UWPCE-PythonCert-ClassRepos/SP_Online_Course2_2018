@@ -45,18 +45,17 @@ def get_articles(source):
               "sortBy": "top"
               }
     print("requesting:", source)
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, ssl=False, params=params) as resp:
-            if resp.status != 200:  # aiohttpp has "status"
-                print(f'something went wrong with: {source}')
-                await asyncio.sleep(0)  # releases control the the mainloop
-                return
-            # awaits response rather than waiting on response in the requests version of this
-            print("got the articles from {}".format(source))
-            data = await resp.json()
+    response = requests.get(url, params=params)
+    if response.status_code != 200:  # requests has "status"
+        print(f'something went wrong with: {source}')
+        print(response)
+        print(response.text)
+        return []
+    data = response.json()
     # the url to the article itself is in data['articles'][i]['url']
-    titles.extend([(str(art['title']) + str(art['description']))
-                   for art in data['articles']])
+    titles = [str(art['title']) + str(art['description'])
+              for art in data['articles']]
+    return titles
 
 
 def count_word(word, titles):
