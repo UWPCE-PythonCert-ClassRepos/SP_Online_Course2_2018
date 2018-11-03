@@ -6,6 +6,7 @@
 import utilities
 import login_database
 import utilities
+import random
 
 log = utilities.configure_logger('default', '../logs/neo4j_script.log')
 
@@ -31,6 +32,7 @@ def run_example():
                             ('Fred', 'Barnes'),
                             ('Mary', 'Evans'),
                             ('Marie', 'Curie'),
+                            ('Isaac', 'Asimov'),
                             ]:
             cyph = "CREATE (n:Person {first_name:'%s', last_name: '%s'})" % (
                 first, last)
@@ -46,16 +48,18 @@ def run_example():
             print(record['first_name'], record['last_name'])
 
         log.info('Step 4: Create some relationships')
-        log.info("Bob Jones likes Alice Cooper, Fred Barnes and Marie Curie")
-
+        log.info("Bob Jones likes yellow.")
+        COLORS = ['RED', 'BLUE', 'YELLOW']
         for first, last in [("Alice", "Cooper"),
                             ("Fred", "Barnes"),
-                            ("Marie", "Curie")]:
+                            ("Marie", "Curie"),
+                            ('Isaac', 'Asimov')]:
+            print("Everyone's favorite colors: ")
             cypher = """
-              MATCH (p1:Person {first_name:'Bob', last_name:'Jones'})
-              CREATE (p1)-[friend:FRIEND]->(p2:Person {first_name:'%s', last_name:'%s'})
-              RETURN p1
-            """ % (first, last)
+                MATCH (p1:Person {first_name:'%s', last_name:'%s'})
+                CREATE (p1)-[favorite:FAVORITE]->(p2:Color {name:'%s'})
+                RETURN p1
+                """ % (first, last, COLORS[random.randint(0, 5)])
             session.run(cypher)
 
         log.info("Step 5: Find all of Bob's friends")
