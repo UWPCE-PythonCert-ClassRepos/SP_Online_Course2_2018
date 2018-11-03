@@ -24,7 +24,7 @@ def get_furniture_data():
             'in_stock_quantity': 3
         },
         {
-            'product': 'Coffee table',
+            'product type': 'Coffee table',
 			'product color': 'White',
             'description': 'Plastic',
             'monthly_rental_cost': 2.50,
@@ -38,20 +38,20 @@ def get_furniture_data():
             'in_stock_quantity': 17
         },
         {
-            'product': 'Recliner',
+            'product type': 'Recliner',
 			'product color': 'Blue',
             'description': 'Leather high back',
             'monthly_rental_cost': 19.99,
             'in_stock_quantity': 6
         },
         {
-            'product': 'Chair',
+            'product type': 'Chair',
 			'product color': 'Black',
             'description': 'Plastic',
             'monthly_rental_cost': 1.00,
             'in_stock_quantity': 45
         },
-            'product': 'Loveseat',
+            'product type': 'Loveseat',
 			'product color': 'Brown',
             'description': 'Leather high back',
             'monthly_rental_cost': 17.99,
