@@ -11,6 +11,7 @@ https://newsapi.org
 
 import threading
 import requests
+import time
 
 from queue import Queue
 
@@ -69,13 +70,15 @@ def count_word(word, titles):
 
 
 if __name__ == "__main__":
+    start = time.time()
     news_queue = Queue()
 
-    def add_news_queue(*args):
-        news_queue.put(get_articles(*args))
+    def add_news_queue(src):
+        news_queue.put(get_articles(src))
 
     # create the objects to hold the data
     sources = get_sources()
+    titles = []
     threads = []
 
     for item in sources:
@@ -85,3 +88,9 @@ if __name__ == "__main__":
 
     for t in threads:
         t.join()
+
+    art_count = len(titles)
+    word_count = count_word(WORD, titles)
+
+    print(f'found {WORD}, {word_count} times in {art_count} articles')
+    print(f'Process took {(time.time() - start):.0f} sec.')
