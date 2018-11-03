@@ -1,16 +1,19 @@
 import math
 import time
 
+times = 1000
 
-def fib(a=1, b=1):
+
+def fib(n):
     """
     The Fibonacci sequence as a generator:
         f(n) = f(n-1) + f(n-2)
         1, 1, 2, 3, 5, 8, 13, 21, 34…
     """
-    while True:
-        yield a
-        a, b = b, a + b
+    if n <= 1:
+        return n
+    else:
+        return fib(n-1) + fib(n-2)
 
 
 def factorial(n):
@@ -29,3 +32,23 @@ def factorial(n):
     else:
         return n * factorial(n - 1)
 
+
+if __name__ == "__main__":
+
+    init = time.clock()
+    for i in range(times):
+        # Credits to Stack Overflow for this succinct version of the Fibonacci sequence.
+        value = ((1+sqrt(5))**i-(1-sqrt(5))**i)/(2**i*sqrt(5))
+    print(f"No function time for Fibonacci: {time.clock() - init}")
+
+    init = time.clock()
+    fib(times)
+    print(f"Function time for Fibonacci: {time.clock() - init}")
+
+    init = time.clock()
+    math.factorial(times)
+    print(f"No function time for factorial: {time.clock() - init}")
+
+    init = time.clock()
+    factorial(times)
+    print(f"Function time for factorial: {time.clock() - init}")
