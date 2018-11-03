@@ -9,19 +9,17 @@ Uses data from the NewsAPI:
 https://newsapi.org
 """
 
-import time
 import threading
 import requests
+import queue
+import time
 
 NEWS_API_KEY = "5e3dca56fa674afe9b01464c3bd308e8"
 
 WORD = "war"
 base_url = 'https://newsapi.org/v1/'
 
-
-# This has to run first, so doesn't really need async
-# but why use two requests libraries ?
-async def get_sources(sources):
+def get_sources():
     """
     Get all the english language sources of news
 
@@ -29,14 +27,15 @@ async def get_sources(sources):
     """
     url = base_url + "sources"
     params = {"language": "en", "apiKey": NEWS_API_KEY}
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, ssl=False, params=params) as resp:
-            data = await resp.json()
-            print("Got the sources")
-    sources.extend([src['id'].strip() for src in data['sources']])
+    response = requests.get(url, params=params)
+    data = response.json()
+    sources = [src['id'].strip() for src in data['sources']]
+    print("Got the sources:")
+    print(sources)
+    return sources
 
 
-async def get_articles(source):
+def get_articles(source):
     """
     download the info for all the articles
     """
