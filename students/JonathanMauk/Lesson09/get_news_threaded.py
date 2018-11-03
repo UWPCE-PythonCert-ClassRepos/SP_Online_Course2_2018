@@ -13,7 +13,7 @@ import time
 import threading
 import requests
 
-NEWS_API_KEY = "84d0483394c44f288965d7b366e54a74"
+NEWS_API_KEY = "5e3dca56fa674afe9b01464c3bd308e8"
 
 WORD = "war"
 base_url = 'https://newsapi.org/v1/'
