@@ -1,10 +1,10 @@
-import math
 import time
+from math import sqrt, factorial
 
-times = 1000
+times = 35
 
 
-def fib(n):
+def fib_recursive(n):
     """
     The Fibonacci sequence as a generator:
         f(n) = f(n-1) + f(n-2)
@@ -13,18 +13,15 @@ def fib(n):
     if n <= 1:
         return n
     else:
-        return fib(n-1) + fib(n-2)
+        return fib_recursive(n-1) + fib_recursive(n-2)
 
 
-def factorial(n):
+def factorial_recursive(n):
     """
     Returns the factorial of a given non-negative integer,
     the product of all positive integers less than or equal to that number.
     """
-    if n == float:
-        print(f"Please enter an integer. You entered {n}.")
-        return
-    elif n < 0:
+    if n < 0:
         print(f"Please enter a non-negative integer. You entered {n}.")
         return
     elif n <= 1:
@@ -42,13 +39,20 @@ if __name__ == "__main__":
     print(f"No function time for Fibonacci: {time.clock() - init}")
 
     init = time.clock()
-    fib(times)
+    result = fib_recursive(times)
     print(f"Function time for Fibonacci: {time.clock() - init}")
 
     init = time.clock()
-    math.factorial(times)
+    factorial(times)
     print(f"No function time for factorial: {time.clock() - init}")
 
     init = time.clock()
-    factorial(times)
+    result = factorial_recursive(times)
     print(f"Function time for factorial: {time.clock() - init}")
+
+# Standard Python interpreter results:
+# No function time for Fibonacci: 7.107942644800277e-05
+# Function time for Fibonacci: 3.1865595943568525
+# No function time for factorial: 3.414295593362482e-06
+# Function time for factorial: 2.1727335597354624e-06
+
