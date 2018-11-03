@@ -56,3 +56,8 @@ if __name__ == "__main__":
 # No function time for factorial: 3.414295593362482e-06
 # Function time for factorial: 2.1727335597354624e-06
 
+# pypy interpreter results:
+# No function time for Fibonacci: 0.00536044408190833
+# Function time for Fibonacci: 0.18236652897743708
+# No function time for factorial: 8.473660882230005e-05
+# Function time for factorial: 3.290139390169089e-05
