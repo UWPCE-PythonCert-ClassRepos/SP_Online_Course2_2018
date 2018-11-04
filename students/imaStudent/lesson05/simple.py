@@ -1,12 +1,14 @@
 import logging
 import logging.handlers
+import datetime
 
 # define default formatter 
 format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 formatter = logging.Formatter(format)
 
 # define handler for file 
-file_handler = logging.FileHandler('mylog.log')
+file_name = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S") + ".log"
+file_handler = logging.FileHandler(file_name)
 file_handler.setLevel(logging.WARNING)           
 file_handler.setFormatter(formatter)
 
