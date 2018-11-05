@@ -1,24 +1,30 @@
 import pandas as pd
 music = pd.read_csv("featuresdf.csv")
 
-def both_gen():
-    ''' for any row, if danceability and loudness pass their tests
-    yield the danceability, artist, and song of that row'''
-    count = 0
-    while count < len(music.danceability):
-        if music.danceability[count] > 0.8 and music.loudness[count] < -5.0:
-            yield (music.danceability[count], music.artists[count], music.name[count])
-        count += 1
+def artists_gen():
+    ''' Write a generator to find and print all of your favorite artist’s tracks. 
+    As it turns out The Weeknd has two tracks in this list: Starboy and I Feel It Comming. '''
+    index = 0
+    while index < len(music.artists):
+        if music.artists[index] == "The Weeknd":
+            yield (music.name[index])
+        index += 1
 
-results = both_gen()
-results_sorted = sorted(results, reverse=True) # sorts by danceability as that is yielded first
+def energy_closure():
+    songs = [x for x in zip(music.energy, music.artists, music.name) if x[0] > 0.8]
+    #sorted_songs = songs.sorted(reverse=True)
+    def print_energy_tracks():
+        for x in songs:
+            print(f"{x[0]:4.2}\t{x[1]:16}\t{x[2]:35}")
+
+    print_energy_tracks()
+
+
+
+results = artists_gen()
+results_sorted = sorted(results, reverse=True)
+print("Tracks by The Weeknd are as follows: ")
 for i in results_sorted:
     print(i)
-'''
-Top songs returned:
-(0.927, 'Migos', 'Bad and Boujee (feat. Lil Uzi Vert)')
-(0.927, 'Drake', 'Fake Love')
-(0.904, 'Kendrick Lamar', 'HUMBLE.')
-(0.884, '21 Savage', 'Bank Account')
-(0.8759999999999999, 'Jax Jones', "You Don't Know Me - Radio Edit")
-'''
+
+energy_closure()
