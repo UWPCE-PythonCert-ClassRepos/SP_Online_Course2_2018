@@ -60,7 +60,6 @@ class Decider():
             elif current_height > self.target_height * (1 + self.margin):
                 new_action = actions['PUMP_OUT']
             else:
-                """current_height is within the margins of the height"""
                 new_action = actions['PUMP_OFF']
 
         if current_action == actions['PUMP_IN']:
