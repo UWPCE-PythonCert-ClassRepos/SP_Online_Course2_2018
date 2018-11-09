@@ -1,0 +1,145 @@
+The issue is that the function is structured to return True only when 'n' is a power of 2. If 'n' is not equal to 2,
+the function will continue to call itself over and over again. This throws the RecursionError, because the program
+will perpetually divide 'n' by 2, unless it lands on 'n == 2'.
+
+Will@ams-work-1H0QH2 MINGW64 ~/pycharmprojects/sp_online_course2_2018/students/wwhite/lesson05 (master)
+$ python -m pdb recursive.py 15
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3
+  4     def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+  9
+ 10
+ 11     if __name__ == "__main__":
+ 12         n = int(sys.argv[1])
+ 13         print(my_fun(n))
+(Pdb) n
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(4)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(11)<module>()
+-> if __name__ == "__main__":
+(Pdb) n
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(12)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(13)<module>()
+-> print(my_fun(n))
+(Pdb) n
+Traceback (most recent call last):
+  File "C:\Users\Will\AppData\Local\Programs\Python\Python37-32\lib\pdb.py", line 1697, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Users\Will\AppData\Local\Programs\Python\Python37-32\lib\pdb.py", line 1566, in _runscript
+    self.run(statement)
+  File "C:\Users\Will\AppData\Local\Programs\Python\Python37-32\lib\bdb.py", line 585, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py", line 13, in <module>
+    print(my_fun(n))
+  File "c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  File "c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py", line 8, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 979 more times]
+  File "c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py", line 4, in my_fun
+    def my_fun(n):
+  File "C:\Users\Will\AppData\Local\Programs\Python\Python37-32\lib\bdb.py", line 90, in trace_dispatch
+    return self.dispatch_call(frame, arg)
+  File "C:\Users\Will\AppData\Local\Programs\Python\Python37-32\lib\bdb.py", line 128, in dispatch_call
+    if not (self.stop_here(frame) or self.break_anywhere(frame)):
+  File "C:\Users\Will\AppData\Local\Programs\Python\Python37-32\lib\bdb.py", line 250, in break_anywhere
+    return self.canonic(frame.f_code.co_filename) in self.breaks
+  File "C:\Users\Will\AppData\Local\Programs\Python\Python37-32\lib\bdb.py", line 45, in canonic
+    if filename == "<" + filename[1:-1] + ">":
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\users\will\appdata\local\programs\python\python37-32\lib\bdb.py(45)canonic()
+-> if filename == "<" + filename[1:-1] + ">":
+(Pdb) quit
+Post mortem debugger finished. The recursive.py will be restarted
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3
+  4     def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+  9
+ 10
+ 11     if __name__ == "__main__":
+ 12         n = int(sys.argv[1])
+ 13         print(my_fun(n))
+(Pdb) n
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(4)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(11)<module>()
+-> if __name__ == "__main__":
+(Pdb) n
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(12)<module>()
+-> n = int(sys.argv[1])
+(Pdb) s
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(13)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) s
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(8)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+Breakpoint 1 at c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py:5
+(Pdb) c
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) c
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) c
+> c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) clear 1
+Deleted breakpoint 1 at c:\users\will\pycharmprojects\sp_online_course2_2018\students\wwhite\lesson05\recursive.py:5
+(Pdb) ll
+  4     def my_fun(n):
+  5  ->     if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+(Pdb)
+
+
