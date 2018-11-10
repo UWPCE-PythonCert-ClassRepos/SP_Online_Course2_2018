@@ -1,0 +1,76 @@
+'''
+Sean Tasaki
+11/9/2018
+Lesson05
+'''
+
+
+The function keeps calling itself because of two reasons: 
+1) The function will never be able to return True because the value of 'n' will only continue to get smaller and will never equal 2
+2) There is no 'stop' condition that will return False.
+
+In order for the function to not have a RecursionError, the function must return True, i.e. the number passed in must be a power of two, or there must be a condtion that will return False. 
+
+Below is my debugging log:
+
+C:\Users\stasaki\Desktop\sean's python code\Lesson05>python -m pdb recursive.py 15
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(3)<module>()
+-> import sys
+(Pdb) ll
+  1
+  2
+  3  -> import sys
+  4
+  5     def my_fun(n):
+  6         if n == 2:
+  7             return True
+  8         return my_fun(n/2)
+  9
+ 10     if __name__ == '__main__':
+ 11         n = int(sys.argv[1])
+ 12         print(my_fun(n))
+(Pdb) b6
+*** NameError: name 'b6' is not defined
+(Pdb) b 6
+Breakpoint 1 at c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py:6
+(Pdb) n
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(5)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(11)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(12)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) c
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) c
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) c
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) c
+> c:\users\stasaki\desktop\sean's python code\lesson05\recursive.py(6)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
