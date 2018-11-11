@@ -1,0 +1,57 @@
+{
+    "__obj_type": "DonorList",
+    "donor_dict": [
+        {
+            "__obj_type": "EachDonor",
+            "name": "Harry Potter",
+            "each_donation": [
+                100,
+                2.48,
+                2048
+            ]
+        },
+        {
+            "__obj_type": "EachDonor",
+            "name": "Ron Weasley",
+            "each_donation": [
+                56.12,
+                1982
+            ]
+        },
+        {
+            "__obj_type": "EachDonor",
+            "name": "Hermione Grainger",
+            "each_donation": [
+                1500,
+                1250,
+                250.65
+            ]
+        },
+        {
+            "__obj_type": "EachDonor",
+            "name": "Albus Dumbledore",
+            "each_donation": [
+                3500,
+                5280,
+                314.15
+            ]
+        },
+        {
+            "__obj_type": "EachDonor",
+            "name": "Severus Snape",
+            "each_donation": [
+                2018,
+                19.01,
+                750,
+                690.99
+            ]
+        },
+        {
+            "__obj_type": "EachDonor",
+            "name": "Rubius Hagrid",
+            "each_donation": [
+                365
+            ]
+        }
+    ]
+}
