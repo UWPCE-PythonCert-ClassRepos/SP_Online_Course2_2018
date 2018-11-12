@@ -10,7 +10,7 @@
 import generator_solution as generator
 
 
-def test_intsum():
+def intsum_test():
     y = generator.intsum()
     assert next(y) == 0
     assert next(y) == 1
@@ -20,7 +20,7 @@ def test_intsum():
     assert next(y) == 15
 
 
-def test_doubler():
+def doubler_test():
     y = generator.doubler()
     assert next(y) == 1
     assert next(y) == 2
@@ -33,19 +33,19 @@ def test_doubler():
     assert v == 2 ** 15
 
 
-def test_fib():
+def fib_test():
     y = generator.fib()
     assert [next(y) for i in range(9)] == [1, 1, 2, 3, 5, 8, 13, 21, 34]
 
 
-def test_prime():
+def prime_test():
     y = generator.prime()
     for value in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]:
         assert next(y) == value
 
 
 if __name__ == "__main__":
-    test_intsum()
-    test_doubler()
-    test_fib()
-    test_prime()
+    intsum_test()
+    doubler_test()
+    fib_test()
+    prime_test()
