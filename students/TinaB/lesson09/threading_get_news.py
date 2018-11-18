@@ -32,8 +32,7 @@ def get_sources():
     data = response.json()
     srcs = [src['id'].strip() for src in data['sources']]
 
-    logger.info(f'List of News Sources:')
-    logger.info({srcs})
+    logger.info(f'List of News Sources:{srcs}')
 
     return srcs
 
