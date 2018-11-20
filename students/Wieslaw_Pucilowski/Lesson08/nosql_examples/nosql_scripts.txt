@@ -1,0 +1,36 @@
+wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson08/nosql/src$ ls -l ../.config
+total 369
+-rwxrwxrwx 1 root root 506 Nov 19 20:30 config.ini
+-rwxrwxrwx 1 root root 217 Nov 11 00:13 config.ini.sample
+wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson08/nosql/src$ ls -l ../logs
+total 0
+wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson08/nosql/src$ python3.6 learnnosql.py
+2018-11-19 20:40:05 - INFO - Configuration file /mnt/c/UW_Python_2/Lesson08/nosql/.config/config.ini
+2018-11-19 20:40:05 - INFO - Mongodb example to use data from Furniture module, so get it
+2018-11-19 20:40:05 - INFO - Here is where we use the connect to mongodb.
+2018-11-19 20:40:05 - INFO - Note use of f string to embed the user & password (from the tuple).
+error: 'PosixPath' object is not iterable
+Traceback (most recent call last):
+  File "learnnosql.py", line 39, in <module>
+    showoff_databases()
+  File "learnnosql.py", line 25, in showoff_databases
+    mongodb_script.run_example(furniture)
+  File "/mnt/c/UW_Python_2/Lesson08/nosql/src/mongodb_script.py", line 17, in run_example
+    with login_database.login_mongodb_cloud() as client:
+  File "/mnt/c/UW_Python_2/Lesson08/nosql/src/login_database.py", line 34, in login_mongodb_cloud
+    log.info('Login: {} and password: {}'.format(user, pw))
+UnboundLocalError: local variable 'user' referenced before assignment
+wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson08/nosql/src$ ls -l ../logs
+total 185
+-rwxrwxrwx 1 root root 101 Nov 19 20:40 login_databases_dev.log
+-rwxrwxrwx 1 root root   0 Nov 19 20:40 mongodb_script.log
+-rwxrwxrwx 1 root root   0 Nov 19 20:40 neo4j_script.log
+-rwxrwxrwx 1 root root 261 Nov 19 20:40 nosql_dev.log
+wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson08/nosql/src$
+wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson08/nosql/src$ cat ../logs/login_databases_dev.log
+2018-11-19 20:40:05 - INFO - Configuration file /mnt/c/UW_Python_2/Lesson08/nosql/.config/config.ini
+wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson08/nosql/src$ cat ../logs/nosql_dev.log
+2018-11-19 20:40:05 - INFO - Mongodb example to use data from Furniture module, so get it
+2018-11-19 20:40:05 - INFO - Here is where we use the connect to mongodb.
+2018-11-19 20:40:05 - INFO - Note use of f string to embed the user & password (from the tuple).
+wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson08/nosql/src$
