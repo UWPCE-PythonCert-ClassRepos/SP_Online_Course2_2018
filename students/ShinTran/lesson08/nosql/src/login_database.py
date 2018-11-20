@@ -6,7 +6,7 @@ import configparser
 from pathlib import Path
 import pymongo
 import redis
-from neo4j import GraphDatabase, basic_auth
+from neo4j.v1 import GraphDatabase, basic_auth
 
 import utilities
 
