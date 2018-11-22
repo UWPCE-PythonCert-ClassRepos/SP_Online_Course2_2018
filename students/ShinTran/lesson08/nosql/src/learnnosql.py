@@ -28,7 +28,7 @@ def showoff_databases():
 
     redis_script.run_example()
     neo4j_script.run_example()
-    simple_script.run_example(furniture)
+    simple_script.run_example()
 
 
 if __name__ == '__main__':

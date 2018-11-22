@@ -93,15 +93,15 @@ def run_example():
 
         log.info('Step 6: Print each color and the person that has the color as their favorite')
         for color in ['Black','Blue','Green','Orange','Purple','Red','White','Yellow']:
-            cyph = """
-              MATCH (c1:Color {name:'%s'})
-              -[:Person]->(ppl)
-              RETURN ppl
+            cyph = """ MATCH(c1:Color {name:'%s'})
+            <-[favcolor:FAVCOLOR]
+            -(p1:Person)
+            return p1.first_name as first, p1.last_name as last
             """ % (color)
             result = session.run(cyph)
-            for item in result:
-                for names in item.values():
-                    print(names)
+            print("Color " + color + " is the favorite for: ")
+            for record in result:
+                print('    ' + record['first'] + ' ' + record['last'])
 
 
 if __name__ == '__main__':
