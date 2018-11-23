@@ -32,10 +32,9 @@ def get_articles(source):
               'sortBy': 'top'}
     print('Requesting:', source)
     resp = requests.get(url, params=params)
-    if resp.status_code != '200':
+    if resp.status_code != 200:
         print('Something went wrong with {}'.format(source))
-        print(resp)
-        print(resp.text)
+        print(resp.status_code)
         return []
     data = resp.json()
     titles = [str(art['title']) + str(art['description']) for art in data['articles']]
