@@ -53,7 +53,7 @@ def add_donation():
     prints an email thanking the donor
     If the user types exit, it would return to the main prompt"""
     temp_list = []
-    donor_name = get_new_donor_name()
+    donor_name = get_donor_name()
     if (donor_name != 'exit'):
         temp_list.append(donor_name)
         donation_amt = get_new_donor_amount()
@@ -62,28 +62,18 @@ def add_donation():
             logger.info("{} has donated {}".format(*temp_list))
             logger.info("Connecting to DB, to add to the Donor records")
             if donor_name in generate_name_list():
-                for item in donor.find():
-                    if item['full_name'] == donor_name:
-                        current_values = {
-                            'full_name': item['full_name'],
-                            'donation_count': item['donation_count'],
-                            'total_donation': item['total_donation'],
-                            'donations': item['donations']
-                        }
-                        dn_list = item['donations']
-                        dn_list.append(temp_list[1])
-                        new_values = {
-                            'full_name': item['full_name'],
-                            'donation_count': item['donation_count'] + 1,
-                            'total_donation': item['total_donation'] + temp_list[1],
-                            'donations': dn_list
-                        }
-                        # Line not working
-                        donor.update_one(current_values, {'$set': new_values})
-                        print("Database has been updated.")
-                # For debugging
-                for item2 in donor.find():
-                    pp(item2)
+                rcrd = donor.find_one({'full_name': donor_name})
+                dn_list = rcrd['donations']
+                dn_list.append(temp_list[1])
+                donor.find_one_and_update(
+                    {"_id": rcrd["_id"]},
+                    {'$set': {
+                        'donations': rcrd['donations'],
+                        'donation_count': rcrd['donation_count'] + 1,
+                        'total_donation': rcrd['total_donation'] + temp_list[1]
+                    }}
+                )
+                print("Database has been updated.")
             else:
                 new_donor = {
                     'full_name': temp_list[0],
@@ -95,92 +85,47 @@ def add_donation():
             logger.info('Database add successful')
             print(get_email_text(temp_list))
 
-'''
-def delete_donation():
-    """Prints all the records in the Donations table,
-    prompts the user to type a donation ID to delete,
-    also updates the Donor table accordingly"""
-    database = SqliteDatabase('mailroom.db')
-    try:
-        logger.info("Connecting to DB, to delete a Donor record")
-        database.connect()
-        database.execute_sql('PRAGMA foreign_keys = ON;')
-        print_donations()
-        del_record = get_donation_ID('d')
-        del_query = Donations.select().where(Donations.id == int(del_record))
-        temp_list = []
-        for item in del_query:
-            temp_list.append(item.full_name)
-            temp_list.append(item.donation)
-            delete_dn = (Donations.delete().where(Donations.id == int(del_record)))
-            delete_dn.execute()
-        logger.info('Updating Donor table so it matches the Donations table')
-        update_donor = (Donor.select().where(Donor.full_name == temp_list[0]))
-        for item in update_donor:
-            updated_rec = (Donor
-                .update(donation_count = item.donation_count - 1,
-                    total_donation = item.total_donation - Decimal(temp_list[1]))
-                .where(Donor.full_name == temp_list[0]))
-            updated_rec.execute()
-        logger.info('Database delete successful')
-    except Exception as e:
-        logger.error("Can't delete the donation")
-        logger.info(e)
-    finally:
-        database.close()
+
+def delete_donor():
+    """Prints all the Donor Names, prompts the user to type
+    a donation name to delete, removes the Donor from the
+    table accordingly"""
+    logger.info("Connecting to DB, to delete a Donor record")
+    donor_name = get_donor_name()
+    if donor_name in generate_name_list():
+        del_query = donor.delete_many({'full_name': donor_name})
+    logger.info('Database delete successful')
 
 
-def update_donation():
-    """Prompts the user to type a donation ID to delete,
-    also updates the Donor table accordingly"""
-    database = SqliteDatabase('mailroom.db')
-    try:
-        logger.info("Connecting to DB, to delete a Donor record")
-        database.connect()
-        database.execute_sql('PRAGMA foreign_keys = ON;')
-        print_donations()
-        upd_record = get_donation_ID('u')
+
+def update_donor():
+    """Prompts the user to type a Donor name to update,
+    prompts the user to enter a series of donations"""
+    logger.info("Connecting to DB, to update a Donor record")
+    donor_name = get_donor_name()
+    if donor_name in generate_name_list():
+        new_dn_list = []
         new_dn_amt = get_new_donor_amount()
-        if float(new_dn_amt) <= 0:
-            print("Invald input:")
+        print("Type 'no' if you want to stop adding donations.")
+        while (new_dn_amt != 'no'):
+            if float(new_dn_amt) <= 0:
+                print("Invald input.")
+            else:
+               new_dn_list.append(float(new_dn_amt))
             new_dn_amt = get_new_donor_amount()
-        upd_query = Donations.select().where(Donations.id == int(upd_record))
-        temp_list = []
-        for item in upd_query:
-            temp_list.append(item.full_name)
-            temp_list.append(item.donation)
-            update_dn = (Donations
-                .update(donation = Decimal(new_dn_amt))
-                .where(Donations.id == int(upd_record)))
-            update_dn.execute()
-        logger.info('Going through the donations table to get')
-        logger.info('total cumulative donation for a donor')
-        temp_sum = 0
-        new_sum = (Donations.select()
-            .where(Donations.full_name == temp_list[0]))
-        for item in new_sum:
-            temp_sum += item.donation
-        updated_rec = (Donor
-            .update(total_donation = temp_sum)
-            .where(Donor.full_name == temp_list[0]))
-        updated_rec.execute()
-        logger.info('Database udpate successful')
-    except Exception as e:
-        logger.error("Can't update the donation")
-        logger.info(e)
-    finally:
-        database.close()
-'''
-
-def print_donations():
-    """Connects to the database Donations table,
-    prints out every record"""
-    query = donor.find()
-    pp("Donor Name           | Donation")
-    pp("---------------------------------------")
-    for item in query:
-        pp("{:20} | {:8}".format(str(item['full_name']), item['donation']))
-    print()
+        if len(new_dn_list) != 0:
+            rcrd = donor.find_one({'full_name': donor_name})
+            donor.find_one_and_update(
+                {"_id": rcrd["_id"]},
+                {'$set': {
+                    'donations': new_dn_list,
+                    'donation_count': len(new_dn_list),
+                    'total_donation': sum(new_dn_list)
+                }}
+            )
+            logger.info('Database udpate successful')
+    else:
+        print("Name not found.")
 
 
 def send_letters():
@@ -224,22 +169,15 @@ def print_report():
     """Prints a report of all the previous donators references generate_report"""
     print(generate_report())
 
-def get_new_donor_name():
-    """Prompts the user for a new donor name"""
+
+def get_donor_name():
+    """Prompts the user for a donor name"""
     return input("Enter a full name: ")
 
 
 def get_new_donor_amount():
     """Prompts the user for a donation amount"""
     return input("Enter a donation amount: ")
-
-
-def get_donation_ID(upd_or_del):
-    """Prompts the user for a donation ID"""
-    if upd_or_del == 'd':
-        return input("Enter a donation ID to delete: ")
-    else:
-        return input("Enter a donation ID to update: ")
 
 
 def clear_db():
@@ -253,8 +191,8 @@ def main_prompt():
     response = input("\n\
         Choose from one of 4 actions:\n\
         1) Add a Donation\n\
-        2) Delete a Donation\n\
-        3) Update a Donation\n\
+        2) Delete a Donor\n\
+        3) Update a Donor\n\
         4) Create a Report\n\
         5) Send letters to everyone\n\
         0) Quit\n\
@@ -285,8 +223,8 @@ if __name__ == "__main__":
         switch_dict = {
             'list': print_names,
             '1': add_donation,
-            #'2': delete_donation,
-            #'3': update_donation,
+            '2': delete_donor,
+            '3': update_donor,
             '4': print_report,
             '5': send_letters,
             '0': clear_db
