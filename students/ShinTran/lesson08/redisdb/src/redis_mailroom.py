@@ -8,11 +8,13 @@ Lesson 8 Assignment
 # Implementing the mailroom program using a database connection
 
 
+from ast import literal_eval
 from decimal import Decimal
 from pprint import pprint as pp
 import logging
 import login_database
 import redis
+import pickle
 import sys
 import utilities
 
@@ -46,7 +48,7 @@ def get_email_text(current_donation):
         Sincerely,\n\
         Your Local Charity".format(*current_donation)
 
-'''
+
 def add_donation():
     """Prompts the user to type a name of a donor, enter a donation amount,
     prints an email thanking the donor
@@ -60,27 +62,18 @@ def add_donation():
             temp_list.append(float(donation_amt))
             logger.info("{} has donated {}".format(*temp_list))
             logger.info("Connecting to DB, to add to the Donor records")
-            if donor_name in generate_name_list():
-                rcrd = donor.find_one({'full_name': donor_name})
-                dn_list = rcrd['donations']
+            if donor_name in generate_name_list():                
+                dn_list = get_donation_list(donor_name)
                 dn_list.append(temp_list[1])
-                donor.find_one_and_update(
-                    {"_id": rcrd["_id"]},
-                    {'$set': {
-                        'donations': rcrd['donations'],
-                        'donation_count': rcrd['donation_count'] + 1,
-                        'total_donation': rcrd['total_donation'] + temp_list[1]
-                    }}
-                )
+                r.hmset(donor_name, {'donations': dn_list})
                 print("Database has been updated.")
             else:
-                new_donor = {
-                    'full_name': temp_list[0],
-                    'donation_count': 1,
-                    'total_donation': temp_list[1],
-                    'donations': [temp_list[1]]
-                }
-                donor.insert_one(new_donor)
+                dn_phone = get_phone()
+                dn_zip = int(get_zip())
+                r.hmset(donor_name,
+                    {'phone': dn_phone,
+                    'zip': dn_zip,
+                    'donations': [temp_list[1]]})
             logger.info('Database add successful')
             print(get_email_text(temp_list))
 
@@ -92,39 +85,62 @@ def delete_donor():
     logger.info("Connecting to DB, to delete a Donor record")
     donor_name = get_donor_name()
     if donor_name in generate_name_list():
-        del_query = donor.delete_many({'full_name': donor_name})
+        r.delete(donor_name)
     logger.info('Database delete successful')
 
 
 
 def update_donor():
     """Prompts the user to type a Donor name to update,
-    prompts the user to enter a series of donations"""
+    the user can then update the phone, zip, or donation
+    list, prompts the user to enter a series of donations
+    for the new donations"""
     logger.info("Connecting to DB, to update a Donor record")
     donor_name = get_donor_name()
     if donor_name in generate_name_list():
-        new_dn_list = []
-        new_dn_amt = get_new_donor_amount()
-        print("Type 'no' if you want to stop adding donations.")
-        while (new_dn_amt != 'no'):
-            if float(new_dn_amt) <= 0:
-                print("Invald input.")
-            else:
-               new_dn_list.append(float(new_dn_amt))
+        donor_phn = r.hmget(donor_name, 'phone')[0]
+        donor_zip = r.hmget(donor_name, 'zip')[0]
+        donor_dns = r.hmget(donor_name, 'donations')[0]
+        print("{}'s phone number is: {}".format(donor_name, donor_phn))
+        print("{}'s zip code is: {}".format(donor_name, donor_zip))
+        print("{} has previously donated: {}".format(donor_name, donor_dns))
+        option = prompt_update_opts()
+        if option == '1':
+            new_phn = get_phone()
+            r.hmset(donor_name, {'phone': new_phn})
+            logger.info('Database update successful')
+        elif option == '2':
+            new_zip = int(get_zip())
+            r.hmset(donor_name, {'zip': new_zip})
+        elif option == '3':
+            new_dn_list = []
             new_dn_amt = get_new_donor_amount()
-        if len(new_dn_list) != 0:
-            rcrd = donor.find_one({'full_name': donor_name})
-            donor.find_one_and_update(
-                {"_id": rcrd["_id"]},
-                {'$set': {
-                    'donations': new_dn_list,
-                    'donation_count': len(new_dn_list),
-                    'total_donation': sum(new_dn_list)
-                }}
-            )
-            logger.info('Database udpate successful')
+            print("Type 'no' if you want to stop adding donations.")
+            while (new_dn_amt != 'no'):
+                if float(new_dn_amt) <= 0:
+                    print("Invald input.")
+                else:
+                   new_dn_list.append(float(new_dn_amt))
+                new_dn_amt = get_new_donor_amount()
+            if len(new_dn_list) != 0:
+                r.hmset(donor_name, {'donations': new_dn_list})
+                logger.info('Database update successful')
+        else:
+            print("Cancelling update.")
     else:
         print("Name not found.")
+
+
+def prompt_update_opts():
+    response = input("\n\
+        Choose from one of 3 actions:\n\
+        1) Update Phone Number\n\
+        2) Update Zip Code\n\
+        3) Update Donations\n\
+        0) Cancel\n\
+        Please type 1, 2, 3, or 0: ")
+    return response
+
 
 
 def send_letters():
@@ -134,12 +150,12 @@ def send_letters():
     Thank you for donating ${:,.2f}.\n\
     Sincerely,\n\
     Your Local Charity"
-    query = donor.find()
-    for item in query:
-        with open(item['full_name'] + ".txt",'w') as output:
-            output.write(message.format(item['full_name'], item['total_donation']))
+    for item in r.keys():
+        dn_list = get_donation_list(item)
+        with open(item + ".txt",'w') as output:
+            output.write(message.format(item, sum(dn_list)))
     print("Letters have been generated.")
-'''
+
 
 def generate_report():
     """Generates a report of all the previous donators
@@ -148,20 +164,14 @@ def generate_report():
     returns the report as a string"""
     donation_total = []
     for item in r.keys():
-        dn_name = str(item)
-
-        dn_list = list(r.hmget(item, 'donations')[0].split()[1:-1])
-        
+        dn_name = item
+        dn_list = get_donation_list(item)
         total_dn = sum(dn_list)
         dn_count = len(dn_list)
-
-        print("tot " + total_dn)
-        print("cnt " + dn_count)
-
-        avg_dn = 100 #total_dn/dn_count
-
-        donation_total.append(
-            [dn_name, total_dn, dn_count, avg_dn])
+        avg_dn = 0
+        if dn_count != 0:
+            avg_dn = total_dn/dn_count
+        donation_total.append([dn_name, total_dn, dn_count, avg_dn])
     donation_total.sort(key=lambda l: l[1], reverse = True)
     s1 = "Donor Name          |   Total Given  |  Num Gifts |  Average Gift\n"
     s2 = "-----------------------------------------------------------------\n"
@@ -170,6 +180,16 @@ def generate_report():
         s3 = '{:20} ${:13,.2f}{:14}  ${:13,.2f}\n'.format(*donation_total[z])
         final_string += s3
     return final_string
+
+
+def get_donation_list(donor_name):
+    """Gets the donations value from the cached dictionary,
+    converts it from a string to a list of floats"""
+    dn_list = literal_eval(r.hmget(donor_name, 'donations')[0])
+    individual_dns = []
+    for i in dn_list:
+        individual_dns.append(i)
+    return individual_dns
 
 
 def print_report():
@@ -187,7 +207,18 @@ def get_new_donor_amount():
     return input("Enter a donation amount: ")
 
 
+def get_phone():
+    """Prompts the user for a phone number"""
+    return input("Enter a phone number: ")
+
+
+def get_zip():
+    """Prompts the user for a zip code"""
+    return input("Enter a zip code: ")
+
+
 def clear_db():
+    """Clears out the database so it's clean for the next use"""
     r.flushdb()
     print("Database has been cleared. Exiting...")
     quit()
@@ -196,7 +227,7 @@ def clear_db():
 def main_prompt():
     """Prompts the user to enter an option"""
     response = input("\n\
-        Choose from one of 4 actions:\n\
+        Choose from one of 6 actions:\n\
         1) Add a Donation\n\
         2) Delete a Donor\n\
         3) Update a Donor\n\
@@ -228,30 +259,26 @@ if __name__ == "__main__":
         r.hmset('Bom Trady',
             {'phone': '295-647-7874',
             'zip': 57672,
-            'email': 'btrady@email.com',
             'donations': [500.00, 750.00, 1000.00, 1250.00, 1500.00]})
         r.hmset('Raron Aodgers',
             {'phone': '905-306-9770',
             'zip': 74089,
-            'email': 'raodgers@email.com',
             'donations': [1500.00, 2000.00]})
         r.hmset('Brew Drees',
             {'phone': '644-113-0350',
             'zip': 44870,
-            'email': 'bdrees@email.com',
             'donations': [2000.00, 3500.00, 5000.00]})
         r.hmset('Meyton Panning',
             {'phone': '235-587-5642',
             'zip': 40087,
-            'email': 'mpanning@email.com',
             'donations': [1500.00, 8500.00]})
         switch_dict = {
             'list': print_names,
-            #'1': add_donation,
-            #'2': delete_donor,
-            #'3': update_donor,
+            '1': add_donation,
+            '2': delete_donor,
+            '3': update_donor,
             '4': print_report,
-            #'5': send_letters,
+            '5': send_letters,
             '0': clear_db
         }
         action(switch_dict)
