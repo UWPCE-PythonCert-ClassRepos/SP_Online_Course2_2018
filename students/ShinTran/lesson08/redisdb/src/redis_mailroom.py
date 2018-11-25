@@ -112,6 +112,7 @@ def update_donor():
         elif option == '2':
             new_zip = int(get_zip())
             r.hmset(donor_name, {'zip': new_zip})
+            logger.info('Database update successful')
         elif option == '3':
             new_dn_list = []
             new_dn_amt = get_new_donor_amount()
@@ -132,6 +133,8 @@ def update_donor():
 
 
 def prompt_update_opts():
+    """Helper method, prompts the user what donor info do they
+    want to update in the database"""
     response = input("\n\
         Choose from one of 3 actions:\n\
         1) Update Phone Number\n\
