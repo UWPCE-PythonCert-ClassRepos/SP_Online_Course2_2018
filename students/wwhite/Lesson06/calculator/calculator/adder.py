@@ -2,6 +2,7 @@
 This module provides an addition operator
 """
 
+
 class Adder(object):
     """
     Class which adds two inputs together
