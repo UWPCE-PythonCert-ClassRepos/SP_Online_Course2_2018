@@ -15,7 +15,7 @@ import json
 
 # import * is a bad idea in general, but helpful for a modules that's part
 # of a package, where you control the names.
-from .saveables import *
+from saveables import *
 
 
 class MetaJsonSaveable(type):
@@ -166,7 +166,6 @@ if __name__ == "__main__":
         def __init__(self, x, lst):
             self.x = x
             self.lst = lst
-
 
     class OtherSaveable(JsonSavable):
 

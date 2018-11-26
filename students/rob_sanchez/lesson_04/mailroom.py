@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import sys
 import re
-from donor_class import Donations
-from donor_class import Donor
+import json
+from donor_class import Donations, Donor
 
 
 # List of donors and donation amounts
 donations_list = Donations()
-donor_list = Donor()
+donor_list = Donor(donations_list.donor_dict)
 
 donations_list.add_donation("Tom Cruise", 100)
 donations_list.add_donation("Tom Cruise", 200)
@@ -24,14 +24,17 @@ donations_list.add_donation("Adam Sandler", 2400)
 
 def main():
     # Menu options
-    options = {1: send_thank_you,
-               2: create_report,
-               3: send_letters,
-               4: challenge,
-               5: sys.exit}
+    options = {1: load_donors,
+               2: save_donors,
+               3: send_thank_you,
+               4: create_report,
+               5: send_letters,
+               6: challenge,
+               7: sys.exit}
     prompt = "\nChoose an action:\n"
-    menu_sel = ("\n1 - Send a Thank You\n2 - Create a Report\n"
-                "3 - Send letters to everyone\n4 - Projections\n5 - Quit\n")
+    menu_sel = ("\n1 - Load Donors\n2 - Save current donors\n"
+                "\n3 - Send a Thank You\n4 - Create a Report\n"
+                "5 - Send letters to everyone\n6 - Projections\n7 - Quit\n")
 
     # User selection
     while True:
@@ -42,6 +45,38 @@ def main():
             print("\nPlease select a numeric value...")
         except TypeError:
             print("\nOption {} is invalid. Try again...".format(user_selection))
+
+
+def load_donors():
+    global donor_list
+
+    while True:
+        try:
+            file_name = input("\nEnter the name of the file that you would like to load\n" +
+                              "or type D for default list (Do not include txt extension):\n")
+            if (file_name.lower() == 'd'):
+                file_name = "Default_Donors"
+
+            with open(file_name + '.txt', 'r') as f:
+                donor_data = json.load(f)
+            donor_list = donor_list.from_json_dict(donor_data)
+            donations_list.donor_dict = donor_list.get_dict()
+
+            print("\nFile '{}' has been loaded succesfully... \n".format(file_name))
+
+            break
+        except FileNotFoundError:
+            print("\nFile '{}' was not found. Try again...".format(file_name))
+
+
+def save_donors():
+
+    file_name = input("\nFile name (File will be saved as a .txt file.):\n")
+
+    with open(file_name+'.txt', 'w') as f:
+        f.write(Donor(donations_list.donor_dict).to_json())
+        # json.dump(donations_list.donor_dict, f)
+    print("\nFile saved...")
 
 
 # Sends a thank you email to the selected donor

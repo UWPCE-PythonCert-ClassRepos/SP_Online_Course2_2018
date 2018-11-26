@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
+import json
+import json_save_meta as js
+from saveables import String, List, Dict, Float
 
 
 class Donations():
+
     def __init__(self):
         self.donor_dict = {}
 
@@ -9,6 +13,7 @@ class Donations():
     # otherwise append their last contribution
     def add_donation(self, name, amount):
         self.donor_dict.setdefault(name, []).append(float(amount))
+        # self.donor_dict.setdefault(name, []).append(float(amount))
 
     # Returns a list of donor names
     def get_list_of_donors(self):
@@ -67,8 +72,13 @@ class Donations():
 
 
 # Class that holds a history of the donor's name and donation amount
-class Donor():
-    def __init__(self):
+class Donor(js.JsonSaveable):
+
+    donations_dict = Dict()
+    donor_details = {}
+
+    def __init__(self, donors):
+        self.donations_dict = donors
         self.donor_details = {}
 
     def add_donor(self, name):
@@ -79,3 +89,6 @@ class Donor():
 
     def get_donor_details(self):
         return self.donor_details
+
+    def get_dict(self):
+        return dict(self.donations_dict)
