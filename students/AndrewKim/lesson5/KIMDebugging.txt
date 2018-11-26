@@ -1,0 +1,82 @@
+1. What is wrong with our logic?
+The recursion does not stop when n is not power of 2. There should be a line of code to stop recursive when n is not power of 2.
+
+2. Why doesn't the function stop calling itself?
+When n value is not power of 2, it does not stop calling itself.
+
+3. What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+n keeps getting divided by 2
+
+
+
+
+
+
+$ python -m pdb recursive.py 5
+> c:\users\kv420e\downloads\uw\recursive.py(2)<module>()
+-> """Recursive module"""
+(Pdb) ll
+  1     #!/usr/bin/env python3
+  2  -> """Recursive module"""
+  3     import sys
+  4
+  5     def my_func(n):
+  6         if n == 2:
+  7             return True
+  8         return my_func(n / 2)
+  9
+ 10     if __name__ == '__main__':
+ 11         n = int(sys.argv[1])
+ 12         print(my_func(n))
+(Pdb) n
+> c:\users\kv420e\downloads\uw\recursive.py(3)<module>()
+-> import sys
+(Pdb) n
+> c:\users\kv420e\downloads\uw\recursive.py(5)<module>()
+-> def my_func(n):
+(Pdb) n
+> c:\users\kv420e\downloads\uw\recursive.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\kv420e\downloads\uw\recursive.py(11)<module>()
+-> n = int(sys.argv[1])
+(Pdb) pp n
+*** NameError: name 'n' is not defined
+(Pdb) n
+> c:\users\kv420e\downloads\uw\recursive.py(12)<module>()
+-> print(my_func(n))
+(Pdb) pp n
+5
+(Pdb) n
+Traceback (most recent call last):
+  File "C:\Program Files\Python37\lib\pdb.py", line 1697, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Program Files\Python37\lib\pdb.py", line 1566, in _runscript
+    self.run(statement)
+  File "C:\Program Files\Python37\lib\bdb.py", line 585, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\users\kv420e\downloads\uw\recursive.py", line 12, in <module>
+    print(my_func(n))
+  File "c:\users\kv420e\downloads\uw\recursive.py", line 8, in my_func
+    return my_func(n / 2)
+  File "c:\users\kv420e\downloads\uw\recursive.py", line 8, in my_func
+    return my_func(n / 2)
+  File "c:\users\kv420e\downloads\uw\recursive.py", line 8, in my_func
+    return my_func(n / 2)
+  [Previous line repeated 979 more times]
+  File "c:\users\kv420e\downloads\uw\recursive.py", line 5, in my_func
+    def my_func(n):
+  File "C:\Program Files\Python37\lib\bdb.py", line 90, in trace_dispatch
+    return self.dispatch_call(frame, arg)
+  File "C:\Program Files\Python37\lib\bdb.py", line 128, in dispatch_call
+    if not (self.stop_here(frame) or self.break_anywhere(frame)):
+  File "C:\Program Files\Python37\lib\bdb.py", line 250, in break_anywhere
+    return self.canonic(frame.f_code.co_filename) in self.breaks
+  File "C:\Program Files\Python37\lib\bdb.py", line 45, in canonic
+    if filename == "<" + filename[1:-1] + ">":
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\program files\python37\lib\bdb.py(45)canonic()
+-> if filename == "<" + filename[1:-1] + ">":
