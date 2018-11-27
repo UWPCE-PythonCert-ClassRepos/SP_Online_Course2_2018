@@ -1,0 +1,5 @@
+[
+  "mailroom_test.py::test_add",
+  "mailroom_test.py::test_update",
+  "mailroom_test.py::test_delete"
+]
