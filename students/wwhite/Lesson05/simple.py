@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # simple.py
 import logging
 import logging.handlers
