@@ -62,7 +62,7 @@ def load_donors():
             donor_list = donor_list.from_json_dict(donor_data)
             donations_list.donor_dict = donor_list.get_dict()
 
-            print("\nFile '{}' has been loaded succesfully... \n".format(file_name))
+            print("\nFile '{}' has been loaded successfully... \n".format(file_name))
 
             break
         except FileNotFoundError:
