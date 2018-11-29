@@ -28,32 +28,3 @@ def prime_generator():
         if not [x for x in range(2,a) if a % x == 0]:
             yield a
         a = a + 1
-
-
-
-""" # Test Sum Generator
-s = sum_generator()
-for x in s:
-    print(x)
-    if x>20:
-        break
-
-# Test double Generator
-d = double_generator()
-for x in d:
-    print(x)
-    if x>20:
-        break
-
-# Test fibonacci Generator
-f = fibonacci_generator()
-for x in f:
-    print(x)
-    if x>20:
-        break """
-
-f = prime_generator()
-for x in f:
-    print(x)
-    if x>20:
-        break
