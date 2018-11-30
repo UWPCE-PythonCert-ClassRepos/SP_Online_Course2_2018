@@ -7,6 +7,7 @@ populate_personjobdept
 
 from personjobdept_model import *
 import logging
+import pprint
 
 
 def add_people(people):
@@ -108,9 +109,39 @@ def add_jobs(jobs):
 
     finally:
         logger.info('close database')
-        database.close() 
-        
+        database.close()
 
+def person_jobs():
+    """
+    A list using pretty print that shows all of the departments 
+    a person worked in for every job they ever had.
+    """
+
+    database = SqliteDatabase('personjob.db')
+    logger.info('calling person_jobs method')
+
+    try:
+
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+
+        logger.info("Getting jobs and depts worked")
+
+        locate = (Job.select(Job.person_employed, Job.job_name,
+                             Job.job_department).order_by(Job.person_employed.desc()))
+
+        for job in locate:
+            record = [job.person_employed, job.job_name, job.job_department]
+            pp = pprint.PrettyPrinter(indent=10)
+            pp.pprint(record) 
+
+    except Exception as e:
+        logging.info(e)
+
+    finally:
+        logger.info('close database')
+        database.close()
+        
 if __name__ == '__main__':
 
     people = [('Sean', 'Boston', 'Billy'),
@@ -121,7 +152,9 @@ if __name__ == '__main__':
               ]
     
     jobs = [('Engineer', '2001-09-22', '2003-01-30', 495, 65500, 'Sean', 'R100'),
+            ('HR Speciaist', '2003-01-30', '2005-01-30', 804, 50000, 'Sean', 'H100'),
             ('Senior analyst', '2003-02-01', '2006-10-22', 1359, 70000, 'Tom', 'A100'),
+            ('Computer Operator','2018-07-09', '2018-11-30', 122, 40000, 'MonkeyMan', 'R100')
             ]
 
     departments = [('R100', 'Operations', 'BigBoss'),
@@ -132,3 +165,4 @@ if __name__ == '__main__':
     add_people(people)
     add_departments(departments)
     add_jobs(jobs)
+    person_jobs()
