@@ -1,11 +1,10 @@
 import pandas as pd
 music = pd.read_csv("featuresdf.csv")
 
-def kendrick_generator():
+def favorite_generator(artist):
     for x in music.artists:
-        if x == 'Kendrick Lamar':
+        if x == artist:
             yield x
             
-kendrick = kendrick_generator()
-for x in kendrick_generator():
+for x in favorite_generator('Kendrick Lamar'):
     print(x)
