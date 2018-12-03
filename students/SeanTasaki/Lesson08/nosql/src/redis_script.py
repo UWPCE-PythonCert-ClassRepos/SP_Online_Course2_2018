@@ -1,3 +1,9 @@
+'''
+Sean Tasaki
+11/27/2018
+Lesson08
+'''
+
 """
     demonstrate use of Redis
 """
@@ -53,6 +59,19 @@ def run_example():
         log.info('Step 8: pull some data from the structure')
         cover_type = r.lindex('186675', 2)
         log.info(f'Type of cover = {cover_type}')
+
+        log.info('Add Customer Info')
+        r.hmset('Beet', {'Telephone': '808-543-9021', 'Zip': '96701'})
+        r.hmset('Ujido', {'Telephone': '808-355-5678', 'Zip': '11211'})
+        r.hmset('Sean', {'Telephone': '524-444-4321', 'Zip': '12111'})
+        r.hmset('Anna', {'Telephone': '321-555-6790', 'Zip': '23456'})
+        r.hmset('Alaska', {'Telephone': '123-456-7890', 'Zip': '98223'})
+        sean_phone = r.hmget('Sean', 'Telephone')
+        Ujido_zip = r.hmget('Ujido', 'Zip')
+        anna_zip = r.hmget('Anna', 'Zip')
+        log.info(f'Sean\'s Telephone number is : {sean_phone}')
+        log.info(f'Ujido\'s Zip is: {Ujido_zip}')
+        log.info(f'Anna\'s Zip is: {anna_zip}')
 
     except Exception as e:
         print(f'Redis error: {e}')

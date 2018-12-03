@@ -1,3 +1,9 @@
+'''
+Sean Tasaki
+11/27/2018
+Lesson08
+'''
+
 """
     module that will login to the various demonstration databases consistently
 """
@@ -5,11 +11,11 @@
 import configparser
 from pathlib import Path
 import pymongo
-pymongo.__version__
 import redis
 from neo4j.v1 import GraphDatabase, basic_auth
 import urllib.parse
 import ssl
+from pprint import pprint as prpr
 
 import utilities
 
@@ -31,23 +37,13 @@ def login_mongodb_cloud():
         pw = config['mongodb_cloud']['pw']
         user1 = urllib.parse.quote_plus(user)
         pw1 = urllib.parse.quote_plus(pw)
-        log.info(f'printing user and pw: {user1}, {pw1}')
-        pw1 = 'Bostoneastboston99*'
+        log.info(f'user1, pw1: {user1} {pw1}, user, pw: {user}, {pw}')
 
     except Exception as e:
         print(f'error: {e}')
 
+    client = pymongo.MongoClient(f'mongodb://{user1}:{pw1}@cluster0-shard-00-00-ez67j.mongodb.net:27017,cluster0-shard-00-01-ez67j.mongodb.net:27017,cluster0-shard-00-02-ez67j.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true')
 
-    client = pymongo.MongoClient(f'mongodb://stasaki:Bostoneastboston99%2A@cluster0-shard-00-00-ez67j.mongodb.net:27017,cluster0-shard-00-01-ez67j.mongodb.net:27017,cluster0-shard-00-02-ez67j.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true')
-    #client = pymongo.MongoClient(f'mongodb://stasaki:Bostoneastboston99*@cluster0-shard-00-00-ez67j.mongodb.net:27017,cluster0-shard-00-01-ez67j.mongodb.net:27017,cluster0-shard-00-02-ez67j.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true')
-
-    '''
-    client = pymongo.MongoClient(f'mongodb://{user1}:{pw1}'
-                                 '@cluster0-shard-00-00-maquj.mongodb.net:27017,'
-                                 'cluster0-shard-00-01-maquj.mongodb.net:27017,'
-                                 'cluster0-shard-00-02-maquj.mongodb.net:27017/test'
-                                 '?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin')
-    '''
     return client
 
 
@@ -94,3 +90,4 @@ def login_neo4j_cloud():
                                   auth=basic_auth(graphenedb_user, graphenedb_pass))
 
     return driver
+

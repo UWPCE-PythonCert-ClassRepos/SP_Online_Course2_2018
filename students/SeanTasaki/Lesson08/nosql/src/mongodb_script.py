@@ -2,7 +2,7 @@
     mongodb example
 """
 
-import pprint
+from pprint import pprint as prpr
 import login_database
 import utilities
 
@@ -24,25 +24,46 @@ def run_example(furniture_items):
 
         furniture = db['furniture']
 
+        log.info('New Item')
+        new_item = {
+            'product':
+                {'product': 'Desk',
+                 'description': 'Wood',
+                 'color': 'Red'},          
+                 'monthly_rental_cost': 20.00,
+                 'in_stock_quantity': 10
+        }
+        new_item_id = furniture.insert_one(new_item).inserted_id
+
         log.info('Step 2: Now we add data from the dictionary above')
         furniture.insert_many(furniture_items)
 
         log.info('Step 3: Find the products that are described as plastic')
         query = {'description': 'Plastic'}
-        results = furniture.find_one(query)
-
+        results = furniture.find(query)
         log.info('Step 4: Print the plastic products')
         print('Plastic products')
-        pprint.pprint(results)
+        for item in results:
+            prpr(item)
+        print('\n')   
 
+        log.info('Print Red Items')
+        queryred = {'color': 'Red'}
+        results1 = furniture.find(queryred)        
+        log.info('Red Products')
+        print('Red products')
+        for item in results1:
+            prpr(item)
+        print('\n')
+           
         log.info('Step 5: Delete the blue couch (actually deletes all blue couches)')
         furniture.remove({"product": {"$eq": "Blue couch"}})
 
         log.info('Step 6: Check it is deleted with a query and print')
         query = {'product': 'Blue couch'}
-        results = furniture.find_one(query)
+        results = furniture.find(query)
         print('The blue couch is deleted, print should show none:')
-        pprint.pprint(results)
+        prpr(results)
 
         log.info(
             'Step 7: Find multiple documents, iterate though the results and print')

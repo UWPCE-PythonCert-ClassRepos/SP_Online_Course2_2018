@@ -1,3 +1,9 @@
+'''
+Sean Tasaki
+11/27/2018
+Lesson08
+'''
+
 """
 pickle etc
 """
@@ -87,6 +93,10 @@ def run_example(furniture_items):
                 pprint.pprint(row)
 
     def run_json():
+        '''
+        json example
+        '''
+        
         log.info("\n\n====")
         log.info("Step 10: Look at working with json data")
         furniture = [{'product': 'Red couch','description': 'Leather low back'},
