@@ -7,6 +7,7 @@ import time
 # create a mutable object that is shared among threads
 class shared:
     val = 1
+    val2 = 1
     
     def __init__(self, y):
         self.val = y
@@ -18,6 +19,7 @@ class shared:
         time.sleep(0.0001) # self.val = 100
         # time.sleep(0.00001) # self.val = 100
         self.val +=1
+        shared.val2 += 1
 
 
     
@@ -58,8 +60,9 @@ for i in range(100):
 print("+++ Class val")
 print(shared.val)
 
-print("+++ Class Object val")
+print("+++ Class Object val, ")
 print(shrek.val)
+print(shared.val2)
 
 
 
