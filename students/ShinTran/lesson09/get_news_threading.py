@@ -3,8 +3,7 @@ Shin Tran
 Python 220
 Assignment 9
 
-Regular synchronous script to see how much a given word is mentioned in the
-news today
+Threading script to see how much a given word is mentioned in the news today
 
 Uses data from the NewsAPI:
 https://newsapi.org
@@ -17,8 +16,9 @@ import requests
 import threading
 import time
 
+
 WORD = "trump"
-NEWS_API_KEY = "7acedf3749254086b464c43945e071a4"
+NEWS_API_KEY = "7d180fa4b3bc4a2999e1a064833f9ede"
 base_url = 'https://newsapi.org/v1/'
 
 
@@ -37,15 +37,15 @@ def get_sources():
     return sources
 
 
-def get_articles(source):
+def get_articles(source, title_list, queueLock):
     """
-    https://newsapi.org/v1/articles?source=associated-press&sortBy=top&apiKey=1fabc23bb9bc485ca59b3966cbd6ea26
+    https://newsapi.org/v1/articles?source=associated-press
+    &sortBy=top&apiKey=1fabc23bb9bc485ca59b3966cbd6ea26
     """
     url = base_url + "articles"
     params = {"source": source,
               "apiKey": NEWS_API_KEY,
-              "sortBy": "top"
-              }
+              "sortBy": "top"}
     print("requesting:", source)
     resp = requests.get(url, params=params)
     if resp.status_code != 200:  # aiohttpp has "status"
@@ -55,12 +55,17 @@ def get_articles(source):
         return []
     data = resp.json()
     # the url to the article itself is in data['articles'][i]['url']
-    titles = [str(art['title']) + str(art['description'])
-              for art in data['articles']]
-    return titles
+    queueLock.acquire()
+    title_list.extend([str(art['title']) + str(art['description'])
+        for art in data['articles']])
+    queueLock.release()
+    return title_list
 
 
 def count_word(word, titles):
+    """
+    Looks for a given word in a list of article title and descriptions
+    """
     word = word.lower()
     count = 0
     for title in titles:
@@ -72,31 +77,22 @@ def count_word(word, titles):
 if __name__ == "__main__":
     start = time.time()
     sources = get_sources()
-
-    art_count = 0
-    word_count = 0
+    titles = []
     thread_list = []
-
     queueLock = threading.Lock()
-    workQueue = queue.Queue()
 
     for source in sources:
-        thread = threading.Thread(target = get_articles, args = (source,))
+        thread = threading.Thread(target = get_articles,
+            args = (source, titles, queueLock))
         thread.daemon = True  # allow ctrl-c to end
         thread.start()
         thread_list.append(thread)
 
-        titles = get_articles(source)
-        art_count += len(titles)
-        word_count += count_word('trump', titles)
-    
-    queueLock.acquire()
-    for i in sources:
-        workQueue.put(i)
-    queueLock.release()
-
     for j in thread_list:
         j.join()
 
-    print(WORD, " found {} times in {} articles".format(word_count, art_count))
-    print("Process took {:.0f} seconds".format(time.time() - start))
+    word_count = 0
+    art_count = len(titles)
+    word_count += count_word('trump', titles)
+    print(WORD, " found {} times in {} articles.".format(word_count, art_count))
+    print("Process took {:.0f} seconds.".format(time.time() - start))
