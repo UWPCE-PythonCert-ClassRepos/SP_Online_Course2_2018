@@ -2,18 +2,22 @@
 # AUTHOR: Micah Braun
 # PROJECT NAME: threaded_data_scraper.py
 # DATE CREATED: 12/01/2018
-# PURPOSE: Lesson 09 Assignment
+# UPDATED: 12/02/2018
 # DESCRIPTION:  Program runs utilizing the same idea behind the async and
 #               sync versions of the newsapi downloader programs but using
 #               multithreading in its place.
-# NOTES: I had been trying to achieve the same results in displaying
-#        the word searched and number of times it appeared in the articles
-#        brought in, but could not figure out a way to make this work w/
-#        threading... (and I burned through several API Keys while trying
-#        to do so... is there a way that this is accomplished?)
+# NOTES ON UPDATE: Made edits based on instructor feedback:
+#                  - included source limitations to avoid running out of
+#                    free API requests
+#                  - imported Semaphore from threading to implement
+#                    internal counter for threaded processes
+#                  - added count_word() function, along with print outs
+# *Program runs on Pycharm 2018.3 (Windows 10, 64x) and Ubuntu 18.04.1 LTS
+#  Both running Python 3.6.7
 # --------------------------------------------------------------------------
+
 import requests
-from threading import Thread
+from threading import Thread, Semaphore
 import time
 
 WORD = "russia"
@@ -37,7 +41,7 @@ def get_sources(sources):
     return sources
 
 
-def get_articles(source):
+def get_articles(source, titles, sem):
     """
 
     """
@@ -56,22 +60,44 @@ def get_articles(source):
         return []
     data = resp.json()
     print('Retrieved: {}'.format(source))
+    sem.acquire()
     titles.extend([str(art['title']) + str(art['description']) for art in data['articles']])
+    sem.release()
     return titles
+
+
+def count_word(word, titles):
+    """
+
+    """
+    word = word.lower()
+    count = 0
+    for title in titles:
+        if word in title.lower():
+            count += 1
+    return count
 
 
 if __name__ == '__main__':
     start = time.time()
+    w_count = 0
+    a_count = 0
     get_sources(sources)
+
+    sem = Semaphore()
 
     list_items = []
 
-    for source in sources:
-        thread = Thread(target=get_articles, args=(source,))
+    for source in sources[:5]:
+        thread = Thread(target=get_articles, args=(source, titles, sem))
         thread.start()
         list_items.append(thread)
 
     for thread in list_items:
+        a_count += len(titles)
+        w_count += count_word('russia', titles)
         thread.join()
 
     print('Process took {} seconds'.format(time.time() - start))
+    # print(titles)
+    print('The word \'{}\' was found {} times in {} articles.'.format(WORD, w_count, a_count))
