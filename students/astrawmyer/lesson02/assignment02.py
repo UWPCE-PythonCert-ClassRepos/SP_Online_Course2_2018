@@ -8,3 +8,20 @@ def favorite_generator(artist):
 
 for x in favorite_generator('Kendrick Lamar'):
     print(x)
+
+#use closure to capture high energy tracks (>0.8)
+
+song_list = zip(music.artists,music.name,music.energy)
+
+def high_energy(energy_level):
+    def high(music):
+        res = [(artist, song, energy) for (artist, song, energy) in song_list if energy > energy_level]
+        print("k")
+        return res
+    return high
+
+""" result = [(artist, song, energy) for (artist, song, energy) in song_list if energy > 0.8]
+print(result) """
+
+result = high_energy(0.8)
+print(result)
