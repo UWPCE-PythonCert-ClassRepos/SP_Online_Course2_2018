@@ -8,8 +8,8 @@ from unittest.mock import MagicMock
 from pump import Pump
 from sensor import Sensor
 
-from .controller import Controller
-from .decider import Decider
+from controller import Controller
+from decider import Decider
 
 
 class ModuleTests(unittest.TestCase):
@@ -21,13 +21,16 @@ class ModuleTests(unittest.TestCase):
     #       using a MOCKED sensor and pump.
 
     def intergrate_test(self):
-
-        sensor = Sensor('127.0.0.1', 8000)
-        sensor.set_state = MagicMock(return_value=True)        
-        pump = Pump('127.0.0.1', 8000)
-        sensor.set_state = MagicMock(return_value=True)
-        decider = Decider(10, .1)
-        decider.set_state = MagicMock(return_value=True)
-        control = Controller(sensor, pump, decider)
-
-          
+        """
+        Using Ghassan's code as an template
+        """
+        p = Pump('127.0.0.1', 8080)
+        s = Sensor('127.0.0.1', 8083)
+        d = Decider(100, .10)
+        c = Controller(s, p, d)
+        c.pump.set_state = MagicMock(return_value=True)
+        for action in c.actions.values():
+            for water_level in range(50, 150, 5):
+                c.sensor.measure = MagicMock(return_value=water_level)
+                c.pump.get_state = MagicMock(return_value=d.decide(water_level, action, c.actions))
+                c.tick()

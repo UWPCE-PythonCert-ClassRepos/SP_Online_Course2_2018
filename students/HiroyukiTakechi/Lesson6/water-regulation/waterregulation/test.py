@@ -9,8 +9,8 @@ from unittest.mock import MagicMock
 from pump import Pump
 from sensor import Sensor
 
-from .controller import Controller
-from .decider import Decider
+from controller import Controller
+from decider import Decider
 
 
 class DeciderTests(unittest.TestCase):
@@ -32,7 +32,7 @@ class DeciderTests(unittest.TestCase):
             'PUMP_OUT': -1
         }
 
-        target = Decider(10, .1)
+        target = Decider(10, .10)
         test_off_below = target.decide(9, actions['PUMP_OFF'], actions)
         self.assertEqual(actions['PUMP_IN'], test_off_below)
         test_off_exact = target.decide(10, actions['PUMP_OFF'], actions)
@@ -50,16 +50,24 @@ class ControllerTests(unittest.TestCase):
     #       Controller.tick
 
     def test_control(self):
+        """
+        Using Ghassan's code as an template
+        """
+        p = Pump('127.0.0.1', 8080)
+        s = Sensor('127.0.0.1', 8083)
+        d = Decider(100, .10)
+        s.measure = MagicMock(return_value=95)
+        p.get_state = MagicMock(return_value=p.PUMP_IN)
+        d.decide = MagicMock(return_value=p.PUMP_IN)
+        p.set_state = MagicMock(return_value=True)
+        c.tick()
+        s.measure.assert_called_with()
+        p.get_state.assert_called_with()
+        d.decide.assert_called_with(95, p.PUMP_IN, actions)
 
 
-        sensor = Sensor('127.0.0.1', 8000)
-        sensor.set_state = MagicMock(return_value=True)        
-        pump = Pump('127.0.0.1', 8000)
-        sensor.set_state = MagicMock(return_value=True)
-        decider = Decider(10, .1)
-        decider.set_state = MagicMock(return_value=True)
-        control = Controller(sensor, pump, decider)
-        control.tick().assert_called_with()
+
+
 
 
 

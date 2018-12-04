@@ -2,13 +2,13 @@
 Hiro Lesson 6 Assignment: Water-regulation: Controller
 Encapsulates command and coordination for the water-regulation module
 """
-
+"""
 from pump import Pump
 from sensor import Sensor
 
-from .controller import Controller
-from .decider import Decider
-
+from controller import Controller
+from decider import Decider
+"""
 
 class Controller(object):
     """

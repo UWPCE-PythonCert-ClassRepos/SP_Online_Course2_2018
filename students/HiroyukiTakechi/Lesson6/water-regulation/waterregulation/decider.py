@@ -55,52 +55,22 @@ class Decider(object):
         # TODO: Implement the properties of this method described above.
 
         new_action = current_action
-        below_margin = self.target_height - self.target_height * self.margin
-        above_margin = self.target_height + self.target_height * self.margin
 
         if current_action == actions['PUMP_OFF']:
-            if current_height < below_margin:
+            if current_height < self.target_height - self.target_height * self.margin:
                 new_action = actions['PUMP_IN']
-            elif current_height > above_margin:
+            elif current_height > self.target_height + self.target_height * self.margin:
                 new_action = actions['PUMP_OUT']
             else:
                 new_action = actions['PUMP_OFF']
-
         if current_action == actions['PUMP_IN']:
-            if current_height > above_margin:
+            if current_height > self.target_height:
                 new_action = actions['PUMP_OFF']
             else:
                 new_action = actions['PUMP_IN']
-
         if current_action == actions['PUMP_OUT']:
-            if current_height < below_margin:
+            if current_height < self.target_height:
                 new_action = actions['PUMP_OFF']
             else:
                 new_action = actions['PUMP_OUT']
-
         return new_action
-
-        """
-        below_margin = self.target_height - self.target_height * self.margin
-        above_margin = self.target_height + self.target_height * self.margin
-
-        if current_action == actions['PUMP_OFF']:
-            if current_height < below_margin:
-                return actions['PUMP_IN']
-            elif current_height > above_margin:
-                return actions['PUMP_OUT']
-            else:
-                return actions['PUMP_OFF']
-
-        if current_action == actions['PUMP_IN']:
-            if current_height > above_margin:
-                return actions['PUMP_OFF']
-            else:
-                return actions['PUMP_IN']
-
-        if current_action == actions['PUMP_OUT']:
-            if current_height < below_margin:
-                return actions['PUMP_OFF']
-            else:
-                return actions['PUMP_OUT']
-        """
