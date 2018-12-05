@@ -17,7 +17,7 @@ class DividerTests(TestCase):
         for i in range(-10, 10):
             for j in range(-10, 10):
                 try:
-                    self.assertEqual(i / j, divider.calc(i, j))
+                    self.assertEqual(j / i, divider.calc(i, j))
                 except ZeroDivisionError:
                     logging.debug("Tried to divide by zero. Var i was {}. Recovered gracefully.".format(i))
 
