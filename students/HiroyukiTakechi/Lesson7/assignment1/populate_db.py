@@ -11,7 +11,7 @@ def populate_db_person():
     """
 
     logging.basicConfig(level=logging.INFO)
-    logger = logging.getlogger(__name__)
+    logger = logging.getLogger(__name__)
 
     database = SqliteDatabase('personjob.db')
 
@@ -28,8 +28,7 @@ def populate_db_person():
         ('Peter', 'Seattle', None),
         ('Susan', 'Boston', 'Beannie'),
         ('Pam', 'Coventry', 'PJ'),
-        ('Steven', 'Colchester', None),
-        ]
+        ('Steven', 'Colchester', None)]
 
     logger.info('Creating Person records: iterate through the list of tuples')
     logger.info('Prepare to explain any errors with exceptions')
@@ -43,14 +42,14 @@ def populate_db_person():
                 new_person = Person.create(
                     person_name = person[PERSON_NAME],
                     lives_in_town = person[LIVES_IN_TOWN],
-                    nickname = PERSON[NICKNAME])
+                    nickname = person[NICKNAME])
                 new_person.save()
                 logger.info('Database add successful')
 
         logger.info('Print the Person records we saved...')
-        for saved_person in Person:
-            logger.info(f'{saved_person.person_name} lives in {saved_person.lives_in_town} ' +\
-                f'and likes to be known as {saved_person.nickname}')
+        for person in Person:
+            logger.info(f'{person.person_name} lives in {person.lives_in_town} ' +\
+                f'and likes to be known as {person.nickname}')
 
     except Exception as e:
         logger.info(f'Error creating = {person[PERSON_NAME]}')
@@ -90,9 +89,23 @@ def populate_db_job():
 
     try:
         database.connect()
-        database.execute_sql('PRAGMA foreign_keys= ON;')
+        database.execute_sql('PRAGMA foreign_keys = ON;')
         for job in jobs:
-            logger.info(f'{job.kob_name} : {job.start_date} to {job.end_date} for {job.person_employed}')
+            with database.transaction():
+                new_job = Job.create(
+                    job_name = job[JOB_NAME],
+                    start_date = job[START_DATE],
+                    end_date = job[END_DATE],
+                    salary = job[SALARY],
+                    person_employed = job[PERSON_EMPLOYED])
+
+                new_job.save()
+                logger.info('Database add successful')
+
+        logger.info('Print the Job records we saved...')
+        for job in Job:
+            logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed}')
+
 
     except Exception as e:
         logger.info(f'Error creating = {job[JOB_NAME]}')
@@ -118,17 +131,17 @@ def populate_db_department():
     DEPARTMENT_NUMBER = 0
     DEPARTMENT_NAME = 1
     DEPARTMENT_MANAGER = 2
-    START_DATE_DEPARTMENT = 3
-    END_DATE_DEPARTMENT = 4
+    #START_DATE_DEPARTMENT = 3
+    #END_DATE_DEPARTMENT = 4
     #DURATION = 5
   
 
     departments = [
-        ('A123', 'Operations', 'Andrew', 'Mary','2003-01-30','2004-01-30'),
-        ('B123', 'Marketing', 'Peter', 'Joe', '2006-10-22', '2007-10-22'),
-        ('C123', 'Finance', 'Susan', 'Declan', '2016-12-24', '2017-12-24'),
-        ('D123', 'HR', 'Pam', 'Darren', '2014-11-10', '2015-11-10'),
-        ('E123', 'Sales', 'Steven', 'Tom', '2014-11-05', '2015-11-05')
+        ('A123', 'Operations', 'Andrew'),
+        ('B123', 'Marketing', 'Peter'),
+        ('C123', 'Finance', 'Susan'),
+        ('D123', 'HR', 'Pam'),
+        ('E123', 'Sales', 'Steven')
     ]
 
     try:
@@ -139,18 +152,15 @@ def populate_db_department():
                 new_department = Department.create(
                     department_number = department[DEPARTMENT_NUMBER],
                     department_name = department[DEPARTMENT_NAME],
-                    department_manager = department[DEPARTMENT_MANAGER],
-                    start_date_department = department[START_DATE_DEPARTMENT],
-                    end_data_department = department[end_data_department])
-                    #duration = department[duration])
+                    department_manager = department[DEPARTMENT_MANAGER])
 
                 new_department.save()
                 logger.info('Database add successful')
 
         logger.info('Print the Department records we saved...')
-        for saved_person in Person:
-            logger.info(f'{saved_person.person_name} lives in {saved_person.lives_in_town} ' +\
-                f'and likes to be known as {saved_person.nickname}')
+        for department in Department:
+            logger.info(f'{department.department_number} is {department.department_name} ' +\
+                f'and the manager is {department.department_manager}')
 
     except Exception as e:
         logger.info(f'Error creating = {department[DEPARTMENT_NAME]}')

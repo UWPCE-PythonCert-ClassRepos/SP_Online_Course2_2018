@@ -63,7 +63,8 @@ class Job(BaseModel):
     logger.info('Which person had the job')
     person_employed = ForeignKeyField(Person, related_name = 'was_filled_by', null = False)
 
-class PersonNumKey(BasedModel):
+
+class PersonNumKey(BaseModel):
 
     """
         This class defines Person, which maintains details of someone
@@ -75,7 +76,7 @@ class PersonNumKey(BasedModel):
 
     person_name = CharField(max_length = 30)
     lives_in_town = CharField(max_length = 40)
-    nickname = CharField(max_field = 20, null = True)
+    nickname = CharField(max_length = 20, null = True)
 
 
 class Department(BaseModel):
@@ -88,17 +89,17 @@ class Department(BaseModel):
     department_number = CharField(primary_key = True, max_length = 4)
     logger.info('Department Name')
     department_name = CharField(max_length = 30)
-    logger.info('Manager Name')
-    manager_name = CharField(max_length = 30)
-    logger.info('StartDate and EndDate')
-    start_date_department = DateField(formats = 'YYYY-MM-DD')
-    end_date_department = DateField(formats = 'YYYY-MM_DD')
+    logger.info('Department Manager')
+    department_manager = CharField(max_length = 30)
+    #logger.info('StartDate and EndDate')
+    #start_date_department = DateField(formats = 'YYYY-MM-DD')
+    #end_date_department = DateField(formats = 'YYYY-MM_DD')
     #logger.info('Duration')
     #duration = end_date - start_date
 
 
 logger.info('Create the table format')
-database.create_table([
+database.create_tables([
         Job,
         Person,
         PersonNumKey,
