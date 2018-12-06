@@ -6,11 +6,11 @@ Unit tests for the water-regulation module
 import unittest
 from unittest.mock import MagicMock
 
-from pump import Pump
-from sensor import Sensor
+from .pump import Pump
+from .sensor import Sensor
 
-from controller import Controller
-from decider import Decider
+from .controller import Controller
+from .decider import Decider
 
 
 class DeciderTests(unittest.TestCase):
@@ -32,13 +32,22 @@ class DeciderTests(unittest.TestCase):
             'PUMP_OUT': -1
         }
 
-        target = Decider(10, .10)
-        test_off_below = target.decide(9, actions['PUMP_OFF'], actions)
-        self.assertEqual(actions['PUMP_IN'], test_off_below)
-        test_off_exact = target.decide(10, actions['PUMP_OFF'], actions)
-        self.assertEqual(actions['PUMP_OFF'], test_off_exact)
-        test_off_above = target.decide(11, actions['PUMP_OFF'], actions)
-        self.assertEqual(actions['PUMP_OUT'], test_off_above)
+        target = Decider(100, .10)
+        target_test_a = target.decide(50, actions['PUMP_OFF'], actions)
+        target_test_b = target.decide(200, actions['PUMP_OFF'], actions)
+        target_test_c = target.decide(105, actions['PUMP_OFF'], actions)
+        target_test_d = target.decide(200, actions['PUMP_IN'], actions)
+        target_test_e = target.decide(95, actions['PUMP_IN'], actions)
+        target_test_f = target.decide(95, actions['PUMP_OUT'], actions)
+        target_test_g = target.decide(105, actions['PUMP_OUT'], actions)
+        self.assertEqual(actions['PUMP_IN'], target_test_a)
+        self.assertEqual(actions['PUMP_OUT'], target_test_b)
+        self.assertEqual(actions['PUMP_OFF'], target_test_c)
+        self.assertEqual(actions['PUMP_OFF'], target_test_d)
+        self.assertEqual(actions['PUMP_IN'], target_test_e)
+        self.assertEqual(actions['PUMP_OFF'], target_test_f)
+        self.assertEqual(actions['PUMP_OUT'], target_test_g)
+
 
 
 class ControllerTests(unittest.TestCase):
@@ -53,9 +62,16 @@ class ControllerTests(unittest.TestCase):
         """
         Using Ghassan's code as an template
         """
+        actions = {
+            'PUMP_IN': 1,
+            'PUMP_OFF': 0,
+            'PUMP_OUT': -1
+        }
+
         p = Pump('127.0.0.1', 8080)
         s = Sensor('127.0.0.1', 8083)
         d = Decider(100, .10)
+        c = Controller(s, p, d)
         s.measure = MagicMock(return_value=95)
         p.get_state = MagicMock(return_value=p.PUMP_IN)
         d.decide = MagicMock(return_value=p.PUMP_IN)

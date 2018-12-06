@@ -50,7 +50,7 @@ class Controller(object):
 
         current_height = self.sensor.measure()
         current_state = self.pump.get_state()
-        next_state = self.decider.decide(current_height, current_pump, self.actions)
+        next_state = self.decider.decide(current_height, current_state, self.actions)
         if self.pump.set_state(next_state):
             return self.pump.set_state(next_state)
         else:
