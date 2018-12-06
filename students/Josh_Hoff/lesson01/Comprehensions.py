@@ -3,7 +3,7 @@ music = pd.read_csv('featuresdf.csv')
 
 #determines the top 5 tracks based on danceability and loudness of song
 def top_5():
-    results = [(a, b, c, d) for a, b, c, d in zip(music.artists, music.name, music.danceability, music.loudness) if c > .8 and d < -5.0]
+    results = [(a, b, c, d) for a, b, c, d in zip(music.artists, music.name, music.danceability, music.loudness) if c > .7 and d < -4.0]
     results.sort(key=sort_by_danceability, reverse=True)
     top_5 = results[0:5]
     chart = '-' * 75
