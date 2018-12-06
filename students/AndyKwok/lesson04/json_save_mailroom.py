@@ -37,7 +37,8 @@ class Mailroom(json.JsonSaveable):
     
     @property
     def display_all(self):
-        self.sort
+        if self.donorlist[0].name is not None:
+            self.sort
         for i in self.donorlist:
             i.display
     @property
@@ -46,11 +47,15 @@ class Mailroom(json.JsonSaveable):
             i.letter
 
     def add_donor(self, donor_name, amount):
-        if donor_name not in [x.name for x in self.donorlist]:
-            self.donorlist += [Donor(donor_name, [amount])]
+        if self.donorlist[0].name is None:
+            self.donorlist[0].name = donor_name
+            self.donorlist[0].donation = [amount]
         else:
-            i = [x.name for x in self.donorlist].index(donor_name)
-            self.donorlist[i].donation += [amount]
+            if donor_name not in [x.name for x in self.donorlist]:
+                self.donorlist += [Donor(donor_name, [amount])]
+            else:
+                i = [x.name for x in self.donorlist].index(donor_name)
+                self.donorlist[i].donation += [amount]
     
 class Donor(json.JsonSaveable):
     name = json.String()
@@ -121,7 +126,7 @@ class Menu:
         return 'cont'
         
     def load_db(self):
-        self.data.load
+        self.data = self.data.load
         return 'cont'
         
     def report(self):
@@ -148,14 +153,13 @@ class Menu:
 
 
 if __name__ == "__main__":
-    database = Mailroom('Mailroom A',
-                        [Donor('Donor C', [3.0]),
-                        Donor('Donor A', [1, 3, 5]),
-                        Donor('Donor B', [10, 20])])
+    # database = Mailroom('Mailroom A',
+                        # [Donor('Donor C', [3.0]),
+                        # Donor('Donor A', [1, 3, 5]),
+                        # Donor('Donor B', [10, 20])])
 
-    
+    database = Mailroom(None,[Donor(None)])
     main_menu = Menu(database)
-    
     select = None
     while select != 'end':
         select = main_menu.main()

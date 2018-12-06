@@ -3,7 +3,6 @@
 
 #!/usr/bin/env python3
 
-
 class Locke(object):
     def __init__(self, capacity):
         self.cap = capacity
