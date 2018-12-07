@@ -1,0 +1,30 @@
+{
+    "__obj_type": "Mailroom",
+    "name": "Mailroom A",
+    "donorlist": [
+        {
+            "__obj_type": "Donor",
+            "name": "Donor A",
+            "donation": [
+                1,
+                3,
+                5
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Donor B",
+            "donation": [
+                10,
+                20
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Donor C",
+            "donation": [
+                3.0
+            ]
+        }
+    ]
+}
