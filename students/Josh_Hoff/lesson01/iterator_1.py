@@ -31,10 +31,13 @@ class IterateMe_1:
 class IterateMe_2:
     def __init__(self, start=0, stop=5, step=1):
         self.current = start - step
+        self.start = start
         self.stop = stop
         self.step = step
 
     def __iter__(self):
+        #added the following line to get IterateMe_2 to work like range() - the count now starts over when a new loop is initiated.
+        self.current = self.start - self.step
         return self
 
     def __next__(self):
