@@ -1,13 +1,13 @@
-
-
+'''
+Sean Tasaki
+12/7/2018
+Lesson08
+'''
 
 from pprint import pprint as pp
 import mr_login_database
-import mr_utilities
 import logging
-import pymongo
 import sys
-from ast import literal_eval
 import json
 
 logging.basicConfig(level=logging.INFO)
@@ -203,6 +203,7 @@ def create_report():
         count = len(donor['Donations'])
         avg = total / count
         donation_list_format.append([name, total, count, avg])
+    print(donation_list_format)
     donation_list_format.sort(key=lambda l: l[1], reverse = True)
     s1 = "Donor Name          |   Total Given  |  Num Gifts |  Average Gift\n"
     s2 = "-----------------------------------------------------------------\n"

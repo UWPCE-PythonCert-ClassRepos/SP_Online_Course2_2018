@@ -1,7 +1,11 @@
+'''
+Sean Tasaki
+12/7/2018
+Lesson08
+'''
 
 from pprint import pprint as pp
 import mr_login_database
-import mr_utilities
 import logging
 import pymongo
 import sys
@@ -81,6 +85,7 @@ def main_menu_response(prompt, main_menu_dict):
         try:
             if main_menu_dict[response]() == "exit menu":
                 client.close()
+                print("Database has been cleared. Have a nice day...")
                 sys.exit(0)
         except KeyError:
             print("Enter a number between 1-5.")    
@@ -100,6 +105,7 @@ def thank_you():
                     donor_names.add(name)
                 for i in donor_names:
                     print(i)
+                return
             elif name.upper() == 'Q':
                 main_menu()
 

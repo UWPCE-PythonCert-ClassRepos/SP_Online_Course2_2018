@@ -1,9 +1,12 @@
-from pprint import pprint as pp
+'''
+Sean Tasaki
+12/7/2018
+Lesson08
+'''
+
 import mr_login_database
-import mr_utilities
 import logging
 import sys
-import json
 from neo4j.v1 import GraphDatabase
 import random
 
@@ -14,7 +17,6 @@ log.setLevel(logging.INFO)
 driver = mr_login_database.login_neo4j_cloud()
 with driver.session() as session:
     session.run("MATCH (n) DETACH DELETE n")
-
 
 with driver.session() as session:
     donors = (
@@ -116,7 +118,7 @@ def list_donors():
         results = session.run(cyph)
         all_donors = []
         for donor in results:
-            all_donors.append(donor['Person']['Name'])
+            all_donors.append(donor['person']['Name'])
     return all_donors
 
 def print_list_donors():
@@ -133,7 +135,7 @@ def thank_you():
         name = donor_name_prompt()
         if name in donor_lis:
             print(f'{name} is a previous donor.')
-            donation = donation_prompt()
+            donation = donation_prompt(name)
             cyph = update_donations(name, donation)
             session.run(cyph)
             print(f'Donation from {name} added successfuly.')
@@ -142,7 +144,7 @@ def thank_you():
 
         else:
             print(f'{name} is a new donor!')
-            donation = donation_prompt()
+            donation = donation_prompt(name, 'new')
             cyph = update_donations(name, donation)
             session.run(cyph)
             print(thank_you_message(name, donation))
@@ -172,7 +174,13 @@ def update_donations(name, donation):
 def donor_nickname_prompt():
     return input('Enter the nickname of the donor\n>> ')
 
-def donation_prompt():
+def donation_prompt(name, donor = ''):
+    if donor == 'new':
+        driver = mr_login_database.login_neo4j_cloud()
+        with driver.session() as session:
+            cyph = """CREATE (:Person {{Name: '{}'}})
+                        """.format(name)
+            session.run(cyph)
     donation = float(input('Enter the donation amount: '))
     return donation
 
@@ -188,9 +196,9 @@ def delete_donor():
         with driver.session() as session:
             name = donor_name_prompt()
             if name in list_d:
-                del_donor = "match(person:Person {Name: '%s'}) delete person" % (name)
+                del_donor = "match(person:Person {Name: '%s'}) detach delete person" % (name)
                 session.run(del_donor)
-                print(f'{name} successfuly deleted from database.')
+                print(f'{name} successfully deleted from database.')
                 return
             else:
                 print(f'{name} is not in the database! Please try again.')
@@ -200,7 +208,7 @@ def total_donations(donor):
     driver = mr_login_database.login_neo4j_cloud()
     with driver.session() as session:
         cyph = """
-                MATCH (person:Person {{donor_name: '{}'}})
+                MATCH (person:Person {{Name: '{}'}})
                 -[:DONATED]-> (donation_amount)
                 RETURN donation_amount
                 """.format(donor)
@@ -208,23 +216,30 @@ def total_donations(donor):
         all_donations = []
         for donor in results:
             all_donations.append(donor['donation_amount']['Amount'])
-            print(f'{donor} and {all_donations}')
-            
-    return sum(all_donations)
-
+    count = len(all_donations)
+    total = sum(all_donations)
+    avg = total / count
+    cur_list = [total, count, avg]
+    return cur_list
 
 def create_report():
     
     driver = mr_login_database.login_neo4j_cloud()
     list_d = list_donors()
-    with driver.session() as session:
-        for donor in list_d:
-            try:
-                print('{:20} | {:15}'.format(
-                donor, get_total_for_donor(donor)))
-                return
-            except TypeError:
-                pass
+    cur_list = []
+    for donor in list_d:
+        total, count, avg = total_donations(donor)
+        cur_list.append([donor, total, count, avg])
+    print(cur_list)
+    cur_list.sort(key=lambda l: l[1], reverse = True)
+    s1 = "Donor Name          |   Total Given  |  Num Gifts |  Average Gift\n"
+    s2 = "-----------------------------------------------------------------\n"
+    report = s1 + s2
+    for z in range(0, len(cur_list)):
+        s3 = '{:20} ${:13,.2f}{:14}  ${:13,.2f}\n'.format(*cur_list[z])
+        report += s3
+    print(report)
+
         
 if __name__ == '__main__':
 
