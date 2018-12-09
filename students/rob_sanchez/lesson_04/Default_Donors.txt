@@ -1,0 +1,21 @@
+{
+    "__obj_type": "Donor",
+    "donations_dict": {
+        "Tom Cruise": [
+            100.0,
+            200.0,
+            300.0
+        ],
+        "Michael Jordan": [
+            1300.0
+        ],
+        "Katy Perry": [
+            4500.0,
+            1500.0
+        ],
+        "Adam Sandler": [
+            500.0,
+            2400.0
+        ]
+    }
+}
