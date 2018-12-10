@@ -26,7 +26,7 @@ class Locke:
                   "             Opening the doors.            \n"
                   "             Closing the doors.            \n"
                   "             Restarting the pumps.         \n"
-                  "-----------Boat Transfer Complete---------\n".
+                  "-----------Boat Transfer Complete---------".
                   format(boat_count))
 
 
