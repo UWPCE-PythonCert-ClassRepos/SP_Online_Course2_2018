@@ -1,0 +1,12 @@
+[configuration]
+user1 = stasaki
+pw1 = cluster0-shard-00-00-ez67j.mongodb.net:27017,cluster0-shard-00-01-ez67j.mongodb.net:27017,cluster0-shard-00-02-ez67j.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true
+connect1 = 
+
+user2 = stasaki
+pw2 = daCsczx1sftYjFIDegrrPpPdCZqLalMa
+connect2 = 
+
+user3 = stasaki
+pw3 = b.FnoM7zomUUyV.Rtzzq8GxjbWF0jaB
+connect3 = 
