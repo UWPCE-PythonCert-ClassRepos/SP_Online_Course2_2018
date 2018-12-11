@@ -78,13 +78,14 @@ def populate_db_job():
     END_DATE = 2
     SALARY = 3
     PERSON_EMPLOYED = 4
+    JOB_DEPARTMENT = 5
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
-        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter'),
-        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter')
+        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew','Operations'),
+        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'Accounting'),
+        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', 'finance'),
+        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter','Engineering'),
+        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter', 'Research')
     ]
 
     try:
@@ -97,7 +98,8 @@ def populate_db_job():
                     start_date = job[START_DATE],
                     end_date = job[END_DATE],
                     salary = job[SALARY],
-                    person_employed = job[PERSON_EMPLOYED])
+                    person_employed = job[PERSON_EMPLOYED],
+                    department_name = job[DEPARTMENT_NAME])
 
                 new_job.save()
                 logger.info('Database add successful')

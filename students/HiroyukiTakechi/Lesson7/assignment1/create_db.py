@@ -58,11 +58,10 @@ class Job(BaseModel):
     start_date = DateField(formats = 'YYYY-MM-DD')
     end_date = DateField(formats = 'YYYY-MM_DD')
     logger.info('Number')
-
     salary = DecimalField(max_digits = 7, decimal_places = 2)
     logger.info('Which person had the job')
     person_employed = ForeignKeyField(Person, related_name = 'was_filled_by', null = False)
-
+    department_name = Foreignkey(Department, related_name = 'was_filled_by', null=False)
 
 class PersonNumKey(BaseModel):
 
