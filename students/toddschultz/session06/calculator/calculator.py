@@ -1,4 +1,4 @@
-''' My Digital Calculator '''
+''' My Digital Calculator. '''
 
 from .exceptions import InsufficientOperands
 
