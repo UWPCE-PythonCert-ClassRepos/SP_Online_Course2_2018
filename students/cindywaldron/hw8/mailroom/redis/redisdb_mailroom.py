@@ -84,6 +84,14 @@ class Donations:
     def __init__(self):
         """collection of donors"""
         self._donors = {}
+        client.flushall()
+
+        client.hmset('Bill Gates', {'Student ID':'99-3047', 'email':'billgates@gmail.com'})
+        client.hmset('Bart Simpson', {'Student ID':'89-3008', 'email':'bartsimpson@hotmail.com'})
+        client.hmset('Bob Clinton', {'Student ID':'98-0049', 'email':'bobclinton@cnn.com'})
+        client.hmset('Susie Jones', {'Student ID':'67-3850', 'email':'susiejones@fb.com'})
+        client.hmset('Doug Wilson', {'Student ID':'87-3851', 'email':'dougwilson@yahoo.com'})
+        client.hmset('Lisa Maye', {'Student ID':'99-9052', 'email':'lisamaye@msnbc.net'})
 
     def insert_donor(self, donor):
         self._donors[donor.name] = donor
@@ -91,40 +99,23 @@ class Donations:
     def add_update(self, donor):
         """ add or update donor"""
 
-        total_amount = donor._amount
-        num_of_donation = donor._donation_count
-        # existing donor
-        if donor.name in self._donors.keys():
-            d =self._donors[donor.name]
-            # update donation amount
-            d.add(donor.amount)
-            total_amount = d._amount
-            num_of_donation = d._donation_count
-        else:
-            # new donor
+        if donor.name not in self._donors.keys():
             self._donors[donor.name] = donor
 
-        average = total_amount/num_of_donation
+        result = client.hgetall(donor.name)
+        if len(result) == 0:
+            print('No information on file')
+        else:
+            print(f'Found Matching Donor: {donor.name}')
+            print(f'Student ID: {result["Student ID"]}  email: {result["email"]}')
 
-        my_dict = { 'total_amount':total_amount,
-                    'donation_count': num_of_donation,
-                    'donation_average':average}
-
-        client.hmset(donor.name, my_dict)
-
-        #print(client.hgetall(donor.name))
 
     def delete(self, donor_name):
         """ delete a donor from database"""
 
         if donor_name in self._donors:
             self._donors.pop(donor_name)
-        try:
 
-            client.delete(donor_name)
-        except Exception as e:
-            print("exception occurred")
-            print(e)
 
     @property
     def donors(self):
@@ -142,11 +133,10 @@ class Donations:
         for k, donor in self._donors.items():
 
             name = donor.name
-            my_dict = client.hgetall(donor.name)
-            print(my_dict)
-            total_amount = my_dict['total_amount']
-            donation_count = my_dict['donation_count']
-            average = my_dict['donation_average']
+            total_amount = donor.amount
+            donation_count = donor.donation_count
+            average = total_amount/ donation_count
+
             a_row = '{:20}  $ {:>10}  {:>10}  $ {:>11}'.format(name,
                                                                       total_amount,
                                                                       donation_count,
