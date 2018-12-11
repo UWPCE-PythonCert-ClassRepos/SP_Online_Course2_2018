@@ -8,7 +8,6 @@ from calculator.divider import Divider
 from calculator.calculator import Calculator
 from calculator.exceptions import InsufficientOperands
 
-
 class ModuleTests(TestCase):
 
     def test_module(self):
