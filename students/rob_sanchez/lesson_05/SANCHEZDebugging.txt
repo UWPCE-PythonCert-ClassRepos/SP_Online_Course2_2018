@@ -3,7 +3,7 @@
 For example, give your best guess or insight on the following questions:
 
 What is wrong with our logic?
-The problem with this logic is that the function terminates with a RecursionError when it reaches the maximum recursion depth. This will always happen with odd numbers and will only even reach 2 with some even numbers.
+The problem with this logic is that the function terminates with a RecursionError when it reaches the maximum recursion depth. This will always happen with odd numbers and will only reach 2 when a very specific set of even numbers are given as input. There is also no logic to check whether the given input is what is actually expected, nor does contain any logic for handling errors. 
 
 Why doesn't the function stop calling itself?
 The function will continue to call itself until the integer provided reaches n = 2 after dividing it by 2. The function will only stop when a number divisible by 2 -- that does not produce an odd number -- is used.
