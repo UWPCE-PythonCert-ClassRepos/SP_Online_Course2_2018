@@ -78,14 +78,14 @@ def populate_db_job():
     END_DATE = 2
     SALARY = 3
     PERSON_EMPLOYED = 4
-    JOB_DEPARTMENT = 5
+    DEPARTMENT_ID = 5
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew','Operations'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'Accounting'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', 'finance'),
-        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter','Engineering'),
-        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter', 'Research')
+        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew','A123'),
+        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'B123'),
+        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', 'C123'),
+        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter','D123'),
+        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter', 'E123')
     ]
 
     try:
@@ -99,7 +99,7 @@ def populate_db_job():
                     end_date = job[END_DATE],
                     salary = job[SALARY],
                     person_employed = job[PERSON_EMPLOYED],
-                    department_name = job[DEPARTMENT_NAME])
+                    department_id = job[DEPARTMENT_ID])
 
                 new_job.save()
                 logger.info('Database add successful')
@@ -130,7 +130,7 @@ def populate_db_department():
     logger.info('Working with Department class')
     logger.info('Creating Department records: just like Person. We use the foreign key')
 
-    DEPARTMENT_NUMBER = 0
+    DEPARTMENT_ID = 0
     DEPARTMENT_NAME = 1
     DEPARTMENT_MANAGER = 2
     #START_DATE_DEPARTMENT = 3
@@ -152,7 +152,7 @@ def populate_db_department():
         for department in departments:
             with database.transaction():
                 new_department = Department.create(
-                    department_number = department[DEPARTMENT_NUMBER],
+                    department_ID = department[DEPARTMENT_ID],
                     department_name = department[DEPARTMENT_NAME],
                     department_manager = department[DEPARTMENT_MANAGER])
 
@@ -161,7 +161,7 @@ def populate_db_department():
 
         logger.info('Print the Department records we saved...')
         for department in Department:
-            logger.info(f'{department.department_number} is {department.department_name} ' +\
+            logger.info(f'{department.department_id} is {department.department_name} ' +\
                 f'and the manager is {department.department_manager}')
 
     except Exception as e:

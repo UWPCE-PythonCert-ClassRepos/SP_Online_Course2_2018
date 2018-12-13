@@ -46,6 +46,26 @@ class Person(BaseModel):
     lives_in_town = CharField(max_length = 40)
     nickname = CharField(max_length = 20, null = True)
 
+
+class Department(BaseModel):
+    """
+        Assignment 1 adding character field for department
+    """
+
+    logger.info('Now the Department class with a similar approach')
+    logger.info('Department Number')
+    department_id = CharField(primary_key = True, max_length = 4)
+    logger.info('Department Name')
+    department_name = CharField(max_length = 30)
+    logger.info('Department Manager')
+    department_manager = CharField(max_length = 30)
+    #logger.info('StartDate and EndDate')
+    #start_date_department = DateField(formats = 'YYYY-MM-DD')
+    #end_date_department = DateField(formats = 'YYYY-MM_DD')
+    #logger.info('Duration')
+    #duration = end_date - start_date
+
+
 class Job(BaseModel):
     """
         This class defines Jon, which maintains details of past Jobs
@@ -61,14 +81,10 @@ class Job(BaseModel):
     salary = DecimalField(max_digits = 7, decimal_places = 2)
     logger.info('Which person had the job')
     person_employed = ForeignKeyField(Person, related_name = 'was_filled_by', null = False)
-    department_name = Foreignkey(Department, related_name = 'was_filled_by', null=False)
+    department_id = ForeignKeyField(Department, related_name = 'was_filled_by', null=False)
+
 
 class PersonNumKey(BaseModel):
-
-    """
-        This class defines Person, which maintains details of someone
-        for whom we want to research career to date.
-    """
 
     logger.info('An alternate Person class')
     logger.info("Note: no primary key so we're give one 'for free'")
@@ -76,25 +92,6 @@ class PersonNumKey(BaseModel):
     person_name = CharField(max_length = 30)
     lives_in_town = CharField(max_length = 40)
     nickname = CharField(max_length = 20, null = True)
-
-
-class Department(BaseModel):
-    """
-        Assignment 1 adding character field for department
-    """
-
-    logger.info('Now the Department class with a similar approach')
-    logger.info('Department Number')
-    department_number = CharField(primary_key = True, max_length = 4)
-    logger.info('Department Name')
-    department_name = CharField(max_length = 30)
-    logger.info('Department Manager')
-    department_manager = CharField(max_length = 30)
-    #logger.info('StartDate and EndDate')
-    #start_date_department = DateField(formats = 'YYYY-MM-DD')
-    #end_date_department = DateField(formats = 'YYYY-MM_DD')
-    #logger.info('Duration')
-    #duration = end_date - start_date
 
 
 logger.info('Create the table format')
