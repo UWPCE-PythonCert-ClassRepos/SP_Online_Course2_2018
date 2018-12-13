@@ -49,7 +49,6 @@ class DeciderTests(unittest.TestCase):
         self.assertEqual(actions['PUMP_OUT'], target_test_g)
 
 
-
 class ControllerTests(unittest.TestCase):
     """
     Unit tests for the Controller class
@@ -80,11 +79,3 @@ class ControllerTests(unittest.TestCase):
         s.measure.assert_called_with()
         p.get_state.assert_called_with()
         d.decide.assert_called_with(95, p.PUMP_IN, actions)
-
-
-
-
-
-
-
-

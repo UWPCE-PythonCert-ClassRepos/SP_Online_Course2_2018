@@ -32,7 +32,8 @@ class Pump(object):
         Set the state of the remote pump.
 
         :param state: One of PUMP_IN, PUMP_OFF, PUMP_OUT
-        :return: True if the remote pump controller acknowledges the request, otherwise False
+        :return: True if the remote pump controller
+        acknowledges the request, otherwise False
         """
 
         request = urllib.request.Request(self.address + ':' + self.port, state)
