@@ -1,6 +1,6 @@
 ''' My Digital Calculator. '''
-
 from .exceptions import InsufficientOperands
+
 
 class Calculator():
     ''' Base class '''
@@ -19,7 +19,8 @@ class Calculator():
         self.stack.insert(1, number)
 
     def _do_calc(self, operator):
-        ''' Execute operations with the proper operator and catches InsufficientOperands '''
+        ''' Execute operations with the proper operator
+        and catches InsufficientOperands '''
         try:
             result = operator.calc(self.stack[0], self.stack[1])
         except IndexError:
