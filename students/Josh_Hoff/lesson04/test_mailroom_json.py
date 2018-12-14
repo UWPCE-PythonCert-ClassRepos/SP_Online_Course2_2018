@@ -128,3 +128,20 @@ Josh Hoff: $250\n\
 Tatsiana Kisel: $351.65\n\
 -------------------------------------------\n'
     assert captured.out == expected
+    
+def test_saving():
+    d = DonorCollection()
+    d.add_donor('Andrew', 500)
+    d.save()
+    with open(f'save.txt', 'r') as outfile:
+        assert outfile.read() == '{"__obj_type": "MyClass", "x": {"Josh Hoff": [25, 75], \
+"Tatsiana Kisel": [35, 105.55], "Andrew": [500]}}'
+
+def test_loading():
+    d = DonorCollection()
+    d.add_donor('Andrew', 300)
+    d.save()
+    d.add_donor('Accident', 40000)
+    assert d.donors == {'Josh Hoff': [25, 75], 'Tatsiana Kisel': [35, 105.55], 'Andrew': [300], 'Accident': [40000]}
+    d.load()
+    assert d._donors == {'Josh Hoff': [25, 75], 'Tatsiana Kisel': [35, 105.55], 'Andrew': [300]}

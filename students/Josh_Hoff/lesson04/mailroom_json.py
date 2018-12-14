@@ -91,13 +91,18 @@ is essential to our success and will be well utilized. \n\n{tab*2}Sincerely, \n{
         return self._donors
         
     def save(self):
-        print('saving...')
+        print('\nSaving...')
         self.mc = MyClass(self._donors)
         self.jc = self.mc.to_json_compat()
+        save_file = json.dumps(self.jc)
+        with open(f'save.txt', 'w') as outfile:
+            outfile.write(save_file)
         
     def load(self):
-        print('loading...')
-        self._donors = self.jc['x']
+        print('\nLoading...')
+        with open(f'save.txt', 'r') as outfile:
+            load_file = json.loads(outfile.read())
+        self._donors = load_file['x']
         
 class Functions:
 
