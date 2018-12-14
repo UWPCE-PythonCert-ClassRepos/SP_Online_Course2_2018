@@ -35,7 +35,7 @@ def get_articles(source):
         }
     print('Requesting: ', source)
     r = requests.get(url, params=params)
-    if r.status_code !=200:
+    if r.status_code != 200:
         print('Error with {}'.format(source))
         return
     data = r.json()
