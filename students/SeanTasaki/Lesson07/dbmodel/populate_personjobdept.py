@@ -111,7 +111,7 @@ def add_jobs(jobs):
         logger.info('close database')
         database.close()
 
-def person_jobs():
+def pretty_print_query():
     """
     A list using pretty print that shows all of the departments 
     a person worked in for every job they ever had.
@@ -153,7 +153,10 @@ if __name__ == '__main__':
     
     jobs = [('Engineer', '2001-09-22', '2003-01-30', 495, 65500, 'Sean', 'R100'),
             ('HR Speciaist', '2003-01-30', '2005-01-30', 804, 50000, 'Sean', 'H100'),
+            ('Accountant I', '2005-01-30', '2008-02-28', 390, 55000, 'Sean', 'A100'),
+            ('Accountant Supervisor', '2008-02-28', '2018-12-13', 3600, 80000, 'Sean', 'A100'),
             ('Senior analyst', '2003-02-01', '2006-10-22', 1359, 70000, 'Tom', 'A100'),
+            ('Operations Supervisor', '2006-10-22', '2008-10-22', 730, 1200000, 'Tom', 'R100'),
             ('Computer Operator','2018-07-09', '2018-11-30', 122, 40000, 'MonkeyMan', 'R100')
             ]
 
@@ -165,4 +168,4 @@ if __name__ == '__main__':
     add_people(people)
     add_departments(departments)
     add_jobs(jobs)
-    person_jobs()
+    pretty_print_query()
