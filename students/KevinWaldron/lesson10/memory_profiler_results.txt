@@ -1,0 +1,79 @@
+Line #    Mem usage    Increment   Line Contents
+================================================
+     5   32.789 MiB   32.789 MiB   @profile
+     6                             def read_text(file):
+     7                                 """
+     8                                 Reads the text from the given input text file into a list of words that were separated by whitespace
+     9                                 :param file: input text file
+    10                                 :returns: the list of words
+    11                                 """
+    12   32.793 MiB    0.004 MiB       text = []
+    13   32.793 MiB    0.000 MiB       with open(file, 'r') as f:
+    14   32.793 MiB    0.000 MiB           while True:
+    15   40.723 MiB    0.062 MiB               line = f.readline().strip('\r')
+    16   40.723 MiB    0.062 MiB               if not line:
+    17   40.723 MiB    0.000 MiB                   break
+    18   40.723 MiB    0.387 MiB               text.extend(line.split())
+    19   40.723 MiB    0.000 MiB       return text
+
+
+Filename: trigrams.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    21   40.723 MiB   40.723 MiB   @profile
+    22                             def create_trigrams(words_list):
+    23                                 """
+    24                                 Creates a trigrams dictionary based on 2 word keys
+    25                                 :param words_list: list of words from input file
+    26                                 :returns: the trigrams created from the words list
+    27                                 """
+    28   40.723 MiB    0.000 MiB       trigrams = dict()
+    29   53.480 MiB    0.062 MiB       for i in range(len(words_list)-2):
+    30   53.480 MiB    0.062 MiB           key = ' '.join(words_list[i:i+2])
+    31   53.480 MiB    0.062 MiB           if key in trigrams:
+    32   53.480 MiB    0.062 MiB               trigrams[key].append(words_list[i+2])
+    33                                     else:
+    34   53.480 MiB    1.250 MiB               trigrams[key] = [words_list[i+2]]
+    35   53.480 MiB    0.000 MiB       return trigrams
+
+
+Filename: trigrams.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    37   53.480 MiB   53.480 MiB   @profile
+    38                             def create_text(trigrams):
+    39                                 """
+    40                                 Creates the new text using the supplied trigrams dictionary
+    41                                 :param trigrams: dictionary of trigrams with two-word keys
+    42                                 :returns: the new text generated from the trigrams
+    43                                 """
+    44   53.414 MiB    0.000 MiB       new_text = random.choice(list(trigrams.keys())).split(' ')
+    45
+    46   53.414 MiB    0.000 MiB       while True:
+    47   55.203 MiB    0.000 MiB           i = len(new_text)
+    48   55.203 MiB    0.000 MiB           key = f"{new_text[i-2]} {new_text[i-1]}"
+    49   55.203 MiB    0.000 MiB           if key in trigrams:
+    50   55.203 MiB    0.641 MiB               new_text.append(random.choice(trigrams[key]))
+    51                                     else:
+    52   54.633 MiB    0.000 MiB               break
+    53   54.633 MiB    0.000 MiB       return new_text
+
+
+Filename: trigrams.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    55   54.633 MiB   54.633 MiB   @profile
+    56                             def write_text(out_file, text):
+    57                                 """
+    58                                 Writes out the supplied list of words to the given output file
+    59                                 :param out_file: the file to write to
+    60                                 :param text: the list of words to write to the output file, a space will be
+    61                                 inserted between each word
+    62                                 """
+    63   54.637 MiB    0.004 MiB       with open(out_file, 'w') as f:
+    64   55.055 MiB    0.000 MiB           for word in text:
+    65   55.055 MiB    0.199 MiB               f.write(word)
+    66   55.055 MiB    0.027 MiB               f.write(' ')
