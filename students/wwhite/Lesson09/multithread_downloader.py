@@ -3,11 +3,13 @@
 import logging
 import requests
 from threading import Thread
+from queue import Queue
 
 WORD = 'trump'
-NEWS_API_KEY = "5794703b1f624142a329ce9a4fc84041"
+NEWS_API_KEY = "11e6b22b346a497980a820a68baee088"
 BASE_URL = 'https://newsapi.org/v1/'
 
+article_queue = Queue()
 sources = []
 titles = []
 
@@ -41,7 +43,17 @@ def get_articles(source):
     data = r.json()
     print('Got all articles from {}'.format(source))
     titles.extend([str(art['title']) + str(art['description']) for art in data['articles']])
+    article_queue.put(titles)
     return titles
+
+
+def count(word, titles):
+    search_word = word.lower()
+    count = 0
+    for t in titles:
+        if search_word in t.lower():
+            count += 1
+    return count
 
 
 if __name__ == '__main__':
@@ -53,5 +65,10 @@ if __name__ == '__main__':
         t.start()
         list.append(t)
 
-    for t in list:
-        t.join()
+    sources_len = len(sources)
+    word_count = 0
+    for i in range(sources_len):
+        a = article_queue.get()
+        word_count += count(WORD, a)
+
+print('"{}" was found {} times'.format(WORD, word_count))
