@@ -1,25 +1,34 @@
 #simple.py
 
 import logging
+from logging import handlers
+from datetime import date
 
-log_format = "%(asctime)s %(filename)s:%(lineno)-4d %(levelname)s %(message)s"
+current_date = date.today().isoformat()
 
-#BEGIN NEW STUFF
-formatter = logging.Formatter(log_format)
+log_format1 = "%(asctime)s %(filename)s:%(lineno)-4d %(levelname)s %(message)s"
+log_format2 = "%(filename)s:%(lineno)-4d %(levelname)s %(message)s"
 
-file_handler = logging.FileHandler('mylog.log')
+formatter1 = logging.Formatter(log_format1)
+formatter2 = logging.Formatter(log_format2)
+
+file_handler = logging.FileHandler(f'{current_date}.log')
 file_handler.setLevel(logging.WARNING)
-file_handler.setFormatter(formatter)
+file_handler.setFormatter(formatter1)
 
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
-console_handler.setFormatter(formatter)
+console_handler.setFormatter(formatter1)
+
+server_handler = logging.handlers.DatagramHandler('127.0.0.1', 514)
+server_handler.setLevel(logging.ERROR)
+server_handler.setFormatter(formatter2)
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
-#END NEW STUFF
+logger.addHandler(server_handler)
 
 #logging.basicConfig(level=logging.WARNING, format=log_format, filename='mylog.log')
 
