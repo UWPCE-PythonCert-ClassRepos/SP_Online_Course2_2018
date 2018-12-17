@@ -1,0 +1,62 @@
+{
+    "__obj_type": "DonorDatabase",
+    "donors": [
+        {
+            "__obj_type": "Donor",
+            "name": "Bill Gates",
+            "donations": [
+                1290492.22,
+                983489391.15,
+                7857348.17,
+                493839.0
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Nikola Tesla",
+            "donations": [
+                23454.13,
+                66554.44,
+                34989893.15
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Jeff Bezos",
+            "donations": [
+                23898982.18,
+                3489893.15
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Elon Musk",
+            "donations": [
+                5909093.78,
+                34989894.95
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Steve Jobs",
+            "donations": [
+                3498984.23
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Linus Torvalds",
+            "donations": [
+                459889895.1,
+                3989854.65
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "New Addition",
+            "donations": [
+                500.0
+            ]
+        }
+    ]
+}
