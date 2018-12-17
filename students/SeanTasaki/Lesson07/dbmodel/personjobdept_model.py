@@ -1,8 +1,8 @@
-
 '''
 Sean Tasaki
-11/9/2018
+11/22/2018
 Lesson07
+personjobdept_model
 '''
 
 """
@@ -16,7 +16,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-database = SqliteDatabase('personjob.db')
+database = SqliteDatabase('pj.db')
 database.connect()
 database.execute_sql('PRAGMA foreign_keys = ON;') # needed for sqlite only
 
