@@ -1,0 +1,70 @@
+# A copy-and-paste of your terminal debugging activity:
+
+(pythree) C:\Users\ckastner\UW\practice>python -m pdb recursive.py 15
+> c:\users\ckastner\uw\practice\recursive.py(1)<module>()
+-> import sys
+(Pdb) n
+> c:\users\ckastner\uw\practice\recursive.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\ckastner\uw\practice\recursive.py(9)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\ckastner\uw\practice\recursive.py(10)<module>()
+-> n = int(sys.argv[1])
+(Pdb) s
+> c:\users\ckastner\uw\practice\recursive.py(11)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\ckastner\uw\practice\recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\ckastner\uw\practice\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) s
+#recursion debugging
+
+> c:\users\ckastner\uw\practice\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+15
+(Pdb) s
+--Call--
+> c:\users\ckastner\uw\practice\recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\ckastner\uw\practice\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\ckastner\uw\practice\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+7.5
+(Pdb) ll
+  3     def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6
+  7  ->     return my_fun(n/2)
+(Pdb) b 7
+Breakpoint 1 at c:\users\ckastner\uw\practice\recursive.py:7
+(Pdb) condition 1 (n/2) < 2
+New condition set for breakpoint 1.
+(Pdb) c
+> c:\users\ckastner\uw\practice\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+3.75
+(Pdb) s
+--Call--
+> c:\users\ckastner\uw\practice\recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\ckastner\uw\practice\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\ckastner\uw\practice\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+1.875
