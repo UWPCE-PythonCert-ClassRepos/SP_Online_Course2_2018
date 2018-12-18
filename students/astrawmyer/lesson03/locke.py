@@ -35,10 +35,23 @@ class Locke:
         self.capacity = capacity
 
     def __enter__(self):
+        print("Stopping the pumps")
+        print("Opening the doors")
+        print("Closing the doors")
+        print("Restarting the pumps")
         return self
     
     def __exit__(self):
+        print("Stopping the pumps")
+        print("Opening the doors")
+        print("Closing the doors")
+        print("Restarting the pumps")
         return self
 
     def move_boats_through(boats):
-        
+        return 8
+    
+
+small_locke = Locke(5)
+with small_locke as locke:
+    locke.move_boats_through(5)
