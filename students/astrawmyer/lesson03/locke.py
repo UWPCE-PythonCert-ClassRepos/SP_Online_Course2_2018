@@ -42,7 +42,8 @@ class Locke:
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print(exc_val)
+        if exc_val:
+            print(exc_val)
         print("Stopping the pumps")
         print("Opening the doors")
         print("Closing the doors")
@@ -56,7 +57,7 @@ class Locke:
             print("Moving {} Boats through".format(boats))
         
     
-
+#Testing below
 small_locke = Locke(5)
 large_locke = Locke(10)
 boats = 8
