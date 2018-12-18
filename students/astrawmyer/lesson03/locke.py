@@ -41,7 +41,7 @@ class Locke:
         print("Restarting the pumps")
         return self
     
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         print("Stopping the pumps")
         print("Opening the doors")
         print("Closing the doors")
@@ -49,6 +49,7 @@ class Locke:
         return self
 
     def move_boats_through(boats):
+        print("moving Boat")
         return 8
     
 
