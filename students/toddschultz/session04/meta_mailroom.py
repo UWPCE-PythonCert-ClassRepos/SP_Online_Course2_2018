@@ -1,6 +1,5 @@
 '''Add JSON support to func_mailroom from 210 Session10'''
 
-import os
 import json
 import json_save.json_save.json_save_dec as jsd
 
@@ -15,7 +14,7 @@ class Donor:
     def __init__(self, name, donations=None):
         self.name = name
         self.donations = donations
-    
+
     @property
     def total_given(self):
         return sum(self.donations)
@@ -29,39 +28,43 @@ class Donor:
         return self.total_given / self.num_gifts
 
     def append_donation(self, donor, current_donor, current_donation):
-        ''' appends a new donation to an existing donor ''' 
-        self.donations.append(float(current_donation))     
+        ''' appends a new donation to an existing donor '''
+        self.donations.append(float(current_donation))
 
     def send_thanks(self, current_donation):
         print("\nDear", self.name, ":")
         print("Thank you very much for your generous donation.")
-        print("Your gift of $" + current_donation, "will help our efforts greatly.\n")
+        print("Your gift of $" + current_donation,
+              "will help our efforts greatly.\n")
         print("Sincerely - ACME Charity")
 
+
 @jsd.json_save
-class DonorCollection: 
+class DonorCollection:
     ''' Information on the entire group of donors '''
     def __init__(self, donors=None):
         self.donors = donors
 
     donors = jsd.List()
 
-    def create_report(self): 
+    def create_report(self):
         print("\nDonor Name\t\t| Total Given | Num Gifts | Average Gift")
         print("-" * 64)
         everyone = []
         for donor in self.donors:
             everyone.append([donor])
         for info in everyone:
-            for donor in info: 
-                print("{:<22}".format(donor.name).title(), "  $", "{:11.2f}".format(donor.total_given), "\t\t{:<2}".format(donor.num_gifts), "{:2}".format("$"), "{:10.2f}".format(donor.average_gift))
+            for donor in info:
+                print("{:<22}".format(donor.name).title(), "  $", 
+                      "{:11.2f}".format(donor.total_given),
+                      "\t\t{:<2}".format(donor.num_gifts), "{:2}".format("$"), "{:10.2f}".format(donor.average_gift))
 
     def send_letters(self):
         everyone = []
         for donor in self.donors:
             everyone.append([donor])
         for info in everyone:
-            for donor in info: 
+            for donor in info:
                 with open('/Users/toddschultz/Projects/' + donor.name + ".txt", 'w') as f:
                     f.write("\n\n" + donor.name + ":\n\tThank you very much for your generous donations. ")
                     f.write(f"your donation total of ${donor.total_given:.2f} is awesome! ")
@@ -71,14 +74,13 @@ class DonorCollection:
 
     def does_donor_exist(self, current_donor, current_donation):
         ''' determines if the donor is already in the collection '''
-        x = 0 
         for donor in self.donors:
             if donor.name == current_donor:
                 donor.append_donation(donor, current_donor, current_donation)
-                donor.send_thanks(current_donation) 
-                break 
+                donor.send_thanks(current_donation)
+                break
         else:
-            self.new_donor(current_donor, current_donation)  
+            self.new_donor(current_donor, current_donation)
 
     def new_donor(self, current_donor, current_donation):
         ''' adds a new donor to the collection '''
@@ -96,29 +98,36 @@ class DonorCollection:
         return value < float(threshold)
 
     def challenge(self, donors, factor, threshold, direction):
-        ''' The challenge multiplys all the donations in a given direction (above or below) a certain threshold amount
-            by a factor entered by the user. '''  
-        print("\nHere are the current donations", direction, "$", threshold, ":")
+        ''' The challenge multiplys all the donations in a given direction
+            (above or below) a certain threshold amount
+            by a factor entered by the user. '''
+        print("\nHere are the current donations",
+              direction, "$", threshold, ":")
         total_a = 0
         for d in self.donors:
-            gifts = filter(lambda x : self.above(x, threshold) if direction == 'above' else self.below(x, threshold), d.donations)
+            gifts = filter(lambda x: self.above(x, threshold)
+                           if direction == 'above'
+                           else self.below(x, threshold), d.donations)
             for i in gifts:
                 total_a = total_a + i
                 print("%.2f" % i)
         print("For a total of: $", total_a)
-        print("\nHere are all the donations", direction, "$", threshold, "multiplied by",factor ,":")
+        print("\nHere are all the donations", direction, "$", threshold,
+              "multiplied by", factor, ":")
         total_b = 0
         for d in self.donors:
-            gifts = map(lambda x : x * float(factor), filter(lambda x : self.above(x, threshold) if direction == 'above' else self.below(x, threshold), d.donations))
+            gifts = map(lambda x: x * float(factor),
+                        filter(lambda x: self.above(x, threshold)
+                        if direction == 'above' else self.below(x, threshold), d.donations))
             for i in gifts:
                 total_b = total_b + i
                 print("%.2f" % i)
         print("For a new total of: $", ("%.2f" % total_b))
-        print("\nThis challenge would make you: $", ("%.2f" % (total_b - total_a)), "more monies!")
+        print("\nThis challenge would make you: $",
+              ("%.2f" % (total_b - total_a)), "more monies!")
 
     def save_json(self):
         """ Saves donor info in JSON """
-        # Convert to json compatible and use json built in to convert to str and write
         info = jsd._to_json_compat(self)
         with open('donors.json', 'w+') as outfile:
             json.dump(info, outfile)
@@ -129,8 +138,10 @@ class DonorCollection:
             loaded = jsd.from_json(infile)
             self.donors = loaded.donors
 
+
 def quit_program():
     exit()
+
 
 def its_go_time():
     ''' Keep user interactions out of the classes '''
@@ -139,19 +150,19 @@ def its_go_time():
     d3 = Donor("fred flintstone", [555.00, 5555.00])
     d4 = Donor("road runner", [199999.00, 10.00, 8.00])
     d5 = Donor("papa smurf", [1001.00, 1002.00, 1003.00, 1200.00, 12.00])
-    donors = DonorCollection([d1, d2, d3, d4, d5]) 
+    donors = DonorCollection([d1, d2, d3, d4, d5])
 
     while True:
         selection = input("\nMAIN MENU\n"
-                "what option would you like?\n"
-                "1 - Send a Thank You\n"
-                "2 - Create a report\n"
-                "3 - Send letters\n"
-                "4 - Challenge\n"
-                "5 - Save donors\n"
-                "6 - Load donors\n"
-                "7 - Exit\n"
-                ">>> ")
+                          "what option would you like?\n"
+                          "1 - Send a Thank You\n"
+                          "2 - Create a report\n"
+                          "3 - Send letters\n"
+                          "4 - Challenge\n"
+                          "5 - Save donors\n"
+                          "6 - Load donors\n"
+                          "7 - Exit\n"
+                          ">>> ")
         if selection == '1':
             current_donor = input("Who would you like to send a Thank You too? ")
             current_donation = input("What was the amount of the donation? ")
@@ -173,6 +184,7 @@ def its_go_time():
             quit_program()
         else:
             print("Please enter 1, 2, 3, 4 or exit")
+
 
 if __name__ == "__main__":
     its_go_time()
