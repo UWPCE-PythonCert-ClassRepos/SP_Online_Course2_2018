@@ -1,7 +1,16 @@
-import os
+'''Add JSON support to func_mailroom from 210 Session10'''
 
+import os
+import json
+import json_save.json_save.json_save_dec as jsd
+
+
+@jsd.json_save
 class Donor:
     ''' Information about the individual donors '''
+
+    name = jsd.String()
+    donations = jsd.List()
 
     def __init__(self, name, donations=None):
         self.name = name
@@ -29,12 +38,13 @@ class Donor:
         print("Your gift of $" + current_donation, "will help our efforts greatly.\n")
         print("Sincerely - ACME Charity")
 
-
-
+@jsd.json_save
 class DonorCollection: 
     ''' Information on the entire group of donors '''
     def __init__(self, donors=None):
         self.donors = donors
+
+    donors = jsd.List()
 
     def create_report(self): 
         print("\nDonor Name\t\t| Total Given | Num Gifts | Average Gift")
@@ -79,7 +89,6 @@ class DonorCollection:
     def threshold_direction(self, num):
         return num >= 1100
 
-
     def above(self, value, threshold):
         return value > float(threshold)
 
@@ -107,6 +116,19 @@ class DonorCollection:
         print("For a new total of: $", ("%.2f" % total_b))
         print("\nThis challenge would make you: $", ("%.2f" % (total_b - total_a)), "more monies!")
 
+    def save_json(self):
+        """ Saves donor info in JSON """
+        # Convert to json compatible and use json built in to convert to str and write
+        info = jsd._to_json_compat(self)
+        with open('donors.json', 'w+') as outfile:
+            json.dump(info, outfile)
+
+    def load_json(self):
+        """ Loads donor info from JSON """
+        with open('donors.json', 'r') as infile:
+            loaded = jsd.from_json(infile)
+            self.donors = loaded.donors
+
 def quit_program():
     exit()
 
@@ -126,7 +148,9 @@ def its_go_time():
                 "2 - Create a report\n"
                 "3 - Send letters\n"
                 "4 - Challenge\n"
-                "5 - Exit\n"
+                "5 - Save donors\n"
+                "6 - Load donors\n"
+                "7 - Exit\n"
                 ">>> ")
         if selection == '1':
             current_donor = input("Who would you like to send a Thank You too? ")
@@ -138,10 +162,14 @@ def its_go_time():
             donors.send_letters()
         elif selection == '4':
             factor = input("By what factor would you like to multiply the donations? ")
-            threshold = input("What threshold would you like see above or belowe? ")
+            threshold = input("What threshold would you like see above or below? ")
             direction = input("Would you like to multiply donations above or below that threshold? ")
             donors.challenge(donors, factor, threshold, direction)
         elif selection == '5':
+            donors.save_json()
+        elif selection == '6':
+            donors.load_json()
+        elif selection == '7':
             quit_program()
         else:
             print("Please enter 1, 2, 3, 4 or exit")
