@@ -1,0 +1,73 @@
+Will@ams-work-1H0QH2 MINGW64 /c/users/will/pycharmprojects/sp_online_course2_2018/students/wwhite/Lesson10 (master)
+$ time python great_circle_main.py
+
+real    0m8.652s
+user    0m0.000s
+sys     0m0.015s
+
+Will@ams-work-1H0QH2 MINGW64 /c/users/will/pycharmprojects/sp_online_course2_2018/students/wwhite/Lesson10 (master)
+$ python great_circle_setup.py build_ext --inplace
+Compiling great_circle.pyx because it changed.
+[1/1] Cythonizing great_circle.pyx
+running build
+running build_ext
+building 'great_circle' extension
+C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64\cl.exe /c /nologo /Ox /W3 /GL /DNDEBUG /MD -IC:\Users\Will\Anaconda3\include -IC:\Users\Will\Anaconda3\include "-IC:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\cppwinrt" /Tcbuild\great_circle.c /Fobuild\temp.win-amd64-3.6\Release\build\great_circle.obj
+great_circle.c
+C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64\link.exe /nologo /INCREMENTAL:NO /LTCG /DLL /MANIFEST:EMBED,ID=2 /MANIFESTUAC:NO /LIBPATH:C:\Users\Will\Anaconda3\libs /LIBPATH:C:\Users\Will\Anaconda3\PCbuild\amd64 "/LIBPATH:C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\lib\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\ucrt\x64" "/LIBPATH:C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\um\x64" /EXPORT:PyInit_great_circle build\temp.win-amd64-3.6\Release\build\great_circle.obj /OUT:.\great_circle.cp36-win_amd64.pyd /IMPLIB:build\temp.win-amd64-3.6\Release\build\great_circle.cp36-win_amd64.lib
+   Creating library build\temp.win-amd64-3.6\Release\build\great_circle.cp36-win_amd64.lib and object build\temp.win-amd64-3.6\Release\build\great_circle.cp36-win_amd64.exp
+Generating code
+Finished generating code
+
+Will@ams-work-1H0QH2 MINGW64 /c/users/will/pycharmprojects/sp_online_course2_2018/students/wwhite/Lesson10 (master)
+$ time python great_circle_main.py
+
+real    0m3.573s
+user    0m0.015s
+sys     0m0.000s
+
+Will@ams-work-1H0QH2 MINGW64 /c/users/will/pycharmprojects/sp_online_course2_2018/students/wwhite/Lesson10 (master)
+$ python great_circle_setup.py build_ext --inplace
+
+Error compiling Cython file:
+------------------------------------------------------------
+...
+
+cpdef double great_circle(double lon1, double lat1, double lon2, double lat2):
+    cdef double a, b, c, radius, theta, x
+
+    radius = 3956
+    x = math.pi / 180.0
+       ^
+------------------------------------------------------------
+
+great_circle.pyx:19:8: undeclared name not builtin: math
+Compiling great_circle.pyx because it changed.
+[1/1] Cythonizing great_circle.pyx
+Traceback (most recent call last):
+  File "great_circle_setup.py", line 7, in <module>
+    ext_modules=cythonize("great_circle.pyx", build_dir="build"),
+  File "C:\Users\Will\Anaconda3\lib\site-packages\Cython\Build\Dependencies.py", line 1026, in cythonize
+    cythonize_one(*args)
+  File "C:\Users\Will\Anaconda3\lib\site-packages\Cython\Build\Dependencies.py", line 1146, in cythonize_one
+    raise CompileError(None, pyx_file)
+Cython.Compiler.Errors.CompileError: great_circle.pyx
+
+Will@ams-work-1H0QH2 MINGW64 /c/users/will/pycharmprojects/sp_online_course2_2018/students/wwhite/Lesson10 (master)
+$ python great_circle_setup.py build_ext --inplace
+Compiling great_circle.pyx because it changed.
+[1/1] Cythonizing great_circle.pyx
+running build
+running build_ext
+building 'great_circle' extension
+C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\bin\HostX86\x64\cl.exe /c /nologo /Ox /W3 /GL /DNDEBUG /MD -IC:\Users\Will\Anaconda3\include -IC:\Users\Will\Anaconda3\include "-IC:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Tools\MSVC\14.16.27023\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\cppwinrt" /Tcbuild\great_circle.c /Fobuild\temp.win-amd64-3.6\Release\build\great_circle.obj
+great_circle.c
+build\great_circle.c(1020): error C2065: 'pi': undeclared identifier
+error: command 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Tools\\MSVC\\14.16.27023\\bin\\HostX86\\x64\\cl.exe' failed with exit status 2
+
+Will@ams-work-1H0QH2 MINGW64 /c/users/will/pycharmprojects/sp_online_course2_2018/students/wwhite/Lesson10 (master)
+$ time python great_circle_main.py
+
+real    0m1.938s
+user    0m0.000s
+sys     0m0.015s
