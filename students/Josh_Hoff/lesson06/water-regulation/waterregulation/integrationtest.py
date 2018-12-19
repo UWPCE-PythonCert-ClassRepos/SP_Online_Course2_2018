@@ -18,6 +18,10 @@ class ModuleTests(unittest.TestCase):
     """
 
     def test_decider_controller_integration(self):
+        """
+        Method that tests and ensures that the decider and controller work
+        well together
+        """
 
         pump = Pump('0.0.0.1', 541)
         sensor = Sensor('0.0.0.1', 541)
@@ -31,6 +35,3 @@ class ModuleTests(unittest.TestCase):
         controller.tick()
 
         self.assertEqual(result, 1)
-
-        # TODO: write an integration test that combines controller and decider,
-        #       using a MOCKED sensor and pump.
