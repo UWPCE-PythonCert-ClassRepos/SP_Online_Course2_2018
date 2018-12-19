@@ -1,0 +1,1 @@
+{"__obj_type": "DonorCollection", "donors": [{"__obj_type": "Donor", "name": "kim schultz", "donations": [10, 100, 1000, 10000]}, {"__obj_type": "Donor", "name": "ann schultz", "donations": [9, 99, 999]}, {"__obj_type": "Donor", "name": "bill schultz", "donations": [222, 2222, 420.0]}]}
