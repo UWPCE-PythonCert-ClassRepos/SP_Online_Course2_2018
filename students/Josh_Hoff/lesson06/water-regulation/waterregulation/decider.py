@@ -3,7 +3,7 @@ Encapsulates decision making in the water-regulation module
 """
 
 
-class Decider(object):
+class Decider:
     """
     Encapsulates decision making in the water-regulation module
     """
@@ -59,21 +59,12 @@ class Decider(object):
         if current_action == actions['PUMP_OFF']:
             if current_height < (self.target_height * (1 - self.margin)):
                 return actions['PUMP_IN']
-            elif current_height > (self.target_height * (1 + self.margin)):
+            if current_height > (self.target_height * (1 + self.margin)):
                 return actions['PUMP_OUT']
-            else:
-                return current_action
         if current_action == actions['PUMP_IN']:
             if current_height > self.target_height:
                 return actions['PUMP_OFF']
-            else:
-                return current_action
         if current_action == actions['PUMP_OUT']:
             if current_height < self.target_height:
                 return actions['PUMP_OFF']
-            else:
-                return current_action
-
-        # TODO: Implement the properties of this method described above.
-
-#        return actions['PUMP_IN']
+        return current_action
