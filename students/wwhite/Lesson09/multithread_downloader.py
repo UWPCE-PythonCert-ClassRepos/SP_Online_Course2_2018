@@ -6,7 +6,7 @@ from threading import Thread
 from queue import Queue
 
 WORD = 'trump'
-NEWS_API_KEY = "11e6b22b346a497980a820a68baee088"
+NEWS_API_KEY = "a41cdd2792c04abbab699e97662b5c0c"
 BASE_URL = 'https://newsapi.org/v1/'
 
 article_queue = Queue()
@@ -42,7 +42,7 @@ def get_articles(source):
         return
     data = r.json()
     print('Got all articles from {}'.format(source))
-    titles.extend([str(art['title']) + str(art['description']) for art in data['articles']])
+    titles = [str(art['title']) + str(art['description']) for art in data['articles']]
     article_queue.put(titles)
     return titles
 
@@ -59,11 +59,16 @@ def count(word, titles):
 if __name__ == '__main__':
     get_sources(sources)
 
-    list = []
+    source_list = []
+    sources = sources[:5]
+
     for source in sources:
         t = Thread(target=get_articles, args=(source,))
         t.start()
-        list.append(t)
+        source_list.append(t)
+
+    for thread in source_list:
+        thread.join()
 
     sources_len = len(sources)
     word_count = 0
