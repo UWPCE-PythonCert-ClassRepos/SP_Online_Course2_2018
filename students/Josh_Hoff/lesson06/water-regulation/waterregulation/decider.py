@@ -13,73 +13,67 @@ class Decider(object):
         Create a new decider instance for this tank.
 
         :param target_height: the target height for liquid in this tank
-        :param margin: the margin of liquid above and below the target height for
-                       which the pump should not turn on. Ex: .05 represents a
-                       5% margin above and below the target_height.
+        :param margin: the margin of liquid above and below the target
+                       height for which the pump should not turn on.
+                       Ex: .05 represents a 5% margin above and
+                       below the target_height.
         """
         self.target_height = target_height
         self.margin = margin
 
     def decide(self, current_height, current_action, actions):
         """
-        Decide a new action for the pump, given the current height of liquid in the
-        tank and the current action of the pump.
+        Decide a new action for the pump, given the current height of
+        liquid in the tank and the current action of the pump.
 
-        Note that the new action for the pump MAY be the same as the current action
-        of the pump.
+        Note that the new action for the pump MAY be the same as the
+        current action of the pump.
 
         The *decide* method shall obey the following behaviors:
 
-          1. If the pump is off and the height is below the margin region, then the
-             pump should be turned to PUMP_IN.
-          2. If the pump is off and the height is above the margin region, then the
-             pump should be turned to PUMP_OUT.
-          3. If the pump is off and the height is within the margin region or on
-             the exact boundary of the margin region, then the pump shall remain at
-             PUMP_OFF.
-          4. If the pump is performing PUMP_IN and the height is above the target
-             height, then the pump shall be turned to PUMP_OFF, otherwise the pump
-             shall remain at PUMP_IN.
-          5. If the pump is performing PUMP_OUT and the height is below the target
-             height, then the pump shall be turned to PUMP_OFF, otherwise, the pump
-             shall remain at PUMP_OUT.
+          1. If the pump is off and the height is below the margin region,
+             then the pump should be turned to PUMP_IN.
+          2. If the pump is off and the height is above the margin region,
+             then the pump should be turned to PUMP_OUT.
+          3. If the pump is off and the height is within the margin region
+             or on the exact boundary of the margin region, then the pump
+             shall remain at PUMP_OFF.
+          4. If the pump is performing PUMP_IN and the height is above the
+             target height, then the pump shall be turned to PUMP_OFF,
+             otherwise the pump shall remain at PUMP_IN.
+          5. If the pump is performing PUMP_OUT and the height is below the
+             target height, then the pump shall be turned to PUMP_OFF,
+             otherwise, the pump shall remain at PUMP_OUT.
 
         :param current_height: the current height of liquid in the tank
         :param current_action: the current action of the pump
         :param actions: a dictionary containing the keys 'PUMP_IN', 'PUMP_OFF',
                         and 'PUMP_OUT'
-        :return: The new action for the pump: one of actions['PUMP_IN'], actions['PUMP_OUT'], actions['PUMP_OFF']
+        :return: The new action for the pump: one of actions['PUMP_IN'],
+        actions['PUMP_OUT'], actions['PUMP_OFF']
         """
-        
 #        PUMP_IN = 1
 #        PUMP_OFF = 0
 #        PUMP_OUT = -1
 
-        
         if current_action == actions['PUMP_OFF']:
-            #step 1
-            if current_height < (self.target_height * (1 - margin)):
-                return self.pump.set_state(actions['PUMP_IN'])
-            #step 2
-            elif current_height > (self.target_height * (1 + margin)):
-                return self.pump.set_state(actions['PUMP_IN'])
-            #step 3
+            if current_height < (self.target_height * (1 - self.margin)):
+                return actions['PUMP_IN']
+            elif current_height > (self.target_height * (1 + self.margin)):
+                return actions['PUMP_OUT']
             else:
                 return current_action
         if current_action == actions['PUMP_IN']:
-            #step 4
             if current_height > self.target_height:
-                return self.pump.set_state(actions['PUMP_OFF'])
+                return actions['PUMP_OFF']
             else:
                 return current_action
-        #step 5
         if current_action == actions['PUMP_OUT']:
             if current_height < self.target_height:
-                return self.pump.set_state(actions['PUMP_OFF'])
+                return actions['PUMP_OFF']
             else:
                 return current_action
 
         # TODO: Implement the properties of this method described above.
 
 #        return actions['PUMP_IN']
-
