@@ -38,7 +38,7 @@ def populate_db_donor():
         for donor in donors:
             with database.transaction():
                 new_donor = Donor.create(
-                    donor_name = Donor[DONAR_NAME],
+                    donor_name = Donor[DONOR_NAME],
                     num_gift = Donor[NUM_GIFT])
 
                 new_donor.save()
