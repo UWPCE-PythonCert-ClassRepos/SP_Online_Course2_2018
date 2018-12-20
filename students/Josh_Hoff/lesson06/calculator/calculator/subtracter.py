@@ -11,6 +11,6 @@ class Subtracter:
     @staticmethod
     def calc(operand_1, operand_2):
         """
-        This method subtracts 2 numbers together
+        This method subtracts 2 numbers
         """
         return operand_1 - operand_2
