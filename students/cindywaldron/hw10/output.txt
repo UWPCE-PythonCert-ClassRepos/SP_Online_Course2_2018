@@ -1,0 +1,308 @@
+Script started on Thu Dec 20 15:57:34 2018
+[?1034hbash-3.2$ python run_mailroom.py 
+INFO:create_donor:Define Donation Database
+INFO:create_donor:Specify the fields in database model, their lengths and if mandatory
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    69     32.1 MiB     32.1 MiB       @profile
+    70                                 def __init__(self):
+    71                                     """collection of donors"""
+    72     32.1 MiB      0.0 MiB           self._donors = {}
+
+
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    14     32.5 MiB     32.5 MiB       @profile
+    15                                 def __init__(self, name, list_donations):
+    16     32.5 MiB      0.0 MiB           self._name = name
+    17     32.5 MiB      0.0 MiB           self._list_donations = list_donations
+    18     32.5 MiB      0.0 MiB           self._donation_count = len(list_donations)
+    19     32.5 MiB      0.0 MiB           self._amount = sum(list_donations)
+
+
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    74     32.5 MiB     32.5 MiB       @profile
+    75                                 def insert_donor(self, donor):
+    76     32.5 MiB      0.0 MiB           self._donors[donor.name] = donor
+
+
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    14     32.5 MiB     32.5 MiB       @profile
+    15                                 def __init__(self, name, list_donations):
+    16     32.5 MiB      0.0 MiB           self._name = name
+    17     32.5 MiB      0.0 MiB           self._list_donations = list_donations
+    18     32.5 MiB      0.0 MiB           self._donation_count = len(list_donations)
+    19     32.5 MiB      0.0 MiB           self._amount = sum(list_donations)
+
+
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    74     32.5 MiB     32.5 MiB       @profile
+    75                                 def insert_donor(self, donor):
+    76     32.5 MiB      0.0 MiB           self._donors[donor.name] = donor
+
+
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    14     32.5 MiB     32.5 MiB       @profile
+    15                                 def __init__(self, name, list_donations):
+    16     32.5 MiB      0.0 MiB           self._name = name
+    17     32.5 MiB      0.0 MiB           self._list_donations = list_donations
+    18     32.5 MiB      0.0 MiB           self._donation_count = len(list_donations)
+    19     32.5 MiB      0.0 MiB           self._amount = sum(list_donations)
+
+
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    74     32.5 MiB     32.5 MiB       @profile
+    75                                 def insert_donor(self, donor):
+    76     32.5 MiB      0.0 MiB           self._donors[donor.name] = donor
+
+
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    14     32.5 MiB     32.5 MiB       @profile
+    15                                 def __init__(self, name, list_donations):
+    16     32.5 MiB      0.0 MiB           self._name = name
+    17     32.5 MiB      0.0 MiB           self._list_donations = list_donations
+    18     32.5 MiB      0.0 MiB           self._donation_count = len(list_donations)
+    19     32.5 MiB      0.0 MiB           self._amount = sum(list_donations)
+
+
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    74     32.5 MiB     32.5 MiB       @profile
+    75                                 def insert_donor(self, donor):
+    76     32.5 MiB      0.0 MiB           self._donors[donor.name] = donor
+
+
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    14     32.5 MiB     32.5 MiB       @profile
+    15                                 def __init__(self, name, list_donations):
+    16     32.5 MiB      0.0 MiB           self._name = name
+    17     32.5 MiB      0.0 MiB           self._list_donations = list_donations
+    18     32.5 MiB      0.0 MiB           self._donation_count = len(list_donations)
+    19     32.5 MiB      0.0 MiB           self._amount = sum(list_donations)
+
+
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    74     32.5 MiB     32.5 MiB       @profile
+    75                                 def insert_donor(self, donor):
+    76     32.5 MiB      0.0 MiB           self._donors[donor.name] = donor
+
+
+
+Choose an action:
+	1. Add or Update Donor
+	2. Create a Report
+	3 Delete a Donor
+	4. Quit
+Select an option (1, 2, 3, or 4) ===>1
+Enter a full name (enter Q to main menu): jojn  hn
+Enter donation amount(enter Q to main menu):1000
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    14     32.5 MiB     32.5 MiB       @profile
+    15                                 def __init__(self, name, list_donations):
+    16     32.5 MiB      0.0 MiB           self._name = name
+    17     32.5 MiB      0.0 MiB           self._list_donations = list_donations
+    18     32.5 MiB      0.0 MiB           self._donation_count = len(list_donations)
+    19     32.5 MiB      0.0 MiB           self._amount = sum(list_donations)
+
+
+INFO:mailroom:Database add successful
+INFO:mailroom:database closes
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    78     32.5 MiB     32.5 MiB       @profile
+    79                                 def add_update(self, donor):
+    80                                     """ add or update donor"""
+    81                             
+    82     32.5 MiB      0.0 MiB           try:
+    83     32.6 MiB      0.1 MiB               database.connect()
+    84     32.6 MiB      0.0 MiB               database.execute_sql('PRAGMA foreign_keys = ON;')
+    85                                         # existing donor
+    86     32.6 MiB      0.0 MiB               if donor.name in self._donors.keys():
+    87                                             d =self._donors[donor.name]
+    88                                             # update donation amount
+    89                                             d.add(donor.amount)
+    90                             
+    91                                             #find existing donor in database
+    92                                             with database.transaction():
+    93                                                 existing_donor = Donor_Collection.get(Donor_Collection.person_name == donor._name)
+    94                             
+    95                                                 existing_donor.total_amount += donor._amount
+    96                                                 existing_donor.donation_count += 1
+    97                                                 existing_donor.average = existing_donor.total_amount/existing_donor.donation_count
+    98                                                 existing_donor.save()
+    99                                                 new_donation_amount = Donation_Amount.create(
+   100                                                     donation_amount = donor._amount,
+   101                                                     from_person = donor._name)
+   102                                                 new_donation_amount.save()
+   103                                                 logger.info('Database update successful')
+   104                                         else:
+   105                                             # new donor
+   106     32.6 MiB      0.0 MiB                   self._donors[donor.name] = donor
+   107                                             #new donor
+   108     32.6 MiB      0.0 MiB                   with database.transaction():
+   109     32.6 MiB      0.0 MiB                       new_donor = Donor_Collection.create(
+   110     32.6 MiB      0.0 MiB                           person_name = donor._name,
+   111     32.6 MiB      0.0 MiB                           donation_count = donor._donation_count,
+   112     32.6 MiB      0.0 MiB                           total_amount = donor._amount)
+   113                             
+   114     32.7 MiB      0.0 MiB                       new_donor.save()
+   115                             
+   116     32.7 MiB      0.0 MiB                       for amount in donor._list_donations:
+   117     32.7 MiB      0.0 MiB                           new_donation_amount = Donation_Amount.create(
+   118     32.7 MiB      0.0 MiB                               donation_amount = amount,
+   119     32.7 MiB      0.0 MiB                               from_person = donor._name)
+   120     32.7 MiB      0.0 MiB                           new_donation_amount.save()
+   121                             
+   122     32.7 MiB      0.0 MiB                       logger.info('Database add successful')
+   123                             
+   124                                     except Exception as e:
+   125                                         logger.info('failed to add or update')
+   126                                         logger.info(e)
+   127                             
+   128                                     finally:
+   129     32.7 MiB      0.0 MiB               logger.info('database closes')
+   130     32.7 MiB      0.0 MiB               database.close()
+
+
+Dear john,
+
+	Thank you for your very kind donation of $1000.00.
+
+	It will be put to very good use.
+
+				Sincerely,
+				-The Team
+
+
+Choose an action:
+	1. Add or Update Donor
+	2. Create a Report
+	3 Delete a Donor
+	4. Quit
+Select an option (1, 2, 3, or 4) ===>2
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   158     32.7 MiB     32.7 MiB       @profile
+   159                                 def generate_report(self):
+   160                                     """Get data from database and Generate report"""
+   161                             
+   162     32.7 MiB      0.0 MiB           report = []
+   163     32.7 MiB      0.0 MiB           report.append("--------------------------------------------------------------")
+   164     32.7 MiB      0.0 MiB           msg = "{:20} | {:10} | {:5} | {:10}".format('Donor Name', 'Total Given', 'Num Gifts', 'Average Gift')
+   165     32.7 MiB      0.0 MiB           report.append(msg)
+   166     32.7 MiB      0.0 MiB           report.append("--------------------------------------------------------------")
+   167                             
+   168     32.8 MiB      0.1 MiB           database.connect()
+   169     32.8 MiB      0.0 MiB           database.execute_sql('PRAGMA foreign_keys = ON;')
+   170     32.8 MiB      0.0 MiB           try:
+   171     32.8 MiB      0.0 MiB               query = Donor_Collection.select(Donor_Collection).order_by(Donor_Collection.total_amount.desc())
+   172                             
+   173     32.8 MiB      0.0 MiB               for aDonor in query:
+   174     32.8 MiB      0.0 MiB                   average = aDonor.total_amount / aDonor.donation_count
+   175     32.8 MiB      0.0 MiB                   a_row = '{:20}  $ {:>10.2f}  {:>10d}  $ {:>11.2f}'.format(aDonor.person_name,
+   176     32.8 MiB      0.0 MiB                                                                         aDonor.total_amount,
+   177     32.8 MiB      0.0 MiB                                                                         aDonor.donation_count,
+   178     32.8 MiB      0.0 MiB                                                                         average)
+   179     32.8 MiB      0.0 MiB                   report.append(a_row)
+   180                                     except Exception as e:
+   181                                         logger.info("Record doesn't exist: ")
+   182                                         logger.info(e)
+   183                             
+   184                                     finally:
+   185     32.8 MiB      0.0 MiB               database.close()
+   186                             
+   187     32.8 MiB      0.0 MiB           return "\n".join(report)
+
+
+--------------------------------------------------------------
+Donor Name           | Total Given | Num Gifts | Average Gift
+--------------------------------------------------------------
+Susan                 $   10000.00           1  $    10000.00
+Pam                   $    9000.00           3  $     3000.00
+Peter                 $    5200.00           2  $     2600.00
+Andrew                $    1000.00           1  $     1000.00
+john                  $    1000.00           1  $     1000.00
+cindy                 $     100.00           1  $      100.00
+
+Choose an action:
+	1. Add or Update Donor
+	2. Create a Report
+	3 Delete a Donor
+	4. Quit
+Select an option (1, 2, 3, or 4) ===>3
+Enter a donor name to delete: john
+INFO:mailroom:Trying to delete john
+Filename: /Users/cindywaldron/python220/SP_Online_Course2_2018/students/cindywaldron/hw10/mailroom.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   132     32.8 MiB     32.8 MiB       @profile
+   133                                 def delete(self, donor_name):
+   134                                     """ delete a donor from database"""
+   135                             
+   136     32.8 MiB      0.0 MiB           try:
+   137     32.8 MiB      0.0 MiB               database.connect()
+   138     32.8 MiB      0.0 MiB               database.execute_sql('PRAGMA foreign_keys = ON;')
+   139                             
+   140     32.8 MiB      0.0 MiB               Donation_Amount.delete().where (Donation_Amount.from_person == donor_name).execute()
+   141                             
+   142     32.8 MiB      0.0 MiB               aDonor = Donor_Collection.get(Donor_Collection.person_name == donor_name)
+   143     32.8 MiB      0.0 MiB               logger.info(f'Trying to delete {aDonor.person_name}')
+   144     32.8 MiB      0.0 MiB               aDonor.delete_instance()
+   145                             
+   146                                     except Exception as e:
+   147                                         logger.info("Delete failed because record doesn't exist: ")
+   148                                         logger.error("error", e)
+   149                             
+   150                                     finally:
+   151     32.8 MiB      0.0 MiB               database.close()
+
+
+
+Choose an action:
+	1. Add or Update Donor
+	2. Create a Report
+	3 Delete a Donor
+	4. Quit
+Select an option (1, 2, 3, or 4) ===>4
+bash-3.2$ exit
+exit
+
+Script done on Thu Dec 20 15:58:23 2018
