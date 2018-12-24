@@ -48,10 +48,35 @@ class Decider(object):
         :param current_action: the current action of the pump
         :param actions: a dictionary containing the keys 'PUMP_IN', 'PUMP_OFF',
                         and 'PUMP_OUT'
-        :return: The new action for the pump: one of actions['PUMP_IN'], actions['PUMP_OUT'], actions['PUMP_OFF']
+        :return: The new action for the pump: one of actions['PUMP_IN'],
+                 actions['PUMP_OUT'], actions['PUMP_OFF']
         """
 
-        # TODO: Implement the properties of this method described above.
+        lower_margin = (1 + self.margin) * self.target_height
+        upper_margin = (1 - self.margin) * self.target_height
 
-        return actions['PUMP_IN']
+        if (current_action == actions['PUMP_OFF']):
+            # 1
+            if(current_height < lower_margin):
+                return actions['PUMP_IN']
+            # 2
+            elif(current_height > upper_margin):
+                return actions['PUMP_OUT']
+            # 3
+            elif(current_height == self.target_height or (
+                 not current_height > upper_margin and
+                 not current_height < lower_margin)):
+                return actions['PUMP_OFF']
+        # 4
+        elif (current_action == actions['PUMP_IN']):
 
+            if(current_height > self.target_height):
+                return actions['PUMP_OFF']
+            else:
+                return actions['PUMP_IN']
+        # 5
+        elif (current_action == actions['PUMP_OUT']):
+            if(current_height < self.target_height):
+                return actions['PUMP_OFF']
+            else:
+                return actions['PUMP_OFF']

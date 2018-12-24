@@ -37,8 +37,12 @@ class Controller(object):
           4. set the pump to that new state
 
         :return: True if the pump has acknowledged its new state, else False
-        """
+        """_
 
-        # TODO: Implement the above-defined behaviors
+        current_height = self.sensor.measure()
+        current_state = self.pump.get_state()
+        next_state = self.decider.decide(current_height, current_state, self.actions)
 
-        return None
+        print(next_state)
+
+        return self.pump.set_state(next_state)
