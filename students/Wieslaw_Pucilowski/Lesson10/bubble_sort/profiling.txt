@@ -1,0 +1,23 @@
+(cython) wpucilow@plno-pucilowski:/mnt/c/UW_Python_2/Lesson10/python-environments/cython/bubble_sort$ ipython
+/usr/local/lib/python3.5/dist-packages/IPython/core/interactiveshell.py:763: UserWarning: Attempting to work in a virtualenv. If you encounter problems, please install IPython inside the virtualenv.
+  warn("Attempting to work in a virtualenv. If you encounter problems, please "
+Python 3.5.2 (default, Nov 23 2017, 16:37:01)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 6.5.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: %run bubble_sort.py
+
+In [2]: %prun main()
+         6 function calls in 0.000 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 bubble_sort.py:3(bubble)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 bubble_sort.py:17(main)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+
+In [3]:
