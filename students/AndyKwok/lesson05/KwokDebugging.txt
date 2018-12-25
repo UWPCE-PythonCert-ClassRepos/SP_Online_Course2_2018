@@ -1,6 +1,13 @@
+# Summary: The logic of this recursive function would fail if an odd number is given to the function.
+It does not have a terminating condition that would yield a false solution and the value of n would
+gradually decrease by half at each iteration indefinitely. See "#" within the code for additional comments.
+
+# The entry runs the pdb debugger and set the value 15 as the interger input
 $ ipython  -m pdb recursive.py 15
 > c:\users\andy - pc\sp_online_course2_2018\students\andykwok\lesson05\recursive.py(2)<module>()
 -> import sys
+
+# Listing the entire code of recursive.py
 (Pdb) ll
   1
   2  -> import sys
@@ -14,11 +21,15 @@ $ ipython  -m pdb recursive.py 15
  10     if __name__ == '__main__':
  11         n = int(sys.argv[1])
  12         print(my_fun(n))
+
+# Running though the code once to verify that it flow and also note that it was not ran as the primary program
 (Pdb) pp n
 *** NameError: name 'n' is not defined
 (Pdb) n
 > c:\users\andy - pc\sp_online_course2_2018\students\andykwok\lesson05\recursive.py(4)<module>()
 -> def my_fun(n):
+
+# The function details are skipped because there is no value initialized
 (Pdb) n
 > c:\users\andy - pc\sp_online_course2_2018\students\andykwok\lesson05\recursive.py(10)<module>()
 -> if __name__ == '__main__':
@@ -30,6 +41,8 @@ $ ipython  -m pdb recursive.py 15
 (Pdb) n
 > c:\users\andy - pc\sp_online_course2_2018\students\andykwok\lesson05\recursive.py(12)<module>()
 -> print(my_fun(n))
+
+# Default value 15 is being inserted after line 11 was ran and is made available to the program
 (Pdb) pp n
 15
 (Pdb) s
@@ -42,16 +55,22 @@ $ ipython  -m pdb recursive.py 15
 (Pdb) s
 > c:\users\andy - pc\sp_online_course2_2018\students\andykwok\lesson05\recursive.py(8)my_fun()
 -> return my_fun(n/2)
+
+# New value hasn't been calculated yet, so it remains as 15
 (Pdb) pp n
 15
 (Pdb) s
 --Call--
 > c:\users\andy - pc\sp_online_course2_2018\students\andykwok\lesson05\recursive.py(4)my_fun()
 -> def my_fun(n):
+
+# Although the function runs normally, it doesn't realize that it cannot resolve itself something is not the power of two
 (Pdb) pp n
 7.5
 (Pdb) s
 > c:\users\andy - pc\sp_online_course2_2018\students\andykwok\lesson05\recursive.py(5)my_fun()
+
+# The function is going through an infinite loop here because it has no terminating condition at this point
 -> if n == 2:
 (Pdb) s
 > c:\users\andy - pc\sp_online_course2_2018\students\andykwok\lesson05\recursive.py(8)my_fun()
@@ -60,5 +79,7 @@ $ ipython  -m pdb recursive.py 15
 --Call--
 > c:\users\andy - pc\sp_online_course2_2018\students\andykwok\lesson05\recursive.py(4)my_fun()
 -> def my_fun(n):
+
+# Repeating this a few iternation concludes that there is no end to the loop and it does not work on odd numbers
 (Pdb) pp n
 3.75
