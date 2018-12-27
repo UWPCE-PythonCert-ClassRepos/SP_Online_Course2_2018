@@ -152,7 +152,7 @@ def populate_db_department():
         for department in departments:
             with database.transaction():
                 new_department = Department.create(
-                    department_ID = department[DEPARTMENT_ID],
+                    department_id = department[DEPARTMENT_ID],
                     department_name = department[DEPARTMENT_NAME],
                     department_manager = department[DEPARTMENT_MANAGER])
 
@@ -175,5 +175,7 @@ def populate_db_department():
 
 if __name__ == '__main__':
     populate_db_person()
-    populate_db_job()
-    populate_db_department()
+    populate_db_department()    
+    populate_db_job()    
+
+

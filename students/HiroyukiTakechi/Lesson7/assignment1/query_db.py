@@ -1,56 +1,47 @@
 """
     Assignment 1: Query the database table
+    Finally, produce a list using pretty print that shows 
+    all of the departments a person worked in for every job they ever had. 
 """
 
 from create_db import *
+from populate_db import *
 import logging
 import pprint
 
-    
+  
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 databse = SqliteDatabase('personjob.db')
 
-logger.info('Showing all of the departments a person worked in for every job they ever had')
 
 def query_db():
 
     try:
         databse.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
+        logger.info('produce a list using pretty print that shows all of the departments a person worked in for every job they ever had.')
 
-        query = (Department
-                 .select(Department, Job)
-                 .join(Job, JOIN.LEFT_OUTER)
-                 .group_by(job.person_employed))
 
-        for department in query:
-            pprint.pprint('{}, {}, {}'.format(department.department_name, job.job_name, job.person_employed))
+        query = (Person
+            .select(Person, Job, Department)
+            .join(Job, JOIN.LEFT_OUTER, on = (Person.person_name 
+                    == Job.person_employed_id))
+            .join(Department, JOIN.LEFT_OUTER, on = (Job.department_id
+                  == Department.department_id)))
+
+        for person in query:
+
+            pprint.pprint('{}, {}'.format(person.person_name, person.job.job_name, person.job.department_id))
 
 
     except Exception as e:
         logger.info(e)
+
     finally:
         logger.info('database closes')
-        dabase.close()        
+        database.close()        
 
 if __name__ == '__main__':
     query_db()
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
