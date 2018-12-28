@@ -94,6 +94,7 @@ def populate_db_job():
 
     jobs = [
         ('Andrew', 'Analyst', '2016-09-01', '2018-09-01', 60000, 'E109'),
+#        ('Andrew', 'Sales Associate', '2012-01-01', '2016-09-01', 30000, 'S101'),
         ('Peter', 'Graphic_Designer', '2010-01-01', '2012-05-05', 45000, 'G202'),
         ('Susan', 'District_Manager', '2014-04-10', '2017-02-14', 85000, 'S101'),
         ('Pam', 'Salesperson', '2012-03-01', '2012-09-01', 75000, 'S101'),
@@ -193,12 +194,12 @@ def pretty_print():
     try:
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
-        query = (Job.select())
+        query = (Job.select(Job, Department).join(Department))
         pp('-' * 58)
         pp('Job Name             Employee         Department          ')
         pp('-' * 58)
         for ind in query:
-            pp(f'{ind.job_name:20} {str(ind.person_employed):16} {str(ind.job_dept):20}')
+            pp(f'{ind.job_name:20} {str(ind.person_employed):16} {str(ind.job_dept.department_name):20}')
         pp('-' * 58)
 
     except Exception as e:
