@@ -23,6 +23,15 @@ class Donor(BaseModel):
     #name of the donor
     donor_name = CharField(primary_key=True, max_length=30)
     donations = DecimalField(max_digits=10, decimal_places=2)
+    
+class Donation(BaseModel):
+    """
+    This class holds each donation made by each donor
+    """
+    held_by = ForeignKeyField(Donor, backref='name_person', null=False)
+    dono = DecimalField(max_digits=10, decimal_places=2)
+    dono_size = CharField(max_length=30)
+    dono_number = IntegerField(primary_key=True)
 
 class Details(BaseModel):
     """
@@ -31,8 +40,6 @@ class Details(BaseModel):
     name = ForeignKeyField(Donor, primary_key=True, backref='person_name', null=False)
     #number of donations made by the donor
     transactions = IntegerField()
-    #total dollar amount of donations
-    total = DecimalField(max_digits=10, decimal_places=2)
     #average dollar amount of donations
     average = DecimalField(max_digits=10, decimal_places=2)
     #first donation made by the donor
@@ -42,6 +49,7 @@ class Details(BaseModel):
 
 database.create_tables([
         Donor,
+        Donation,
         Details
     ])
 
