@@ -1,0 +1,1 @@
+{"John Marks": [5000.34, 2500, 1267], "Matt Smith": [750], "Kelsey Rodgers": [55.76], "John Williams": [500, 1898], "Morgan Stanley": [12000.98, 8670], "Roger Johnson": [264, 942.23], "Sherry Wilson": [4000, 2324.1, 1352], "Alex Grant": [8739, 4312], "Rich Rich": [4500]}
