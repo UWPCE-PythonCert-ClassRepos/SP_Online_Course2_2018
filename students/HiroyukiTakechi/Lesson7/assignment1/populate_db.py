@@ -4,6 +4,14 @@
 
 import logging
 from create_db import *
+from datetime import datetime
+
+
+def duration_calculator(start_date, end_date):
+    start = datetime.strptime(''.join(start_date.split('-')), '%Y%m%d')
+    end= datetime.strptime(''.join(end_date.split('-')), '%Y%m%d')
+    return (end - start).days
+
 
 def populate_db_person():
     """
@@ -80,6 +88,7 @@ def populate_db_job():
     PERSON_EMPLOYED = 4
     DEPARTMENT_ID = 5
 
+
     jobs = [
         ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew','A123'),
         ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'B123'),
@@ -97,6 +106,7 @@ def populate_db_job():
                     job_name = job[JOB_NAME],
                     start_date = job[START_DATE],
                     end_date = job[END_DATE],
+                    duration = duration_calculator(job[START_DATE], job[END_DATE]),
                     salary = job[SALARY],
                     person_employed = job[PERSON_EMPLOYED],
                     department_id = job[DEPARTMENT_ID])

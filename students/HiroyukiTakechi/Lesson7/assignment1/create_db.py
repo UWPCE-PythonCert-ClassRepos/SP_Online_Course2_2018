@@ -77,6 +77,7 @@ class Job(BaseModel):
     logger.info('Dates')
     start_date = DateField(formats = 'YYYY-MM-DD')
     end_date = DateField(formats = 'YYYY-MM_DD')
+    duration = IntegerField()
     logger.info('Number')
     salary = DecimalField(max_digits = 7, decimal_places = 2)
     logger.info('Which person had the job')

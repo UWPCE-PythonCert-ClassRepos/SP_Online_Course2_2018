@@ -32,7 +32,7 @@ def query_db():
 
         for person in query:
 
-            pprint.pprint('{}, {}'.format(person.person_name, person.job.job_name, person.job.department_id))
+            pprint.pprint('Name: {}, Job Title: {}, Deparment: {}, Duration (Days): {}'.format(person.person_name, person.job.job_name, person.job.department_id, person.job.duration))
 
 
     except Exception as e:
