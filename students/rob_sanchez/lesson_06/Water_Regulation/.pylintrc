@@ -55,6 +55,11 @@ confidence=
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
 disable=too-few-public-methods,
+        too-many-return-statements,
+        duplicate-code,
+        inconsistent-return-statements,
+        no-name-in-module,
+        import-error,
         print-statement,
         parameter-unpacking,
         unpacking-in-except,
