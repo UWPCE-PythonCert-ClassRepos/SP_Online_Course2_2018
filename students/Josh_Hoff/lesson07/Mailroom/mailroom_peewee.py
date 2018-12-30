@@ -7,40 +7,38 @@ from create_mailroom import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-class DonorCollection:
-    def __init__(self):
-        pass
         
-    def show_list(self):
-        for saved_donor in Donor:
-            print(f'{saved_donor}')
-        return
-            
-    def save(self):
-        pass
-
-    def load(self):
-        pass
+def show_list():
+    for saved_donor in Donor:
+        print(f'{saved_donor}')
+    return
+                    
+def report():
+    donorq = (Donor.select().order_by(Donor.donor_name)).prefetch(Donation)
+    for i in donorq:
+        print(i.donor_name)
+        for x in i.name_person:
+            print(f'  Invoice: {x.dono_number} : ${x.dono}')
+        print(f'  Total Donations: ${i.donations}')
+        for x in i.person_name:
+            print(f'   Transactions - {x.transactions}')
+            print(f'   Average Donation - ${x.average:.2f}')
+            print(f'   First Donation - ${x.first_gift}')
+            print(f'   Latest Donation - ${x.last_gift}')
         
-    def report(self):
-        donorq = (Donor.select().order_by(Donor.donor_name)).prefetch(Donation)
-        for i in donorq:
-            print(i.donor_name)
-            for x in i.name_person:
-                print(f'  Invoice: {x.dono_number} : ${x.dono}')
-            print(f'  Total Donations: ${i.donations}')
-            for x in i.person_name:
-                print(f'   Transactions - {x.transactions}')
-                print(f'   Average Donation - ${x.average}')
-                print(f'   First Donation - ${x.first_gift}')
-                print(f'   Latest Donation - ${x.last_gift}')
-        
-    def letters(self):
-        pass
+def letters():
+    tab = '    '
+    query = (Details.select().order_by(Details.name)).prefetch(Donor)
+    for name in query:
+        with open(f'{name.name.donor_name}.txt', 'w') as outfile:                
+            donation = name.name.donations
+            val = name.last_gift
+            outfile.write(f'Dear {name.name.donor_name}, \n\n{tab}Thank you very much for your most recent donation \
+of ${val:.2f}! \n\n{tab}You have now donated a total of ${donation:.2f}. \n\n{tab}Your support \
+is essential to our success and will be well utilized. \n\n{tab*2}Sincerely, \n{tab*3}-The Company')
     
 def show_donations():
-    a.show_list()
+    show_list()
     while True:
         choice = input(f'Whose donations do you want to see?: ')
         if choice == 'quit':
@@ -57,7 +55,7 @@ def show_donations():
         
 def delete():
     new_dict = {}
-    a.show_list()
+    show_list()
     while True:
         choice = input(f'Which donor would you like to edit?: ')
         if choice == 'quit':
@@ -82,16 +80,16 @@ def delete():
                         ind.name.donations = (float(ind.name.donations) - float(item.dono))
                         ind.average = (ind.name.donations / ind.transactions)
                         item.delete_instance()
-                        num = (Donation.select(fn.MAX(Donation.dono_number)).where(Donation.held_by == choice).scalar())
-                        replacing = (Donation.select().where(Donation.dono_number == num))
-                        for number in replacing:
+                        max = (Donation.select(fn.MAX(Donation.dono_number)).where(Donation.held_by == choice).scalar())
+                        min = (Donation.select(fn.MIN(Donation.dono_number)).where(Donation.held_by == choice).scalar())
+                        query_max = (Donation.select().where(Donation.dono_number == max))
+                        query_min = (Donation.select().where(Donation.dono_number == min))
+                        for number in query_max:
                             ind.last_gift = number.dono
+                        for number in query_min:
+                            ind.first_gift = number.dono
                         ind.save()
-                        ind.name.save()
-#                        print(ind.name.donations)
-
-#MAKE IT SO IF FIRST DONATION IS DELETED, A NEW FIRST DONATION TAKES ITS PLACE. SAME WITH LAST DONATION.
-                        
+                        ind.name.save()                        
 #                query = (Donation.select().where(Donation.held_by == choice).order_by(Donation.dono_number))
 #                for ind in query:
 #                    print(f'{ind.dono_number}: {ind.dono}')
@@ -102,7 +100,7 @@ def delete():
         
 def edit():
     new_dict = {}
-    a.show_list()
+    show_list()
     while True:
         choice = input(f'Which donor would you like to edit?: ')
         if choice == 'quit':
@@ -128,13 +126,17 @@ def edit():
                         ind.name.donations = (float(ind.name.donations) - float(item.dono) + float(replace))
                         ind.average = (ind.name.donations / ind.transactions)
                         item.dono = float(replace)
-                        num = (Donation.select(fn.MAX(Donation.dono_number)).where(Donation.held_by == choice).scalar())
-                        replacing = (Donation.select().where(Donation.dono_number == num))
-                        for number in replacing:
+                        item.save()
+                        max = (Donation.select(fn.MAX(Donation.dono_number)).where(Donation.held_by == choice).scalar())
+                        min = (Donation.select(fn.MIN(Donation.dono_number)).where(Donation.held_by == choice).scalar())
+                        query_max = (Donation.select().where(Donation.dono_number == max))
+                        query_min = (Donation.select().where(Donation.dono_number == min))
+                        for number in query_max:
                             ind.last_gift = number.dono
+                        for number in query_min:
+                            ind.first_gift = number.dono
                         ind.save()
                         ind.name.save()
-                        item.save()
                 return
                     
                             
@@ -216,22 +218,17 @@ def continuing():
     continues the program
     """
     print('Try Again.\n')
-    
-    
-a = DonorCollection()
 
 switch_func_dict = {
     '1':thank_you,
     '2':edit,
     '3':delete,
-    '4':a.report,
-    '5':a.letters,
-    '6':a.save,
-    '7':a.load,
-    '8':show_donations,
-    '9':quitting,
+    '4':report,
+    '5':letters,
+    '6':show_donations,
+    '7':quitting,
     'quit':quitting,
-    'list':a.show_list
+    'list':show_list
     }
 
 if __name__ == '__main__':
@@ -242,10 +239,8 @@ if __name__ == '__main__':
         f'\n3: Delete Donation' +\
         f'\n4: Create a Report' +\
         f'\n5: Send Letters to Everyone' +\
-        f'\n6: Save' +\
-        f'\n7: Load' +\
-        f'\n8: Show Donations' +\
-        f'\n9: Quit' +\
+        f'\n6: Show Donations' +\
+        f'\n7: Quit' +\
         f'\n\nChoose an Option: '
         )
         c = switch_func_dict.get(choice, continuing)()
