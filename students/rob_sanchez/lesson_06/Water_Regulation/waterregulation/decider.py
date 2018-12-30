@@ -69,8 +69,8 @@ class Decider(object):
             elif current_height > upper_margin:
                 return actions['PUMP_OUT']
             # 3
-            elif(current_height < upper_margin and
-                 current_height > lower_margin):
+            elif(current_height <= upper_margin and
+                 current_height >= lower_margin):
                 return actions['PUMP_OFF']
         # 4
         elif current_action == actions['PUMP_IN']:
