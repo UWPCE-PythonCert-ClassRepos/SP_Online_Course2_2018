@@ -2,7 +2,21 @@
 import logging
 
 log_format = "%(asctime)s %(filename)s:%(lineno)-4d %(levelname)s %(message)s"  # Add/modify these
-logging.basicConfig(level=logging.WARNING, format=log_format, filename='mylog.log')
+# BEGIN NEW STUFF
+formatter = logging.Formatter(log_format)
+
+file_handler = logging.FileHandler('mylog.log')
+file_handler.setLevel(logging.WARNING)
+file_handler.setFormatter(formatter)
+
+console_handler = logging.StreamHandler()        # Add this line
+console_handler.setLevel(logging.DEBUG)          # Add this line
+console_handler.setFormatter(formatter)          # Add this line
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)                   # Add this line
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)               # Add this line
 
 def my_fun(n):
     for i in range(0, n):
