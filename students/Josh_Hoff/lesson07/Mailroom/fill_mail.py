@@ -2,7 +2,7 @@
     Default database for testing mailroom
 """
 import logging
-from create_mailroom import *
+from .create_mailroom import *
 
 def populate_db():
     """
