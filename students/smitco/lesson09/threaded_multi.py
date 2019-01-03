@@ -66,7 +66,7 @@ titles = []
 get_sources(sources)
 
 threads = []
-for i in range(1):
+for i in range(100):
     thread = threading.Thread(target=get_articles, args=(sources,))
     threads.append(thread)
     thread.start()
