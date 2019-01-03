@@ -1,8 +1,7 @@
 # lesson 09 threaded downloader exercise
 # !/usr/bin/env python3
 
-# ran out of requests from news api (250 available every 6 hours)
-# took 1 sec on my machine compared to 34 secs with sync and 4 secs with async
+# took 3 sec on my machine compared to 34 secs with sync and 4 secs with async
 
 import time
 import requests
@@ -14,42 +13,44 @@ NEWS_API_KEY = "36f7da631b8a4373a98bcae0f0516d7f"
 base_url = 'https://newsapi.org/v1/'
 
 sources = queue.Queue()
+thread_lock = threading.Lock()
 
-def get_sources(s):
+def get_sources(sources):
     """ Get the english language sources of news """
     
     url = base_url + 'sources'
     params = {'langauge': 'en'}
     resp = requests.get(url, params=params)
     data = resp.json()
-    s.put([(src['id'].strip()) for src in data['sources']])
+    for src in data['sources']:
+        sources.put(src['id'].strip())
     print('all the sources')
-    return s
+    return sources
     
 
-def get_articles(s):
-    while s.empty() != True:
-        source = s.get()
+def get_articles():
+    while not sources.empty():
+        source = sources.get()
         url = base_url + 'articles'
         params = {'source': source,
                    'apiKey': NEWS_API_KEY,
                    'sortBy': 'top'
                   }
-        print('requesting:', source)
+        print('requesting:', params)
         resp = requests.get(url, params=params)
         if resp.status_code != 200:
             print('something went wrong with {}'.format(source))
             print(resp)
             print(resp.text)
-            s.task_done()
+            sources.task_done()
             return
         data = resp.json()
-        threading.Lock.acquire()
-        titles = [str(art['title']) + str(art['description'])
-                  for art in data['articles']]
-        threading.Lock.release()
-        s.task_done()
-        return titles
+        print('got the articles from {}'.format(source))
+        with thread_lock:
+            titles.extend([str(art['title']) + str(art['description'])
+                      for art in data['articles']])
+        sources.task_done()
+    return titles
 
 
 def count_word(word, titles):
@@ -67,7 +68,7 @@ get_sources(sources)
 
 threads = []
 for i in range(100):
-    thread = threading.Thread(target=get_articles, args=(sources,))
+    thread = threading.Thread(target=get_articles)
     threads.append(thread)
     thread.start()
 
