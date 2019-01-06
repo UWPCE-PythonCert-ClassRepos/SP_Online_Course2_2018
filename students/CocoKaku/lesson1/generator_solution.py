@@ -1,3 +1,7 @@
+"""
+Lesson 1: Generators
+"""
+
 def intsum():
     """
     keep adding the next integer
@@ -5,20 +9,12 @@ def intsum():
     so the sequence is:
     0, 1, 3, 6, 10, 15 …
     """
-    sum = 0
-    n = 1
+    num = 0
+    i = 1
     while True:
-        yield sum
-        sum += n
-        n += 1
-
-
-def intsum2():
-    """
-
-    :return:
-    """
-    pass
+        yield num
+        num += i
+        i += 1
 
 
 def doubler():
@@ -37,27 +33,33 @@ def fib():
     f(n) = f(n-1) + f(n-2)
     1, 1, 2, 3, 5, 8, 13, 21, 34…
     """
-    n = 1
+    num = 1
     nminus1 = 1
     nminus2 = 0
     while True:
-        yield n
-        n = nminus1 + nminus2
+        yield num
+        num = nminus1 + nminus2
         nminus2 = nminus1
-        nminus1 = n
+        nminus1 = num
 
 
-def isPrime(n):
-    for i in range(2,int(n**0.5)+1):
-        if n%i==0:
+def is_prime(num):
+    """
+    return True if num is prime, False if it is not
+    """
+    for i in range(2, int(num ** 0.5) + 1):
+        if num % i == 0:
             return False
     return True
 
 
 def prime():
-    n = 2
+    """
+    Next prime generator
+    """
+    num = 2
     while True:
-        while not isPrime(n):
-            n += 1
-        yield n
-        n += 1
+        while not is_prime(num):
+            num += 1
+        yield num
+        num += 1

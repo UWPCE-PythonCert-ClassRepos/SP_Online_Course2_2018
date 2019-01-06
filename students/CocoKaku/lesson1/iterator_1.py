@@ -65,16 +65,18 @@ if __name__ == "__main__":
     print("\n\nTesting improved iterator compared to range")
     it = IterateMe_2(2, 20, 2)
     for i in it:
-        if i > 10: break
+        if i > 10:
+            break
         print(i, end=' ')
-    print("pause",end=' ')
+    print("pause", end=' ')
     for i in it:
         print(i, end=' ')
 
     print("\n\nCompare to range")
     rng = range(2, 20, 2)
     for r in rng:
-        if r > 10: break
+        if r > 10:
+            break
         print(r, end=' ')
     print("pause", end=' ')
     for r in rng:
