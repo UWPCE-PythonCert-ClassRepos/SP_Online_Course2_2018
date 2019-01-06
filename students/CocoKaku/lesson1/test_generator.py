@@ -20,7 +20,7 @@ def test_intsum():
     assert next(g) == 10
     assert next(g) == 15
 
-
+"""
 def test_intsum2():
 
     g = gen.intsum2()
@@ -31,7 +31,7 @@ def test_intsum2():
     assert next(g) == 6
     assert next(g) == 10
     assert next(g) == 15
-
+"""
 
 def test_doubler():
 
