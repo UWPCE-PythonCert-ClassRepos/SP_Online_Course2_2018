@@ -26,6 +26,8 @@ class Donors(BaseModel):
     """
         This class defines Donor, which maintains the records
         for our current donors.
+        Using generated keys to assign a unique identifier for
+        each donor.
     """
 
     donor_name = CharField(unique=True, max_length=30)
@@ -34,6 +36,7 @@ class Donors(BaseModel):
 class Donations(BaseModel):
     """
         This class defines Donations from our current donors.
+        Using generated keys because each donor can have multiple donations.
     """
 
     donor = ForeignKeyField(Donors, null=False)

@@ -68,9 +68,9 @@ def populate_donations():
         (1, 200),
         (1, 300),
         (2, 1300),
-        (2, 4500),
-        (2, 1500),
-        (3, 500),
+        (3, 4500),
+        (3, 1500),
+        (4, 500),
         (4, 2400),
         ]
 
@@ -96,6 +96,33 @@ def populate_donations():
         database.close()
 
 
+def select_donors():
+    """
+        Produces a list using pretty print that shows all of
+        the departments a person worked in for every job they ever had.
+    """
+    database = SqliteDatabase('mailroom.db')
+
+    database.connect()
+    database.execute_sql('PRAGMA foreign_keys = ON;')
+
+    names_query = (Donors
+                   .select(Donors.donor_name,
+                           fn.SUM(Donations.donation).alias('total'),
+                           fn.COUNT(Donations.donation).alias('num'),
+                           fn.AVG(Donations.donation).alias('avg'))
+                   .join(Donations, on=(Donors.id == Donations.donor_id))
+                   .group_by(Donors.donor_name)
+                   .order_by(fn.AVG(Donations.donation).desc())
+                   )
+
+    for name in names_query:
+        print("\nDonor name: {}".format(str(name.donor_name)))
+        print("Total Given: ${}".format(str(name.total)))
+        print("Num Given: {}".format(str(name.num)))
+        print("Average: {}".format(str(name.avg)))
+
+
 def day_diff(d1, d2):
     date1 = datetime.strptime(d1, '%Y-%m-%d')
     date2 = datetime.strptime(d2, '%Y-%m-%d')
@@ -105,3 +132,4 @@ def day_diff(d1, d2):
 if __name__ == '__main__':
     populate_donors()
     populate_donations()
+    select_donors()
