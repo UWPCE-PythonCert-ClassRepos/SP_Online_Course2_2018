@@ -90,6 +90,8 @@ def set_variables(query, temp = None):
     setting.last_gift
 
 def new_donor(first_name, last_name, donation):
+    email = input('What is the email?: ')
+    phone = input('What is the phone number?: ')
     donor_data.insert_one({'first_name': first_name,
         'last_name': last_name,
         'donations': [donation],
@@ -97,7 +99,9 @@ def new_donor(first_name, last_name, donation):
         'average': donation,
         'first_gift': donation,
         'last_gift': donation,
-        'transactions': 1
+        'transactions': 1,
+        'email': email,
+        'phone': phone
         })
 
 def existing_donor(first_name, last_name, donation):

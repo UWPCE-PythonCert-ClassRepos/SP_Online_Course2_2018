@@ -1,5 +1,6 @@
 """
     clears database for testing
+    WARNING: THIS WILL CLEAR ALL KEYS IN THE REDIS DATABASE
 """
 
 import login_redis

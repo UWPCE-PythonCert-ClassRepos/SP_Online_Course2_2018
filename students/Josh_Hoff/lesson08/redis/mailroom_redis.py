@@ -65,15 +65,16 @@ def set_variables(name, cust_num):
 
 def new_donor(name, donation):
     new_cust_num = f"{name[0]}{r.incr('customer_count')}"
-
+    email = input('What is the email?: ')
+    phone = input('What is the phone number?: ')
     r.hset(name, 'total_donations', donation)
     r.hset(name, 'average', donation)
     r.hset(name, 'first_gift', donation)
     r.hset(name, 'last_gift', donation)
     r.hincrby(name, 'transactions', 1)
     r.hset(name, 'average', donation)
-    r.hset(name, 'email', "")
-    r.hset(name, 'phone', "")
+    r.hset(name, 'email', email)
+    r.hset(name, 'phone', phone)
     r.hset(name, 'cust_num', new_cust_num)
     r.hset(name, r.incr('invoice'), donation)
     r.rpush(new_cust_num, r.get('invoice'))
@@ -167,7 +168,6 @@ def delete():
         continue
 
 def edit():
-    #EDIT THIS NEXT ---------------------------------------------
     names = show_list()
     while True:
         choice = input(f'Which donor would you like to edit?: ')
@@ -198,38 +198,6 @@ def edit():
                     set_variables(donor, cust_num)
                     return
         print('\nDonator does not exist.\n')
-        continue
-    show_list()
-    while True:
-        first_name = input(f'Which donor would you like to edit?: ')
-        if first_name == 'quit':
-            return
-        cursor = donor_data.find()
-        for doc in cursor:
-            if first_name == doc['first_name']:
-                query = donor_data.find_one({'first_name': first_name})
-                temp = []
-                for ind in query['donations']:
-                    print(f'{query["donations"].index(ind)+1}: {ind}')
-                    temp.append(ind)
-                while True:
-                    number = int(input(f'Which donation would you like to edit?: ')) - 1
-                    if number == 'quit':
-                        return
-                    break
-                while True:
-                    replace = input(f'What is the correct donation amount?: ')
-                    if replace == 'quit':
-                        return
-                    try:
-                        float(replace)
-                    except ValueError:
-                        print('\nPlease give a number instead.\n')
-                        continue
-                    temp[number] = float(replace)
-                    set_variables(query, temp)
-                    return
-        print('\nPlease type a name from the list.\n')
         continue
 
 def thank_you():
