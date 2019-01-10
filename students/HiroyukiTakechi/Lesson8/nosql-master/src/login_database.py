@@ -27,14 +27,12 @@ def login_mongodb_cloud():
         user = config["mongodb_cloud"]["user"]
         pw = config["mongodb_cloud"]["pw"]
 
+
     except Exception as e:
         print(f'error: {e}')
 
-    client = pymongo.MongoClient(f'mongodb://{user}:{pw}'
-                                 '@cluster0-shard-00-00-wphqo.mongodb.net:27017,'
-                                 'cluster0-shard-00-01-wphqo.mongodb.net:27017,'
-                                 'cluster0-shard-00-02-wphqo.mongodb.net:27017/test'
-                                 '?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin')
+    client = pymongo.MongoClient(f'mongodb://ldconejo:fds@cluster0-shard-00-00-maquj.mongodb.net:27017,cluster0-shard-00-01-maquj.mongodb.net:27017,cluster0-shard-00-02-maquj.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true')
+    #client = pymongo.MongoClient(f'mongodb://take0033:Microsoft2007!@cluster0-shard-00-00-sqonm.mongodb.net:27017,cluster0-shard-00-01-sqonm.mongodb.net:27017,cluster0-shard-00-02-sqonm.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true')
 
     return client
 
@@ -77,8 +75,12 @@ def login_neo4j_cloud():
 
     graphenedb_user = config["neo4j_cloud"]["user"]
     graphenedb_pass = config["neo4j_cloud"]["pw"]
-    graphenedb_url = 'bolt://hobby-opmhmhgpkdehgbkejbochpal.dbs.graphenedb.com:24786'
+    graphenedb_url = 'bolt://hobby-ghnnfcbockbogbkeahomhjcl.dbs.graphenedb.com:24786'
     driver = GraphDatabase.driver(graphenedb_url,
                                   auth=basic_auth(graphenedb_user, graphenedb_pass))
 
     return driver
+
+
+
+

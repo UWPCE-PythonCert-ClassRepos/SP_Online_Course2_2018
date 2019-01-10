@@ -123,12 +123,12 @@ def run_example(furniture_items):
             ('Customer10', 'Tomato', 1, 3.0, 3.0)           
         ]
         log.info("Step 8: Write csv file")
-        with open('/Users/hiroyukitakechi/SP_Online_Course2_2018/students/HiroyukiTakechi/Lesson8/nosql-master/src/transaction.csv', 'w') as transaction:
+        with open('transaction.csv', 'w') as transaction:
             transactionwriter = csv.writer(transaction)
-            transactionwriter.writerow(transactiondata)
+            transactionwriter.writerow(peopledata)
 
         log.info("Step 9: Read csv file back")
-        with open('/Users/hiroyukitakechi/SP_Online_Course2_2018/students/HiroyukiTakechi/Lesson8/nosql-master/src/transaction.csv', 'r') as transaction:
+        with open('transaction.csv', 'r') as transaction:
             transaction_reader = csv.reader(transaction, delimiter=',', quotechar='"')
             for row in transaction_reader:
                 pprint.pprint(row)

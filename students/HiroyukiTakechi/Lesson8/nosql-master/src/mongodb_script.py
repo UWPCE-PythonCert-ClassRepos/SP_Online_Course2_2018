@@ -52,7 +52,7 @@ def run_example(furniture_items):
         log.info('Notice how we parse out the data from the document')
 
         for doc in cursor:
-            print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['product']} Stock: {doc['in_stock_quantity']}")
+            print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['product_type']} Stock: {doc['in_stock_quantity']}")
 
         log.info('Step added by Hiro: Find all the red products)')
         cursor = furniture.find({'color': 'Red'})
