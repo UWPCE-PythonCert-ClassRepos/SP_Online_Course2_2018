@@ -1,9 +1,17 @@
 def intsum(i=0):
     sum = 0
     while True:
-        yield sum
         sum = sum + i
         i = i + 1
+        yield sum
+
+
+def intsum2(i=0):
+    sum = 0
+    while True:
+        sum = sum + i
+        i = i + 1
+        yield sum
 
 
 def doubler(i=1):
