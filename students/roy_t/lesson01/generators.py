@@ -15,11 +15,12 @@ def sum_of_integers():
 
 
 def doubler():
-    """Each value is double the previous value"""
+    """Each value is double the previous value."""
     val = 1
     while True:
         yield val
         val *= 2
+
 
 def fibonacci_sequence():
     """Return the fibonacci series of length n."""
@@ -28,8 +29,9 @@ def fibonacci_sequence():
         yield a
         a, b = b, a + b
 
+
 def prime_numbers():
-    """Generate the prime numbers"""
+    """Generate the prime numbers."""
     count = 1
     while True:
         count += 1
@@ -39,3 +41,36 @@ def prime_numbers():
         else:
             yield count
 
+
+def squared_nums():
+    """Square number generator"""
+    num = 1
+    while True:
+        squared = num*num
+        yield squared
+        num += 1
+
+
+def count_by_threes():
+    """Count-by-three geneator"""
+    x = 0
+    while True:
+        yield x
+        x += 3
+
+
+def cubed_nums():
+    """cubed number generator"""
+    num = 1
+    while True:
+        cubed = num**3
+        yield cubed
+        num += 1
+
+
+def minus_7():
+    """Subtract 7 from previous number generator"""
+    x = 0
+    while True:
+        yield x
+        x -= 7

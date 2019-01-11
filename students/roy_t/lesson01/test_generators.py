@@ -47,6 +47,29 @@ class TestGenerators(unittest.TestCase):
 		assert next(prim_gen) == 11
 		assert next(prim_gen) == 13
 
+	def test_squared_nums(self):
+		sq_gen = gen.squared_nums()
+		for i in range(1, 10):
+			assert next(sq_gen) == i*i
+
+	def test_cubed_nums(self):
+		cube_gen = gen.cubed_nums()
+		for i in range(1, 10):
+			assert next(cube_gen) == i**3
+
+	def test_count_by_threes(self):
+		vals = [0, 3, 6, 9, 12, 15, 18]
+		c = gen.count_by_threes()
+		for i in range(len(vals)):
+			assert next(c) == vals[i]
+
+	def test_minus_7(self):
+		vals = [0, -7, -14, -21, -28, -35, -42, -49]
+		m = gen.minus_7()
+		for i in range(len(vals)):
+			assert next(m) == vals[i]
+
+
 
 if __name__ == "__main__":
 	unittest.main()
