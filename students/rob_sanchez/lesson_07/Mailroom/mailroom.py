@@ -3,24 +3,33 @@ import sys
 import re
 import json
 from donor_class import *
+import os
 
 
-# List of donors and donation amounts
+# New instance of the MyDonation class
 donations_list = MyDonations()
 
 
 def main():
+    """
+        Displays the main menu selection options
+    """
     # Menu options
     options = {1: send_thank_you,
                2: create_report,
                3: send_letters,
                4: challenge,
-               5: delete_donor,
-               7: sys.exit}
+               5: update_donor,
+               6: update_donation,
+               7: delete_donor,
+               8: delete_donation,
+               0: sys.exit}
     prompt = "\nChoose an action:\n"
     menu_sel = ("\n1 - Send a Thank You\n2 - Create a Report\n"
-                "3 - Send letters to everyone\n4 - Projections\n"
-                "5 - Delete donor \n7 - Quit\n")
+                "3 - Send letters to everyone\n4 - Projections\n\n"
+                "5 - Update Donor\n6 - Update Donation\n\n"
+                "7 - Delete Donor\n8 - Delete Donation\n\n"
+                "0 - Quit\n\n")
 
     # User selection
     while True:
@@ -33,8 +42,10 @@ def main():
             print("\nOption {} is invalid. Try again...".format(user_selection))
 
 
-# Sends a thank you email to the selected donor
 def send_thank_you():
+    """
+        Sends a thank you email to the selected donor
+    """
 
     # Get name of donor
     donor_name = name_prompt()
@@ -52,37 +63,116 @@ def send_thank_you():
     print(send_email(donations_list.get_last_donation(donor_name)))
 
 
-# Creates a summary report of the donations
 def create_report():
+    """
+        Displays a summary report of the current list of donations
+    """
     donations_list.get_summary
 
 
-# Creates a thank you file for each donor
+# C
 def send_letters():
+    """
+        reates a thank you letter for each donor as a
+        text document
+    """
 
     for value in donations_list.get_list_of_donors():
         name = str(value.donor_name)
-        with open(name + '.txt', 'w') as f:
+
+        if not os.path.exists('letters/'):
+            os.makedirs('letters/')
+
+        with open("letters/"+name+".txt", 'w') as f:
             f.write(create_letter(donations_list.get_donor_summary(name)))
         print("\nLetter to {} has been sent...".format(name))
 
 
 def challenge():
+    """
+        Challenges a donor's current donations for a given range
+        and with a given multiplier value
+    """
     while True:
         try:
-            name = name_prompt()
+            donor_name = name_prompt()
+
+            # Display list of donors when user types "list"
+            while donor_name.lower() == "list":
+                donations_list.get_formatted_list_of_donors()
+                donor_name = name_prompt()
+
+            # Display current list of donations
+            donations_list.get_formatted_list_of_donations(donor_name)
+
             min = min_prompt()
             max = max_prompt()
             multiplier = multiplier_prompt()
-            print(donations_list.challenge(name, factor=multiplier, min=min, max=max))
+            print(donations_list.challenge(donor_name, factor=multiplier, min=min, max=max))
             break
         except ValueError:
-            print("\n>> Please enter a valid name <<")
+            print("\n>> Please enter a valid donor name <<")
         except KeyError:
             print("\n>> Donor not found <<")
 
 
+def update_donor():
+    """
+        Updates a donor's current name
+    """
+    while True:
+        try:
+            # Get name of donor to be updated
+            donor_name = name_prompt()
+
+            # Display list of donors when user types "list"
+            while donor_name.lower() == "list":
+                donations_list.get_formatted_list_of_donors()
+                donor_name = name_prompt()
+
+            # Get donor's new name
+            new_name = new_name_prompt()
+
+            donations_list.update_donor(donor_name, new_name)
+            break
+        except ValueError:
+            print("\n>> Donor not found <<")
+
+
+def update_donation():
+    """
+        Updates a donor's donation
+    """
+
+    while True:
+        try:
+            # Get name of donor to be deleted
+            donor_name = name_prompt()
+
+            # Display list of donors when the user types "list"
+            while donor_name.lower() == "list":
+                donations_list.get_formatted_list_of_donors()
+                donor_name = name_prompt()
+
+            # Display current list of donations
+            donations_list.get_formatted_list_of_donations(donor_name)
+
+            donation = donation_prompt()
+            new_donation = new_donation_prompt()
+
+            donations_list.update_donation(donor_name, donation, new_donation)
+
+            break
+        except ValueError:
+            print("\n>> Donor not found <<")
+        except DonationError:
+            print("\n>> Donation not found <<")
+
+
 def delete_donor():
+    """
+        Deletes the specified donor and donations from the database
+    """
     while True:
         try:
             # Get name of donor to be deleted
@@ -99,9 +189,43 @@ def delete_donor():
             print("\n>> Donor not found <<")
 
 
+def delete_donation():
+    """
+        Deletes the specified donor's donation
+    """
+    donor_name = ""
+    donation = 0
+
+    while True:
+        try:
+            # Get name of donor to be deleted
+            donor_name = name_prompt()
+
+            # Display list of donors when the user types "list"
+            while donor_name.lower() == "list":
+                donations_list.get_formatted_list_of_donors()
+                donor_name = name_prompt()
+
+            # Display current list of donations
+            donations_list.get_formatted_list_of_donations(donor_name)
+
+            donation = donation_prompt()
+
+            donations_list.delete_donation(donor_name, donation)
+            break
+        except ValueError:
+            print("\n>> Donor not found <<")
+        except DonationError:
+            print("\n>> Donation not found <<")
+
+
+####
 # Helper methods:
-# Asks user for the name of donor to send thank you email
+####
 def name_prompt():
+    """
+        Prompts the user for the name of donor to send thank you email
+    """
     while True:
         try:
             name = input("\nPlease enter the Donor's full name:\n" +
@@ -115,8 +239,26 @@ def name_prompt():
             print("\n>> Please enter a valid name <<")
 
 
-# Asks user for the donation amount
+def new_name_prompt():
+    """
+        Prompts the user for the donor's updated name
+    """
+    while True:
+        try:
+            name = input("\nPlease enter the Donor's new name:\n").strip()
+            if re.match("^[A-Za-z ,]*$", name) and name:
+                return name
+                break
+            else:
+                print("\n>> Please enter a valid name <<")
+        except ValueError:
+            print("\n>> Please enter a valid name <<")
+
+
 def donation_prompt():
+    """
+        Prompts the user for a donation amount
+    """
     while True:
         try:
             amount = re.sub("[, ]", "", input("\nDonation amount:\n$"))
@@ -126,8 +268,23 @@ def donation_prompt():
             print("\n>> Please enter a valid donation amount <<")
 
 
-# Asks user for the donation multiplier number
+def new_donation_prompt():
+    """
+        Prompts the user for the updated donatino amount
+    """
+    while True:
+        try:
+            amount = re.sub("[, ]", "", input("\nNew donation amount:\n$"))
+            return round(float(amount), 2)
+            break
+        except ValueError:
+            print("\n>> Please enter a valid donation amount <<")
+
+
 def multiplier_prompt():
+    """
+        Prompts the user for the donation multiplier factor
+    """
     while True:
         try:
             multiplier = re.sub("[, ]", "", input("\nMultiply donations by: "))
@@ -137,8 +294,10 @@ def multiplier_prompt():
             print("\n>> Please enter a valid multiplier <<")
 
 
-# Asks user for a minimum donation
 def min_prompt():
+    """
+        Prompts the user for the minimum projection donation
+    """
     while True:
         try:
             min = re.sub("[, ]", "", input("\nMin donation (Press enter for default value): "))
@@ -148,8 +307,10 @@ def min_prompt():
             print("\n>> Please enter a valid minimum value <<")
 
 
-# Asks user for a maximum donation
 def max_prompt():
+    """
+        Prompts the user for the maximum projection donation
+    """
     while True:
         try:
             max = re.sub("[, ]", "", input("\nMax donation (Press enter for default value): "))
@@ -159,8 +320,10 @@ def max_prompt():
             print("\n>> Please enter a valid maximum value <<")
 
 
-# Sends an email to the specified donor
 def send_email(new_donor):
+    """
+        Formats the email for newly added donors
+    """
     body = ("\nDear {donor_name},\n\n"
             "I would like to personally thank you for your generours donation "
             "of ${amount} to our charity organization.\nYour support allows us"
@@ -169,8 +332,10 @@ def send_email(new_donor):
     return body
 
 
-# Thank you letter template
 def create_letter(donations):
+    """
+        Formats the letter for the current list of donors
+    """
     body = ("\nDear {donor_name},\n\n"
             "I would like to personally thank you for your recent "
             "donation of ${last_donation} to our charity organization. "

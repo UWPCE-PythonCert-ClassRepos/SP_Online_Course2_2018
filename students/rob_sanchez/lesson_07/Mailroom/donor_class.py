@@ -4,11 +4,6 @@ from create_mailroom_db import *
 
 class MyDonations():
 
-    def __init__(self):
-        self.donor_name = ""
-        self.donation_amount = ""
-        self.donors_list = []
-
     def add_donation(self, name, amount):
         """
             Adds a new donor and donation contribution
@@ -48,9 +43,87 @@ class MyDonations():
         finally:
             database.close()
 
+    def challenge(self, donor, factor=1, min=50, max=9999999):
+        """
+            Returns estimated predictions of current donations
+        """
+        new_collection = Donations()
+        new_total = 0
+
+        # Return donations within the specified range
+        donor_id = self.get_donor_id(donor)
+        query = (Donations.select(Donations.donation)
+                          .where((Donations.donor_id == donor_id) &
+                                 (Donations.donation <= max) &
+                                 (Donations.donation >= min)))
+
+        for row in query:
+            new_total += round(float(row.donation), 2) * factor
+
+        proj_str = ("\nIf donations between ${0} and ${1} are multiplied by a factor of {2}, "
+                    "\nthe total contribution for {3} "
+                    "will be: $").format(min, max, factor, donor)
+
+        return proj_str + str(new_total)
+
+    def update_donor(self, name, new_name):
+        """
+            Updates the specified donor's name
+        """
+
+        database = SqliteDatabase('mailroom.db')
+
+        try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+
+            update = (Donors.update(donor_name=new_name)
+                            .where(Donors.donor_name == name))
+
+            if(update.execute()):
+                print("\n'{0}' has been updated to '{1}''".format(name, new_name))
+            else:
+                raise ValueError
+
+        finally:
+            database.close()
+
+    def update_donation(self, name, donation, new_donation):
+        """
+            Updates a donor's donation amount
+        """
+
+        database = SqliteDatabase('mailroom.db')
+
+        try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+
+            donor_id = self.get_donor_id(name)
+            donation_id = ""
+
+            query = (Donations.select(fn.max(Donations.id).alias('id'))
+                              .where((Donations.donor_id == donor_id) &
+                                     (Donations.donation == donation))
+                              .namedtuples())
+
+            for row in query:
+                donation_id = row.id
+
+            update = (Donations.update(donation=new_donation)
+                               .where(Donations.id == donation_id))
+
+            if(update.execute()):
+                print("\n${0} has been updated to ${1}".format(donation, new_donation))
+            else:
+                raise DonationError
+
+        finally:
+            database.close()
+
     def delete_donor(self, name):
         """
-            Adds a new donor and donation contribution
+            Deletes a donor and donations
         """
 
         database = SqliteDatabase('mailroom.db')
@@ -69,8 +142,42 @@ class MyDonations():
         finally:
             database.close()
 
-    # Returns a list of donor names
+    def delete_donation(self, name, donation):
+        """
+            Deletes a donor's donations
+        """
+
+        database = SqliteDatabase('mailroom.db')
+
+        try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+
+            donor_id = self.get_donor_id(name)
+            donation_id = ""
+
+            query = (Donations.select(fn.max(Donations.id).alias('id'))
+                              .where((Donations.donor_id == donor_id) &
+                                     (Donations.donation == donation))
+                              .namedtuples())
+
+            for row in query:
+                donation_id = row.id
+
+            to_del = Donations.delete().where(Donations.id == donation_id).execute()
+
+            if (to_del):
+                print("\n{0}'s donation of ${1} has been deleted... ".format(name, donation))
+            else:
+                raise DonationError
+
+        finally:
+            database.close()
+
     def get_list_of_donors(self):
+        """
+            Returns a list of donor names
+        """
 
         database = SqliteDatabase('mailroom.db')
         database.connect()
@@ -80,24 +187,60 @@ class MyDonations():
 
         return donors_query
 
-    # Returns a list of donor ids
+    def get_list_of_donations(self, id):
+        """
+            Returns a list of donations from the donor specified
+        """
+
+        database = SqliteDatabase('mailroom.db')
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+
+        donations_query = (Donations.select(Donations.donation)
+                                    .where(Donations.donor_id == id))
+
+        return donations_query
+
     def get_donor_id(self, name):
+        """
+            Returns the primary key of a donor based on their name
+        """
 
         database = SqliteDatabase('mailroom.db')
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
         id = ""
 
-        donors_query = (Donors.select(Donors.id)
-                              .where(Donors.donor_name == name))
+        id_query = (Donors.select(Donors.id)
+                          .where(Donors.donor_name == name))
 
-        for row in donors_query:
+        for row in id_query:
             id = row.id
 
         return id
 
-    # Returns a formatted list of donor names
+    def get_donation_id(self, donation):
+        """
+            Returns the primary key of a donor based on their name
+        """
+
+        database = SqliteDatabase('mailroom.db')
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        id = ""
+
+        id_query = (Donations.select(fn.max(Donations.id))
+                             .where(Donations.donation == donation))
+
+        for row in id_query:
+            id = row.id
+
+        return id
+
     def get_formatted_list_of_donors(self):
+        """
+            Returns a formatted list of donor names
+        """
 
         donor_list = self.get_list_of_donors()
         names = []
@@ -108,16 +251,32 @@ class MyDonations():
         print("\nList of current donors: ")
         print(*names, sep=", ")
 
+    def get_formatted_list_of_donations(self, name):
+        """
+            # Returns a formatted list of donations
+            for the given donor name
+        """
+
+        id = self.get_donor_id(name)
+        donations_list = self.get_list_of_donations(id)
+        donations = []
+
+        for row in donations_list:
+            donations.append("$" + str(row.donation))
+
+        print("\nList of current donations for {}: ".format(name))
+        print(*donations, sep=", ")
+
     # Returns the total donations for each donor
     @property
     def donation_totals(self):
         return {sum(self.donor_dict[key]) for key in self.donor_dict}
 
-    # Returns donation summary ordered by donation amount
     @property
     def get_summary(self):
         """
             Returns a formatted list of donors and donations
+            ordered by the average total contribution
         """
         headers = ["Donor Name", "Total Given", "Num Gifts", "Average Gift"]
         str_format = "{:<30} ${:>17} {:>16} ${:>14}"
@@ -151,6 +310,10 @@ class MyDonations():
             database.close()
 
     def get_donor_summary(self, name):
+        """
+            Returns a summary of the last donation and total
+            contribution of each donor
+        """
         summary = {}
         id = self.get_donor_id(name)
 
@@ -172,6 +335,9 @@ class MyDonations():
         return summary
 
     def get_last_donation(self, name):
+        """
+            Returns the last donation for the specified donor
+        """
         summary = {}
         id = self.get_donor_id(name)
 
@@ -194,20 +360,7 @@ class MyDonations():
 
         return summary
 
-    def challenge(self, donor, factor=1, min=50, max=9999999):
-        new_collection = Donations()
 
-        filtered_donations = self.filter_donations(self.donor_dict[donor], min, max)
-        new_list = list(map(lambda x: x*factor, filtered_donations))
-
-        for donations in new_list:
-            new_collection.add_donation(donor, donations)
-
-        proj_str = ("\nIf donations between ${} and ${} are multiplied by a factor of {}, "
-                    "\nthe total contribution for {} "
-                    "will be: $").format(min, max, factor, donor)
-
-        return proj_str + str(new_collection.donation_totals).strip('{}')
-
-    def filter_donations(self, donations, min, max):
-        return list(filter(lambda x: min <= x <= max, donations))
+class DonationError(Exception):
+    """Raised when the donation value is not found"""
+    pass
