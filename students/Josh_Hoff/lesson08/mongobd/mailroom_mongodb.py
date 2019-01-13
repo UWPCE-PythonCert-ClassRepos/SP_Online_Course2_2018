@@ -82,6 +82,9 @@ class Donorhandle:
         return query['last_gift']
 
 def set_variables(query, temp = None):
+    if not temp:
+        donor_data.delete_one( {'first_name': query['first_name'], 'last_name': query['last_name']})
+        return
     setting = Donorhandle(query, temp)
     setting.gifts
     setting.total_donations

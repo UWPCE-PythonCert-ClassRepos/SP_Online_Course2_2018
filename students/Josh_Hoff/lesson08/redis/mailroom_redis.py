@@ -225,6 +225,26 @@ def thank_you():
         print('New donor - adding donor to database')
         new_donor(name, donation)
         return
+        
+def look_up():
+    names = [item for item in r.scan()[1] if r.type(item) == 'hash']
+    while True:
+        check = input(f'\n1: Phone Numbers' +\
+        f'\n2: Emails' +\
+        f'\n3: Customer Number' +\
+        f'\n\nWhat would you like to look up?: ')
+        if check == 'quit':
+            return
+        for name in names:
+            print(name)
+            details = r.hgetall(name)
+            if check == '1':
+                print(f'   {details["phone"]}')
+            if check == '2':
+                print(f'   {details["email"]}')
+            if check == '3':
+                print(f'   {details["cust_num"]}')
+        return
 
 def quitting():
     """
@@ -245,7 +265,8 @@ switch_func_dict = {
     '4':report,
     '5':letters,
     '6':show_donations,
-    '7':quitting,
+    '7':look_up,
+    '8':quitting,
     'quit':quitting,
     'list':show_list
     }
@@ -260,7 +281,8 @@ if __name__ == '__main__':
             f'\n4: Create a Report' +\
             f'\n5: Send Letters to Everyone' +\
             f'\n6: Show Donations' +\
-            f'\n7: Quit' +\
+            f'\n7: Look Up Donor Data' +\
+            f'\n8: Quit' +\
             f'\n\nChoose an Option: '
             )
             c = switch_func_dict.get(choice, continuing)()
