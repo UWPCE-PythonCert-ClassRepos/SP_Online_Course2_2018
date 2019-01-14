@@ -51,6 +51,7 @@ def get_furniture_data():
             'monthly_rental_cost': 1.00,
             'in_stock_quantity': 45
         },
+        {
             'product type': 'Loveseat',
 			'product color': 'Brown',
             'description': 'Leather high back',
