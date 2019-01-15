@@ -7,7 +7,9 @@ music = pd.read_csv('featuresdf.csv')
 
 
 def my_closure():
+	"""Return a function of songs with danceability over the given value"""
 	def danceable(danceability=0.8):
+		"""Generator returning songs with danceability over a given value"""
 		tracks = ((round(dance, 3), artist, song_name)
 		          for dance, artist, song_name in zip(music.danceability, music.artists, music.name)
 		          if dance >= danceability)
