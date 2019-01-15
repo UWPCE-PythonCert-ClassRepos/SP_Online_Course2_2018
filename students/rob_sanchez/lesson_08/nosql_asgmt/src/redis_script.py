@@ -18,41 +18,69 @@ def run_example():
     try:
         log.info('Step 1: connect to Redis')
         r = login_database.login_redis_cloud()
-        log.info('Step 2: cache some data in Redis')
+        print('\nStep 2: cache some data in Redis...')
         r.set('andy', 'andy@somewhere.com')
 
-        log.info('Step 2: now I can read it')
+        log.info('Now I can read it using the key')
         email = r.get('andy')
-        log.info('But I must know the key')
-        log.info(f'The results of r.get: {email}')
+        log.info(f'The results of r.get(\'andy\'): {email}')
 
-        log.info('Step 3: cache more data in Redis')
+        print('\nStep 3: cache more data in Redis...')
         r.set('pam', 'pam@anywhere.com')
         r.set('fred', 'fred@fearless.com')
+        print(r.get('pam'))
+        print(r.get('fred'))
 
-        log.info('Step 4: delete from cache')
-        r.delete('andy')
-        log.info(f'r.delete means andy is now: {email}')
-
-        log.info(
-            'Step 6: Redis can maintain a unique ID or count very efficiently')
-        r.set('user_count', 21)
-        r.incr('user_count')
-        r.incr('user_count')
-        r.decr('user_count')
-        result = r.get('user_count')
-        log.info('I could use this to generate unique ids')
-        log.info(f'Redis says 21+1+1-1={result}')
-
-        log.info('Step 7: richer data for a SKU')
+        print('\nStep 4: adding and pulling richer data for a SKU...')
         r.rpush('186675', 'chair')
         r.rpush('186675', 'red')
         r.rpush('186675', 'leather')
         r.rpush('186675', '5.99')
 
-        log.info('Step 8: pull some data from the structure')
         cover_type = r.lindex('186675', 2)
+        price = r.lindex('186675', 3)
         log.info(f'Type of cover = {cover_type}')
+        log.info(f'Price = {price}')
+
+        print('\nStep 5: Adding additional customer data to the cache...')
+
+        # Index values:
+        PHONE = 0
+        ZIP = 1
+
+        # customer 1
+        r.rpush('John', '425-123-1111')
+        r.rpush('John', '99501')
+
+        # customer 2
+        r.rpush('Michael', '425-123-2222')
+        r.rpush('Michael', '99524')
+
+        # customer 3
+        r.rpush('Kate', '425-123-3333')
+        r.rpush('Kate', '85001')
+
+        # customer 4
+        r.rpush('Tom', '425-123-4444')
+        r.rpush('Tom', '85055')
+
+        # customer 5
+        r.rpush('Ron', '425-123-5555')
+        r.rpush('Ron', '72201')
+
+        # customer 6
+        r.rpush('Percy', '206-321-6666')
+        r.rpush('Percy', '72217')
+
+        # Retrive zip code
+        print('\nStep 6: Retrieving the Zip code of a known customer...')
+        zip = r.lindex('John', ZIP)
+        print(f'John\'s Zip code: {zip}')
+
+        # Retrive phone #
+        print('\nStep 7: Retrieving the Zip code of a known customer...')
+        phone_number = r.lindex('Kate', PHONE)
+        print(f'Kate\'s phone number: {phone_number}')
 
     except Exception as e:
         print(f'Redis error: {e}')

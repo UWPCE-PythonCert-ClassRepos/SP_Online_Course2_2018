@@ -90,9 +90,9 @@ def run_example(furniture_items):
         log.info("\n\n====")
         log.info("Step 10: Look at working with json data")
         furniture = [{'product': 'Red couch', 'description': 'Leather low back'},
-        {'product': 'Blue couch', 'description': 'Cloth high back'},
-        {'product': 'Coffee table', 'description': 'Plastic'},
-        {'product': 'Red couch', 'description': 'Leather high back'}]
+                     {'product': 'Blue couch', 'description': 'Cloth high back'},
+                     {'product': 'Coffee table', 'description': 'Plastic'},
+                     {'product': 'Red couch', 'description': 'Leather high back'}]
 
         log.info("Step 11: Return json string from an object")
         furniture_string = json.dumps(furniture)
