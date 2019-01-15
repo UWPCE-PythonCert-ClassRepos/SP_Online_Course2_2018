@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
+__author__ = "roy_t  githubtater"
+
 import pandas as pd
-import pprint
-from itertools import count, tee
+from itertools import tee
 
 music = pd.read_csv('featuresdf.csv')
 
@@ -20,7 +21,7 @@ def gen_len(iterable):
     return total
 
 
-def print_favorites(iterable, title='Top Songs of 2017'):
+def print_favorites(iterable, title="\nTop Songs of 2017"):
     """Function to print an iterable, including generators"""
     print(title)
     format_str = '{:<20}{:<20}'
@@ -46,8 +47,8 @@ def main():
         print_gen = find_favs_tee[1]
         total = gen_len(count_gen)
         if total == 0:
-            print('Your favorite artist wasn\'t found.\nBut, you\'re in luck, because everyone loves Ed Sheeran!!')
-            print_favorites(find_favorite_artist('Ed Sheeran'))
+            print('Your favorite artist wasn\'t found.\nBut, you\'re in luck, because everyone loves Ed Sheeran!\n')
+            print_favorites(find_favorite_artist('Ed Sheeran'), 'Top Ed Sheeran Songs of 2017')
         else:
             print_favorites(print_gen)
 
