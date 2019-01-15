@@ -6,8 +6,8 @@ import pandas as pd
 music = pd.read_csv('featuresdf.csv')
 
 
-def my_closure():
-	"""Return a function of songs with danceability over the given value"""
+def danceable_closure():
+	"""Return a function that in"""
 	def danceable(danceability=0.8):
 		"""Generator returning songs with danceability over a given value"""
 		tracks = ((round(dance, 3), artist, song_name)
@@ -29,7 +29,7 @@ def print_danceables(iterable):
 
 def main():
 	# create the intial generator object
-	danceable_tracks = my_closure()
+	danceable_tracks = danceable_closure()
 	print_danceables(danceable_tracks())# passing no arguments with danceable_tracks uses default danceability == 0.8
 
 	# Using the same generator object, get danceable tracks over 0.9 by passing the parameter
