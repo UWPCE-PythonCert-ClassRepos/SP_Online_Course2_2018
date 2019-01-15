@@ -13,7 +13,7 @@ import utilities
 log = utilities.configure_logger('default', '../logs/mongodb_script.log')
 
 
-def run_example(furniture_items):
+def run_example(furniture_items, movie_data):
     """
     various persistence and serialization scenarios
 
@@ -105,9 +105,25 @@ def run_example(furniture_items):
         log.info("Step 14: print the string")
         pprint.pprint(furniture_object)
 
-    run_pickle()
-    run_shelve()
-    run_csv()
-    run_json()
+    def run_movie_pickle():
+        """
+            Reads and writes new data using pickle
+        """
+        log.info("\n\n====")
+        log.info('Writing movie data to a pickle file...')
+
+        pickle.dump(movie_data, open('../data/new_data.pkl', 'wb'))
+
+        log.info('Reading the pickle file...')
+        read_data = pickle.load(open('../data/new_data.pkl', 'rb'))
+
+        assert read_data == movie_data
+        pprint.pprint(read_data)
+
+    # run_pickle()
+    # run_shelve()
+    # run_csv()
+    # run_json()
+    run_movie_pickle()
 
     return

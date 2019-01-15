@@ -5,6 +5,7 @@ Integrated example for nosql databases
 """
 
 import new_data
+import movie_data
 import mongodb_script
 import redis_script
 import neo4j_script
@@ -21,6 +22,7 @@ def showoff_databases():
 
     # New furniture data source
     furniture = new_data.get_furniture_data()
+    persistence = movie_data.get_movie_data()
 
     # log.info("Running MongoDB exercise")
     # mongodb_script.run_example(furniture)
@@ -28,11 +30,11 @@ def showoff_databases():
     # log.info("Running Redis exercise")
     # redis_script.run_example()
 
-    log.info("Running Neo4J exercise")
-    neo4j_script.run_example()
+    # log.info("Running Neo4J exercise")
+    # neo4j_script.run_example()
 
-    # log.info("Running persistence and serialization exercise")
-    # simple_script.run_example(furniture)
+    log.info("Running persistence and serialization exercise")
+    simple_script.run_example(furniture, persistence)
 
 
 if __name__ == '__main__':
