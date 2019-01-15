@@ -68,8 +68,7 @@ def login_neo4j_cloud():
 
     """
 
-    log.info('Here is where we use the connect to neo4j.')
-    log.info('')
+    log.info('Connecting to neo4j...')
 
     config.read(config_file)
 
