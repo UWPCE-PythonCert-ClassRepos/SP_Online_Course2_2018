@@ -1,0 +1,135 @@
+1. This code will only return Ture and stop if n equals to 2.
+2. This code will only return Ture and stop if n equals to 2.
+3. This code will call it again and again untile n is too small to acheive and cause RecursionError: 
+
+
+
+
+C:\Users\Admin\Documents\Python UW\SP_Online_Course2_2018\students\ZhuojingXie\lesson05>python -m pdb rec.py 12
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(3)<module>()
+-> import sys
+(Pdb) ll
+  1     #!/usr/bin/env python3
+  2
+  3  -> import sys
+  4
+  5     def my_fun(n):
+  6     #    if n < 1:
+  7     #        return False
+  8         if n == 2:
+  9             return True
+ 10         return my_fun(n/2)
+ 11
+ 12     if __name__ == '__main__':
+ 13         n=int(sys.argv[1])
+ 14         print(my_fun(n))
+(Pdb) n
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(5)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(12)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(13)<module>()
+-> n=int(sys.argv[1])
+(Pdb) n
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(14)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(8)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(8)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(8)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(8)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.5
+(Pdb) s
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(8)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(8)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.375
+(Pdb) n
+> c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py(10)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+Traceback (most recent call last):
+  File "C:\Users\Admin\Anaconda3\lib\pdb.py", line 1667, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Users\Admin\Anaconda3\lib\pdb.py", line 1548, in _runscript
+    self.run(statement)
+  File "C:\Users\Admin\Anaconda3\lib\bdb.py", line 431, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py", line 14, in <module>
+    print(my_fun(n))
+  File "c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py", line 10, in my_fun
+    return my_fun(n/2)
+  File "c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py", line 10, in my_fun
+    return my_fun(n/2)
+  File "c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py", line 10, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 980 more times]
+  File "c:\users\admin\documents\python uw\sp_online_course2_2018\students\zhuojingxie\lesson05\rec.py", line 5, in my_fun
+    def my_fun(n):
+  File "C:\Users\Admin\Anaconda3\lib\bdb.py", line 50, in trace_dispatch
+    return self.dispatch_call(frame, arg)
+  File "C:\Users\Admin\Anaconda3\lib\bdb.py", line 76, in dispatch_call
+    if not (self.stop_here(frame) or self.break_anywhere(frame)):
+  File "C:\Users\Admin\Anaconda3\lib\bdb.py", line 173, in break_anywhere
+    return self.canonic(frame.f_code.co_filename) in self.breaks
+  File "C:\Users\Admin\Anaconda3\lib\bdb.py", line 29, in canonic
+    if filename == "<" + filename[1:-1] + ">":
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\users\admin\anaconda3\lib\bdb.py(29)canonic()
+-> if filename == "<" + filename[1:-1] + ">":
+(Pdb)
