@@ -24,14 +24,14 @@ def showoff_databases():
     furniture = new_data.get_furniture_data()
     persistence = movie_data.get_movie_data()
 
-    # log.info("Running MongoDB exercise")
-    # mongodb_script.run_example(furniture)
+    log.info("Running MongoDB exercise")
+    mongodb_script.run_example(furniture)
 
-    # log.info("Running Redis exercise")
-    # redis_script.run_example()
+    log.info("Running Redis exercise")
+    redis_script.run_example()
 
-    # log.info("Running Neo4J exercise")
-    # neo4j_script.run_example()
+    log.info("Running Neo4J exercise")
+    neo4j_script.run_example()
 
     log.info("Running persistence and serialization exercise")
     simple_script.run_example(furniture, persistence)
