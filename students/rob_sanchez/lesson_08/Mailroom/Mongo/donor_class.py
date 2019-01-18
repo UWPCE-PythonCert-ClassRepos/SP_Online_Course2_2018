@@ -324,6 +324,9 @@ class MyDonations():
 
         return summary
 
+####
+# Helper methods:
+####
     def Average(self, lst):
         """
             Returns the average of a list of values
@@ -331,6 +334,9 @@ class MyDonations():
         return round(sum(lst) / len(lst), 2)
 
     def unique(self, sequence):
+        """
+            Returns unique values in the order given
+        """
         seen = set()
         return [x for x in sequence if not (x in seen or seen.add(x))]
 
