@@ -82,7 +82,7 @@ def populate_departments():
     departments = [
         ('ACCT', 'Accounting', 'Andrew'),
         ('INVT', 'Investment', 'Peter'),
-        ('HMRC', 'Human Resources', 'Susan')
+        ('HMRC', 'Human Resources', 'Peter')
         ]
 
     try:
@@ -129,13 +129,14 @@ def populate_jobs():
     END_DATE = 2
     SALARY = 3
     PERSON_EMPLOYED = 4
+    DEPARTMENT = 5
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
-        ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Peter'),
-        ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Peter')
+        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew','ACCT'),
+        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew','ACCT'),
+        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew','ACCT'),
+        ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Peter','HMRC'),
+        ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Peter','HMRC')
     ]
 
     def employment_duration(first_date, second_date):
@@ -154,7 +155,9 @@ def populate_jobs():
                     end_date=job[END_DATE],
                     duration=employment_duration(job[END_DATE], job[START_DATE]),
                     salary=job[SALARY],
-                    person_employed=job[PERSON_EMPLOYED])
+                    person_employed=job[PERSON_EMPLOYED],
+                    job_department = job[DEPARTMENT])
+
                 new_job.save()
                 logger.info('Database add successful.')
 
