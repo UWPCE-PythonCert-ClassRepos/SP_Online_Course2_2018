@@ -43,5 +43,5 @@ def limit_records_zip(df):
 
 if __name__=='__main__':
     print(limit_records_pandas(df).head(5))
-    print(limit_records_listcomps(df)[:5])
-    print(limit_records_zip(df)[:5])
+    #print(limit_records_listcomps(df)[:5])
+    #print(limit_records_zip(df)[:5])
