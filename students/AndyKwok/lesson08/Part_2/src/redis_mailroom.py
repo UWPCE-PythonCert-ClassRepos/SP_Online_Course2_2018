@@ -1,8 +1,6 @@
-"""
-    demonstrate use of Redis
-"""
 import login_database
 import utilities
+# import redis
 
 def run_example():
     """
@@ -10,11 +8,12 @@ def run_example():
     """
 
     log = utilities.configure_logger('default', '../logs/redis_script.log')
-
+    
     try:
         log.info('Step 1: connect to Redis')
         r = login_database.login_redis_cloud()
         log.info('Step 2: cache some data in Redis')
+        r.flushdb()
         r.set('andy', 'andy@somewhere.com')
 
         log.info('Step 2: now I can read it')
@@ -52,37 +51,46 @@ def run_example():
 
     except Exception as e:
         print(f'Redis error: {e}')
+        
 
 def run_nosql_ex():
-    """
-        redis data lesson 08
-    """
-
     log = utilities.configure_logger('default', '../logs/redis_script.log')
 
     try:
         r = login_database.login_redis_cloud()
         r.flushall()
         log.info('Data is being saved into redis')
-        r.hmset('andy', {'email': 'andy@somewhere.com', 'zip': '91700', 'phone': '555-666-8888'})
-        r.hmset('pam', {'email': 'pam@anywhere.com', 'zip': '91755', 'phone': '322-666-8888'})
-        r.hmset('fred', {'email': 'fred@fearless.com', 'zip': '98534', 'phone': '555-666-2888'})
-        r.hmset('tester_1', {'email': 'test1@fearless.com', 'zip': '91755', 'phone': '555-666-8788'})
-        r.hmset('tester_3', {'email': 'test3@fearless.com', 'zip': '91755', 'phone': '555-666-8787'})
-        r.hmset('tester_2', {'email': 'test2@fearless.com', 'zip': '91785', 'phone': '555-666-8799'})
+        r.hmset('tester_1', {'donation': [11.0, 3.1, 23.0]})
+        r.hmset('tester_3', {'donation': [10.1, 3.5, 2.0]})
+        r.hmset('tester_2', {'donation': [10.0, 3, 2.0]})
         
-        log.info('Data is being read from redis')
-        test_result = r.keys()
-        log.info(f'{test_result}')
-        
-        result = r.hgetall('tester_1')
-        email = result['email']
-        zip = result['zip']
-        phone = result['phone']
-        log.info('Here is are the information of one person')
-        log.info(f'tester_1 - email = {email}')
-        log.info(f'tester_1 - zip = {zip}')
-        log.info(f'tester_1 - phone= {phone}')
+        # log.info('Data is being read from redis')
+        # result = r.hgetall('tester_1')
+        # email = result['email']
+        # donation = result['donation']
+        # log.info('Here is are the information of one person')
+        # log.info(f'Donor = {zip}')
+        # log.info(f'Doantion = {donation}')
 
     except Exception as e:
         print(f'Redis error: {e}')
+
+# def setdb():
+    # log = utilities.configure_logger('default', '../logs/redis_script.log')
+    
+    # try:
+        # d = login_database.login_redis_cloud()
+        # d.flushall()
+        # log.info('Data is being saved into redis')
+        # d.hmset('andy', {'email': [11.0, 3.1, 23.0]})
+        # d.hmset('pam', {'email': [10.1, 3.5, 2.0]})
+        # d.hmset('fred', {'email': [10.0, 3, 2.0]})
+    # except Exception as e:
+        # print(f'Redis error: {e}')
+
+        
+# def redis_read_all():
+# def redis_read():
+# def redis_edit():
+# def redis_del():
+# def redis_add():

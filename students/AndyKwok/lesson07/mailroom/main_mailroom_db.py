@@ -17,6 +17,7 @@ donations = [
         ]
         
 option = True
+
 if __name__ == '__main__':
     prog.add_donor(adddonor)
     prog.add_donation(donations)
@@ -31,14 +32,12 @@ if __name__ == '__main__':
                 3 - Add Donation
                 4 - Edit Donation
                 5 - Delete Donor
-                6 - Delete donation
-                7 - Quit
+                6 - Quit
                 """
             )
-            tool.read_db()
             option = input('Please select an option> ')
             if option == '1':
-                tool.read_db()
+                tool.read_db_total()
                 option = True
             elif option == '2':
                 name = input('Name of new donor> ')
@@ -48,6 +47,7 @@ if __name__ == '__main__':
                 print('Donor info added...')
                 option = True
             elif option == '3':
+                tool.read_db()
                 num_entry = tool.donation_count() + 1
                 amount = float(input('Amount of donation> $ '))
                 id = 'ID_' + input('ID of the donor> ')
@@ -57,22 +57,26 @@ if __name__ == '__main__':
                 print('Donation info added...')
                 option = True
             elif option == '4':
-                id = int(input('Donation entry to edit> '))
-                new_amount = input('New donation amount> $ ')
-                prog.edit_donation(id, new_amount)
-                print('Donation entry updated...')
+                tool.read_db()
+                donorname = input('Which donor\'s donation needs to be edited> ')
+                tool.read_db_select(donorname)
+                selection = input('Edit or Delete > ')
+                if selection.lower() == 'edit':
+                    id = int(input('Donation entry to edit> '))
+                    new_amount = input('New donation amount> $ ')
+                    prog.edit_donation(id, new_amount)
+                    print('Donation entry updated...')
+                elif selection.lower() == 'delete' :     
+                    entry = int(input('Donation entry to delete> '))
+                    prog.delete_donation(entry)
+                    print('Entry deleted')
                 option = True
             elif option == '5':
+                tool.read_db()
                 id = 'ID_' + input('ID of the donor> ')
                 prog.delete_donor(id)
                 option = True
             elif option == '6':
-                entry = int(input('Donation entry to delete> '))
-                prog.delete_donation(entry)
-                print('Entry deleted')
-                option = True
-            elif option == '7':
                 option = False
         except KeyError:
             print('Option does not exist...please try again')
-        tool.read_db()

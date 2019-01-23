@@ -26,15 +26,15 @@ def showoff_databases():
 #    neo4j_script.run_example()
 #    simple_script.run_example(furniture)
 
-    log.info("Folloing are for the lesson 08 exercise")
-    log.info("Here is an application of monogodb")
-    mongodb_script.run_nosql_ex(furniture)
+    # log.info("Folloing are for the lesson 08 exercise")
+    # log.info("Here is an application of monogodb")
+    # mongodb_script.run_nosql_ex(furniture)
     log.info("Here is an application of redis")
     redis_script.run_nosql_ex()
-    log.info("Here is an application of neo4j")
-    neo4j_script.run_nosql_ex()
-    log.info("Here is an application of simple script")
-    simple_script.run_nosql_ex()
+    # log.info("Here is an application of neo4j")
+    # neo4j_script.run_nosql_ex()
+    # log.info("Here is an application of simple script")
+    # simple_script.run_nosql_ex()
 
 if __name__ == '__main__':
     """

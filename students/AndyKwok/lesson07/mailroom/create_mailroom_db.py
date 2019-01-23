@@ -34,7 +34,7 @@ class Donation(BaseModel):
     logger.info('Checkpoint: Donation added')
     
     amount = DecimalField(max_digits = 15, decimal_places = 2)
-    donation_id = IntegerField()
+    donation_id = IntegerField(primary_key = True)
     donated_by = ForeignKeyField(Donor, related_name='was_offered_by', null = False)
     
     logger.info('Checkpoint: Donation info modified')
