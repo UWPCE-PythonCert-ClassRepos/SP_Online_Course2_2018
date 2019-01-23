@@ -48,7 +48,8 @@ class TestLockes(unittest.TestCase):
 		self.large_locke.engage_locke(entering=True)
 
 		# We expect the following actions when boats enter the locke
-		expected_text = '''Enter: Stopping the pumps.
+		expected_text = '''
+Enter: Stopping the pumps.
 Enter: Opening the doors.
 Move: Boats entering the locke.
 Exit: Closing the doors.
@@ -61,7 +62,8 @@ Exit: Restarting the pumps.
 		captured_output = io.StringIO()
 		sys.stdout = captured_output
 
-		expected_text = '''Enter: Stopping the pumps.
+		expected_text = '''
+Enter: Stopping the pumps.
 Enter: Opening the doors.
 Exit: Boats exiting the locke
 Exit: Closing the doors.
