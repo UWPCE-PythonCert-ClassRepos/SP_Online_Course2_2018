@@ -1,6 +1,9 @@
+#!/usr/bin/env python3
+
 """
     Simple database example with Peewee ORM, sqlite and Python
     Here we define the schema
+    Use logging for messages so they can be turned off
 """
 
 import logging
@@ -8,6 +11,8 @@ from peewee import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+logger.info('One off program to build the classes from the model in the database')
 
 database = SqliteDatabase('personnel_database.db')
 database.connect()
@@ -25,6 +30,8 @@ class Person(BaseModel):
         for whom we want to research career to date.
     """
 
+    logger.info('Note how we defined the class')
+
     logger.info('Specify the fields in our model, their lengths and if mandatory')
     logger.info('Must be a unique identifier for each person')
 
@@ -35,18 +42,13 @@ class Person(BaseModel):
 
 class Department(BaseModel):
     """
-        This class defines Department, which maintains department details of a person.
+        This class defines Department, which is needed to track
+        an persons job history.
     """
-    logger.info('Department Number')
-    department_number = CharField(primary_key=True, max_length=4, constraints=[
-        Check(
-            'upper ( substr ( department_number , 1 , 1 ) BETWEEN "A" AND "Z" )'
-        )
-    ])
-    logger.info('Department Name')
-    department_name = CharField(max_length=30)
-    logger.info('Department Manager')
-    department_manager = CharField(max_length=30, null=False)
+    logger.info('Now the Department class is defined')
+    dpt_number = CharField(primary_key=True, max_length=4)
+    dpt_name = CharField(max_length=4, null=False)
+    dpt_manager = CharField(max_length=30, null=False)
 
 
 class Job(BaseModel):
@@ -55,20 +57,25 @@ class Job(BaseModel):
         held by a Person.
     """
 
+    logger.info('Now the Job class with a simlar approach')
     job_name = CharField(primary_key=True, max_length=30)
     logger.info('Dates')
     start_date = DateField(formats='YYYY-MM-DD')
     end_date = DateField(formats='YYYY-MM-DD')
-
-    duration = IntegerField()
-    logger.info('Duration')
-
     logger.info('Number')
+
     salary = DecimalField(max_digits=7, decimal_places=2)
     logger.info('Which person had the Job')
-    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
-    job_department = ForeignKeyField(Department, related_name='in_department', null=False)
+    person_employed = ForeignKeyField(Person,
+                                      related_name='was_filled_by',
+                                      null=False)
+    departmnet = ForeignKeyField(Department, null=False)
 
 
-database.create_tables([Person, Department, Job])
+database.create_tables([
+        Job,
+        Person,
+        Department
+    ])
+
 database.close()

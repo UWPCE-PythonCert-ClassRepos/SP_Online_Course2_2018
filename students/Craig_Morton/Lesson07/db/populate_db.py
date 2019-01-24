@@ -1,3 +1,10 @@
+# ------------------------------------------------- #
+# Title: Lesson 7, Database Management, Pretty Print Rev2
+# Dev:   Craig Morton
+# Date:  12/26/2018
+# Change Log: CraigM, 1/12/2018, Database Management, Pretty Print Rev2
+# ------------------------------------------------- #
+
 """
     Learning persistence with Peewee and sqlite
     delete the database to start over
@@ -6,17 +13,8 @@
 
 from create_db import *
 from datetime import datetime, timedelta
-from dateutil.parser import parse
 import pprint
 import logging
-
-
-def date_converter(date):
-    return datetime.strptime(''.join(date.split('-')), '%Y%m%d')
-
-
-def dates_diff(date2, date1):
-    return (date_converter(date2)-date_converter(date1)).days
 
 
 def populate_persons():
@@ -24,7 +22,7 @@ def populate_persons():
     add person data to database
     """
 
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
     logger = logging.getLogger(__name__)
 
     database = SqliteDatabase('personnel_database.db')
@@ -74,7 +72,7 @@ def populate_persons():
 
 def populate_depts():
     """
-    add departments data to database
+        add department data to database
     """
 
     logging.basicConfig(level=logging.INFO)
@@ -84,11 +82,11 @@ def populate_depts():
 
     logger.info('Working with Department class')
 
-    DEPT_NUM = 0
-    DEPT_NAME = 1
-    DEPT_MGR = 2
+    DPT_NUMBER = 0
+    DPT_NAME = 1
+    DPT_MANAGER = 2
 
-    depts = [
+    departments = [
         ('SYS', 'System Engineering', 'Sally Systems'),
         ('DEV', 'Software Engineering', 'Devin Developer'),
         ('NET', 'Network Engineering', 'Nina Networks')
@@ -97,21 +95,22 @@ def populate_depts():
     try:
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
-        for dept in depts:
+        for dpt in departments:
             with database.transaction():
                 new_department = Department.create(
-                    department_number=dept[DEPT_NUM],
-                    department_name=dept[DEPT_NAME],
-                    department_manager=dept[DEPT_MGR],)
+                    dpt_number=dpt[DPT_NUMBER],
+                    dpt_name=dpt[DPT_NAME],
+                    dpt_manager=dpt[DPT_MANAGER])
                 new_department.save()
 
         logger.info('Print the Department records we saved...')
-        for dept in Department:
-            logger.info(f'{dept.department_number} : {dept.department_manager} ' +
-                        f'manages {dept.department_name}')
+        for dpt in Department:
+            logger.info(f'dpt number: {dpt.dpt_number} ' +
+                        f'dpt name: {dpt.dpt_name} ' +
+                        f'dpt manager: {dpt.dpt_manager}')
 
     except Exception as e:
-        logger.info(f'Error creating = {dept[DEPT_NAME]}')
+        logger.info(f'Error creating = {dpt[DPT_NUMBER]}')
         logger.info(e)
 
     finally:
@@ -126,7 +125,9 @@ def populate_jobs():
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
+
     database = SqliteDatabase('personnel_database.db')
+
     logger.info('Working with Job class')
     logger.info('Creating Job records: just like Person. We use the foreign key')
 
@@ -135,7 +136,7 @@ def populate_jobs():
     END_DATE = 2
     SALARY = 3
     PERSON_EMPLOYED = 4
-    DEPARTMENT = 5
+    DPT_NUMBER = 5
 
     jobs = [
         ('Systems Engineer', '2014-08-08', '2018-08-08', 80000, 'Nikola', 'SYS'),
@@ -155,15 +156,14 @@ def populate_jobs():
                     job_name=job[JOB_NAME],
                     start_date=job[START_DATE],
                     end_date=job[END_DATE],
-                    duration=dates_diff(job[END_DATE], job[START_DATE]),
                     salary=job[SALARY],
                     person_employed=job[PERSON_EMPLOYED],
-                    job_department=job[DEPARTMENT])
+                    departmnet=job[DPT_NUMBER])
                 new_job.save()
 
-        logger.info('Read/Print all job rows')
         for job in Job:
-            logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed} in 'f'{job.job_department}')
+            logger.info(f'{job.job_name} : {job.start_date} ' + f'to {job.end_date} for {job.person_employed} ' +
+                        f'dept_id: {job.departmnet}')
 
     except Exception as e:
         logger.info(f'Error creating = {job[JOB_NAME]}')
@@ -174,8 +174,46 @@ def populate_jobs():
         database.close()
 
 
+def person_pretty_print():
+    """
+        Pretty print displaying all departments a person has worked
+        as well as every job they've had, including duration.  Combines multiple tables.
+    """
+    database = SqliteDatabase('personnel_database.db')
+
+    database.connect()
+    database.execute_sql('PRAGMA foreign_keys = ON;')
+
+    dbdata = Job.select(Job.person_employed).distinct()
+
+    for names in dbdata:
+        print("\nEmployee: {}".format(str(names.person_employed)))
+        query = (Job.select(Person.person_name, Department.dpt_name, Department.dpt_number,
+                            Job.start_date, Job.end_date).join(Person, on=(Person.person_name == Job.person_employed))
+                 .join(Department, on=(Department.dpt_number == Job.departmnet))
+                 .where(Person.person_name == names.person_employed).namedtuples())
+
+        for row in query:
+            days_worked = date_differential(row.end_date, row.start_date)
+            out = ("Department Number: " + row.dpt_number,
+                   "Department Name: " + row.dpt_name,
+                   "Start Date: " + row.start_date,
+                   "End Date: " + row.end_date,
+                   "Duration of Employment: " + str(days_worked))
+            pprint.pprint(out)
+
+
+def date_differential(d1, d2):
+    """
+    Duration of employment.
+    """
+    date1 = datetime.strptime(d1, '%Y-%m-%d')
+    date2 = datetime.strptime(d2, '%Y-%m-%d')
+    return abs((date2 - date1).days)
+
+
 if __name__ == '__main__':
     populate_persons()
     populate_depts()
     populate_jobs()
-
+    person_pretty_print()
