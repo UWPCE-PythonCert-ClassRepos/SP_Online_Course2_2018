@@ -20,12 +20,12 @@ def read_db_select(donorname):
     
     query = (Donor
              .select(Donor, Donation)
-             .join(Donation, JOIN.INNER)
+             .join(Donation, JOIN.LEFT_OUTER)
              .group_by(Donation)
              .order_by(Donor.donor_id)
             )
         
-    logger.info(f'{a:<15} {b:<15} {a:<15} {d:<15}')
+    logger.info(f'{c:<15} {b:<15} {a:<15} {d:<15}')
     logger.info(f'=' * 55)
     for donor in query.where(Donor.donor_name == donorname):
         try:
@@ -52,7 +52,7 @@ def read_db_total():
              .order_by(Donor.donor_id)
             )
         
-    print(f'{a:<15} {b:<15} {g:<15}')
+    print(f'{c:<15} {b:<15} {g:<15}')
     print(f'=' * 50)
     for donor in query:
         try:
@@ -79,11 +79,11 @@ def read_db():
              .order_by(Donor.donor_id)
             )
         
-    logger.info(f'{a:<10} {b:<10} {c:<10} {d:<10} {g:<5}')
+    logger.info(f'{c:<15} {b:<15} {a:<15} {d:<15} {g:<15}')
     logger.info(f'=' * 50)
     for donor in query:
         try:
-            logger.info(f'{donor.donation.donation_id:<10} {donor.donor_name:<10} {donor.donor_id:<10} {donor.donation.amount:<10} {donor.total:<5}')
+            logger.info(f'{donor.donor_id:<10} {donor.donor_name:<10} {donor.donation.donation_id:<10} {donor.donation.amount:<10} {donor.total:<5}')
         except Exception as e:
             logger.info(f'{donor.donor_name} cannot be display properly...')
             logger.info(e)

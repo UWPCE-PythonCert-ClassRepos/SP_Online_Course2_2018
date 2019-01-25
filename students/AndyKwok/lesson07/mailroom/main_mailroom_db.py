@@ -44,17 +44,15 @@ if __name__ == '__main__':
                 id = 'ID_' + input('ID Number> ')
                 adddonor = [(name, id)]
                 prog.add_donor(adddonor)
-                print('Donor info added...')
                 option = True
             elif option == '3':
                 tool.read_db()
-                num_entry = tool.donation_count() + 1
-                amount = float(input('Amount of donation> $ '))
                 id = 'ID_' + input('ID of the donor> ')
+                num_entry = input('ID of the donation> ')
+                amount = float(input('Amount of donation> $ '))
                 donations = [(amount, num_entry, id)]
                 print(donations)
-                prog.add_donation(donations)
-                print('Donation info added...')
+                prog.add_donation(donations)                
                 option = True
             elif option == '4':
                 tool.read_db()
