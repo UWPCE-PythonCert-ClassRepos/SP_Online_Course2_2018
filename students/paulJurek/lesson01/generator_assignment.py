@@ -15,10 +15,22 @@ def Doubler(start: int=1, step: int=2):
     """keeps doubling previous value
     args:
         start: strting int.  Must be non-zero
-        step: indicates multiple each iteration increases value by
-    0 + 1 + 2 + 3 + 4 + 5 + …"""
+        step: indicates multiple each iteration increases value by"""
     current_num = start
 
     while True:
         yield current_num
         current_num *= step
+
+def Fibonacci():
+    """runs fibonacci series.  User can modify starting position if needed
+    args:
+        start: strting int.  Must be non-zero"""
+
+    yield 1
+    previous_num = 0
+    current_num = 1    
+
+    while True:
+            previous_num, current_num = current_num, previous_num + current_num
+            yield current_num

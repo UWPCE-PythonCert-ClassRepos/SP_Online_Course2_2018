@@ -29,6 +29,16 @@ def test_doubler():
 def test_fibonacci():
     """given Fibonacci generator
     when next is called
-    the correct values is returned"""
+    the correct values is returned""" 
 
+    fib = gm.Fibonacci()
+
+    assert next(fib) == 1
+    assert next(fib) == 1
+    assert next(fib) == 2
+    assert next(fib) == 3
+    assert next(fib) == 5
+    assert next(fib) == 8
+    assert next(fib) == 13
+    assert next(fib) == 21
  
