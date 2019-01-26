@@ -89,11 +89,11 @@ def populate_db():
     DEPT_EMPLOYED = 5
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew', 'HR'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'HR'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', 'Engineering'),
-        ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Peter', 'PR'),
-        ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Peter', 'HR')
+        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew', 'A100'),
+        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'A100'),
+        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', 'B100'),
+        ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Peter', 'C000'),
+        ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Peter', 'A100')
         ]
 
     try:
