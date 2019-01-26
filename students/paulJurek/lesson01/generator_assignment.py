@@ -34,3 +34,14 @@ def Fibonacci():
     while True:
             previous_num, current_num = current_num, previous_num + current_num
             yield current_num
+
+def primes():
+        """creates a prime number generator starting at 2"""
+        prime = 2
+
+        while True:
+                divs = []
+                divs = [x for x in range(1,prime//2+1) if prime % x==0]
+                if len(divs)==1:
+                        yield prime
+                prime += 1

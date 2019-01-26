@@ -5,7 +5,6 @@ import generator_assignment as gm
 
 def test_generate_increasing_ints():
     """tests generator works for 5 iterations and sums results"""
-    count = 0
     gen = gm.generate_increasing_ints(start=0, step=1)
 
     assert next(gen) == 0
@@ -42,3 +41,16 @@ def test_fibonacci():
     assert next(fib) == 13
     assert next(fib) == 21
  
+def test_primes():
+    """test prime number generator identifies prime numbers correctly"""
+    gen = gm.primes()
+
+    assert next(gen) == 2
+    assert next(gen) == 3
+    assert next(gen) == 5
+    assert next(gen) == 7
+    assert next(gen) == 11
+    assert next(gen) == 13
+    assert next(gen) == 17
+    assert next(gen) == 19
+    assert next(gen) == 23
