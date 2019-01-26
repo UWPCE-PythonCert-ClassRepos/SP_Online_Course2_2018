@@ -42,8 +42,6 @@ class IterateMe_2(IterateMe_1):
             raise StopIteration
 
 
-
-
 if __name__ == "__main__":
 
     print("Testing the iterator")
@@ -53,7 +51,8 @@ if __name__ == "__main__":
     print("testing second iterator")
     it = IterateMe_2(2, 20, 2)
     for i in it:
-        if i > 10:  break
+        if i > 10:
+            break
         print(i)
     for i in it:
         print(i)
@@ -62,7 +61,8 @@ if __name__ == "__main__":
     print("testing range")
     rng = range(2, 20, 2)
     for i in rng:
-        if i > 10:  break
+        if i > 10:
+            break
         print(i)
     for i in rng:
         print(i)
@@ -70,7 +70,8 @@ if __name__ == "__main__":
     print("matching range")
     it = IterateMe_2(2, 20, 2)
     for i in it:
-        if i > 10:  break
+        if i > 10:
+            break
         print(i)
     it = IterateMe_2(2, 20, 2)
     for i in it:
