@@ -10,3 +10,15 @@ def generate_increasing_ints(start: int=0, step: int=1):
         yield current_total
         current_total += current_num
         current_num += 1
+
+def Doubler(start: int=1, step: int=2):
+    """keeps doubling previous value
+    args:
+        start: strting int.  Must be non-zero
+        step: indicates multiple each iteration increases value by
+    0 + 1 + 2 + 3 + 4 + 5 + …"""
+    current_num = start
+
+    while True:
+        yield current_num
+        current_num *= step
