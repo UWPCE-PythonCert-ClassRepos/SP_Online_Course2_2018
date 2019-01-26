@@ -54,3 +54,14 @@ def test_primes():
     assert next(gen) == 17
     assert next(gen) == 19
     assert next(gen) == 23
+
+def test_increase_pow():
+    """tests increasing powers for given base of 3"""
+    gen = gm.increase_power(3)
+
+    assert next(gen) == 1
+    assert next(gen) == 3
+    assert next(gen) == 9
+    assert next(gen) == 27
+    assert next(gen) == 81
+    assert next(gen) == 243

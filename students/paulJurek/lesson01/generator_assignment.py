@@ -45,3 +45,11 @@ def primes():
                 if len(divs)==1:
                         yield prime
                 prime += 1
+
+def increase_power(base: int):
+        """returns increasing power value with given base"""
+        pow = 0
+
+        while True:
+                yield base ** pow
+                pow += 1
