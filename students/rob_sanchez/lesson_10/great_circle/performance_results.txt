@@ -1,0 +1,51 @@
+Profile outputs of each version of great_circle:
+
+### Straight forward python:
+
+	Wed Jan 23 18:16:20 2019    great_circle_v0_Profile.prof
+
+		 70000004 function calls in 20.857 seconds
+
+	   Ordered by: internal time
+
+	   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+	 10000000   12.471    0.000   18.019    0.000 great_circle_v0.py:9(great_circle)
+		1    2.837    2.837   20.857   20.857 great_circle.py:6(run_test)
+	 30000000    2.665    0.000    2.665    0.000 {built-in method math.cos}
+	 20000000    1.868    0.000    1.868    0.000 {built-in method math.sin}
+	 10000000    1.016    0.000    1.016    0.000 {built-in method math.acos}
+		1    0.000    0.000   20.857   20.857 {built-in method builtins.exec}
+		1    0.000    0.000   20.857   20.857 <string>:1(<module>)
+		1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+### Cython version with cdef variable declaration:
+
+
+	Wed Jan 23 19:10:09 2019    great_circle_v1_Profile.prof
+
+		 10000004 function calls in 6.628 seconds
+
+	   Ordered by: internal time
+
+	   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+	 10000000    5.052    0.000    5.052    0.000 {great_circle_v1.great_circle}
+		1    1.575    1.575    6.628    6.628 great_circle.py:7(run_test)
+		1    0.000    0.000    6.628    6.628 {built-in method builtins.exec}
+		1    0.000    0.000    6.628    6.628 <string>:1(<module>)
+		1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+### Cython version using cdef extern to import math functions
+
+	Wed Jan 23 20:59:18 2019    great_circle_v2_Profile.prof
+
+		 10000004 function calls in 2.724 seconds
+
+	   Ordered by: internal time
+
+	   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+		1    1.476    1.476    2.724    2.724 great_circle.py:8(run_test)
+	 10000000    1.248    0.000    1.248    0.000 {great_circle_v2.great_circle}
+		1    0.000    0.000    2.724    2.724 {built-in method builtins.exec}
+		1    0.000    0.000    2.724    2.724 <string>:1(<module>)
+		1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
