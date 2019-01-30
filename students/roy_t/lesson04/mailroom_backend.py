@@ -16,7 +16,7 @@ class Donor:
         self.donations = donations if donations else []
 
     def __add__(self, other):
-        new_donation = self.amount
+        new_donation = 0
         if isinstance(other, (int, float)):
             new_donation += other
         elif isinstance(other, Donor):
@@ -24,11 +24,9 @@ class Donor:
         return Donor(new_donation)
 
     def __str__(self):
-        return 'Donor name: {}  Donations: {}'.format(self.name, self.donations)
-        # return '{}'.format(self.donations)
+        return 'Donor name: {}  Donations: {}'.format(self.name, str(sum(self.donations)))
 
     def __repr__(self):
-        # return 'Donor({}, {})'.format(self.name, sum(self.donations))
         return 'Donor({}, {})'.format(self.name, self.donations)
 
     def add_donation(self, new_donation):
@@ -114,23 +112,6 @@ class DonorCollection:
             print(f'Successfully loaded file: {filename}')
         return self.donors
 
-    def add(self, name, amount):
-        name = name.title()
-        if name in [donor.name for donor in self.donors]:
-            name.donations.append([amt for amt in amount])
-        else:
-            if isinstance(amount, list):
-                self.add_donor(Donor(name, amount))
-
-
-    @property
-    def donor_names(self):
-        return self.donor_names
-
-    @property
-    def donations_list(self):
-        return self.donations_list
-
     def add_donor(self, donor):
         self.donors.append(donor)
 
@@ -210,4 +191,3 @@ class DonorCollection:
             print(list(under_50_filter))
             over_100_filter = map(lambda x: x * 2, filter(lambda y:  y >= max_donation, donor.donations))
         return projection_coll50, projection_coll100
-

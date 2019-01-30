@@ -125,7 +125,7 @@ class MailroomUI:
             print(donor.name)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     collection = mb.DonorCollection()
     donor1 = mb.Donor('Fred Flintstone', [27.14, 89.14])
     donor2 = mb.Donor('Wilma Willbanks', [150.00])
