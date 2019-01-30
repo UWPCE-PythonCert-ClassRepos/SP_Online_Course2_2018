@@ -15,7 +15,7 @@ def read_db():
     
     query = (Department
              .select(Job, Department)
-             .join(Job, JOIN.LEFT_OUTER)
+             .join(Job, JOIN.INNER)
             )
     try:
         for dept in query:
