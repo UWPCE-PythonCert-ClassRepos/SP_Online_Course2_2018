@@ -77,5 +77,6 @@ class TestMailroomBackend(unittest.TestCase):
                 self.assertTrue(d.name in text)
         self.coll.load_json()
 
+
 if __name__ == "__main__":
     unittest.main()
