@@ -104,13 +104,15 @@ class MailroomUI:
         """Receive input from the user to enter a new donation"""
         donor_name = input('\nEnter the donor name (First Last): \n')
         donation_amount = float(input('\nEnter the donation amount: \n'))
+        found = False
         for donor in self.collection.donors:
             if donor.name == donor_name:
-                donor.donations.append(donation_amount)
-            else:
-                new_donor = mb.Donor(donor_name, [donation_amount])
-        self.collection.donors.append(new_donor)
-
+                found = True
+        if found:
+            donor.donations.append(donation_amount)
+        else:
+            new_donor = mb.Donor(donor_name, [donation_amount])
+            self.collection.donors.append(new_donor)
 
     def save_donor_json(self):
         self.collection.save_json()
@@ -127,9 +129,13 @@ class MailroomUI:
 
 if __name__ == "__main__":
     collection = mb.DonorCollection()
+
+    # initialize the application with some donors
     donor1 = mb.Donor('Fred Flintstone', [27.14, 89.14])
     donor2 = mb.Donor('Wilma Willbanks', [150.00])
     donor3 = mb.Donor('Barney Rubble', [250, 24, 57, 175])
+
+    # add the donor objects to the collection
     collection.add_donor(donor1)
     collection.add_donor(donor2)
     collection.add_donor(donor3)

@@ -15,13 +15,6 @@ class Donor:
         self.name = name.title()
         self.donations = donations if donations else []
 
-    def __add__(self, other):
-        new_donation = 0
-        if isinstance(other, (int, float)):
-            new_donation += other
-        elif isinstance(other, Donor):
-            new_donation += other.amount
-        return Donor(new_donation)
 
     def __str__(self):
         return 'Donor name: {}  Donations: {}'.format(self.name, str(sum(self.donations)))
@@ -112,8 +105,17 @@ class DonorCollection:
             print(f'Successfully loaded file: {filename}')
         return self.donors
 
-    def add_donor(self, donor):
-        self.donors.append(donor)
+    def add_donor(self, other):
+        new_donation = 0
+        for donor in self.donors:
+            if donor.name == other.name:
+                if isinstance(other.donaations, list):
+                    for d in list:
+                        donor.donations.append(d)
+                if isinstance(other.donations, (int, float)):
+                    donor.donations.append(other.donations)
+        else:
+            self.donors.append(other)
 
     def create_report(self, title='DONATION REPORT'):
         format_str = '{:<25}${:<15}{:<15}{:<15}{:<15}{:<15}'
