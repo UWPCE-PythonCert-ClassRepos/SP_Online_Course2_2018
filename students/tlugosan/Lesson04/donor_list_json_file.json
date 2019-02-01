@@ -1,0 +1,44 @@
+[
+    {
+        "_name": "Toni Orlando",
+        "_donation": [
+            150.0,
+            200.0,
+            100.0
+        ]
+    },
+    {
+        "_name": "Amanda Clark",
+        "_donation": [
+            1800.0
+        ]
+    },
+    {
+        "_name": "Robin Hood",
+        "_donation": [
+            1234.56,
+            4500.34,
+            765.28
+        ]
+    },
+    {
+        "_name": "Gina Travis",
+        "_donation": [
+            523.1,
+            75.0
+        ]
+    },
+    {
+        "_name": "Mark Johnson",
+        "_donation": [
+            850.0,
+            20.14
+        ]
+    },
+    {
+        "_name": "Gary Scott",
+        "_donation": [
+            200.0
+        ]
+    }
+]
