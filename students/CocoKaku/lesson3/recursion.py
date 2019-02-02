@@ -19,3 +19,5 @@ def fact(n):
 if __name__ == "__main__":
     for i in range(0, 11):
         print(f"{i:2d}! = {fact(i):,}")
+    print(fact(9))
+    print(fact(10))
