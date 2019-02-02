@@ -1,5 +1,6 @@
 """Module for dividing two numbers"""
 
+
 class Divider(object):
     """Class for division of 2 numbers."""
 

@@ -1,5 +1,6 @@
 """Module for multiplying two numbers"""
 
+
 class Multiplier(object):
     """Class for multiplication of 2 numbers."""
 

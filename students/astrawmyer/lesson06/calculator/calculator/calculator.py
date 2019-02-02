@@ -1,8 +1,10 @@
 """
-Module for the calculator. This module calls the other modules for calculations.
+Module for the calculator.
+This module calls the other modules for calculations.
 """
 
 from .exceptions import InsufficientOperands
+
 
 class Calculator(object):
     """Class Calculator."""

@@ -1,5 +1,6 @@
 """Module for adding two numbers"""
 
+
 class Adder(object):
     """Class for addition of 2 numbers."""
 
