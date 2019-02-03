@@ -4,16 +4,13 @@ from operator import itemgetter
 import os
 import datetime
 import json
-from json import JSONEncoder
-from pathlib import Path
+import json_save.json_save_meta as js
 
 
-class MyEncoder(JSONEncoder):
-    def default(self, o):
-        return o.__dict__
+class Donor(js.JsonSaveable):
+    _donation = js.List()
+    _name = js.String()
 
-
-class Donor():
     def __init__(self, name, donation=None):
         if name == '':
             self._name = 'Anonymous'
@@ -32,7 +29,7 @@ class Donor():
 
     @name.setter
     def name(self, name):
-        self.name = str(name)
+        self._name = str(name)
 
     @property
     def donation(self):
@@ -72,41 +69,11 @@ class Donor():
     def stats(self):
         return [self.total_donation_amount(), self.donation_occurrences(), self.average_total_donor_amount()]
 
-    def match_donations(self, matching_multiplier, min_val=None, max_val=None):
-        if min_val and max_val:
-            if max_val < min_val:
-                raise ValueError("Minimum value should be greater than maximum value.")
-            else:
-                return list(
-                    map(lambda x: x * matching_multiplier, filter(lambda y: min_val <= y <= max_val, self._donation)))
-        elif min_val:
-            return list(map(lambda x: x * matching_multiplier, filter(lambda y: min_val <= y, self._donation)))
-        elif max_val:
-            return list(map(lambda x: x * matching_multiplier, filter(lambda y: y <= max_val, self._donation)))
 
-
-class DonorList:
+class DonorList(js.JsonSaveable):
+    _donors = js.List()
     file_name = "donor_list_json_file.json"
-    _file_json=[]
-
-    def read_from_json_decorator(func):
-        def inner1(self, *args, **kwargs):
-            with open(args[0], "r") as fp:
-                self._file_json = json.load(fp)
-            func(self, *args, **kwargs)
-        return inner1
-
-    def save_to_json_decorator(func):
-        def inner1(self, *args, **kwargs):
-            func(self, *args, **kwargs)
-
-            target_directory = os.getcwd()
-            target_file_path = os.path.join(target_directory, self.file_name)
-            with open(target_file_path, "w") as fp:
-                json.dump(self._donors, fp, indent=4, cls=MyEncoder)
-        return inner1
-
-
+    new_donors_list = js.List()
 
     def __init__(self, donors=[]):
         if donors is None:
@@ -115,6 +82,45 @@ class DonorList:
             self._donors = [donors]
         else:
             self._donors = donors
+
+    """def save_to_json(self):
+        target_directory = os.getcwd()
+        target_file_path = os.path.join(target_directory, self.file_name)
+        new_donors_list = table_dictionary.to_json()
+        with open(target_file_path, 'w') as fp:
+            js.to_json(new_donors_list, fp, indent=4)"""
+
+    def save_to_json(self):
+        target_directory = os.getcwd()
+        target_file_path = os.path.join(target_directory, self.file_name)
+        donor_to_json = table_dictionary.to_json()
+        with open(target_file_path, "w") as fp:
+            fp.write(donor_to_json)
+
+    def load_from_json(self):
+        target_directory = os.getcwd()
+        target_file_path = os.path.join(target_directory, self.file_name)
+        with open(target_file_path, 'r') as fp:
+            donor_load = fp.read()
+        return js.from_json(donor_load)
+
+    def populate_dict(self):
+        target_directory = os.getcwd()
+        target_file_path = os.path.join(target_directory, self.file_name)
+        if os.path.exists(target_file_path):
+            abd = self.load_from_json()
+            self._donors = abd._donors
+        else:
+            self.init_dict()
+
+    def init_dict(self):
+        self._donors = [
+            Donor('Toni Orlando', [150.00, 200.00, 100.00]),
+            Donor('Amanda Clark', [1800.00]),
+            Donor('Robin Hood', [1234.56, 4500.34, 765.28]),
+            Donor('Gina Travis', [523.10, 75.00]),
+            Donor('Mark Johnson', [850.00, 20.14])
+        ]
 
     @property
     def donors(self):
@@ -132,11 +138,8 @@ class DonorList:
             d_list += str(d)
         return d_list
 
-
-    @save_to_json_decorator
     def add_donor_list(self, donor):
-        self._donors.append(donor)
-        return self._donors
+        return self._donors.append(donor)
 
     def names_only_list(self):
         names_list = []
@@ -152,7 +155,7 @@ class DonorList:
     def display_donor_list(self):
         """Prints the full list of donors and corresponding donation history."""
         for d in self._donors:
-            print("{:<20}: {}".format(d.name, d._donation))
+            print("{:<20}: {}".format(d.name, d.donation))
         pass
 
     """def __iter__(self):
@@ -168,52 +171,19 @@ class DonorList:
         sorted_new_list = sorted(new_list, key=itemgetter(1), reverse=True)
         return sorted_new_list
 
-    def match_by_donation_factor(self, donation_factor, min=None, max=None):
-        new_list = []
-        total_amount = 0
-        for k in self._donors:
-            multiplied_donation_list = k.match_donations(donation_factor, min, max)
-            sum_donations = sum(multiplied_donation_list)
-            print("{:<20}: {}".format(k.name, multiplied_donation_list))
-            new_list.append(Donor(k.name, multiplied_donation_list))
-            total_amount = total_amount + sum_donations
-        print("Current total donation: ${:.2f}".format(total_amount))
-        multiplyed_total_amount = total_amount * donation_factor
-        print("Your matching donation if multiplyed by {} is: ${:.2f}".format(donation_factor, multiplyed_total_amount))
-        return new_list
 
-    @save_to_json_decorator
-    def add_donation(self, send_to_name, donation_amount):
-        d = self.find_donor_history(send_to_name)
-        d.add_donation(donation_amount)
-
-    @save_to_json_decorator
-    def init_dict(self):
-        self._donors = [
-            Donor('Toni Orlando', [150.00, 200.00, 100.00]),
-            Donor('Amanda Clark', [1800.00]),
-            Donor('Robin Hood', [1234.56, 4500.34, 765.28]),
-            Donor('Gina Travis', [523.10, 75.00]),
-            Donor('Mark Johnson', [850.00, 20.14])
-        ]
-
-    @read_from_json_decorator
-    def load_existing_json(self, target_file_path):
-        for d in self._file_json:
-            self._donors.append(Donor(d['_name'], d['_donation']))
-
-    def populate_dict(self):
-        target_directory = os.getcwd()
-        target_file_path = os.path.join(target_directory, self.file_name)
-        if os.path.exists(target_file_path):
-            self.load_existing_json(target_file_path)
-        else:
-            self.init_dict()
+table_dictionary = DonorList()
+"""table_dictionary = DonorList([
+    Donor('Toni Orlando1', [150.00, 200.00, 100.00]),
+    Donor('Amanda Clark', [1800.00]),
+    Donor('Robin Hood', [1234.56, 4500.34, 765.28]),
+    Donor('Gina Travis', [523.10, 75.00]),
+    Donor('Mark Johnson', [850.00, 20.14])
+])"""
+table_dictionary.populate_dict()
 
 actions_dictionary = {'1': 'Send a Thank You', '2': 'Create a Report', '3': 'Send letters to everyone', '4': 'Quit',
-                      5: 'Projection calculation'}
-
-table_dict = DonorList()
+                      '5': 'Save to file', '6': 'Load from file'}
 
 
 def sending_thank_you():
@@ -222,12 +192,14 @@ def sending_thank_you():
         send_to_name = input(
             "First: Who do you want to send the email to? Type 'list' for a list of all the donors. ")
         if send_to_name == 'list':
-            table_dict.display_donor_list()
+            table_dictionary.display_donor_list()
             # send_to_name = input("Second: Who do you want to send the email to? Type 'list' for a list of all the donors. ")
         else:
             break
-
-    names_list = table_dict.names_only_list()
+    names_list = table_dictionary.names_only_list()
+    if send_to_name not in names_list:
+        table_dictionary.add_donor_list(Donor(send_to_name, []))
+    # donation_amount = input("What donation amount do you want to thank them for? ")
     while True:
         try:
             donation_amount = float(input('What donation amount do you want to thank them for? '))
@@ -237,37 +209,10 @@ def sending_thank_you():
                 print("Number has to be positive.")
         except ValueError:
             print("Input must be a number.")
-    if send_to_name not in names_list:
-        table_dict.add_donor_list(Donor(send_to_name, donation_amount))
-    else:
-        table_dict.add_donation(send_to_name, donation_amount)
-
+    d = table_dictionary.find_donor_history(send_to_name)
+    d.add_donation(donation_amount)
     print("Dear {}, Thank you for your generous contribution of ${:.2f} to our program.".format(send_to_name,
                                                                                                 donation_amount))
-
-
-def projection_calculation():
-    """Projection amounts for donations for double contributions under $100 and triple contributions above $50"""
-    projection_type = input(
-        'Do you want to set a minimum contribution or a maximum contribution for the projection? '
-        'Your options are : min, max or both. ').lower()
-    if projection_type == 'both':
-        min_val = float(input('what is the minimum donation that would you like to set for the projection.'))
-        multiplyer = float(input('How many times do you want to multiply the donations amount?'))
-        max_val = float(input('what is the maximum donation that would you like to set for the projection.'))
-        table_dict.match_by_donation_factor(multiplyer, min_val, max_val)
-    elif projection_type == 'min':
-        min_val = float(input('what is the minimum donation that would you like to set for the projection.'))
-        multiplyer = float(
-            input('How many times do you want to multiply the donations above the minimum amount?'))
-        table_dict.match_by_donation_factor(multiplyer, min_val, None)
-    elif projection_type == 'max':
-        max_val = float(input('what is the maximum donation that would you like to set for the projection.'))
-        multiplyer = float(
-            input('How many times do you want to multiply the donations under the maximum amount?'))
-        table_dict.match_by_donation_factor(multiplyer, None, max_val)
-    else:
-        print("Not a valid entry.")
 
 
 def print_report():
@@ -276,7 +221,7 @@ def print_report():
     len_header = len(table_header)
     print("|".join(["{:<20}"] * len_header).format(*table_header))
     print("-" * (20 * len_header + (len_header - 1)))
-    sorted_new_list = table_dict.stat_donor_list()
+    sorted_new_list = table_dictionary.stat_donor_list()
     for row in sorted_new_list:
         print("{0:<20} ${1:>19.2f} {2:>20} ${3:>19.2f}".format(*row))
     return sorted_new_list
@@ -286,9 +231,9 @@ def send_everyone_letters(target_directory=os.getcwd()):
     """Sends a letter to everyone in the table for their first donation in the list."""
     file_name_extension = '.txt'
     today_date_short = calculate_date()
-    # names_only_list = table_dict.names_only_list()
-    print(table_dict.donors)
-    for file_name in table_dict.donors:
+    # names_only_list = table_dictionary.names_only_list()
+    print(table_dictionary.donors)
+    for file_name in table_dictionary.donors:
         target_file_path = os.path.join(target_directory,
                                         str(file_name.name).replace(' ',
                                                                     '_') + today_date_short + file_name_extension)
@@ -308,7 +253,6 @@ def send_everyone_letters(target_directory=os.getcwd()):
 
 def select_action_dictionary(prompt, switch_func_dict):
     """User selects an action by its corresponding order number."""
-    table_dict.populate_dict()
     while True:
         choice_actions = input(prompt)
         try:
@@ -340,16 +284,15 @@ def quit_program():
     return "quit"
 
 
+
 switch_func_dict = {
     '1': sending_thank_you,
     '2': print_report,
     '3': send_everyone_letters,
     '4': quit_program,
-    '5': projection_calculation
+    '5': table_dictionary.save_to_json,
+    '6': table_dictionary.load_from_json
 }
 
 if __name__ == '__main__':
     select_action_dictionary(print_menu(), switch_func_dict)
-    # table_dict.match_by_donation_factor(3, 300, 900)
-    # table_dict.match_by_donation_factor(3, None, 900)
-    # table_dict.match_by_donation_factor(3, 300, None)
