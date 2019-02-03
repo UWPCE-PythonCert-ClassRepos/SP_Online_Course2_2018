@@ -20,9 +20,14 @@ class Locke:
         print('starting pumps')
 
     def __exit__(self, *args):
-        print('open door 2')
-        print('moving boats')
-        print('closing door 2')
+        try:
+            print('open door 2')
+            print('moving boats')
+            print('closing door 2')
+        except ValueError as e:
+            raise
+        except TypeError as e:
+            raise
 
     def move_boats_through(self, boats: int, boat_level: str = 'low') -> bool:
         """processes boats through locke.
@@ -31,15 +36,10 @@ class Locke:
             boat_level: high or low.  indicates starting level of boat entry
         returns:
             boolean indicating if transfer was successful"""
-        try:
-            if ((boats % 1) > 0) | (boats < 0) | (boats > self.boat_capacity):
-                raise ValueError
-        except ValueError:
-            raise ValueError('input positive integer for boats')
-        except TypeError:
-            raise ValueError('input integer')
-
+        if ((boats % 1) > 0) | (boats < 0) | (boats > self.boat_capacity):
+            raise ValueError
         return True
+        
 
 if __name__=="__main__":
     locke = Locke(5)

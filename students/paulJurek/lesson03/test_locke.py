@@ -31,7 +31,6 @@ def test_locke_rejects_boats_count_over_limit():
     (-1),
     (1.2),
     (0.123),
-    ('hello')
 ])
 def test_locke_errors_on_bad_inputs(bad_input):
     """given inputs other than positive ints or 0
@@ -39,6 +38,15 @@ def test_locke_errors_on_bad_inputs(bad_input):
     locke1 = Locke(5)
     boats = bad_input
     with pytest.raises(ValueError):
+        with locke1:
+            locke1.move_boats_through(boats)
+
+def test_locke_typeerrors_on_str_inputs():
+    """given inputs other than positive ints or 0
+    the locke sends inputerror on initialization"""
+    locke1 = Locke(5)
+    boats = 'hello'
+    with pytest.raises(TypeError):
         with locke1:
             locke1.move_boats_through(boats)
 
