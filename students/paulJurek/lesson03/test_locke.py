@@ -64,7 +64,8 @@ def test_std_output_tells_story(capsys):
     assert captured[2] == "moving boats"
     assert captured[3] == "closing door1"
     assert captured[4] == "starting pumps"
-    assert captured[5] == "open door 2"
-    assert captured[6] == "moving boats"
-    assert captured[7] == "closing door 2"
+    assert captured[5] == "moving 4 boats through locks"
+    assert captured[6] == "open door 2"
+    assert captured[7] == "moving boats"
+    assert captured[8] == "closing door 2"
 

@@ -25,7 +25,7 @@ class Locke:
             print('moving boats')
             print('closing door 2')
         except ValueError as e:
-            raise
+            raise e("this isn't going to work")
         except TypeError as e:
             raise
 
@@ -36,12 +36,18 @@ class Locke:
             boat_level: high or low.  indicates starting level of boat entry
         returns:
             boolean indicating if transfer was successful"""
-        if ((boats % 1) > 0) | (boats < 0) | (boats > self.boat_capacity):
-            raise ValueError
+        if ((boats % 1) > 0) | (boats < 0) :
+            raise ValueError('invalid input for number of boats')
+        if (boats > self.boat_capacity):
+            boats = self.boat_capacity
+            self.move_boats_through(boats=boats)
+            raise ValueError(f'too many boats going through locks. {boats} successfully moved through locks.')
+        else:
+            print(f'moving {boats} boats through locks')
         return True
         
 
 if __name__=="__main__":
     locke = Locke(5)
     with locke:
-        locke.move_boats_through(5)
+        locke.move_boats_through(6)
