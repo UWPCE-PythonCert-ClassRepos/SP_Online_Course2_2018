@@ -39,6 +39,7 @@ class IterateMe_2(IterateMe_1):
         self.start = start
         self.stop = stop
         self.step = step
+
     def __iter__(self):
         return self.myrange()
 
@@ -46,7 +47,7 @@ class IterateMe_2(IterateMe_1):
         start = self.start
         stop = self.stop
         step = self.step
-        while start <= stop:
+        while start < stop:
             yield start
             start += step
 
@@ -62,5 +63,21 @@ class IterateMe_2(IterateMe_1):
 if __name__ == "__main__":
 
     print("Testing the iterator")
-    for i in IterateMe_1():
+    test = IterateMe_2(stop = 20)
+    for i in test:
+        if i == 10:
+            break
+        print(i)
+    print("After break")
+    for i in test:
+        print(i)
+
+    print("Now, comparing to range()")
+    test = range(0,20)
+    for i in test:
+        if i == 10:
+            break
+        print(i)
+    print("After break")
+    for i in test:
         print(i)
