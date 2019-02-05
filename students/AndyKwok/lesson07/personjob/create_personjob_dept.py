@@ -41,8 +41,8 @@ class Department(BaseModel):
     logger.info('Checkpoint: Defining Department class')
     
     # Verifies that the first value of the department number is a character
-    dept_num = CharField(constraints=[Check('lower(substr(Department.dept_num,1,1)) BETWEEN "a" AND "z"')], max_length = 4)
-    dept_name = CharField(primary_key = True, max_length = 30)
+    dept_num = CharField(primary_key = True, constraints=[Check('lower(substr(Department.dept_num,1,1)) BETWEEN "a" AND "z"')], max_length = 4)
+    dept_name = CharField(max_length = 30)
     dept_manager = CharField(max_length = 30)
     
 #    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null = False)

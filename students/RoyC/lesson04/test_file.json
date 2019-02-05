@@ -1,0 +1,13 @@
+{
+    "__obj_type": "DonationRecords",
+    "_donors": [
+        {
+            "__obj_type": "Donor",
+            "_name": "John Doe",
+            "_donations": [
+                555.55,
+                666.66
+            ]
+        }
+    ]
+}
