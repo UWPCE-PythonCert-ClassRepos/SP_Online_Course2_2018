@@ -1,0 +1,11 @@
+pypy version:
+PyPy 6.0.0 with MSC v.1910 32 bit
+
+No recursion time for Fibonacci: 2.490535889910174
+recursion time for Fibonacci: 1.9755940634007727
+
+
+python version:
+Python 3.5.3 
+No recursion time for Fibonacci: 8.283904133624498
+recursion time for Fibonacci: 4.790356844610262
