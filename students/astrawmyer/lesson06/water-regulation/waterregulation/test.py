@@ -22,9 +22,6 @@ class DeciderTests(unittest.TestCase):
     Unit tests for the Decider class
     """
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Decider.decide
-
     """     def test_dummy(self):
         
         Just some example syntax that you might use
@@ -88,5 +85,17 @@ class ControllerTests(unittest.TestCase):
 
     # TODO: write a test or tests for each of the behaviors defined for
     #       Controller.tick
+    def test_tick(self):
+        # Initialize controller, decider, pump, sensor.
+        sensor = Sensor('127.0.0.1', 8000)
+        pump = Pump('127.0.0.1', 8000)
+        decider = Decider(50,5)
+        controller = Controller(sensor, pump, decider)
+        
+        pump.set_state = MagicMock(return_value=True)
+        pump.get_state = MagicMock(return_value=pump.PUMP_OFF)
+        sensor.measure = MagicMock(return_value=25)
 
-    pass
+        
+        self.assertEqual(Pump.PUMP_IN,controller.tick())
+
