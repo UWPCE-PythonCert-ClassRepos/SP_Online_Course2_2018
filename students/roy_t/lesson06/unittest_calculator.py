@@ -43,13 +43,15 @@ class CalculatorTests(TestCase):
 
     def setUp(self):
         """
-        Configure a new Adder, Subtractor, Multiplier, and Divider to instantiate a calculator
+        Configure a new Adder, Subtractor, Multiplier,
+        and Divider to instantiate a calculator
         """
         self.adder = Adder()
         self.subtracter = Subtracter()
         self.multiplier = Multiplier()
         self.divider = Divider()
-        self.calculator = Calculator(self.adder, self.subtracter, self.multiplier, self.divider)
+        self.calculator = Calculator(self.adder, self.subtracter,
+                                     self.multiplier, self.divider)
 
     def test_insufficient_operands(self):
         """At least two operands are needed."""
@@ -73,3 +75,19 @@ class CalculatorTests(TestCase):
         self.calculator.enter_number(2)
         self.calculator.subtract()
         self.subtracter.calc.assert_called_with(1, 2)
+
+    def test_multiplier_call(self):
+        """Test numbers can be multiplied."""
+        self.multiplier.calc = MagicMock(return_value=0)
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.multiply()
+        self.multiplier.calc.assert_called_with(1, 2)
+
+    def test_divider_call(self):
+        """Test numbers can be divided."""
+        self.divider.calc = MagicMock(return_value=0)
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.divide()
+        self.divider.calc.assert_called_with(1, 2)

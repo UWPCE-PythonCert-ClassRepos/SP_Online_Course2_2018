@@ -2,6 +2,7 @@
 
 from .exceptions import InsufficientOperands
 
+
 class Calculator:
     """Class to build a Calculator"""
 
