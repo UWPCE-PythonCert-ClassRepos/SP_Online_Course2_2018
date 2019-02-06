@@ -11,6 +11,11 @@ from sensor import Sensor
 from .controller import Controller
 from .decider import Decider
 
+actions = {
+    'PUMP_IN': 1,
+    'PUMP_OUT': 0,
+    'PUMP_OFF': -1,
+}
 
 class DeciderTests(unittest.TestCase):
     """
@@ -20,15 +25,20 @@ class DeciderTests(unittest.TestCase):
     # TODO: write a test or tests for each of the behaviors defined for
     #       Decider.decide
 
-    def test_dummy(self):
-        """
+    """     def test_dummy(self):
+        
         Just some example syntax that you might use
-        """
+        
 
         pump = Pump('127.0.0.1', 8000)
         pump.set_state = MagicMock(return_value=True)
 
-        self.fail("Remove this test.")
+        self.fail("Remove this test.") """
+    
+    def test_decider_off_below(self):
+        decider = Decider(50,5)
+        action_state = decider.decide(40,actions['PUMP_OFF'],actions)
+        self.assertEqual(actions['PUMP_IN'],action_state)
 
 
 class ControllerTests(unittest.TestCase):
