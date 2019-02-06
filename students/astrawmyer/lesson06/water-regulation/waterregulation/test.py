@@ -39,6 +39,46 @@ class DeciderTests(unittest.TestCase):
         decider = Decider(50,5)
         action_state = decider.decide(40,actions['PUMP_OFF'],actions)
         self.assertEqual(actions['PUMP_IN'],action_state)
+    
+    def test_decider_off_above(self):
+        decider = Decider(50,5)
+        action_state = decider.decide(60,actions['PUMP_OFF'],actions)
+        self.assertEqual(actions['PUMP_OUT'],action_state)
+
+    def test_decider_off_within(self):
+        decider = Decider(50,5)
+        action_state = decider.decide(51,actions['PUMP_OFF'],actions)
+        self.assertEqual(actions['PUMP_OFF'],action_state)
+    
+    def test_decider_in_below(self):
+        decider = Decider(50,5)
+        action_state = decider.decide(40,actions['PUMP_IN'],actions)
+        self.assertEqual(actions['PUMP_IN'],action_state)
+    
+    def test_decider_in_above(self):
+        decider = Decider(50,5)
+        action_state = decider.decide(60,actions['PUMP_IN'],actions)
+        self.assertEqual(actions['PUMP_OFF'],action_state)
+
+    def test_decider_in_within(self):
+        decider = Decider(50,5)
+        action_state = decider.decide(51,actions['PUMP_IN'],actions)
+        self.assertEqual(actions['PUMP_IN'],action_state)
+
+    def test_decider_out_below(self):
+        decider = Decider(50,5)
+        action_state = decider.decide(40,actions['PUMP_OUT'],actions)
+        self.assertEqual(actions['PUMP_OFF'],action_state)
+    
+    def test_decider_out_above(self):
+        decider = Decider(50,5)
+        action_state = decider.decide(60,actions['PUMP_OUT'],actions)
+        self.assertEqual(actions['PUMP_OUT'],action_state)
+
+    def test_decider_out_within(self):
+        decider = Decider(50,5)
+        action_state = decider.decide(51,actions['PUMP_OUT'],actions)
+        self.assertEqual(actions['PUMP_OUT'],action_state)
 
 
 class ControllerTests(unittest.TestCase):
