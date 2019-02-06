@@ -22,7 +22,7 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
 
-server_handler = logging.handlers.DatagramHandler('127.0.0.1', "514")
+server_handler = logging.handlers.DatagramHandler('127.0.0.1', 514)
 server_handler.setLevel((logging.ERROR))
 server_handler.setFormatter(server_formatter)
 

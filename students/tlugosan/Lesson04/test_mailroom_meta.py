@@ -6,7 +6,7 @@ import unittest
 import pytest
 from unittest import mock
 from mock import patch
-import mailroom_meta as mailroom
+import mailroom5_meta as mailroom
 import os
 
 
