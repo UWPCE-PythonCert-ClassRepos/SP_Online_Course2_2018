@@ -38,6 +38,32 @@ class SubtracterTests(TestCase):
                 self.assertEqual(i - j, subtracter.calc(i, j))
 
 
+class MultiplierTests(TestCase):
+    """Class for testing Multiplier"""
+
+    def test_multiplying(self):
+        """Create a Multiplier, verify the result"""
+        multplier = Multiplier()
+
+        for i in range(-10, 10):
+            for j in range(-10, 10):
+                self.assertEqual(i * j, multplier.calc(i, j))
+
+
+class DividerTests(TestCase):
+    """Class for testing Divider"""
+
+    def test_dividing(self):
+        """Create a Divider, verify the result"""
+        divider = Divider()
+
+        for i in range(-10, 10):
+            for j in range(-10, 10):
+                if j == 0:
+                    continue
+                self.assertEqual(i / j, divider.calc(i, j))
+
+
 class CalculatorTests(TestCase):
     """Class for testing the Calculator"""
 
