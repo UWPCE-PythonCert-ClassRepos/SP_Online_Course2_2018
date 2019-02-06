@@ -1,5 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock
+from mock import patch
+from unittest import mock
 
 from calculator.adder import Adder
 from calculator.subtracter import Subtracter
@@ -8,7 +10,7 @@ from calculator.divider import Divider
 from calculator.calculator import Calculator
 from calculator.exceptions import InsufficientOperands
 
-
+"""
 class AdderTests(TestCase):
 
     def test_adding(self):
@@ -59,6 +61,8 @@ class MultiplierTests(TestCase):
         for i in range(-10, 10):
             for j in range(-10, 10):
                 self.assertEqual(i * j, multiplier.calc(i, j))
+
+"""
 
 
 class CalculatorTests(TestCase):
@@ -112,3 +116,25 @@ class CalculatorTests(TestCase):
         self.calculator.divide()
 
         self.divider.calc.assert_called_with(1, 2)
+
+    def test_combine_call_1(self):
+        self.adder.calc = MagicMock(return_value=33)
+
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.add()
+        self.calculator.enter_number(1)
+        self.calculator.add()
+
+        self.adder.calc.assert_called_with(33, 1)
+
+    def test_combine_call_2(self):
+        self.adder.calc = MagicMock(return_value=56)
+        self.subtracter.calc = MagicMock(return_value=0)
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(2)
+        self.calculator.add()
+        self.calculator.enter_number(2)
+        self.calculator.subtract()
+
+        self.subtracter.calc.assert_called_with(56, 2)
