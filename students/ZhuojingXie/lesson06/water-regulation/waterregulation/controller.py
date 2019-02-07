@@ -2,11 +2,6 @@
 Encapsulates command and coordination for the water-regulation module
 """
 
-from pump import Pump
-from sensor import Sensor
-#from controller import Controller
-from decider import Decider
-
 
 class Controller(object):
     """
@@ -33,24 +28,20 @@ class Controller(object):
         }
 
     def tick(self):
-
         """
         On each call to tick, the controller shall:
 
           1. query the sensor for the current height of liquid in the tank
-          2. query the pump for its current state (pumping in, pumping out, or at rest)
-          3. query the decider for the next appropriate state of the pump, given the above
+          2. query the pump for its current state (pumping in,
+             pumping out, or at rest)
+          3. query the decider for the next appropriate state of the pump,
+             given the above
           4. set the pump to that new state
 
         :return: True if the pump has acknowledged its new state, else False
         """
+        height = self.sensor.measure()
+        state = self.pump.get_state()
+        next_state = self.decider.decide(height, state, self.actions)
 
-        # TODO: Implement the above-defined behaviors
-        try:
-            self.pump.set_state(self.decider.decide(self.sensor.measure(),
-                                                    self.pump.get_state(),
-                                                    self.actions))
-        except TypeError:
-            return False
-
-        return True
+        return self.pump.set_state(next_state)

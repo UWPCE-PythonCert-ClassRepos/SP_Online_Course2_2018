@@ -8,8 +8,9 @@ from unittest.mock import MagicMock
 from pump import Pump
 from sensor import Sensor
 
-from controller import Controller
-from decider import Decider
+from .controller import Controller
+from .decider import Decider
+
 
 
 class DeciderTests(unittest.TestCase):
@@ -17,8 +18,7 @@ class DeciderTests(unittest.TestCase):
     Unit tests for the Decider class
     """
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Decider.decide
+
 
 
     def test_decide(self):
@@ -32,8 +32,8 @@ class DeciderTests(unittest.TestCase):
             'PUMP_OFF': 0,
         }
 
-        self.assertEqual(target.decide(80, acts['PUMP_OFF'], acts),1)
-        self.assertEqual(target.decide(80, acts['PUMP_IN'], acts),1)
+        self.assertEqual(target.decide(80, acts['PUMP_OFF'], acts), 1)
+        self.assertEqual(target.decide(80, acts['PUMP_IN'], acts), 1)
         self.assertEqual(target.decide(110, acts['PUMP_OFF'], acts), -1)
         self.assertEqual(target.decide(110, acts['PUMP_OUT'], acts), -1)
         self.assertEqual(target.decide(101, acts['PUMP_OFF'], acts), 0)
@@ -47,9 +47,9 @@ class ControllerTests(unittest.TestCase):
     Unit tests for the Controller class
     """
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Controller.tick
+
     def test_controller_tick(self):
+        '''testing controller'''
         sensor = Sensor('127.0.0.1', '514')
         sensor.measure = MagicMock(return_value=105)
         pump = Pump('127.0.0.1', '8000')
