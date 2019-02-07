@@ -28,79 +28,78 @@ class DeciderTests(unittest.TestCase):
         Tests proper action when pump is off and level below.
         """
         decider = Decider(50, 5)
-        action_state = decider.decide(40, self.actions['PUMP_OFF'], self.actions)
-        self.assertEqual(self.actions['PUMP_IN'], action_state)
+        action_st = decider.decide(40, self.actions['PUMP_OFF'], self.actions)
+        self.assertEqual(self.actions['PUMP_IN'], action_st)
 
     def test_decider_off_above(self):
         """
         Tests proper action when pump is off and level above.
         """
         decider = Decider(50, 5)
-        action_state = decider.decide(60, self.actions['PUMP_OFF'], self.actions)
-        self.assertEqual(self.actions['PUMP_OUT'], action_state)
+        action_st = decider.decide(60, self.actions['PUMP_OFF'], self.actions)
+        self.assertEqual(self.actions['PUMP_OUT'], action_st)
 
     def test_decider_off_within(self):
         """
         Tests proper action when pump is off and level within margin.
         """
         decider = Decider(50, 5)
-        action_state = decider.decide(51, self.actions['PUMP_OFF'], self.actions)
-        self.assertEqual(self.actions['PUMP_OFF'], action_state)
+        action_st = decider.decide(51, self.actions['PUMP_OFF'], self.actions)
+        self.assertEqual(self.actions['PUMP_OFF'], action_st)
 
     def test_decider_in_below(self):
         """
         Tests proper action when pump is in and level below.
         """
         decider = Decider(50, 5)
-        action_state = decider.decide(40, self.actions['PUMP_IN'], self.actions)
-        self.assertEqual(self.actions['PUMP_IN'], action_state)
+        action_st = decider.decide(40, self.actions['PUMP_IN'], self.actions)
+        self.assertEqual(self.actions['PUMP_IN'], action_st)
 
     def test_decider_in_above(self):
         """
         Tests proper action when pump is in and level above.
         """
         decider = Decider(50, 5)
-        action_state = decider.decide(60, self.actions['PUMP_IN'], self.actions)
-        self.assertEqual(self.actions['PUMP_OFF'], action_state)
+        action_st = decider.decide(60, self.actions['PUMP_IN'], self.actions)
+        self.assertEqual(self.actions['PUMP_OFF'], action_st)
 
     def test_decider_in_within(self):
         """
         Tests proper action when pump is in and level within margin.
         """
         decider = Decider(50, 5)
-        action_state = decider.decide(51, self.actions['PUMP_IN'], self.actions)
-        self.assertEqual(self.actions['PUMP_IN'], action_state)
+        action_st = decider.decide(51, self.actions['PUMP_IN'], self.actions)
+        self.assertEqual(self.actions['PUMP_IN'], action_st)
 
     def test_decider_out_below(self):
         """
         Tests proper action when pump is out and level below.
         """
         decider = Decider(50, 5)
-        action_state = decider.decide(40, self.actions['PUMP_OUT'], self.actions)
-        self.assertEqual(self.actions['PUMP_OFF'], action_state)
+        action_st = decider.decide(40, self.actions['PUMP_OUT'], self.actions)
+        self.assertEqual(self.actions['PUMP_OFF'], action_st)
 
     def test_decider_out_above(self):
         """
         Tests proper action when pump is out and level above.
         """
         decider = Decider(50, 5)
-        action_state = decider.decide(60, self.actions['PUMP_OUT'], self.actions)
-        self.assertEqual(self.actions['PUMP_OUT'], action_state)
+        action_st = decider.decide(60, self.actions['PUMP_OUT'], self.actions)
+        self.assertEqual(self.actions['PUMP_OUT'], action_st)
 
     def test_decider_out_within(self):
         """
         Tests proper action when pump is out and level within margin.
         """
         decider = Decider(50, 5)
-        action_state = decider.decide(51, self.actions['PUMP_OUT'], self.actions)
-        self.assertEqual(self.actions['PUMP_OUT'], action_state)
+        action_st = decider.decide(51, self.actions['PUMP_OUT'], self.actions)
+        self.assertEqual(self.actions['PUMP_OUT'], action_st)
 
 
 class ControllerTests(unittest.TestCase):
     """
     Unit tests for the Controller class
     """
-
 
     def test_tick(self):
         """
@@ -115,6 +114,5 @@ class ControllerTests(unittest.TestCase):
         pump.set_state = MagicMock(return_value=True)
         pump.get_state = MagicMock(return_value=pump.PUMP_OFF)
         sensor.measure = MagicMock(return_value=25)
-
 
         self.assertEqual(Pump.PUMP_IN, controller.tick())

@@ -31,5 +31,4 @@ class ModuleTests(unittest.TestCase):
         pump.get_state = MagicMock(return_value=pump.PUMP_OFF)
         sensor.measure = MagicMock(return_value=25)
 
-
         self.assertEqual(Pump.PUMP_IN, controller.tick())
