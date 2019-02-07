@@ -12,7 +12,6 @@ from .controller import Controller
 from .decider import Decider
 
 
-
 class DeciderTests(unittest.TestCase):
     """
     Unit tests for the Decider class
