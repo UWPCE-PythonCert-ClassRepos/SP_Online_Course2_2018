@@ -1,0 +1,326 @@
+Our code is missing the base case to terminate the recursion.
+And the recursion keeps going as the division of 1 to 2 creates an infinite number of divisions by 2 
+asymptotic to 0 but never reaching 0 and there is nothing to stop without the explicit False statement.
+
+
+
+C:\Users\tlugo\Desktop\PythonUW\Class220\SP_Online_Course2_2018\students\tlugosan\Lesson05>python -m pdb debug_ex.py 15
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(3)<module>()
+-> import sys
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)<module>()
+-> def my_function(n):
+(Pdb) ll
+  1     #!/usr/bin/env python3
+  2
+  3     import sys
+  4
+  5
+  6  -> def my_function(n):
+  7         if n == 2:
+  8             return True
+  9
+ 10         return my_function(n/2)
+ 11
+ 12
+ 13     if __name__ == "__main__":
+ 14         n = int(sys.argv[1])
+ 15         print(my_function(n))
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(13)<module>()
+-> if __name__ == "__main__":
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(14)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(15)<module>()
+-> print(my_function(n))
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(10)my_function()
+-> return my_function(n/2)
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(10)my_function()
+-> return my_function(n/2)
+(Pdb) n
+Traceback (most recent call last):
+  File "C:\Users\tlugo\AppData\Local\Programs\Python\Python36\lib\pdb.py", line 1667, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Users\tlugo\AppData\Local\Programs\Python\Python36\lib\pdb.py", line 1548, in _runscript
+    self.run(statement)
+  File "C:\Users\tlugo\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 434, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 15, in <module>
+    print(my_function(n))
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 10, in my_function
+    return my_function(n/2)
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 10, in my_function
+    return my_function(n/2)
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 10, in my_function
+    return my_function(n/2)
+  [Previous line repeated 980 more times]
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 6, in my_function
+    def my_function(n):
+  File "C:\Users\tlugo\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 53, in trace_dispatch
+    return self.dispatch_call(frame, arg)
+  File "C:\Users\tlugo\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 79, in dispatch_call
+    if not (self.stop_here(frame) or self.break_anywhere(frame)):
+  File "C:\Users\tlugo\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 176, in break_anywhere
+    return self.canonic(frame.f_code.co_filename) in self.breaks
+  File "C:\Users\tlugo\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 32, in canonic
+    if filename == "<" + filename[1:-1] + ">":
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\users\tlugo\appdata\local\programs\python\python36\lib\bdb.py(32)canonic()
+-> if filename == "<" + filename[1:-1] + ">":
+(Pdb) n
+Post mortem debugger finished. The debug_ex.py will be restarted
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(3)<module>()
+-> import sys
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)<module>()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(13)<module>()
+-> if __name__ == "__main__":
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(14)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(15)<module>()
+-> print(my_function(n))
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(10)my_function()
+-> return my_function(n/2)
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(10)my_function()
+-> return my_function(n/2)
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb)
+3.75
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(10)my_function()
+-> return my_function(n/2)
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(10)my_function()
+-> return my_function(n/2)
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) ll
+  6  -> def my_function(n):
+  7         if n == 2:
+  8             return True
+  9
+ 10         return my_function(n/2)
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(10)my_function()
+-> return my_function(n/2)
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 2:
+(Pdb) pp n
+0.46875
+(Pdb) ll
+  6     def my_function(n):
+  7  ->     if n == 2:
+  8             return True
+  9
+ 10         return my_function(n/2)
+(Pdb) quit
+
+C:\Users\tlugo\Desktop\PythonUW\Class220\SP_Online_Course2_2018\students\tlugosan\Lesson05>python -m pdb debug_ex.py 15
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(3)<module>()
+-> import sys
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)<module>()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(15)<module>()
+-> if __name__ == "__main__":
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(16)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(17)<module>()
+-> print(my_function(n))
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 1:
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(9)my_function()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(12)my_function()
+-> return my_function(n/2)
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 1:
+(Pdb) pp n
+7.5
+(Pdb) c
+Traceback (most recent call last):
+  File "C:\Users\tlugo\AppData\Local\Programs\Python\Python36\lib\pdb.py", line 1667, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Users\tlugo\AppData\Local\Programs\Python\Python36\lib\pdb.py", line 1548, in _runscript
+    self.run(statement)
+  File "C:\Users\tlugo\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 434, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 17, in <module>
+    print(my_function(n))
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 12, in my_function
+    return my_function(n/2)
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 7, in my_function
+    if n == 1:
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 12, in my_function
+    return my_function(n/2)
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 12, in my_function
+    return my_function(n/2)
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 12, in my_function
+    return my_function(n/2)
+  [Previous line repeated 984 more times]
+  File "c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py", line 7, in my_function
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n == 1:
+(Pdb) n
+Post mortem debugger finished. The debug_ex.py will be restarted
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(3)<module>()
+-> import sys
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)<module>()
+-> def my_function(n):
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(15)<module>()
+-> if __name__ == "__main__":
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(16)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(17)<module>()
+-> print(my_function(n))
+(Pdb) s
+--Call--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(6)my_function()
+-> def my_function(n):
+(Pdb) ll
+  6  -> def my_function(n):
+  7         if n <= 1:
+  8             return False
+  9         if n == 2:
+ 10             return True
+ 11
+ 12         return my_function(n/2)
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(7)my_function()
+-> if n <= 1:
+(Pdb) pp n
+15
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(9)my_function()
+-> if n == 2:
+(Pdb) n
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(12)my_function()
+-> return my_function(n/2)
+(Pdb) n
+--Return--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(12)my_function()->False
+-> return my_function(n/2)
+(Pdb) n
+False
+--Return--
+> c:\users\tlugo\desktop\pythonuw\class220\sp_online_course2_2018\students\tlugosan\lesson05\debug_ex.py(17)<module>()->None
+-> print(my_function(n))
+(Pdb) pp n
+15
+(Pdb) quit
+
+C:\Users\tlugo\Desktop\PythonUW\Class220\SP_Online_Course2_2018\students\tlugosan\Lesson05>python  debug_ex.py 15
+False
+
+C:\Users\tlugo\Desktop\PythonUW\Class220\SP_Online_Course2_2018\students\tlugosan\Lesson05>python  debug_ex.py 2
+True
+
+C:\Users\tlugo\Desktop\PythonUW\Class220\SP_Online_Course2_2018\students\tlugosan\Lesson05>python  debug_ex.py 16
+True
+
+C:\Users\tlugo\Desktop\PythonUW\Class220\SP_Online_Course2_2018\students\tlugosan\Lesson05>python  debug_ex.py 122
+False
