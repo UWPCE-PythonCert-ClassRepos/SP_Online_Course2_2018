@@ -1,0 +1,56 @@
+{
+    "__obj_type": "DonorList",
+    "_donors": [
+        {
+            "__obj_type": "Donor",
+            "_donation": [
+                150.0,
+                200.0,
+                100.0
+            ],
+            "_name": "Toni Orlando"
+        },
+        {
+            "__obj_type": "Donor",
+            "_donation": [
+                1800.0
+            ],
+            "_name": "Amanda Clark"
+        },
+        {
+            "__obj_type": "Donor",
+            "_donation": [
+                1234.56,
+                4500.34,
+                765.28
+            ],
+            "_name": "Robin Hood"
+        },
+        {
+            "__obj_type": "Donor",
+            "_donation": [
+                523.1,
+                75.0
+            ],
+            "_name": "Gina Travis"
+        },
+        {
+            "__obj_type": "Donor",
+            "_donation": [
+                850.0,
+                20.14
+            ],
+            "_name": "Mark Johnson"
+        },
+        {
+            "__obj_type": "Donor",
+            "_donation": [
+                44.0,
+                4.0,
+                73.0
+            ],
+            "_name": "abc"
+        }
+    ],
+    "new_donors_list": []
+}
