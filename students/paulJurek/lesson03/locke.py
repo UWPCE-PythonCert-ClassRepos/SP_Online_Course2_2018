@@ -19,15 +19,10 @@ class Locke:
         print('closing door1')
         print('starting pumps')
 
-    def __exit__(self, *args):
-        try:
-            print('open door 2')
-            print('moving boats')
-            print('closing door 2')
-        except ValueError as e:
-            raise e("this isn't going to work")
-        except TypeError as e:
-            raise
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type != None:
+            print(f"Exception found: {exc_val}")
+        return True
 
     def move_boats_through(self, boats: int, boat_level: str = 'low') -> bool:
         """processes boats through locke.
