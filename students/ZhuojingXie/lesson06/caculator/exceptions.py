@@ -1,4 +1,0 @@
-class InsufficientOperands(Exception):
-    pass
-
-    

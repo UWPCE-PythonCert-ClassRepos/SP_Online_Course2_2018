@@ -1,0 +1,204 @@
+1. The logic is configured in such a way that there will always be a case where division by zero is a guarantee.
+2. The function is stuck in a for loop.
+3. The value of n is static. However, the variable of i is incremented by range(0, n)
+
+In [14]: import logging
+    ...:
+    ...: log_format = "%(asctime)s %(filename)s:%(lineno)-4d %(levelname)s %(message)s"  # Add/modify t
+    ...: hese
+    ...: formatter = logging.Formatter(log_format)
+    ...: file_handler = logging.FileHandler('test_log.log')
+    ...: file_handler.setFormatter(formatter)
+    ...: file_handler.setLevel(logging.DEBUG) # changed the default level to DEBUG to make same as cons
+    ...: ole_handler
+    ...:
+    ...: console_handler = logging.StreamHandler()
+    ...: console_handler.setLevel(logging.DEBUG)
+    ...: console_handler.setFormatter(formatter)
+    ...: logger = logging.getLogger()
+    ...: logger.addHandler(file_handler)
+    ...: logger.addHandler(console_handler)
+    ...:
+    ...:
+    ...: def my_fun(n):
+    ...:     for i in range(0, n):
+    ...:         logging.debug(i)
+    ...:         if i == 50:
+    ...:             logging.warning("The value of i is 50.")
+    ...:         try:
+    ...:             100 / (50 - i)
+    ...:         except ZeroDivisionError:
+    ...:             logging.error("Tried to divide by zero. Var i was {}. Recovered gracefully.".forma
+    ...: t(i))
+    ...:
+
+In [15]: my_fun(51)
+DEBUG:root:0
+2019-01-30 22:14:10,001 <ipython-input-14-7c538932a001>:19   DEBUG 0
+2019-01-30 22:14:10,001 <ipython-input-14-7c538932a001>:19   DEBUG 0
+DEBUG:root:1
+2019-01-30 22:14:10,002 <ipython-input-14-7c538932a001>:19   DEBUG 1
+2019-01-30 22:14:10,002 <ipython-input-14-7c538932a001>:19   DEBUG 1
+DEBUG:root:2
+2019-01-30 22:14:10,003 <ipython-input-14-7c538932a001>:19   DEBUG 2
+2019-01-30 22:14:10,003 <ipython-input-14-7c538932a001>:19   DEBUG 2
+DEBUG:root:3
+2019-01-30 22:14:10,003 <ipython-input-14-7c538932a001>:19   DEBUG 3
+2019-01-30 22:14:10,003 <ipython-input-14-7c538932a001>:19   DEBUG 3
+DEBUG:root:4
+2019-01-30 22:14:10,004 <ipython-input-14-7c538932a001>:19   DEBUG 4
+2019-01-30 22:14:10,004 <ipython-input-14-7c538932a001>:19   DEBUG 4
+DEBUG:root:5
+2019-01-30 22:14:10,004 <ipython-input-14-7c538932a001>:19   DEBUG 5
+2019-01-30 22:14:10,004 <ipython-input-14-7c538932a001>:19   DEBUG 5
+DEBUG:root:6
+2019-01-30 22:14:10,005 <ipython-input-14-7c538932a001>:19   DEBUG 6
+2019-01-30 22:14:10,005 <ipython-input-14-7c538932a001>:19   DEBUG 6
+DEBUG:root:7
+2019-01-30 22:14:10,005 <ipython-input-14-7c538932a001>:19   DEBUG 7
+2019-01-30 22:14:10,005 <ipython-input-14-7c538932a001>:19   DEBUG 7
+DEBUG:root:8
+2019-01-30 22:14:10,009 <ipython-input-14-7c538932a001>:19   DEBUG 8
+2019-01-30 22:14:10,009 <ipython-input-14-7c538932a001>:19   DEBUG 8
+DEBUG:root:9
+2019-01-30 22:14:10,009 <ipython-input-14-7c538932a001>:19   DEBUG 9
+2019-01-30 22:14:10,009 <ipython-input-14-7c538932a001>:19   DEBUG 9
+DEBUG:root:10
+2019-01-30 22:14:10,011 <ipython-input-14-7c538932a001>:19   DEBUG 10
+2019-01-30 22:14:10,011 <ipython-input-14-7c538932a001>:19   DEBUG 10
+DEBUG:root:11
+2019-01-30 22:14:10,013 <ipython-input-14-7c538932a001>:19   DEBUG 11
+2019-01-30 22:14:10,013 <ipython-input-14-7c538932a001>:19   DEBUG 11
+DEBUG:root:12
+2019-01-30 22:14:10,014 <ipython-input-14-7c538932a001>:19   DEBUG 12
+2019-01-30 22:14:10,014 <ipython-input-14-7c538932a001>:19   DEBUG 12
+DEBUG:root:13
+2019-01-30 22:14:10,016 <ipython-input-14-7c538932a001>:19   DEBUG 13
+2019-01-30 22:14:10,016 <ipython-input-14-7c538932a001>:19   DEBUG 13
+DEBUG:root:14
+2019-01-30 22:14:10,017 <ipython-input-14-7c538932a001>:19   DEBUG 14
+2019-01-30 22:14:10,017 <ipython-input-14-7c538932a001>:19   DEBUG 14
+DEBUG:root:15
+2019-01-30 22:14:10,023 <ipython-input-14-7c538932a001>:19   DEBUG 15
+2019-01-30 22:14:10,023 <ipython-input-14-7c538932a001>:19   DEBUG 15
+DEBUG:root:16
+2019-01-30 22:14:10,025 <ipython-input-14-7c538932a001>:19   DEBUG 16
+2019-01-30 22:14:10,025 <ipython-input-14-7c538932a001>:19   DEBUG 16
+DEBUG:root:17
+2019-01-30 22:14:10,025 <ipython-input-14-7c538932a001>:19   DEBUG 17
+2019-01-30 22:14:10,025 <ipython-input-14-7c538932a001>:19   DEBUG 17
+DEBUG:root:18
+2019-01-30 22:14:10,027 <ipython-input-14-7c538932a001>:19   DEBUG 18
+2019-01-30 22:14:10,027 <ipython-input-14-7c538932a001>:19   DEBUG 18
+DEBUG:root:19
+2019-01-30 22:14:10,031 <ipython-input-14-7c538932a001>:19   DEBUG 19
+2019-01-30 22:14:10,031 <ipython-input-14-7c538932a001>:19   DEBUG 19
+DEBUG:root:20
+2019-01-30 22:14:10,033 <ipython-input-14-7c538932a001>:19   DEBUG 20
+2019-01-30 22:14:10,033 <ipython-input-14-7c538932a001>:19   DEBUG 20
+DEBUG:root:21
+2019-01-30 22:14:10,035 <ipython-input-14-7c538932a001>:19   DEBUG 21
+2019-01-30 22:14:10,035 <ipython-input-14-7c538932a001>:19   DEBUG 21
+DEBUG:root:22
+2019-01-30 22:14:10,036 <ipython-input-14-7c538932a001>:19   DEBUG 22
+2019-01-30 22:14:10,036 <ipython-input-14-7c538932a001>:19   DEBUG 22
+DEBUG:root:23
+2019-01-30 22:14:10,038 <ipython-input-14-7c538932a001>:19   DEBUG 23
+2019-01-30 22:14:10,038 <ipython-input-14-7c538932a001>:19   DEBUG 23
+DEBUG:root:24
+2019-01-30 22:14:10,043 <ipython-input-14-7c538932a001>:19   DEBUG 24
+2019-01-30 22:14:10,043 <ipython-input-14-7c538932a001>:19   DEBUG 24
+DEBUG:root:25
+2019-01-30 22:14:10,044 <ipython-input-14-7c538932a001>:19   DEBUG 25
+2019-01-30 22:14:10,044 <ipython-input-14-7c538932a001>:19   DEBUG 25
+DEBUG:root:26
+2019-01-30 22:14:10,045 <ipython-input-14-7c538932a001>:19   DEBUG 26
+2019-01-30 22:14:10,045 <ipython-input-14-7c538932a001>:19   DEBUG 26
+DEBUG:root:27
+2019-01-30 22:14:10,047 <ipython-input-14-7c538932a001>:19   DEBUG 27
+2019-01-30 22:14:10,047 <ipython-input-14-7c538932a001>:19   DEBUG 27
+DEBUG:root:28
+2019-01-30 22:14:10,052 <ipython-input-14-7c538932a001>:19   DEBUG 28
+2019-01-30 22:14:10,052 <ipython-input-14-7c538932a001>:19   DEBUG 28
+DEBUG:root:29
+2019-01-30 22:14:10,053 <ipython-input-14-7c538932a001>:19   DEBUG 29
+2019-01-30 22:14:10,053 <ipython-input-14-7c538932a001>:19   DEBUG 29
+DEBUG:root:30
+2019-01-30 22:14:10,056 <ipython-input-14-7c538932a001>:19   DEBUG 30
+2019-01-30 22:14:10,056 <ipython-input-14-7c538932a001>:19   DEBUG 30
+DEBUG:root:31
+2019-01-30 22:14:10,057 <ipython-input-14-7c538932a001>:19   DEBUG 31
+2019-01-30 22:14:10,057 <ipython-input-14-7c538932a001>:19   DEBUG 31
+DEBUG:root:32
+2019-01-30 22:14:10,059 <ipython-input-14-7c538932a001>:19   DEBUG 32
+2019-01-30 22:14:10,059 <ipython-input-14-7c538932a001>:19   DEBUG 32
+DEBUG:root:33
+2019-01-30 22:14:10,065 <ipython-input-14-7c538932a001>:19   DEBUG 33
+2019-01-30 22:14:10,065 <ipython-input-14-7c538932a001>:19   DEBUG 33
+DEBUG:root:34
+2019-01-30 22:14:10,069 <ipython-input-14-7c538932a001>:19   DEBUG 34
+2019-01-30 22:14:10,069 <ipython-input-14-7c538932a001>:19   DEBUG 34
+DEBUG:root:35
+2019-01-30 22:14:10,075 <ipython-input-14-7c538932a001>:19   DEBUG 35
+2019-01-30 22:14:10,075 <ipython-input-14-7c538932a001>:19   DEBUG 35
+DEBUG:root:36
+2019-01-30 22:14:10,078 <ipython-input-14-7c538932a001>:19   DEBUG 36
+2019-01-30 22:14:10,078 <ipython-input-14-7c538932a001>:19   DEBUG 36
+DEBUG:root:37
+2019-01-30 22:14:10,082 <ipython-input-14-7c538932a001>:19   DEBUG 37
+2019-01-30 22:14:10,082 <ipython-input-14-7c538932a001>:19   DEBUG 37
+DEBUG:root:38
+2019-01-30 22:14:10,085 <ipython-input-14-7c538932a001>:19   DEBUG 38
+2019-01-30 22:14:10,085 <ipython-input-14-7c538932a001>:19   DEBUG 38
+DEBUG:root:39
+2019-01-30 22:14:10,086 <ipython-input-14-7c538932a001>:19   DEBUG 39
+2019-01-30 22:14:10,086 <ipython-input-14-7c538932a001>:19   DEBUG 39
+DEBUG:root:40
+2019-01-30 22:14:10,088 <ipython-input-14-7c538932a001>:19   DEBUG 40
+2019-01-30 22:14:10,088 <ipython-input-14-7c538932a001>:19   DEBUG 40
+DEBUG:root:41
+2019-01-30 22:14:10,089 <ipython-input-14-7c538932a001>:19   DEBUG 41
+2019-01-30 22:14:10,089 <ipython-input-14-7c538932a001>:19   DEBUG 41
+DEBUG:root:42
+2019-01-30 22:14:10,093 <ipython-input-14-7c538932a001>:19   DEBUG 42
+2019-01-30 22:14:10,093 <ipython-input-14-7c538932a001>:19   DEBUG 42
+DEBUG:root:43
+2019-01-30 22:14:10,095 <ipython-input-14-7c538932a001>:19   DEBUG 43
+2019-01-30 22:14:10,095 <ipython-input-14-7c538932a001>:19   DEBUG 43
+DEBUG:root:44
+2019-01-30 22:14:10,096 <ipython-input-14-7c538932a001>:19   DEBUG 44
+2019-01-30 22:14:10,096 <ipython-input-14-7c538932a001>:19   DEBUG 44
+DEBUG:root:45
+2019-01-30 22:14:10,099 <ipython-input-14-7c538932a001>:19   DEBUG 45
+2019-01-30 22:14:10,099 <ipython-input-14-7c538932a001>:19   DEBUG 45
+DEBUG:root:46
+2019-01-30 22:14:10,101 <ipython-input-14-7c538932a001>:19   DEBUG 46
+2019-01-30 22:14:10,101 <ipython-input-14-7c538932a001>:19   DEBUG 46
+DEBUG:root:47
+2019-01-30 22:14:10,105 <ipython-input-14-7c538932a001>:19   DEBUG 47
+2019-01-30 22:14:10,105 <ipython-input-14-7c538932a001>:19   DEBUG 47
+DEBUG:root:48
+2019-01-30 22:14:10,107 <ipython-input-14-7c538932a001>:19   DEBUG 48
+2019-01-30 22:14:10,107 <ipython-input-14-7c538932a001>:19   DEBUG 48
+DEBUG:root:49
+2019-01-30 22:14:10,109 <ipython-input-14-7c538932a001>:19   DEBUG 49
+2019-01-30 22:14:10,109 <ipython-input-14-7c538932a001>:19   DEBUG 49
+DEBUG:root:50
+2019-01-30 22:14:10,110 <ipython-input-14-7c538932a001>:19   DEBUG 50
+2019-01-30 22:14:10,110 <ipython-input-14-7c538932a001>:19   DEBUG 50
+WARNING:root:The value of i is 50.
+2019-01-30 22:14:10,114 <ipython-input-14-7c538932a001>:21   WARNING The value of i is 50.
+2019-01-30 22:14:10,114 <ipython-input-14-7c538932a001>:21   WARNING The value of i is 50.
+ERROR:root:Tried to divide by zero. Var i was 50. Recovered gracefully.
+2019-01-30 22:14:10,116 <ipython-input-14-7c538932a001>:25   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2019-01-30 22:14:10,116 <ipython-input-14-7c538932a001>:25   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+
+In [16]:
+
+
+
+
+
+
+
+
