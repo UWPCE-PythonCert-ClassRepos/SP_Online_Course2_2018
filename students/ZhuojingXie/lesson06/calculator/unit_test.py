@@ -1,13 +1,12 @@
 from unittest import TestCase
-
 from unittest.mock import MagicMock
-from exceptions import InsufficientOperands
 
-from adder import Adder
-from subtracter import Subtracter
-from multiplier import Multiplier
-from divider import Divider
-from calculator import Calculator
+from calculator.adder import Adder
+from calculator.subtracter import Subtracter
+from calculator.multiplier import Multiplier
+from calculator.divider import Divider
+from calculator.calculator import Calculator
+from calculator.exceptions import InsufficientOperands
 
 
 class AdderTests(TestCase):
@@ -29,7 +28,6 @@ class SubtracterTests(TestCase):
             for j in range(-10, 10):
                 self.assertEqual(i - j, subtracter.calc(i, j))
 
-
 class MultiplierTests(TestCase):
 
     def test_multiplying(self):
@@ -37,7 +35,7 @@ class MultiplierTests(TestCase):
 
         for i in range(-10, 10):
             for j in range(-10, 10):
-                self.assertEqual(i * j, multiplier.calc(i, j))
+                self.assertEqual(i*j, multiplier.calc(i, j))
 
 
 class DividerTests(TestCase):
@@ -47,8 +45,9 @@ class DividerTests(TestCase):
 
         for i in range(-10, 10):
             for j in range(-10, 10):
-                if j != 0:
-                    self.assertEqual(i / j, divider.calc(i, j))
+                if not j==0:
+                    self.assertEqual(i/j, divider.calc(i, j))
+
 
 
 class CalculatorTests(TestCase):
