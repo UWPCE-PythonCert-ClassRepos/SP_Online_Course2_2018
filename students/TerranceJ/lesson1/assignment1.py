@@ -1,7 +1,12 @@
+"""Lesson 1 assignment
+	written by Terrance J
+"""
 
-
+#COMPREHENSION ASSIGNMENT
 def top_five():
-	"""This is the comprehensions assignment"""
+	"""This is the comprehensions assignment
+	Return the top 5 tracks meeting loudness and danceability
+	"""
 
 	music = pandas.read_csv("featuresdf.csv")
 
@@ -20,7 +25,7 @@ def top_five():
 
 	return top_five
 
-
+#ITERATOR ASSIGNMENT
 class IterateMe_2:
 	
 	def __init__(self, start, stop, step):
@@ -62,7 +67,7 @@ it remembers its state and picks up where it left of at the break.
 Range Does not behave the same as an iterator. it does not pick up where the break occurs"""
 
 
-#GENERATORS
+#GENERATOR ASSIGNMENT
 
 def sum_of_integers(stop):
 	"""GENERATOR - keep adding the next integer"""
