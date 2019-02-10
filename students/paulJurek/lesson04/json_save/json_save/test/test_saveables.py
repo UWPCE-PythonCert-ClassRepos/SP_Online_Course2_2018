@@ -20,6 +20,8 @@ basics = [(String, "This is a string"),
           (Tuple, (1, 2, 3.4, "this")),
           (List, [[1, 2, 3], [4, 5, 6]]),
           (DateTime, datetime.datetime(2019,1,1)),
+          (DateTime, datetime.datetime(2019,1,1,1,1,1)),
+          (DateTime, datetime.datetime.utcnow()),
           (List, [{"3": 34}, {"4": 5}]),  # list with dicts in it.
           (Dict, {"this": {"3": 34}, "that": {"4": 5}})  # dict with dicts
           ]

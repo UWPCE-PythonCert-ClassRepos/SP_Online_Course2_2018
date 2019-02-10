@@ -224,7 +224,7 @@ class DateTime(Saveable):
     This assumes datetime object stored in python and 
     stores format '%Y-%m-%d %H:%M:%S'
     """
-    datetime_format = '%Y-%m-%d %H:%M:%S'
+    datetime_format = '%Y-%m-%d %H:%M:%S:%f'
 
     @staticmethod
     def to_json_compat(val):
