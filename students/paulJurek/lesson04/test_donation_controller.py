@@ -1,10 +1,10 @@
-"""testing the donation controller"""
+"""testing the donation controller for donation center"""
 
 import datetime
+import pathlib
 import pytest
 from Donor import Donor
 from DonationController import DonationController
-
 
 @pytest.fixture
 def stw():
@@ -12,16 +12,29 @@ def stw():
     setup with basic information and no donations"""
     return DonationController(name='Save The Whales')
 
-
 @pytest.fixture
 def donor1():
     return Donor(id=1, firstname='Fisher', lastname='Price')
-
 
 @pytest.fixture
 def donor2():
     return Donor(id=2, firstname='Wonky', lastname='Donkey')
 
+def test_controller_creates_saved_file(stw, donor1):
+    """given a controller is intialized and donors added
+    when saved with the internal method and then loaded
+    then the results can be reloaded"""
+    # create controller and save
+    test_filename = 'test.json'
+    stw.create_donor(donor1)
+    stw.save(test_filename)
+    stw
+
+    # now make load database and compare
+    stw2 = DonationController(name='Save The Whales2')
+    stw2.load(test_filename)
+
+    assert stw1 == stw1
 
 def test_create_new_donor(stw, donor1):
     """given a donation controller
@@ -30,7 +43,6 @@ def test_create_new_donor(stw, donor1):
     assert stw.find_donor(donor1) is None
     stw.create_donor(donor1)
     assert stw.find_donor(donor1) == donor1
-
 
 def test_create_new_donor_creates_error_if_exists(stw, donor1):
     stw.create_donor(donor1)
@@ -48,14 +60,12 @@ def test_create_donation_for_donor(stw, donor1):
     stw.create_donation(donor=donor1, amount=500)
     assert stw.get_total_donations() == 500
 
-
 def test_error_when_create_donation_for_missing_donor(stw, donor1):
     """give user tries to add donation for non-existanant donor
     when the amount is applied
     an exception is returned"""
     with pytest.raises(IndexError):
         stw.create_donation(donor=donor1, amount=500)
-
 
 def test_send_letters_to_all_donors(stw, donor1, donor2, tmpdir):
     """given controller
@@ -89,7 +99,6 @@ def test_next_id_property(stw, donor1, donor2):
 
         stw.create_donor(donor1)
         assert stw.next_id == 3
-
 
 def test_controller_challege_errors_on_small_value(stw):
         """given controller
