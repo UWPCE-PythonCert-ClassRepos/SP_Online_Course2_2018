@@ -9,17 +9,21 @@ import datetime
 from pathlib import Path
 import pickle
 from Donor import Donor, Donation
+from json_save.json_save import json_save_meta as js
 
 
-class DonationController:
+class DonationController(js.JsonSaveable):
     """organization controller for donations"""
+    name = js.String()
+    donors = js.Dict()
 
-    def __init__(self, name: str):
-        """args:
-            name : organzational name
-            """
-        self.name = name
-        self.donors = {}
+    def __init__(self, name, donors=None):
+        self.name=name
+        if donors:
+            self.donors = donors
+        else:
+            self.donors = {}
+
 
     def find_donor(self, donor: Donor):
         """searches through donor list and returns donor
@@ -161,6 +165,22 @@ class DonationController:
     def project_donation(self, factor, min_donation=0, max_donation=1e9):
         """provides projected donation amount assuming donor matches all donations"""
         return self.challenge(factor=factor, min_donation=min_donation, max_donation=max_donation).get_total_donations()
+
+
+    def save(self, filename):
+        """saves donation database"""
+        pass
+    
+    @classmethod
+    def load(cls, filename):
+        """rebuilds database from file"""
+        pass
+
+    def __eq__(self, other):
+        return self.to_json_compat() == other.to_json_compat()
+
+    def __repr__(self):
+        return self.to_json_compat()
 
 def modify_donor_donations(factor, donor):
     """returns a modified donor with their donations matched by nice donor"""

@@ -28,13 +28,16 @@ def test_controller_creates_saved_file(stw, donor1):
     test_filename = 'test.json'
     stw.create_donor(donor1)
     stw.save(test_filename)
+    print(stw)
     stw
 
     # now make load database and compare
-    stw2 = DonationController(name='Save The Whales2')
-    stw2.load(test_filename)
+    stw2 = DonationController.load(test_filename)
+    print(stw2)
+    assert str(stw) == str(stw2)
+    assert 1 == 2
 
-    assert stw1 == stw1
+
 
 def test_create_new_donor(stw, donor1):
     """given a donation controller
