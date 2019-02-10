@@ -4,6 +4,7 @@
 The Saveable objects used by both the metaclass and decorator approach.
 """
 import ast
+import datetime
 
 # import json
 
@@ -15,6 +16,7 @@ __all__ = ['Bool',
            'Saveable',
            'String',
            'Tuple',
+           'DateTime',
            ]
 
 
@@ -216,3 +218,22 @@ class Dict(Saveable):
             except (KeyError, TypeError):
                 new_dict[key] = item
         return new_dict
+
+class DateTime(Saveable):
+    """
+    This assumes datetime object stored in python and 
+    stores format '%Y-%m-%d %H:%M:%S'
+    """
+    datetime_format = '%Y-%m-%d %H:%M:%S'
+
+    @staticmethod
+    def to_json_compat(val):
+        return val.strftime(DateTime.datetime_format)
+
+    @staticmethod
+    def to_python(val):
+        """
+        convers string back to datetiem object
+        """
+        # try to reconstitute using the obj method
+        return datetime.datetime.strptime(val, DateTime.datetime_format)

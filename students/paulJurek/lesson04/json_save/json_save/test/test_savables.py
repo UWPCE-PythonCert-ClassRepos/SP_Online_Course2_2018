@@ -4,7 +4,7 @@
 tests for the savable objects
 """
 import pytest
-
+import datetime
 import json
 
 from json_save.saveables import *
@@ -19,6 +19,7 @@ basics = [(String, "This is a string"),
           (List, [2, 3, 4]),
           (Tuple, (1, 2, 3.4, "this")),
           (List, [[1, 2, 3], [4, 5, 6]]),
+          (DateTime, datetime.datetime(2019,1,1)),
           (List, [{"3": 34}, {"4": 5}]),  # list with dicts in it.
           (Dict, {"this": {"3": 34}, "that": {"4": 5}})  # dict with dicts
           ]
