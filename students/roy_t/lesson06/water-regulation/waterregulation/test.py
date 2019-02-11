@@ -1,10 +1,6 @@
 """
 Unit tests for the water-regulation module
 """
-import sys
-sys.path.insert(0,
-'C:\\Users\\roy\\Documents\\uw_python\\SP_Online_Course2_2018\\'
-'students\\roy_t\\lesson06\\water-regulation\\')
 
 import urllib.request
 import unittest
