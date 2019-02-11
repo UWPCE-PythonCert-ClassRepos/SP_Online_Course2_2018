@@ -6,6 +6,7 @@ and management of donations"""
 
 import copy
 import datetime
+import json
 from pathlib import Path
 import pickle
 from Donor import Donor, Donation
@@ -169,13 +170,17 @@ class DonationController(js.JsonSaveable):
 
     def save(self, filename):
         """saves donation database"""
-        print(self)
+
+        with open(filename, 'w') as fp:
+            json.dump(self.to_json_compat(), fp)
         return self.to_json_compat()
     
     @classmethod
-    def load(cls, file):
+    def load(cls, filename):
         """rebuilds database from file"""
-        return cls.from_json_dict(file)
+        with open(filename, 'r') as fp:
+            data = json.load(fp)
+        return cls.from_json_dict(data)
 
     def __eq__(self, other):
         return self.to_json_compat() == other.to_json_compat()

@@ -30,10 +30,8 @@ def test_controller_creates_saved_file(stw, donor1):
     extract = stw.save(test_filename)
 
     # now make load database and compare
-    stw2 = DonationController.load(extract)
+    stw2 = DonationController.load(test_filename)
     assert str(stw) == str(stw2)
-
-
 
 def test_create_new_donor(stw, donor1):
     """given a donation controller
