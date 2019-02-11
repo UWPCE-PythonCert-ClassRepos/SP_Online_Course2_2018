@@ -46,23 +46,25 @@ class Decider:
 
         :param current_height: the current height of liquid in the tank
         :param current_action: the current action of the pump
-        :param actions: a dictionary containing the keys 'PUMP_IN', 'PUMP_OFF',
-                        and 'PUMP_OUT'
-        :return: The new action for the pump: one of actions['PUMP_IN'], actions['PUMP_OUT'], actions['PUMP_OFF']
+        :param actions: a dictionary containing the keys 'PUMP_IN',
+        'PUMP_OFF', and 'PUMP_OUT'
+        :return: The new action for the pump: one of actions['PUMP_IN'],
+        actions['PUMP_OUT'], actions['PUMP_OFF']
         """
         current_margin = (current_height - self.target_height) / self.target_height
+        print(current_margin, self.margin)
         if current_action == actions['PUMP_OFF'] and current_margin < self.margin:
             return actions['PUMP_IN']
-        if current_action == actions['PUMP_OFF'] and current_height > self.margin:
+        if current_action == actions['PUMP_OFF'] and current_margin > self.margin:
             return actions['PUMP_OUT']
-        if current_action == actions['PUMP_OFF'] and current_height <= self.margin:
+        if current_action == actions['PUMP_OFF'] and current_margin <= self.margin:
             return actions['PUMP_OFF']
         if current_action == actions['PUMP_IN'] and current_height > self.target_height:
             return actions['PUMP_OFF']
-        else:
+        if current_action == actions['PUMP_IN'] and current_height <= self.target_height:
             return actions['PUMP_IN']
         if current_action == actions['PUMP_OUT'] and current_height < self.target_height:
-           return actions['PUMP_OFF']
+            action = actions['PUMP_OFF']
         else:
-            return actions['PUMP_OUT']
-
+            action = actions['PUMP_OUT']
+        return action
