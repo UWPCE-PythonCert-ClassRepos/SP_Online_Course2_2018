@@ -27,15 +27,11 @@ def test_controller_creates_saved_file(stw, donor1):
     # create controller and save
     test_filename = 'test.json'
     stw.create_donor(donor1)
-    stw.save(test_filename)
-    print(stw)
-    stw
+    extract = stw.save(test_filename)
 
     # now make load database and compare
-    stw2 = DonationController.load(test_filename)
-    print(stw2)
+    stw2 = DonationController.load(extract)
     assert str(stw) == str(stw2)
-    assert 1 == 2
 
 
 

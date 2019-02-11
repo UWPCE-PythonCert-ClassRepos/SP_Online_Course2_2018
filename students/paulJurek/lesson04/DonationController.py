@@ -169,18 +169,19 @@ class DonationController(js.JsonSaveable):
 
     def save(self, filename):
         """saves donation database"""
-        pass
+        print(self)
+        return self.to_json_compat()
     
     @classmethod
-    def load(cls, filename):
+    def load(cls, file):
         """rebuilds database from file"""
-        pass
+        return cls.from_json_dict(file)
 
     def __eq__(self, other):
         return self.to_json_compat() == other.to_json_compat()
 
     def __repr__(self):
-        return self.to_json_compat()
+        return str(self.to_json_compat())
 
 def modify_donor_donations(factor, donor):
     """returns a modified donor with their donations matched by nice donor"""

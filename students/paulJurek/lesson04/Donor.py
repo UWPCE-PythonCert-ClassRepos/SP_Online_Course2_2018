@@ -5,9 +5,20 @@ import datetime
 from json_save.json_save import json_save_meta as js
 
 Donation = namedtuple('Donation', ['amount', 'date', 'id'])
-
 # TODO: add email validation https://www.pythoncentral.io/how-to-validate-an-email-address-using-python/
 
+class Donation(js.JsonSaveable):
+    id = js.Int()
+    amount = js.Float()
+    date = js.DateTime()
+
+    def __init__(self, id: int, amount: float, date: datetime=datetime.datetime.utcnow()):
+        self.id = id
+        self.amount = amount
+        self.date = date
+
+    def __repr__(self):
+            return str(self.to_json_compat())
 class Donor(js.JsonSaveable):
     """donor giving to organization"""
     id = js.Int()
@@ -67,5 +78,8 @@ class Donor(js.JsonSaveable):
         """provides summary tuple of donor"""
         return (self.id, self.fullname, self.donation_total(), self.donation_count(), self.donation_total()/self.donation_count())
 
+    def __repr__(self):
+            return str(self.to_json_compat())
+            
 def increase_donation(donation, factor):
     return Donation(amount=donation.amount*factor, date=donation.date, id=donation.id)
