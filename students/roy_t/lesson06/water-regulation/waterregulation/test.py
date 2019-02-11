@@ -1,12 +1,12 @@
 """
 Unit tests for the water-regulation module
 """
-
 import sys
 sys.path.insert(0,
 'C:\\Users\\roy\\Documents\\uw_python\\SP_Online_Course2_2018\\'
 'students\\roy_t\\lesson06\\water-regulation\\')
 
+import urllib.request
 import unittest
 from unittest.mock import MagicMock
 from pump import Pump
@@ -15,12 +15,8 @@ from controller import Controller
 from decider import Decider
 
 
-
-
 class DeciderTests(unittest.TestCase):
-    """
-    Unit tests for the Decider class
-    """
+    """Unit tests for the Decider class"""
 
     def setUp(self):
         """Set up each test with an actions dict"""
@@ -38,16 +34,16 @@ class DeciderTests(unittest.TestCase):
 
     def test_pump_off_and_height_above_margin(self):
         """
-        2. If the pump is off and the height is above the margin region, then the
-             pump should be turned to PUMP_OUT.
+        2. If the pump is off and the height is above the margin region,
+        then the pump should be turned to PUMP_OUT.
         """
         self.assertEqual(-1, self.decider.decide(106, 0, self.actions))
 
     def test_pump_off_and_height_is_above_target_but_equal_margin(self):
         """
-        3. If the pump is off and the height is within the margin region or on
-             the exact boundary of the margin region, then the pump shall remain at
-             PUMP_OFF.
+        3. If the pump is off and the height is within the margin region
+        or on the exact boundary of the margin region, then the pump shall
+         remain at PUMP_OFF.
         """
         self.assertEqual(0, self.decider.decide(105, 0, self.actions))
 
@@ -79,32 +75,31 @@ class DeciderTests(unittest.TestCase):
         """
         self.assertEqual(-1, self.decider.decide(190, -1, self.actions))
 
-    # def test_dummy(self):
-    #     """
-    #     Just some example syntax that you might use
-    #     """
-    #
-    #     pump = Pump('127.0.0.1', 8000)
-    #     pump.set_state = MagicMock(return_value=True)
-    #
-    #     self.fail("Remove this test.")
-
 
 class ControllerTests(unittest.TestCase):
-    """
-    Unit tests for the Controller class
-    """
+    """Unit tests for the Controller class"""
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Controller.tick
     def setUp(self):
-        """A controller with a basic configuration."""
-        self.sensor = Sensor('127.0.0.1', '8000')
-        self.pump = Pump('127.0.0.1', '8000')
+        """A controller with basic configuration."""
+        self.ip_addr = '127.0.0.1'
+        self.port = '8000'
+        urllib.request.urlopen = MagicMock(return_value=5)
+        self.sensor = Sensor(self.ip_addr, self.port)
+        self.pump = Pump(self.ip_addr, self.port)
         self.pump.set_state(MagicMock(return_value=True))
         self.decider = Decider(100, 0.05)
         self.controller = Controller(self.sensor, self.pump, self.decider)
 
-    def test_verify_initial_state(self):
-        """Test docstring."""
-        pass
+    def test_controller_tick(self):
+        """Verify the Controller ticks as expected"""
+        self.sensor.measure = MagicMock(return_value=110)
+        self.pump.get_state = MagicMock(return_value=self.pump.PUMP_IN)
+        self.decider.decide = MagicMock(return_value=self.pump.PUMP_OFF)
+        self.pump.set_state = MagicMock(return_value=True)
+
+        self.controller.tick()
+
+        self.sensor.measure.assert_called_with()
+        self.pump.get_state.assert_called_with()
+        self.decider.decide.assert_called_with(110, self.pump.PUMP_IN)
+        self.pump.set_state.assert_called_with(self.pump.PUMP_OFF)
