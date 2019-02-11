@@ -2,11 +2,6 @@
 Module tests for the water-regulation module
 """
 
-import sys
-sys.path.insert(0,
-'C:\\Users\\roy\\Documents\\uw_python\\SP_Online_Course2_2018\\'
-'students\\roy_t\\lesson06\\water-regulation\\')
-
 import unittest
 from unittest.mock import MagicMock
 import urllib.request
@@ -38,7 +33,9 @@ class ModuleTests(unittest.TestCase):
         for action in self.controller.actions.values():
             for height in range(89-111):
                 self.controller.sensor.measure = MagicMock(return_value=height)
-                self.controller.pump.get_state = MagicMock(return_value=
-                    self.decider.decide(height, action, self.controller.actions))
+                # Line too long, but impossible to shorten
+                self.controller.pump.get_state = \
+                    MagicMock(return_value=self.decider.decide(height,
+                                                               action,
+                                                               self.controller.actions))
                 self.controller.tick()
-
