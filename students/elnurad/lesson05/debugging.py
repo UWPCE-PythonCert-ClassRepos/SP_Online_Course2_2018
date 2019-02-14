@@ -14,7 +14,8 @@ if __name__ == '__main__':
 
 #The function keeps calling itself without stopping because its termination condition was not set very clearly. It only stops by returning True
 #if n equals 2 or another number that is a power of 2, e.g. 8, 16, 32, 64. Otherwise, no termination condition is implemented and as a result, 
-#the function keeps calling itself endlessly. 
+#the function keeps calling itself endlessly. The value of n keeps getting smaller and smaller with each iteration of the recursive function
+#since the function doesn't know when to stop and keeps calling itself. 
 
 #Below is my debugging log:
 
