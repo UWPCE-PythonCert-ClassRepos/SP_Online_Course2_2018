@@ -2,7 +2,6 @@
 from donor_models import *
 import os
 import os.path
-import json
 
 
 Bill = Donor("Bill Gates", [500, 6000])
@@ -29,7 +28,6 @@ def thank_you_note():
     else:
         donors.add_new_donor(name, amount)
 
-
 def letter_to_all():
     """Write a thank you note to each donor and save it to a disk"""
     for donor in donors.collection:
@@ -39,35 +37,38 @@ def letter_to_all():
         total_don = donor.total_donations
         with open(f"{filepath}\\{donor.name}.txt", "w") as f:
             f.write("Dear {0},\n\n\tThank you for your very kind donation of ${1}.\n\n\t\t It will be put to very good use.\n\n\t\t\t Sincerely,\n\t\t\t -The Team".format(donor.name, total_don)) 
-     
 
 def quit():
     """exit the running program"""
     exit()
     
-  
 def save():
+    """Save donors database to a file"""
     filename = input("Please, name the destination for this file: ")
     if filename.endswith(".txt"):
         filename.strip(".txt")
     donors.save(filename, donors)
     
-   
-def load():
-    filename = input("Which file would you like to load? ")
-    donors.load(filename)
-    print(donors)
+def create_report():
+    """Print report using donors database"""
+    donors.create_report()
 
-    
+def load():
+    """Load saved database from an existing json file to use it in our program"""
+    global donors
+    filename = input("Which file would you like to load? ")
+    loaded_donors = donors.load(filename)
+    donors = loaded_donors
+    print(donors)
+          
 dict_select = {
 1: thank_you_note,
-2: donors.create_report,
+2: create_report,
 3: letter_to_all,
 4: save,
 5: load,
 6: quit
 }
-
 
 if __name__ == '__main__':
     while True:

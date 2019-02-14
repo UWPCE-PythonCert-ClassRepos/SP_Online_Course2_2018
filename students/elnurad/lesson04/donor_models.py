@@ -9,7 +9,7 @@ import json
 @js.json_save
 class Donor():
     name = String()
-    donation = List()
+    donations = List()
     """create a class that represents a donor."""
     def __init__(self, name, donations = None):
         self.name = name
@@ -85,13 +85,15 @@ class DonorCollection():
         for member in sorted(self.collection, reverse = True):
             print("{:<20} ${:>12,.2f}{:^12} ${:>12,.2f}".format(member.name, member.total_donations, member.donations_number, member.average_donation))
     
-    def load(self, filename):
-        with open(filename, 'r') as loaded_info:
-            donors = json.load(loaded_info)
-
     def save(self, filename, info):
         with open(f"{filename}.json", "w") as f:
             f.write(info.to_json())
+
+    def load(self, filename):
+        with open(filename, 'r') as loaded_info:
+            info = json.load(loaded_info)
+            donors = self.from_json_dict(info)
+        return donors
         
 
 
