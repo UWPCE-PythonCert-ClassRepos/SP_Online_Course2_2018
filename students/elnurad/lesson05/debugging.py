@@ -12,12 +12,12 @@ if __name__ == '__main__':
     print(my_fun(n))
 
 
-#The function keeps calling itself without stopping because its termination condition was not set very clearly. It only stops by returning True
-#if n equals 2 or another number that is a power of 2, e.g. 8, 16, 32, 64. Otherwise, no termination condition is implemented and as a result, 
-#the function keeps calling itself endlessly. The value of n keeps getting smaller and smaller with each iteration of the recursive function
-#since the function doesn't know when to stop and keeps calling itself. 
+# The function keeps calling itself without stopping because its termination condition was not set very clearly. It only stops by returning True
+# if n equals 2 or another number that is a power of 2, e.g. 8, 16, 32, 64. Otherwise, no termination condition is implemented and as a result, 
+# the function keeps calling itself endlessly. The value of n keeps decreasing with each recursion of the recursive function
+# since the function doesn't know when to stop and keeps calling itself. 
 
-#Below is my debugging log:
+# Below is my debugging log:
 
 # PS C:\Users\elnura\documents\pythoncert\sp_online_course2_2018\students\elnurad\lesson05> python -m pdb debugging.py 15
 # > c:\users\elnura\documents\pythoncert\sp_online_course2_2018\students\elnurad\lesson05\debugging.py(2)<module>()
