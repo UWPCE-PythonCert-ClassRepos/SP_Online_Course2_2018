@@ -9,5 +9,5 @@ def great_circle(double lon1, double lat1, double lon2, double lat2):
     a = (90.0 - lat1) * (x)
     b = (90.0 - lat2) * (x)
     theta = (lon2 - lon1) * (x)
-    c = np.acos((np.cos(a) * np.cos(b)) + (np.sin(a) * np.sin(b) * np.cos(theta)))
+    c = np.arccos((np.cos(a) * np.cos(b)) + (np.sin(a) * np.sin(b) * np.cos(theta)))
     return radius * c

@@ -1109,7 +1109,6 @@ static const char __pyx_k_np[] = "np";
 static const char __pyx_k_pi[] = "pi";
 static const char __pyx_k_cos[] = "cos";
 static const char __pyx_k_sin[] = "sin";
-static const char __pyx_k_acos[] = "acos";
 static const char __pyx_k_lat1[] = "lat1";
 static const char __pyx_k_lat2[] = "lat2";
 static const char __pyx_k_lon1[] = "lon1";
@@ -1120,6 +1119,7 @@ static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_theta[] = "theta";
+static const char __pyx_k_arccos[] = "arccos";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_radius[] = "radius";
 static const char __pyx_k_great_circle[] = "great_circle";
@@ -1127,7 +1127,7 @@ static const char __pyx_k_great_circle_v3[] = "great_circle_v3";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_great_circle_v3_pyx[] = "great_circle_v3.pyx";
 static PyObject *__pyx_n_s_a;
-static PyObject *__pyx_n_s_acos;
+static PyObject *__pyx_n_s_arccos;
 static PyObject *__pyx_n_s_b;
 static PyObject *__pyx_n_s_c;
 static PyObject *__pyx_n_s_cline_in_traceback;
@@ -1311,7 +1311,7 @@ static PyObject *__pyx_pf_15great_circle_v3_great_circle(CYTHON_UNUSED PyObject 
  *     a = (90.0 - lat1) * (x)
  *     b = (90.0 - lat2) * (x)             # <<<<<<<<<<<<<<
  *     theta = (lon2 - lon1) * (x)
- *     c = np.acos((np.cos(a) * np.cos(b)) + (np.sin(a) * np.sin(b) * np.cos(theta)))
+ *     c = np.arccos((np.cos(a) * np.cos(b)) + (np.sin(a) * np.sin(b) * np.cos(theta)))
  */
   __pyx_v_b = ((90.0 - __pyx_v_lat2) * __pyx_v_x);
 
@@ -1319,7 +1319,7 @@ static PyObject *__pyx_pf_15great_circle_v3_great_circle(CYTHON_UNUSED PyObject 
  *     a = (90.0 - lat1) * (x)
  *     b = (90.0 - lat2) * (x)
  *     theta = (lon2 - lon1) * (x)             # <<<<<<<<<<<<<<
- *     c = np.acos((np.cos(a) * np.cos(b)) + (np.sin(a) * np.sin(b) * np.cos(theta)))
+ *     c = np.arccos((np.cos(a) * np.cos(b)) + (np.sin(a) * np.sin(b) * np.cos(theta)))
  *     return radius * c
  */
   __pyx_v_theta = ((__pyx_v_lon2 - __pyx_v_lon1) * __pyx_v_x);
@@ -1327,12 +1327,12 @@ static PyObject *__pyx_pf_15great_circle_v3_great_circle(CYTHON_UNUSED PyObject 
   /* "great_circle_v3.pyx":12
  *     b = (90.0 - lat2) * (x)
  *     theta = (lon2 - lon1) * (x)
- *     c = np.acos((np.cos(a) * np.cos(b)) + (np.sin(a) * np.sin(b) * np.cos(theta)))             # <<<<<<<<<<<<<<
+ *     c = np.arccos((np.cos(a) * np.cos(b)) + (np.sin(a) * np.sin(b) * np.cos(theta)))             # <<<<<<<<<<<<<<
  *     return radius * c
  */
   __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_acos); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 12, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_arccos); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 12, __pyx_L1_error)
@@ -1488,7 +1488,7 @@ static PyObject *__pyx_pf_15great_circle_v3_great_circle(CYTHON_UNUSED PyObject 
 
   /* "great_circle_v3.pyx":13
  *     theta = (lon2 - lon1) * (x)
- *     c = np.acos((np.cos(a) * np.cos(b)) + (np.sin(a) * np.sin(b) * np.cos(theta)))
+ *     c = np.arccos((np.cos(a) * np.cos(b)) + (np.sin(a) * np.sin(b) * np.cos(theta)))
  *     return radius * c             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
@@ -1571,7 +1571,7 @@ static struct PyModuleDef __pyx_moduledef = {
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_a, __pyx_k_a, sizeof(__pyx_k_a), 0, 0, 1, 1},
-  {&__pyx_n_s_acos, __pyx_k_acos, sizeof(__pyx_k_acos), 0, 0, 1, 1},
+  {&__pyx_n_s_arccos, __pyx_k_arccos, sizeof(__pyx_k_arccos), 0, 0, 1, 1},
   {&__pyx_n_s_b, __pyx_k_b, sizeof(__pyx_k_b), 0, 0, 1, 1},
   {&__pyx_n_s_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
