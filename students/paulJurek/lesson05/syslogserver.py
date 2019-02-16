@@ -7,8 +7,8 @@
 
 # Derived from https://gist.github.com/marcelom/4218010
 
-
-HOST, PORT = "0.0.0.0", 514
+# updated for windows configuration
+HOST, PORT = '127.0.0.1', 514
 
 
 import socketserver
@@ -33,4 +33,4 @@ if __name__ == "__main__":
     except (IOError, SystemExit):
         raise
     except KeyboardInterrupt:
-print ("Crtl+C Pressed. Shutting down.")
+        print("Crtl+C Pressed. Shutting down.")
