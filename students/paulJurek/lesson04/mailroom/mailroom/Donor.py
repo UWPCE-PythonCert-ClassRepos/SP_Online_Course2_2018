@@ -2,7 +2,7 @@
 
 from collections import namedtuple
 import datetime
-from json_save.json_save import json_save_meta as js
+from json_save import json_save_meta as js
 
 Donation = namedtuple('Donation', ['amount', 'date', 'id'])
 # TODO: add email validation https://www.pythoncentral.io/how-to-validate-an-email-address-using-python/

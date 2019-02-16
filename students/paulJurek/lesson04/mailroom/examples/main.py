@@ -1,11 +1,11 @@
 """entry point to mailroom application"""
 
 from pathlib import Path
-from DonationController import DonationController, save_donation_controller, load_donation_controller
-from Donor import Donor
-from helpers import menu_selection
+from mailroom.DonationController import DonationController
+from mailroom.Donor import Donor
+from mailroom.helpers import menu_selection
 
-CONTROLLER = load_donation_controller('stw.p')
+CONTROLLER = DonationController.load('stw.json')
 
 def main_menu():
     """calls main menu for program"""
@@ -78,7 +78,7 @@ def send_thank_you_letters():
 
 def save_database():
     """saves default database"""
-    save_donation_controller(CONTROLLER, Path('stw.p'))
+    CONTROLLER.save(path('stw.json'))
 
 
 def create_sample_donor_database():

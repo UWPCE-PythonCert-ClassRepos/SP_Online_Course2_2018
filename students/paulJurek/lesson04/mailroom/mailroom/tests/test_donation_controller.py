@@ -3,8 +3,8 @@
 import datetime
 import pathlib
 import pytest
-from Donor import Donor
-from DonationController import DonationController
+from mailroom.Donor import Donor
+from mailroom.DonationController import DonationController
 
 @pytest.fixture
 def stw():

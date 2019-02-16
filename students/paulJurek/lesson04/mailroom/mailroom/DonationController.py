@@ -9,8 +9,8 @@ import datetime
 import json
 from pathlib import Path
 import pickle
-from Donor import Donor, Donation
-from json_save.json_save import json_save_meta as js
+from mailroom.Donor import Donor, Donation
+from json_save import json_save_meta as js
 
 
 class DonationController(js.JsonSaveable):
@@ -37,13 +37,19 @@ class DonationController(js.JsonSaveable):
         except AttributeError:
             return self.donors.get(int(donor))
 
-    def create_donor(self, donor):
-        """creates donor"""
+    def create_donor(self, donor: Donor):
+        """creates donor in donation controller.  accepts donor object to 
+        register donor.  
+        args:
+            donor: donor object to register with controller
+
+            """
         if self.find_donor(donor):
             raise KeyError('donor already exists')
         if isinstance(donor,Donor):
             try:
                 self.donors[donor.id] = donor
+                return donor.id
             except AttributeError:
                 raise AttributeError('Donor object needs id')
     
@@ -178,9 +184,13 @@ class DonationController(js.JsonSaveable):
     @classmethod
     def load(cls, filename):
         """rebuilds database from file"""
-        with open(filename, 'r') as fp:
-            data = json.load(fp)
-        return cls.from_json_dict(data)
+        try:
+            with open(filename, 'r') as fp:
+                data = json.load(fp)
+            return cls.from_json_dict(data)
+        except FileNotFoundError:
+            """creates new donation controller when file not found"""
+            return cls(filename)
 
     def __eq__(self, other):
         return self.to_json_compat() == other.to_json_compat()
@@ -207,14 +217,6 @@ def filter_donor_donations(donor, min_donation=0, max_donation = 1.0e9):
 def filter_fun_generator(min_donation=0, max_donation=1.0e9):
     """returns function with factor applied.  This increases donation amount  by factor"""
     return lambda x: filter_donor_donations(min_donation=min_donation, max_donation=max_donation, donor=x)
-
-def load_donation_controller(database):
-    """loads database controller"""
-    return pickle.load(open(database, "rb"))
-
-def save_donation_controller(controller, database):
-    """save database controller"""
-    pickle.dump(controller, open(database, 'wb'))
 
 def multiply_donation(original, factor):
     """returns multiplied donation"""

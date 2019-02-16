@@ -2,7 +2,7 @@
 
 import pytest
 
-from Donor import Donor
+from mailroom.Donor import Donor
 
 @pytest.fixture
 def example_donor():
