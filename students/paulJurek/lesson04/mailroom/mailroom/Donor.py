@@ -23,7 +23,7 @@ class Donor(js.JsonSaveable):
     """donor giving to organization"""
     id = js.Int()
     firstname = js.String()
-    lasname = js.String()
+    lastname = js.String()
     email = js.String()
     _donations = js.List()
     _donation_id = js.Int()

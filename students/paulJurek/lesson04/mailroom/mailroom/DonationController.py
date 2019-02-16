@@ -120,8 +120,8 @@ class DonationController(js.JsonSaveable):
         donor_stats = [donor.summarize_donor() for id, donor in self.donors.items()]
         donor_stats.sort(key=lambda tup: tup[2], reverse=True)
         for summary in donor_stats:
-            print(f"{summary[1]:<26} ${summary[2]:>13.2f}  "
-                f"{summary[3]:>10}  ${summary[4]:>14.2f}")
+            print(f"{summary[1]:<26} ${summary[2]/100:>13.2f}  "
+                f"{summary[3]:>10}  ${summary[4]/100:>14.2f}")
 
     def send_letters_to_everyone(self, 
                                  thank_you_directory=Path('/mailroom_thankyou_letters')):

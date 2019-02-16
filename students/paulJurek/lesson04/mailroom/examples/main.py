@@ -78,7 +78,7 @@ def send_thank_you_letters():
 
 def save_database():
     """saves default database"""
-    CONTROLLER.save(path('stw.json'))
+    CONTROLLER.save(Path('stw.json'))
 
 
 def create_sample_donor_database():
