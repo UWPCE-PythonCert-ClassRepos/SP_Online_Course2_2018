@@ -36,12 +36,21 @@ class ControllerTests(unittest.TestCase):
     Unit tests for the Controller class
     """
 
+    def setUp(self):
+        self.sensor = Sensor('127.0.0.1', 8000)
+        self.pump = Pump('127.0.0.1', 8000)
+        self.decider = Decider('127.0.0.1', 8000)
+
+        self.controller = Controller(sensor=self.sensor,
+                                     pump=self.pump,
+                                     decider=self.decider)
+
     def test_measure_is_called(self):
         """given controller with sensor attached
         when get_measurement is called, the sensor measure method
         gets called"""
         pass
-    
+
     def test_get_pump_state_called(self):
         """given controoler with pump
         when controller get_pump_state called
@@ -54,7 +63,7 @@ class ControllerTests(unittest.TestCase):
         decider method decide gets called with inputs
         for current fluid height and pump state"""
         pass
-    
+
     def test_controller_calls_set_pump_state(self):
         """given a controller
         when decider decides to set pump state and calls set_pump_state
@@ -70,6 +79,3 @@ class ControllerTests(unittest.TestCase):
         pump.set_state = MagicMock(return_value=True)
 
         self.fail("Remove this test.")
-
-
-    pass
