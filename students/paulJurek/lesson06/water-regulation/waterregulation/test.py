@@ -70,8 +70,12 @@ class ControllerTests(unittest.TestCase):
         for current fluid height and pump state"""
         self.decider.decide = MagicMock(return_value=0)
 
-        self.controller.decide_pump_state(current_height=5, pump_state=0)
-        self.decider.decide.assert_called_with(5, 0)
+        self.controller.decide_pump_state(current_height=5, 
+                                          pump_state=0, 
+                                          actions=self.controller.actions)
+        self.decider.decide.assert_called_with(current_height=5, 
+                                               pump_state=0, 
+                                               actions=self.controller.actions)
 
     def test_controller_calls_set_pump_state(self):
         """given a controller

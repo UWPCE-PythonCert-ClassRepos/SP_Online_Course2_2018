@@ -59,3 +59,12 @@ class Controller(object):
         :return: int indicating state of pump
         """
         return int(self.pump.get_state())
+
+    def decide_pump_state(self, current_height: float, 
+                          pump_state: int, 
+                          actions: dict) -> int:
+        """analyzes current state of system and decides command for pump
+        :returns: int indicating command to send to pump"""
+        return int(self.decider.decide(current_height=current_height,
+                                       pump_state=pump_state,
+                                       actions=actions))
