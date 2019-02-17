@@ -49,7 +49,10 @@ class ControllerTests(unittest.TestCase):
         """given controller with sensor attached
         when get_measurement is called, the sensor measure method
         gets called"""
-        pass
+        self.sensor.measure = MagicMock(return_value=0)
+
+        self.controller.get_measurement()
+        self.sensor.measure.assert_called_with()
 
     def test_get_pump_state_called(self):
         """given controoler with pump
