@@ -8,6 +8,7 @@ from calculator.divider import Divider
 from calculator.calculator import Calculator
 from calculator.exceptions import InsufficientOperands
 
+
 class AdderTests(TestCase):
 
     def test_adding(self):
@@ -57,7 +58,10 @@ class CalculatorTests(TestCase):
         self.multiplier = Multiplier()
         self.divider = Divider()
 
-        self.calculator = Calculator(self.adder, self.subtracter, self.multiplier, self.divider)
+        self.calculator = Calculator(self.adder,
+                                     self.subtracter,
+                                     self.multiplier,
+                                     self.divider)
 
     def test_insufficient_operands(self):
         self.calculator.enter_number(0)
@@ -82,5 +86,3 @@ class CalculatorTests(TestCase):
         self.calculator.subtract()
 
         self.subtracter.calc.assert_called_with(1, 2)
-
-

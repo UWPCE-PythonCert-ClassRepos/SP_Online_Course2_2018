@@ -2,6 +2,7 @@
 
 from .exceptions import InsufficientOperands
 
+
 class Calculator:
     """defines calculator object"""
 

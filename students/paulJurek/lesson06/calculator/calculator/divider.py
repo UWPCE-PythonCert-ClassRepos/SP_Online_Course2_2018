@@ -1,5 +1,6 @@
 """defines divider objects"""
 
+
 class Divider:
     """defines basic divider object"""
 

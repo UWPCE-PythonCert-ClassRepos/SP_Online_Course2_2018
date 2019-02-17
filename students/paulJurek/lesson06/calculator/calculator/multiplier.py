@@ -1,5 +1,6 @@
 """defines mulitplying behavior"""
 
+
 class Multiplier:
     """basic mulitplier object"""
 

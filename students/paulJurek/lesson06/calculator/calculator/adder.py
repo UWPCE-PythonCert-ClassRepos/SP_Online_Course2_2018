@@ -1,5 +1,6 @@
 """defines adder object"""
 
+
 class Adder:
     """adder object to be used in calculator"""
     @staticmethod
