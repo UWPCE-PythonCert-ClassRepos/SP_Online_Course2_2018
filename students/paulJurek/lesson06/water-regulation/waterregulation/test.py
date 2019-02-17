@@ -58,7 +58,10 @@ class ControllerTests(unittest.TestCase):
         """given controoler with pump
         when controller get_pump_state called
         the pump method get_state gets called"""
-        pass
+        self.pump.get_state = MagicMock(return_value=0)
+
+        self.controller.get_pump_state()
+        self.pump.get_state.assert_called_with()
 
     def test_decider_gets_called(self):
         """given a controller
