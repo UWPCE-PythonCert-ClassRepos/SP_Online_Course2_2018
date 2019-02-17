@@ -55,7 +55,11 @@ class DeciderTests(unittest.TestCase):
         """3. If the pump is off and the height is within the margin
         region or on the exact boundary of the margin region, then
         the pump shall remain at PUMP_OFF."""
-        self.fail("implement this test")
+        # set current state
+        current_height = self.decider.target_height
+        pump_state = 'PUMP_OFF'
+
+        self.assertEqual(self.actions['PUMP_OFF'], self.decider.decide(current_height=current_height, current_action=pump_state, actions=self.actions))
 
     def test_pump_off_for_height_above_pump_in(self):
         """4. If the pump is performing PUMP_IN and the height is above
