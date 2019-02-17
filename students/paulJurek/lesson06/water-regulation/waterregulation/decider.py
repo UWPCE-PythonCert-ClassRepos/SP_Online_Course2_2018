@@ -60,19 +60,25 @@ class Decider(object):
                                                         actions['PUMP_OUT'],
                                                         actions['PUMP_OFF']
         """
-        if ((current_action == 'PUMP_OFF') & 
+        if ((current_action == 'PUMP_OFF') &
            (current_height < self.get_target_low())):
            output = 'PUMP_IN'
-        elif ((current_action == 'PUMP_OFF') & 
+
+        elif ((current_action == 'PUMP_OFF') &
            (current_height > self.get_target_high())):
             output = 'PUMP_OUT'
-        elif ((current_action == 'PUMP_OFF') & 
-           (current_height <= self.get_target_high()) & 
+
+        elif ((current_action == 'PUMP_OFF') &
+           (current_height <= self.get_target_high()) &
            (current_height >= self.get_target_low())):
+            output = 'PUMP_OFF'
+
+        elif ((current_action == 'PUMP_IN') &
+           (current_height > self.get_target_high())):
             output = 'PUMP_OFF'
 
         else:
             output = current_action
-        
+
         return actions[output]
 
