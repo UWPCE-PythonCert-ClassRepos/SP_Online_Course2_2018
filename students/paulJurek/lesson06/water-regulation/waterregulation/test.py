@@ -68,7 +68,10 @@ class ControllerTests(unittest.TestCase):
         when decide_pump_state gets called
         decider method decide gets called with inputs
         for current fluid height and pump state"""
-        pass
+        self.decider.decide = MagicMock(return_value=0)
+
+        self.controller.decide_pump_state(current_height=5, pump_state=0)
+        self.decider.decide.assert_called_with(5, 0)
 
     def test_controller_calls_set_pump_state(self):
         """given a controller
