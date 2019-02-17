@@ -36,15 +36,20 @@ class DeciderTests(unittest.TestCase):
     def test_pump_in_for_off_pump_low_height(self):
         """1. If the pump is off and the height is below the
         margin region, then the pump should be turned to PUMP_IN."""
-        # set current height below margin
+        # set current state
         current_height = self.decider.target_height * (1 - 2 * self.decider.margin)
         pump_state = 'PUMP_OFF'
+
         self.assertEqual(self.actions['PUMP_IN'], self.decider.decide(current_height=current_height, current_action=pump_state, actions=self.actions))
 
     def test_pump_out_for_pump_off_height_above(self):
         """2. If the pump is off and the height is above the margin region,
         then the pump should be turned to PUMP_OUT."""
-        self.fail("implement this test")
+        # set current state
+        current_height = self.decider.target_height * (1 + 2 * self.decider.margin)
+        pump_state = 'PUMP_OFF'
+
+        self.assertEqual(self.actions['PUMP_OUT'], self.decider.decide(current_height=current_height, current_action=pump_state, actions=self.actions))
 
     def test_pump_off_for_pump_off_height_good(self):
         """3. If the pump is off and the height is within the margin
