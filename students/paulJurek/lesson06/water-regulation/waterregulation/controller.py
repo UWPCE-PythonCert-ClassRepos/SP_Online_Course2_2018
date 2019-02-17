@@ -41,8 +41,6 @@ class Controller(object):
         :return: True if the pump has acknowledged its new state, else False
         """
 
-        # TODO: Implement the above-defined behaviors
-
         return None
 
     def get_measurement(self) -> float:
@@ -68,3 +66,10 @@ class Controller(object):
         return int(self.decider.decide(current_height=current_height,
                                        pump_state=pump_state,
                                        actions=actions))
+
+    def set_pump_state(self, state):
+        """sets state of pump
+        :param state: One of PUMP_IN, PUMP_OFF, PUMP_OUT
+        :returns: None
+        """
+        self.pump.set_state(state=state)
