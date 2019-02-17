@@ -81,7 +81,10 @@ class ControllerTests(unittest.TestCase):
         """given a controller
         when decider decides to set pump state and calls set_pump_state
         the pump set_state method is called"""
-        pass
+        self.pump.set_state = MagicMock(return_value=True)
+        self.controller.set_pump_state(state=0)
+        self.pump.set_state.assert_called_with(state=0)
+
 
     def test_dummy(self):
         """
