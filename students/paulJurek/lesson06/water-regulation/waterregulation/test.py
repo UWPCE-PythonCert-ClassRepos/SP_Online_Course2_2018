@@ -85,12 +85,31 @@ class ControllerTests(unittest.TestCase):
         self.controller.set_pump_state(state=0)
         self.pump.set_state.assert_called_with(state=0)
 
-    def test_dummy(self):
+    def test_tick_runs_process_to_set_pump_state(self):
         """
-        Just some example syntax that you might use
+        expected behavior
+        1. query the sensor for the current height of liquid in the tank
+          2. query the pump for its current state (pumping in,
+            pumping out, or at rest)
+          3. query the decider for the next appropriate state of the pump,
+            given the above
+          4. set the pump to that new state
         """
+        CURRENT_HEIGHT = 5
+        CURRENT_PUMP_STATE = 0
+        NEXT_PUMP_STATE = 1
 
-        pump = Pump('127.0.0.1', 8000)
-        pump.set_state = MagicMock(return_value=True)
+        self.sensor.measure = MagicMock(return_value=CURRENT_HEIGHT)
+        self.pump.get_state = MagicMock(return_value=CURRENT_PUMP_STATE)
+        self.decider.decide = MagicMock(return_value=NEXT_PUMP_STATE)
+        self.pump.set_state = MagicMock(return_value=True)
 
-        self.fail("Remove this test.")
+        self.controller.tick()
+
+        self.sensor.measure.assert_called_with()
+        self.pump.get_state.assert_called_with()
+        self.decider.decide.assert_called_with(current_height=CURRENT_HEIGHT,
+                                               pump_state=CURRENT_PUMP_STATE,
+                                               actions=self.controller.actions)
+
+        self.pump.set_state.assert_called_with(state=NEXT_PUMP_STATE)
