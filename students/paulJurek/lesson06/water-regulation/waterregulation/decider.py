@@ -77,6 +77,10 @@ class Decider(object):
            (current_height > self.get_target_high())):
             output = 'PUMP_OFF'
 
+        elif ((current_action == 'PUMP_OUT') &
+           (current_height < self.get_target_low())):
+            output = 'PUMP_OFF'
+
         else:
             output = current_action
 

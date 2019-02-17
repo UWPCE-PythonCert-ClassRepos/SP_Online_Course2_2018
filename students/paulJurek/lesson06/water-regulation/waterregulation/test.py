@@ -83,13 +83,13 @@ class DeciderTests(unittest.TestCase):
 
         self.assertEqual(self.actions['PUMP_IN'], self.decider.decide(current_height=current_height, current_action=pump_state, actions=self.actions))
 
-    def test_pump_off_for_pump_out_height_ok(self):
+    def test_pump_off_for_pump_out_height_low(self):
         """5. If the pump is performing PUMP_OUT and the height is below
              the target height, then the pump shall be turned to PUMP_OFF,
              otherwise, the pump shall remain at PUMP_OUT.
         """
         # set current state
-        current_height = self.decider.target_height * (1 + 2 * self.decider.margin)
+        current_height = self.decider.target_height * (1 - 2 * self.decider.margin)
         pump_state = 'PUMP_OUT'
 
         self.assertEqual(self.actions['PUMP_OFF'], self.decider.decide(current_height=current_height, current_action=pump_state, actions=self.actions))
