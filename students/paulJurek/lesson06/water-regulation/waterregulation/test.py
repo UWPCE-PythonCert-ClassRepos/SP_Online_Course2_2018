@@ -16,24 +16,30 @@ class DeciderTests(unittest.TestCase):
     """
     Unit tests for the Decider class
     """
+    def setUp(self):
+        """sets up reusable Decider for rest of test"""
+        self.decider = Decider(target_height=100, margin=.1)
+        self.actions = {
+            'PUMP_IN': 1,
+            'PUMP_OUT': -1,
+            'PUMP_OFF': 0,
+        }
 
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Decider.decide
+    def test_get_target_low(self):
+        """assures get_target_low provides correct value"""
+        self.assertEqual(90, int(self.decider.get_target_low()))
 
-    def test_dummy(self):
-        """
-        Just some example syntax that you might use
-        """
-
-        pump = Pump('127.0.0.1', 8000)
-        pump.set_state = MagicMock(return_value=True)
-
-        self.fail("Remove this test.")
+    def test_get_target_high(self):
+        """assures get_target_high provides correct value"""
+        self.assertEqual(110, int(self.decider.get_target_high()))
 
     def test_pump_in_for_off_pump_low_height(self):
         """1. If the pump is off and the height is below the
         margin region, then the pump should be turned to PUMP_IN."""
-        self.fail("implement this test")
+        # set current height below margin
+        current_height = self.decider.target_height * (1 - 2 * self.decider.margin)
+        pump_state = 'PUMP_OFF'
+        self.assertEqual(self.actions['PUMP_IN'], self.decider.decide(current_height=current_height, current_action=pump_state, actions=self.actions))
 
     def test_pump_out_for_pump_off_height_above(self):
         """2. If the pump is off and the height is above the margin region,
