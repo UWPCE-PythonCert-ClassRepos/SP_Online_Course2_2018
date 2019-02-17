@@ -68,7 +68,7 @@ class Donors():
 
     inherits from:
     dict
-    
+
     methods:
     list_donors
     add_donor
@@ -76,7 +76,7 @@ class Donors():
     thank_you_letter
     summary_report
     send_all_letters
-    
+
     classmethods:
     get_second = returns second element in a sequence, used as key for sorting
     """
@@ -88,7 +88,7 @@ class Donors():
                 self.db[name] = Donor(name, donations)
 
     def list_donors(self):
-        return '\n'.join(['   '+name for name in self.db.keys()])
+        return '\n'.join(['   '+name for name in self.db])
 
     def add_donor(self, donor):
         self.db[donor.name] = donor
@@ -114,7 +114,7 @@ class Donors():
     def send_all_letters(self, dir_name):
         if not isdir(dir_name):
             mkdir(dir_name)
-        for name in self.db.keys():
+        for name in self.db:
             file_name = dir_name + '/' + name.replace(',', '').replace(' ', '_') + '.txt'
             with open(file_name, 'w') as f:
                 f.write(self.db[name].thank_you_letter())
@@ -136,11 +136,12 @@ class Donors():
             if max_donation:
                 donations = list(filter(lambda x: x <= max_donation, donations))
             if donations:
-                new_db.add_donor(Donor(d.name, list(map(lambda x: round(x * factor, 2), donations))))
+                new_db.add_donor(
+                    Donor(d.name, list(map(lambda x: round(x * factor, 2), donations))))
         return new_db
 
     def total_value(self):
         total = 0
         for d in self.db.values():
-            total += reduce(lambda x,y: x+y, d.donations)
+            total += reduce(lambda x, y: x+y, d.donations)
         return total

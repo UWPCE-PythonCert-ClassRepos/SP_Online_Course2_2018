@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """
 updated mailroom program for Python 220 Lesson 4 assignment (metaprogramming)
-(1) changed main() to read donor database from json file instead of being hard-coded into DONOR_DB dict
+(1) changed main() to read donor database from json file instead of being hard-coded
+    into DONOR_DB dict
 (2) added to quit_program() to write donor database to json file before quitting
 note that user does not interact with reading and writing of donor database file
 """
@@ -75,13 +76,14 @@ def run_projection(db):
 
 
 def main_menu_error(_):
+    """print error message if invalid menu item is entered"""
     print("Invalid choice, try again")
 
 
 def quit_program(db):
-    dj = db.to_json()
+    """save donor database to json, then exit program"""
     with open(DONOR_FILE, 'w') as f:
-        f.write(dj)
+        f.write(db.to_json())
     quit()
 
 
