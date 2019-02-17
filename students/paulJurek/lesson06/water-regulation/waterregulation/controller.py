@@ -3,7 +3,7 @@ Encapsulates command and coordination for the water-regulation module
 """
 
 
-class Controller(object):
+class Controller:
     """
     Encapsulates command and coordination for the water-regulation module
     """
@@ -40,8 +40,12 @@ class Controller(object):
 
         :return: True if the pump has acknowledged its new state, else False
         """
-
-        return None
+        measurement = self.get_measurement()
+        pump_state = self.get_pump_state()
+        new_pump_state = self.decide_pump_state(current_height=measurement,
+                                                pump_state=pump_state,
+                                                actions=self.actions)
+        return self.set_pump_state(new_pump_state)
 
     def get_measurement(self) -> float:
         """calls sensor method for getting measurement
@@ -70,6 +74,6 @@ class Controller(object):
     def set_pump_state(self, state):
         """sets state of pump
         :param state: One of PUMP_IN, PUMP_OFF, PUMP_OUT
-        :returns: None
+        :returns: True/False indicating if change was successful
         """
-        self.pump.set_state(state=state)
+        return self.pump.set_state(state=state)
