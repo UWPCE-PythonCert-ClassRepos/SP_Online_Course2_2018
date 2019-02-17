@@ -24,7 +24,7 @@ class Calculator:
 
     def _do_calc(self, operator):
         try:
-            result = operator.calc(self.stack[0], self.stack[1])
+            result = operator.calc(self.stack[1], self.stack[0])
         except IndexError:
             raise InsufficientOperands
 
