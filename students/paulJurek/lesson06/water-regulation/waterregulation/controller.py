@@ -45,10 +45,17 @@ class Controller(object):
 
         return None
 
-    def get_measurement(self):
+    def get_measurement(self) -> float:
         """calls sensor method for getting measurement
-        reading of liquid level.  No inputs. 
+        reading of liquid level.  No inputs.
 
         :return: float with response from sensor
         """
         return float(self.sensor.measure())
+
+    def get_pump_state(self) -> int:
+        """calls pump to get current pump state.sensor
+
+        :return: int indicating state of pump
+        """
+        return int(self.pump.get_state())
