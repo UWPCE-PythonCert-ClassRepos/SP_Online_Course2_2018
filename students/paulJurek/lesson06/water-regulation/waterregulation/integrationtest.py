@@ -35,19 +35,22 @@ class ModuleTests(unittest.TestCase):
 
         # set start
         current_height = 0
-        current_pump_state = 0
+        current_pump_state = 'PUMP_OFF'
 
         controller.sensor.measure = MagicMock(return_value=current_height)
         controller.pump.get_state = MagicMock(return_value=current_pump_state)
-        controller.pump.set_state = MagicMock(return_value='PUMP_IN')
+        controller.pump.set_state = MagicMock(return_value=True)
+        controller.pump.PUMP_IN = MagicMock(return_value=True)
+        controller.pump.PUMP_OFF = MagicMock(return_value=True)
+        controller.pump.PUMP_OUT = MagicMock(return_value=True)
 
         # test motor starts
         controller.tick()
-        controller.pump.set_state.assert_called_with(state='PUMP_IN')
+        controller.pump.PUMP_IN.assert_called_with()
 
         # re-testing to ensure this still keeps PUMP_IN
         controller.tick()
-        controller.pump.set_state.assert_called_with(state="PUMP_IN")
+        controller.pump.PUMP_IN.assert_called_with()
 
         # increase until in limit
         # test motor turns off
