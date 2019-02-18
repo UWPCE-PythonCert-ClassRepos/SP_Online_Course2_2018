@@ -1,0 +1,54 @@
+{
+    "__obj_type": "Donors",
+    "db": {
+        "William Gates, III": {
+            "__obj_type": "Donor",
+            "_name": "William Gates, III",
+            "_donations": [
+                653772.32,
+                12.17
+            ]
+        },
+        "Jeff Bezos": {
+            "__obj_type": "Donor",
+            "_name": "Jeff Bezos",
+            "_donations": [
+                877.33
+            ]
+        },
+        "Paul Allen": {
+            "__obj_type": "Donor",
+            "_name": "Paul Allen",
+            "_donations": [
+                663.23,
+                43.87,
+                1.32
+            ]
+        },
+        "Mark Zuckerberg": {
+            "__obj_type": "Donor",
+            "_name": "Mark Zuckerberg",
+            "_donations": [
+                1663.23,
+                4300.87,
+                10432.0
+            ]
+        },
+        "Colleen Kaku": {
+            "__obj_type": "Donor",
+            "_name": "Colleen Kaku",
+            "_donations": [
+                50000,
+                1000000,
+                1000000
+            ]
+        },
+        "Roger Kaku": {
+            "__obj_type": "Donor",
+            "_name": "Roger Kaku",
+            "_donations": [
+                100.0
+            ]
+        }
+    }
+}
