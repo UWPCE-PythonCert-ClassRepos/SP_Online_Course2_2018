@@ -70,4 +70,3 @@ class Controller:
         return self.decider.decide(current_height=current_height,
                                    current_action=pump_state,
                                    actions=actions)
-
