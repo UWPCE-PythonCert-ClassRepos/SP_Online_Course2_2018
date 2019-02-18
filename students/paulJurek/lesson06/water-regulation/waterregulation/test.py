@@ -182,8 +182,8 @@ class ControllerTests(unittest.TestCase):
         when decider decides to set pump state and calls set_pump_state
         the pump set_state method is called"""
         self.pump.set_state = MagicMock(return_value=True)
-        self.controller.set_pump_state(state=0)
-        self.pump.set_state.assert_called_with(state=0)
+        self.controller.set_pump_state(state='PUMP_OFF')
+        self.pump.set_state.assert_called_with(state='PUMP_OFF')
 
     def test_tick_runs_process_to_set_pump_state(self):
         """
@@ -196,11 +196,11 @@ class ControllerTests(unittest.TestCase):
           4. set the pump to that new state
         """
         current_height = 5
-        current_pump_state = 'PUMP_OFF'
+        pump_state = 'PUMP_OFF'
         next_pump_state = 'PUMP_IN'
 
         self.sensor.measure = MagicMock(return_value=current_height)
-        self.pump.get_state = MagicMock(return_value=current_pump_state)
+        self.pump.get_state = MagicMock(return_value=pump_state)
         self.decider.decide = MagicMock(return_value=next_pump_state)
         self.pump.set_state = MagicMock(return_value=True)
 
@@ -209,7 +209,7 @@ class ControllerTests(unittest.TestCase):
         self.sensor.measure.assert_called_with()
         self.pump.get_state.assert_called_with()
         self.decider.decide.assert_called_with(current_height=current_height,
-                                               current_action=current_pump_state,
+                                               current_action=pump_state,
                                                actions=self.controller.actions)
 
         self.pump.set_state.assert_called_with(state=next_pump_state)

@@ -76,4 +76,4 @@ class Controller:
         :param state: One of PUMP_IN, PUMP_OFF, PUMP_OUT
         :returns: True/False indicating if change was successful
         """
-        return self.pump.set_state(state=state)
+        return self.actions[state]()

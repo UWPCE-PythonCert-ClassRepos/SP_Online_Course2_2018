@@ -28,7 +28,10 @@ class Decider:
         """returns value of target plus margin"""
         return self.target_height * (1+self.margin)
 
-    def decide(self, current_height: float, current_action: str, actions: dict):
+    def decide(self,
+               current_height: float,
+               current_action: str,
+               actions: dict):
         """
         Decide a new action for the pump, given the current height of
         liquid in the tank and the current action of the pump.

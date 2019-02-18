@@ -60,3 +60,15 @@ class Pump(object):
         """
         response = urllib.request.urlopen(self.address + ":" + self.port)
         return self.actions_int_2_str[int(response.read)]
+
+    def PUMP_IN(self):
+        """interface to call set_state for turning pump in"""
+        return self.set_state(state='PUMP_IN')
+
+    def PUMP_OFF(self):
+        """interface to call set_state for turning pump off"""
+        return self.set_state(state='PUMP_OFF')
+
+    def PUMP_OUT(self):
+        """interface to call set_state for turning pump out"""
+        return self.set_state(state='PUMP_OUT')

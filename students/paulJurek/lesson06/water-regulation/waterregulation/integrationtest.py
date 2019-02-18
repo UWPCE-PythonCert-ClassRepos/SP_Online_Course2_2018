@@ -35,7 +35,7 @@ class ModuleTests(unittest.TestCase):
 
         # set start
         current_height = 0
-        current_pump_state = 'PUMP_OFF'
+        current_pump_state = 0
 
         controller.sensor.measure = MagicMock(return_value=current_height)
         controller.pump.get_state = MagicMock(return_value=current_pump_state)
