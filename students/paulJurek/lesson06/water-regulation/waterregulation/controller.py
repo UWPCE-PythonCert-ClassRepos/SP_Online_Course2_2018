@@ -45,7 +45,6 @@ class Controller:
         new_pump_state = self.decide_pump_state(current_height=measurement,
                                                 pump_state=pump_state,
                                                 actions=self.actions)
-
         return self.set_pump_state(new_pump_state)
 
     def get_measurement(self) -> float:
