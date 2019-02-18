@@ -9,6 +9,7 @@ Python Version: 3.6.4
 import json_save.json_save_dec as js
 import json
 
+
 @js.json_save
 class Donor:
     """
@@ -28,7 +29,7 @@ class Donor:
         """
         self.name = str(args[0])
         # Using protected _donations value because I don't want people
-        # overwriting These values.  I don't mind if they change the donor name.
+        # overwriting These values.  I don't mind if they change the name.
         try:
             self._donations = [float(x) for x in args[1]]
         except IndexError:
@@ -65,6 +66,7 @@ class Donor:
         except ZeroDivisionError:
             return 0
 
+
 @js.json_save
 class Donorlist:
     """
@@ -73,6 +75,7 @@ class Donorlist:
     """
 
     _donor_objects = js.Dict()
+
     def __init__(self, init_list=None):
         """Takes dictionary value using format {'donor1', ['donations1']} """
         self._donor_objects = {}
@@ -147,8 +150,9 @@ class Donorlist:
         sorted_tuple = self.list_by_total()
         header = "{:<20}| {:>10} | {:>10} | {:>10}\n"
         file_out.write(header.format(*categories))
-        for donor in sorted_tuple:
-            file_out.write(spacing.format(donor.name, donor.total, donor.count, donor.average))
+        for dn in sorted_tuple:
+            ft = spacing.format(dn.name, dn.total, dn.count, dn.average)
+            file_out.write(ft)
 
     def get_total(self, name):
         """Returns total donations for donor"""
