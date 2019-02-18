@@ -2,7 +2,7 @@
 """
 File Name: test_donor.py
 Author: Travis Brackney
-Class: Python 201 - Self paced online
+Class: Python 220 - Self paced online
 Date Created 2/10/2019
 Python Version: 3.6.4
 """
