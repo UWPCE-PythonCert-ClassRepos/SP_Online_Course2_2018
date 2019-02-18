@@ -14,6 +14,12 @@ class Pump(object):
     PUMP_IN = 1
     PUMP_OFF = 0
     PUMP_OUT = -1
+    actions_str_2_int = {'PUMP_IN': 1,
+                         'PUMP_OFF': 0,
+                         'PUMP_OUT': -1}
+    actions_int_2_str = {1: 'PUMP_IN',
+                         0: 'PUMP_OFF',
+                         -1: 'PUMP_OUT'}
 
     def __init__(self, address, port):
         """
@@ -26,7 +32,7 @@ class Pump(object):
         self.address = address
         self.port = port
 
-    def set_state(self, state):
+    def set_state(self, state: str) -> bool:
         """
         Set the state of the remote pump.
 
@@ -34,8 +40,10 @@ class Pump(object):
         :return: True if the remote pump controller acknowledges the request,
             otherwise False
         """
+        state_int = self.actions_str_2_int[state]
 
-        request = urllib.request.Request(self.address + ':' + self.port, state)
+        request = urllib.request.Request(self.address + ':' + self.port,
+                                         state_int)
 
         try:
             urllib.request.urlopen(request)
@@ -44,11 +52,11 @@ class Pump(object):
 
         return True
 
-    def get_state(self) -> int:
+    def get_state(self) -> str:
         """
         Get the state of the remote pump.
 
         :return: int representing one of PUMP_IN, PUMP_OFF, PUMP_OUT
         """
         response = urllib.request.urlopen(self.address + ":" + self.port)
-        return int(response.read)
+        return self.actions_int_2_str[int(response.read)]

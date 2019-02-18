@@ -3,7 +3,7 @@ Encapsulates decision making in the water-regulation module
 """
 
 
-class Decider(object):
+class Decider:
     """
     Encapsulates decision making in the water-regulation module
     """
@@ -28,7 +28,7 @@ class Decider(object):
         """returns value of target plus margin"""
         return self.target_height * (1+self.margin)
 
-    def decide(self, current_height, current_action, actions):
+    def decide(self, current_height: float, current_action: str, actions: dict):
         """
         Decide a new action for the pump, given the current height of
         liquid in the tank and the current action of the pump.
@@ -60,29 +60,29 @@ class Decider(object):
                                                         actions['PUMP_OUT'],
                                                         actions['PUMP_OFF']
         """
-        if ((current_action == 'PUMP_OFF') &
-           (current_height < self.get_target_low())):
-           output = 'PUMP_IN'
+        if ((current_action == 'PUMP_OFF') & (current_height <
+                                              self.get_target_low())):
+
+            output = 'PUMP_IN'
 
         elif ((current_action == 'PUMP_OFF') &
-           (current_height > self.get_target_high())):
+              (current_height > self.get_target_high())):
             output = 'PUMP_OUT'
 
         elif ((current_action == 'PUMP_OFF') &
-           (current_height <= self.get_target_high()) &
-           (current_height >= self.get_target_low())):
+              (current_height <= self.get_target_high()) &
+              (current_height >= self.get_target_low())):
             output = 'PUMP_OFF'
 
         elif ((current_action == 'PUMP_IN') &
-           (current_height > self.get_target_high())):
+              (current_height > self.get_target_high())):
             output = 'PUMP_OFF'
 
         elif ((current_action == 'PUMP_OUT') &
-           (current_height < self.get_target_low())):
+              (current_height < self.get_target_low())):
             output = 'PUMP_OFF'
 
         else:
             output = current_action
 
         return actions[output]
-

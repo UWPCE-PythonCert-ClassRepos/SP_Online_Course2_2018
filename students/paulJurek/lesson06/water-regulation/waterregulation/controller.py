@@ -55,23 +55,23 @@ class Controller:
         """
         return float(self.sensor.measure())
 
-    def get_pump_state(self) -> int:
+    def get_pump_state(self) -> str:
         """calls pump to get current pump state.sensor
 
         :return: int indicating state of pump
         """
-        return int(self.pump.get_state())
+        return self.pump.get_state()
 
     def decide_pump_state(self, current_height: float,
-                          pump_state: int,
-                          actions: dict) -> int:
+                          pump_state: str,
+                          actions: dict) -> str:
         """analyzes current state of system and decides command for pump
         :returns: int indicating command to send to pump"""
-        return int(self.decider.decide(current_height=current_height,
-                                       pump_state=pump_state,
-                                       actions=actions))
+        return self.decider.decide(current_height=current_height,
+                                   current_action=pump_state,
+                                   actions=actions)
 
-    def set_pump_state(self, state):
+    def set_pump_state(self, state: str):
         """sets state of pump
         :param state: One of PUMP_IN, PUMP_OFF, PUMP_OUT
         :returns: True/False indicating if change was successful

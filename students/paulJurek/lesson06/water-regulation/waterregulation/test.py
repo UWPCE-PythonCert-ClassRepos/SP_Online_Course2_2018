@@ -168,13 +168,13 @@ class ControllerTests(unittest.TestCase):
         when decide_pump_state gets called
         decider method decide gets called with inputs
         for current fluid height and pump state"""
-        self.decider.decide = MagicMock(return_value=0)
+        self.decider.decide = MagicMock(return_value='PUMP_OFF')
 
-        self.controller.decide_pump_state(current_height=5,
-                                          pump_state=0,
+        self.controller.decide_pump_state(current_height=5.0,
+                                          pump_state='PUMP_OFF',
                                           actions=self.controller.actions)
-        self.decider.decide.assert_called_with(current_height=5,
-                                               pump_state=0,
+        self.decider.decide.assert_called_with(current_height=5.0,
+                                               current_action='PUMP_OFF',
                                                actions=self.controller.actions)
 
     def test_controller_calls_set_pump_state(self):
@@ -196,8 +196,8 @@ class ControllerTests(unittest.TestCase):
           4. set the pump to that new state
         """
         current_height = 5
-        current_pump_state = 0
-        next_pump_state = 1
+        current_pump_state = 'PUMP_OFF'
+        next_pump_state = 'PUMP_IN'
 
         self.sensor.measure = MagicMock(return_value=current_height)
         self.pump.get_state = MagicMock(return_value=current_pump_state)
@@ -209,7 +209,7 @@ class ControllerTests(unittest.TestCase):
         self.sensor.measure.assert_called_with()
         self.pump.get_state.assert_called_with()
         self.decider.decide.assert_called_with(current_height=current_height,
-                                               pump_state=current_pump_state,
+                                               current_action=current_pump_state,
                                                actions=self.controller.actions)
 
         self.pump.set_state.assert_called_with(state=next_pump_state)
