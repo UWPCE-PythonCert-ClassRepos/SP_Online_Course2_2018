@@ -177,15 +177,6 @@ class ControllerTests(unittest.TestCase):
                                                current_action='PUMP_OFF',
                                                actions=self.controller.actions)
 
-    def test_controller_calls_set_pump_state(self):
-        """given a controller
-        when decider decides to set pump state and calls set_pump_state
-        the pump set_state method is called"""
-        self.pump.set_state = MagicMock(return_value=True)
-        self.pump.PUMP_OFF = MagicMock(return_value=True)
-        self.controller.set_pump_state(state=self.pump.PUMP_OFF)
-        self.pump.PUMP_OFF.assert_called_with()
-
     def test_tick_runs_process_to_set_pump_state(self):
         """
         expected behavior

@@ -45,7 +45,7 @@ class Controller:
         new_pump_state = self.decide_pump_state(current_height=measurement,
                                                 pump_state=pump_state,
                                                 actions=self.actions)
-        return self.set_pump_state(new_pump_state)
+        return new_pump_state()
 
     def get_measurement(self) -> float:
         """calls sensor method for getting measurement
@@ -66,14 +66,8 @@ class Controller:
                           pump_state: str,
                           actions: dict) -> str:
         """analyzes current state of system and decides command for pump
-        :returns: int indicating command to send to pump"""
+        :returns: str indicating command to send to pump"""
         return self.decider.decide(current_height=current_height,
                                    current_action=pump_state,
                                    actions=actions)
 
-    def set_pump_state(self, state):
-        """sets state of pump
-        :param state: One of PUMP_IN, PUMP_OFF, PUMP_OUT
-        :returns: True/False indicating if change was successful
-        """
-        return state()
