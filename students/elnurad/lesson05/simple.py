@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import logging
 import logging.handlers
+from datetime import datetime
 
 log_format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 log_format_2 = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
@@ -9,7 +10,8 @@ log_format_2 = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 formatter = logging.Formatter(log_format)
 formatter_2 = logging.Formatter(log_format_2)
 
-file_handler = logging.FileHandler('mylog.log')
+
+file_handler = logging.FileHandler('{:%Y-%m-%d}.log'.format(datetime.now()))
 file_handler.setLevel(logging.WARNING)
 file_handler.setFormatter(formatter)
 
