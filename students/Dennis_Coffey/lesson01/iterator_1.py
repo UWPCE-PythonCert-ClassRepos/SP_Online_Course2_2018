@@ -24,8 +24,7 @@ class IterateMe_1:
         self.current += 1
         if self.current < self.stop:
             return self.current
-        else:
-            raise StopIteration
+        raise StopIteration
 
 class IterateMe_2:
     """
@@ -51,14 +50,14 @@ class IterateMe_2:
         self.current = self.start - self.step
 
     def __iter__(self):
+        self.current = self.start - self.step # Added in so iterator acts like range if there is a break
         return self
 
     def __next__(self):
         self.current += self.step
         if self.current < self.stop:
             return self.current
-        else:
-            raise StopIteration
+        raise StopIteration
 
 if __name__ == "__main__":
 
@@ -78,9 +77,14 @@ if __name__ == "__main__":
     for i in it:
         print(i)
         
-    print("Testing the iterator 2 to compare to range()")
-    for i in IterateMe_2(10):
+    print("Testing the range function with a break")
+    range_test = range(2, 20, 2)
+    for i in range_test:
+        if i > 10:
+            break
         print(i)
+    for i in range_test:
+        print(i)       
 
     # Test whether IterateMe_2 produces same result as range for different scenarios
     assert list(IterateMe_2(10)) == list(range(10)), "Does not work like range"
