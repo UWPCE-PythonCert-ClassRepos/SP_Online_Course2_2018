@@ -21,7 +21,7 @@ class Calculator():
         self.stack.insert(1, number)
 
     def _do_calc(self, operator):
-        """Make calculations calling the provided operator"""
+        """Do calculations with the provided operator"""
         try:
             result = operator.calc(self.stack[0], self.stack[1])
         except IndexError:
