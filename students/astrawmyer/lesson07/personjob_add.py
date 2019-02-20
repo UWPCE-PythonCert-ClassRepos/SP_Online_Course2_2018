@@ -108,3 +108,37 @@ def populate_job_db():
     finally:
         logger.info('database closes')
         database.close()
+
+def populate_dept_db():
+    """
+        add department data to database
+    """
+
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    database = SqliteDatabase('personjob.db')
+
+    logger.info('Working with Department class')
+    logger.info('Creating Department records: just like Person. We use the foreign key')
+
+    DEPT_NUMBER = 0
+    DEPT_NAME = 1
+    DEPT_MANAGER = 2
+
+    departments = [
+        ('43R0', 'Aero', 'Adrian Newey'),
+        ('T1R3', 'Tires', 'Michelin Man'),
+        ('90WR', 'Engines', 'Robert Yates')
+        ]
+    
+    try:
+        database.connect()
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        for department in departments:
+            with database.transaction():
+                new_department = Department.create(
+                    department_number = department[DEPT_NUMBER],
+                    department_name = department[DEPT_NAME],
+                    department_manager = department[DEPT_MANAGER])
+                new_department.save()
