@@ -142,3 +142,20 @@ def populate_dept_db():
                     department_name = department[DEPT_NAME],
                     department_manager = department[DEPT_MANAGER])
                 new_department.save()
+    
+        logger.info('Reading and print all Job rows (note the value of person)...')
+        for department in Department:
+            logger.info(f'{department.department_number} : {department.department_name} Manager is {department.department_manager}')
+
+    except Exception as e:
+        logger.info(f'Error creating = {department[DEPT_NAME]}')
+        logger.info(e)
+
+    finally:
+        logger.info('database closes')
+        database.close()
+
+if __name__ == '__main__':
+    populate_person_db()
+    populate_job_db()
+    populate_dept_db()
