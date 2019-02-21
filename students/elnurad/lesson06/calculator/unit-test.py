@@ -101,6 +101,4 @@ class CalculatorTests(TestCase):
         self.calculator.divide()
 
         self.divider.calc.assert_called_with(1, 2)
-
-
-
+        
