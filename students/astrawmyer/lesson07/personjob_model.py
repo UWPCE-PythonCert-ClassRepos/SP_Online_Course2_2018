@@ -61,3 +61,5 @@ database.create_tables([
         Person,
         PersonNumKey
     ])
+
+database.close()
