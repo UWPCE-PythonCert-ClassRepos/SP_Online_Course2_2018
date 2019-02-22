@@ -1,5 +1,6 @@
 import logging
 from personjob_model import *
+import pprint
 
 def populate_person_db():
     """
@@ -171,7 +172,9 @@ def print_jobs():
     query = Job.select(Job.person_employed, Job.job_name, Job.job_dept)
 
     for job in query:
-        print(job.person_employed, job.job_name, job.job_dept)
+        job_list = [job.person_employed, job.job_name, job.job_dept]
+        pp = pprint.PrettyPrinter()
+        pp.pprint(job_list)
 
 if __name__ == '__main__':
     populate_person_db()
