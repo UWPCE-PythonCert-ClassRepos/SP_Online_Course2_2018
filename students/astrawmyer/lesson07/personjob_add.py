@@ -172,7 +172,7 @@ def print_jobs():
     query = Job.select(Job.person_employed, Job.job_name, Job.job_dept)
 
     for job in query:
-        job_list = [job.person_employed, job.job_name, job.job_dept]
+        job_list = [job.person_employed.person_name, job.job_name, job.job_dept.department_name]
         pp = pprint.PrettyPrinter()
         pp.pprint(job_list)
 
