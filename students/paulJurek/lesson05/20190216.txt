@@ -1,0 +1,40 @@
+2019-02-16 14:14:31,593 simple.py:34  WARNING The value of i is 50.
+2019-02-16 14:14:31,593 simple.py:39  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+Traceback (most recent call last):
+  File "simple.py", line 36, in my_fun
+    i / (50 - i)
+ZeroDivisionError: division by zero
+2019-02-16 14:14:57,888 simple.py:34  WARNING The value of i is 50.
+2019-02-16 14:14:57,896 simple.py:39  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2019-02-16 14:16:18,069 simple.py:34  WARNING The value of i is 50.
+2019-02-16 14:16:18,069 simple.py:39  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+Traceback (most recent call last):
+  File "simple.py", line 36, in my_fun
+    i / (50 - i)
+ZeroDivisionError: division by zero
+2019-02-16 14:16:43,963 simple.py:34  WARNING The value of i is 50.
+2019-02-16 14:16:43,963 simple.py:39  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2019-02-16 14:17:19,454 simple.py:34  WARNING The value of i is 50.
+2019-02-16 14:17:19,454 simple.py:39  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2019-02-16 14:17:20,729 simple.py:34  WARNING The value of i is 50.
+2019-02-16 14:17:20,729 simple.py:39  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2019-02-16 14:17:21,528 simple.py:34  WARNING The value of i is 50.
+2019-02-16 14:17:21,544 simple.py:39  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2019-02-16 14:18:07,301 simple.py:34  WARNING The value of i is 50.
+2019-02-16 14:18:07,301 simple.py:39  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+Traceback (most recent call last):
+  File "simple.py", line 36, in my_fun
+    i / (50 - i)
+ZeroDivisionError: division by zero
+2019-02-16 14:18:08,974 simple.py:34  WARNING The value of i is 50.
+2019-02-16 14:18:08,974 simple.py:39  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+Traceback (most recent call last):
+  File "simple.py", line 36, in my_fun
+    i / (50 - i)
+ZeroDivisionError: division by zero
+2019-02-16 14:18:09,686 simple.py:34  WARNING The value of i is 50.
+2019-02-16 14:18:09,686 simple.py:39  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+Traceback (most recent call last):
+  File "simple.py", line 36, in my_fun
+    i / (50 - i)
+ZeroDivisionError: division by zero
