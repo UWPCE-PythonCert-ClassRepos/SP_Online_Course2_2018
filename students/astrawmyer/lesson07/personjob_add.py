@@ -75,13 +75,15 @@ def populate_job_db():
     END_DATE = 2
     SALARY = 3
     PERSON_EMPLOYED = 4
+    JOB_DEPT = 5
+    JOB_LENGTH = 6
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
-        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter'),
-        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter')
+        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew', '43R0', 2131),
+        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'T1R3', 500),
+        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', '43R0', 8),
+        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter', '90WR', 258),
+        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter', '90WR', 3)
         ]
 
     try:
@@ -94,7 +96,9 @@ def populate_job_db():
                     start_date = job[START_DATE],
                     end_date = job[END_DATE],
                     salary = job[SALARY],
-                    person_employed = job[PERSON_EMPLOYED])
+                    person_employed = job[PERSON_EMPLOYED],
+                    job_dept = job[JOB_DEPT],
+                    job_length = [JOB_LENGTH])
                 new_job.save()
 
         logger.info('Reading and print all Job rows (note the value of person)...')
@@ -156,6 +160,7 @@ def populate_dept_db():
         database.close()
 
 if __name__ == '__main__':
+    personjob_model()
     populate_person_db()
     populate_job_db()
     populate_dept_db()
