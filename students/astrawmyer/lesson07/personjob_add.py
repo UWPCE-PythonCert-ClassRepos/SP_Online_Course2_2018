@@ -163,6 +163,7 @@ def populate_dept_db():
 def print_jobs():
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
+    logger.info('Preparing printing of list of people.')
 
     database = SqliteDatabase('personjob.db')
 
