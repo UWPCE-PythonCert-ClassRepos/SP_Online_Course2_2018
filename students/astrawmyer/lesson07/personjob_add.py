@@ -159,10 +159,22 @@ def populate_dept_db():
         logger.info('database closes')
         database.close()
 
+def print_jobs():
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
+    database = SqliteDatabase('personjob.db')
 
+    database.connect()
+    database.execute_sql('PRAGMA foreign_keys = ON;')
+
+    query = Job.select(Job.person_employed, Job.job_name, Job.job_dept)
+
+    for job in query:
+        print(job.person_employed, job.job_name, job.job_dept)
 
 if __name__ == '__main__':
     populate_person_db()
     populate_job_db()
     populate_dept_db()
+    print_jobs()
