@@ -24,6 +24,15 @@ class Person(BaseModel):
     lives_in_town = CharField(max_length = 40)
     nickname = CharField(max_length = 20, null = True)
 
+class Department(BaseModel):
+    """
+        This class defines Department, which maintains details department
+        number, department name, and department manager.
+    """
+    department_number = CharField(primary_key = True, max_length=4)
+    department_name = CharField(max_length=30)
+    department_manager = CharField(max_length=30)
+
 class Job(BaseModel):
     """
         This class defines Job, which maintains details of past Jobs
@@ -34,17 +43,10 @@ class Job(BaseModel):
     end_date = DateField(formats = 'YYYY-MM-DD')
     salary = DecimalField(max_digits = 7, decimal_places = 2)
     person_employed = ForeignKeyField(Person, related_name='was_filled_by', null = False)
-    job_dept = job[JOB_DEPT],
-    job_length = [JOB_LENGTH])
+    job_dept = ForeignKeyField(Department, null = False)
+    job_length = IntegerField()
 
-class Department(BaseModel):
-    """
-        This class defines Department, which maintains details department
-        number, department name, and department manager.
-    """
-    department_number = CharField(primary_key = True, max_length=4)
-    department_name = CharField(max_length=30)
-    department_manager = CharField(max_length=30)
+
 
 class PersonNumKey(BaseModel):
     """

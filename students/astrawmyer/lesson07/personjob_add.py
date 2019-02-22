@@ -98,7 +98,7 @@ def populate_job_db():
                     salary = job[SALARY],
                     person_employed = job[PERSON_EMPLOYED],
                     job_dept = job[JOB_DEPT],
-                    job_length = [JOB_LENGTH])
+                    job_length = job[JOB_LENGTH])
                 new_job.save()
 
         logger.info('Reading and print all Job rows (note the value of person)...')
@@ -159,8 +159,10 @@ def populate_dept_db():
         logger.info('database closes')
         database.close()
 
+
+
+
 if __name__ == '__main__':
-    personjob_model()
     populate_person_db()
     populate_job_db()
     populate_dept_db()
