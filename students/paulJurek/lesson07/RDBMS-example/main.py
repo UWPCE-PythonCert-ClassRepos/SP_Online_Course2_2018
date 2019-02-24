@@ -156,6 +156,7 @@ def populate_jobs():
         for job in Job:
             logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed}')
             logger.info(f'days on job: {job.days_in_job}')
+
     except Exception as e:
         logger.info(f'Error creating = {job[JOB_NAME]}')
         logger.info(e)
@@ -164,9 +165,21 @@ def populate_jobs():
         logger.info('database closes')
         database.close()
 
+def report_persons_departments():
+    """creates report of all departments person worked"""
+    query = (Person
+             .select(Person.person_name, Department.department_name, Job.job_name)
+             .join(Job, join_type=JOIN.LEFT_OUTER,  on=(Person.person_name == Job.person_employed))
+             .join(Department, join_type=JOIN.LEFT_OUTER, on=(Job.department == Department.department_number))
+             .dicts()
+             )
+
+    for entry in query:
+        print(entry)
 
 
 if __name__ == '__main__':
     populate_people()
     populate_departments()
     populate_jobs()
+    report_persons_departments()

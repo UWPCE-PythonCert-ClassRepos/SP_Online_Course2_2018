@@ -31,7 +31,7 @@ class Department(BaseModel):
     """
     department_number = CharField(primary_key = True, max_length = 4)
     department_name = CharField(max_length = 30)
-    department_manager = ForeignKeyField(Person, related_name='was_filled_by', null = True)
+    department_manager = CharField(max_length = 30, null=True)
 
 
 class Job(BaseModel):
