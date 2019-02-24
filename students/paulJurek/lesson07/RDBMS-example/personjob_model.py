@@ -5,6 +5,7 @@
 """
 
 from peewee import *
+import datetime
 
 database = SqliteDatabase('personjob.db')
 
@@ -39,10 +40,15 @@ class Job(BaseModel):
         held by a Person.
     """
     job_name = CharField(primary_key = True, max_length = 30)
-    start_date = DateField(formats = 'YYYY-MM-DD')
-    end_date = DateField(formats = 'YYYY-MM-DD')
+    start_date = DateField(null=False)
+    end_date = DateField(null=False)
     salary = DecimalField(max_digits = 7, decimal_places = 2)
-    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null = False)
-    department = ForeignKeyField(Department, related_name='was_filled_by', null = False)
+    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
+    department = ForeignKeyField(Department, related_name='was_filled_by', null=False)
+
+    @property
+    def days_in_job(self):
+        """returns the time in the job"""
+        return (self.end_date - self.start_date).days
 
 database.create_tables([Person, Department, Job])

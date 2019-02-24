@@ -131,11 +131,11 @@ def populate_jobs():
     DEPARTMENT = 5
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew', 'D001'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'D001'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', 'D002'),
-        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter', 'D002'),
-        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter', 'D002')
+        ('Analyst', datetime.datetime(2001,9,22), datetime.datetime(2003, 1,30),65500, 'Andrew', 'D001'),
+        ('Senior analyst', datetime.datetime(2001,9,22), datetime.datetime(2003, 1,30), 70000, 'Andrew', 'D001'),
+        ('Senior business analyst', datetime.datetime(2001,9,22), datetime.datetime(2003, 1,30), 80000, 'Andrew', 'D002'),
+        ('Admin supervisor', datetime.datetime(2001,9,22), datetime.datetime(2003, 1,30), 45900, 'Peter', 'D002'),
+        ('Admin manager', datetime.datetime(2001,9,22), datetime.datetime(2003, 1,30), 45900, 'Peter', 'D002')
         ]
 
     try:
@@ -155,7 +155,7 @@ def populate_jobs():
         logger.info('Reading and print all Job rows (note the value of person)...')
         for job in Job:
             logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed}')
-
+            logger.info(f'days on job: {job.days_in_job}')
     except Exception as e:
         logger.info(f'Error creating = {job[JOB_NAME]}')
         logger.info(e)
