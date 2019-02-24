@@ -12,14 +12,20 @@ def stw():
     setup with basic information and no donations"""
     return DonationController(name='Save The Whales')
 
+# TODO: get rid of donor fixtures.  These should not be part of unit tests here
+# use mock
 @pytest.fixture
 def donor1():
     return Donor(id=1, firstname='Fisher', lastname='Price')
 
+# TODO: get rid of donor fixtures.  These should not be part of unit tests here
+# use mock
 @pytest.fixture
 def donor2():
     return Donor(id=2, firstname='Wonky', lastname='Donkey')
 
+# TODO: change to point to sqlite
+# TODO: update tests to only test controller save
 def test_controller_creates_saved_file(stw, donor1):
     """given a controller is intialized and donors added
     when saved with the internal method and then loaded
@@ -33,6 +39,7 @@ def test_controller_creates_saved_file(stw, donor1):
     stw2 = DonationController.load(test_filename)
     assert str(stw) == str(stw2)
 
+# TODO: update with mock
 def test_create_new_donor(stw, donor1):
     """given a donation controller
     when user creates new donor
@@ -41,6 +48,7 @@ def test_create_new_donor(stw, donor1):
     stw.create_donor(donor1)
     assert stw.find_donor(donor1) == donor1
 
+# TODO: update with mock
 def test_create_new_donor_creates_error_if_exists(stw, donor1):
     stw.create_donor(donor1)
     assert stw.find_donor(donor1) == donor1
@@ -48,6 +56,7 @@ def test_create_new_donor_creates_error_if_exists(stw, donor1):
     with pytest.raises(KeyError):
         stw.create_donor(donor1)
 
+# TODO: update with mock
 def test_create_donation_for_donor(stw, donor1):
     """given a controller and donor
     when a donation is added to donor
