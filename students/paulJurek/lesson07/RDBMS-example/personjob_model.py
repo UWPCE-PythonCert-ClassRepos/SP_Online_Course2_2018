@@ -7,8 +7,6 @@
 from peewee import *
 
 database = SqliteDatabase('personjob.db')
-database.connect()
-database.execute_sql('PRAGMA foreign_keys = ON;')
 
 class BaseModel(Model):
     class Meta:
@@ -24,6 +22,17 @@ class Person(BaseModel):
     lives_in_town = CharField(max_length = 40)
     nickname = CharField(max_length = 20, null = True)
 
+
+class Department(BaseModel):
+    """
+        This class defines Depatment, which maintains department information
+        related to the job
+    """
+    department_number = CharField(primary_key = True, max_length = 4)
+    department_name = CharField(max_length = 30)
+    department_manager = ForeignKeyField(Person, related_name='was_filled_by', null = True)
+
+
 class Job(BaseModel):
     """
         This class defines Job, which maintains details of past Jobs
@@ -34,12 +43,6 @@ class Job(BaseModel):
     end_date = DateField(formats = 'YYYY-MM-DD')
     salary = DecimalField(max_digits = 7, decimal_places = 2)
     person_employed = ForeignKeyField(Person, related_name='was_filled_by', null = False)
+    department = ForeignKeyField(Department, related_name='was_filled_by', null = False)
 
-	
-class Department(BaseModel):
-	"""
-		This class defines Depatment, which maintains department information
-		related to the job
-	"""
-	department_number = CharField(primary_key = True, max_length = 4)
-	department_name = CharField(primary_key = True, max_length = 30)
+database.create_tables([Person, Department, Job])
