@@ -1,9 +1,7 @@
 """custom base model for ORM in mailroom"""
 
+from . config import database
 from peewee import *
-
-database_name = 'mailroom.db'
-database = SqliteDatabase(database_name)
 
 class BaseModel(Model):
     class Meta:

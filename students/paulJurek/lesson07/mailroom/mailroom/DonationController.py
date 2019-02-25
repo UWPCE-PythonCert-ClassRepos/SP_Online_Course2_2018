@@ -6,89 +6,71 @@ and management of donations"""
 
 import copy
 import datetime
-import json
+import logging
 from pathlib import Path
-import pickle
-from mailroom.Donor import Donor, Donation
-from json_save import json_save_meta as js
+
+from peewee import *
+
+from . Donor import Donor
+from . Donation import Donation
 
 
-class DonationController(js.JsonSaveable):
-    """organization controller for donations"""
-    name = js.String()
-    donors = js.Dict()
+class DonationController():
+    """organization controller for donations
+    upon initiation, the Donation controller will first look if the file 
+    already exists in the directory.  If so, this will be loaded.  
+    If not, a new one will be created.  The application is initalized with 
+    empty donors.
 
-    def __init__(self, name, donors=None):
-        self.name=name
-        if donors:
-            self.donors = donors
-        else:
-            self.donors = {}
+    Through the controller new donors, donation and reports are created.  
+    """
 
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
 
-    def find_donor(self, donor: Donor):
+    def find_donor(self, donor_name: str):
         """searches through donor list and returns donor
-        returns none if not found.  Setup to first check for donor id
-        if this fails, assumes integer and will check for that"""
-        # TODO: refactor and add int method to donor to allow int(donor)
-            # to return same as donor.id
-        try:
-            return self.donors.get(donor.id)
-        except AttributeError:
-            return self.donors.get(int(donor))
-
-    def create_donor(self, donor: Donor):
-        """creates donor in donation controller.  accepts donor object to 
-        register donor.  
+        returns none if not found.  Search is performed on donor_name.
         args:
-            donor: donor object to register with controller
+            donor_name: donors name.
+        returns:
+            donor object"""
+        try:
+            return Donor.get(Donor.donor_name == donor_name)
+        except Donor.DoesNotExist:
+            return None
 
+    def create_donor(self, donor_name: str, donor_email: str = None) -> Donor:
+        """creates donor in donation controller.  Accepts donor_name and email 
+        then creates object.  This first checks if donor already exists and raises
+        error to avoid duplication.  
+        args:
+            donor_name: name for donor
+            donor_email: contact email for donor
+        returns:
+            donor inctance
             """
-        if self.find_donor(donor):
-            raise KeyError('donor already exists')
-        if isinstance(donor,Donor):
-            try:
-                self.donors[donor.id] = donor
-                return donor.id
-            except AttributeError:
-                raise AttributeError('Donor object needs id')
-    
-    def build_donor_from_name(self, firstname, lastname):
-        """interface to build donor from just name and automatically assign id"""
-        self.create_donor(Donor(id=self.next_id, firstname=firstname, lastname=lastname))
+        self.logger.info('creating new donor')
+        return Donor.create(donor_name=donor_name, donor_email=donor_email)
+
+    def create_donation(self, amount, donor, date=datetime.datetime.utcnow()):
+        """creates donation in input donor
+        the donation amount should be in dollar cents (eg ###.##)
+        the donor name should be full name of donor.
+        Optional parameter is date which should be datetime object."""
+        if not self.find_donor(donor_name=donor):
+            self.create_donor(donor_name=donor)
+            
+        return Donation.create(donation_donor=donor, donation_amount=amount, date=date)
 
     def get_total_donations(self):
         """returns total donations in controller"""
-        return sum([k.donation_total() for i, k in self.donors.items() if k.donations])
-
-    def create_donation(self, donor, amount, date=datetime.datetime.utcnow()):
-        """creates donation in input donor"""
-
-        if self.find_donor(donor) is None:
-            raise IndexError('Donor does not exist')
-        self.find_donor(donor).add_donation(amount)
-
-    @property
-    def next_id(self):
-        """returns the next avaliable int id from list
-        used to asign donor ids"""
-        donor_id_list = {i for i in self.donors}
-        if self.donors:
-            max_id = max(donor_id_list)
-        else:
-            max_id = 1
-        
-        # create range of ints
-        non_used_ids = set(range(1,max_id+1)) - donor_id_list
-        if non_used_ids:
-            return min(non_used_ids)
-        else:
-            return max_id + 1
+        return (Donation
+         .select(fn.Sum(Donation.donation_amount).alias('total_donation'))
 
     def display_donors(self):
         """displays a list of donors in printed format"""
-        donor_list = [":".join([str(donor_id), donor.fullname]) for donor_id, donor in self.donors.items()]
-        print("\n".join(donor_list))
+        print("\n".join(Donor.select(Donor.donor_name)))
 
     def donor_report(self):
         """handles process for main screens report selection
@@ -123,28 +105,9 @@ class DonationController(js.JsonSaveable):
             print(f"{summary[1]:<26} ${summary[2]/100:>13.2f}  "
                 f"{summary[3]:>10}  ${summary[4]/100:>14.2f}")
 
-    def send_letters_to_everyone(self, 
-                                 thank_you_directory=Path('/mailroom_thankyou_letters')):
-        """creates thank yous for all donors and sends out"""
-        # iterate through donors and donations to send thank yous
-        for id, donor in self.donors.items():
-            file_name = "".join([str(id), '.txt'])
-            full_path = thank_you_directory / file_name
-            donor_info = donor.summarize_donor()
-            thank_you_text = self.create_donation_thank_you(donor=donor, amount=donor_info[2])
-            try:
-                print(full_path)
-                with open(full_path, 'w') as f:
-                    f.write(thank_you_text)
-            except FileNotFoundError:
-                print('Mailroom thank you directory not found.  Please create this directory first.')
-                break
-            else:
-                print(f'Thank you letter for {id} created in "{thank_you_directory}"')
-
     def create_donation_thank_you(self, donor, amount):
         """prints thank you message to terminal for donation"""
-        return f"""Dear {donor.fullname},
+        return f"""Dear {donor},
 
             Thank you for your very kind donation of ${amount:.2f}.
 
@@ -153,71 +116,6 @@ class DonationController(js.JsonSaveable):
                         Sincerely,
                             -The Team"""
 
-    def challenge(self, factor, min_donation=0, max_donation=1e9):
-        """increases donations due to nice donor
-        returns copy of donation controller with multiplied input"""
-
-        if factor < 1:
-            raise ValueError('Donors are not allowed to take $ from our cause.  Please consider factor of 10 ;)')
-        # copy generated to avoid messing with old database
-        new_db = copy.deepcopy(self)
-        mod_func = modifying_fun_generator(factor)
-        mod_filter = filter_fun_generator(min_donation=min_donation, max_donation=max_donation)
-        # seperate list made to simplify code as we need to regenerate dict
-        donor_list = map(mod_func, filter(mod_filter, new_db.donors.values()))
-        # rebuilds donors dict
-        new_db.donors = {i.id:i for i in donor_list}        
-        return new_db
-
-    def project_donation(self, factor, min_donation=0, max_donation=1e9):
-        """provides projected donation amount assuming donor matches all donations"""
-        return self.challenge(factor=factor, min_donation=min_donation, max_donation=max_donation).get_total_donations()
-
-
-    def save(self, filename):
-        """saves donation database"""
-
-        with open(filename, 'w') as fp:
-            json.dump(self.to_json_compat(), fp)
-        return self.to_json_compat()
-    
-    @classmethod
-    def load(cls, filename):
-        """rebuilds database from file"""
-        try:
-            with open(filename, 'r') as fp:
-                data = json.load(fp)
-            return cls.from_json_dict(data)
-        except FileNotFoundError:
-            """creates new donation controller when file not found"""
-            return cls(filename)
-
-    def __eq__(self, other):
-        return self.to_json_compat() == other.to_json_compat()
-
-    def __repr__(self):
-        return str(self.to_json_compat())
-
-def modify_donor_donations(factor, donor):
-    """returns a modified donor with their donations matched by nice donor"""
-    new_donations = [Donation(amount=i.amount*factor, date=i.date, id=i.id) for i in donor.donations]
-    donor._donations = new_donations
-    return donor
-
-def modifying_fun_generator(factor):
-    """returns function with factor applied.  This increases donation amount  by factor"""
-    return lambda x: modify_donor_donations(factor=factor, donor=x)
-
-def filter_donor_donations(donor, min_donation=0, max_donation = 1.0e9):
-    """filters donor donations to just those meeting criteria"""
-    filtered_donations = [Donation(amount=i.amount, date=i.date, id=i.id) for i in donor.donations if (i.amount>=min_donation and i.amount <= max_donation) ]
-    donor._donations = filtered_donations
-    return donor
-
-def filter_fun_generator(min_donation=0, max_donation=1.0e9):
-    """returns function with factor applied.  This increases donation amount  by factor"""
-    return lambda x: filter_donor_donations(min_donation=min_donation, max_donation=max_donation, donor=x)
-
-def multiply_donation(original, factor):
-    """returns multiplied donation"""
-    return orginal * factor
+    def send_donation_thank_you(self, message):
+        """sends donation thank you to donor"""
+        pass
