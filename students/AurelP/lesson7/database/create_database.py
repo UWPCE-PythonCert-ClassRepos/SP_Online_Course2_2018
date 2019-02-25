@@ -68,8 +68,8 @@ class Job(BaseModel):
     logger.info('Salary')
     logger.info('FOREIGN KEYS: Each job is linked to a peson and a department')
     person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
-    job_department = ForeignKeyField(Department, related_name='work_department', null=False)
-
+    job_department = ForeignKeyField(Department, related_name='in_department', null=False)
+    # 'work_department'
 
 database.create_tables([Person, Department, Job])
 database.close()
