@@ -1,51 +1,12 @@
 """donor class controlling donor behavior"""
 
-from collections import namedtuple
 import datetime
-from json_save import json_save_meta as js
+from mailroom.BaseModel import BaseModel
 
-Donation = namedtuple('Donation', ['amount', 'date', 'id'])
-# TODO: add email validation https://www.pythoncentral.io/how-to-validate-an-email-address-using-python/
-
-class Donation(js.JsonSaveable):
-    id = js.Int()
-    amount = js.Float()
-    date = js.DateTime()
-
-    def __init__(self, id: int, amount: float, date: datetime=datetime.datetime.utcnow()):
-        self.id = id
-        self.amount = amount
-        self.date = date
-
-    def __repr__(self):
-            return str(self.to_json_compat())
-class Donor(js.JsonSaveable):
+class Donor(BaseModel):
     """donor giving to organization"""
-    id = js.Int()
-    firstname = js.String()
-    lastname = js.String()
-    email = js.String()
-    _donations = js.List()
-    _donation_id = js.Int()
-
-    def __init__(self, id, firstname=None, lastname=None, email=None):
-        """args:
-            id (int): identification for donor.  Will try to force to int when
-                initiated or raise error.
-            firstname (str, optional): string representing given name
-            lastnamt (str, optional): string representing surname
-
-            _donations (list): contains Donation objects from donor
-            _donation_id (int): tracks indentification for donations"""
-        try:
-            self.id = int(id)
-        except ValueError:
-            raise ValueError('id input should be interpreted as integer')
-        self.firstname = firstname
-        self.lastname = lastname
-        self.email = email
-        self._donations = []
-        self._donation_id = 1
+    donor_name = CharField(primary_key=True, max_length=50)
+    email = CharField( max_length=50)
 
     def donation_total(self):
         """returns the total amount the donor has donated"""

@@ -1,19 +1,19 @@
 """donor class controlling donor behavior"""
-
-from collections import namedtuple
 import datetime
-from json_save.json_save import json_save_meta as js
+from peewee import IntegerField, ForeignKeyField, DateField
+from peewee import Check
+from mailroom.BaseModel import BaseModel
+from mailroom.Donor import Donor
 
 
-class Donation(js.JsonSaveable):
-    id = js.Int()
-    amount = js.Float()
-    date = js.DateTime()
+class Donation(BaseModel):
+    donation_amount_cents = IntegerField(null=False,
+                                         constraints=[Check('price >= 0')])
+    donation_donor = ForeignKeyField(Donor, related_name='was_filled_by',
+                                     null=False)
+    donation_date = DateField(null=False, default=datetime.datetime.today())
 
-    def __init__(self, id: int, amount: float, date: datetime=datetime.datetime.utcnow()):
-        self.id = id
-        self.amount = amount
-        self.date = date
-
-    def __repr__(self):
-            return str(self.to_json_compat())
+    @property
+    def donation_amount(self):
+        """returns donation_amount_cents in dollars"""
+        return self.donation_amount_cents/100
