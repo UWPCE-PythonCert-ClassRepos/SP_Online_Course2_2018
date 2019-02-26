@@ -152,3 +152,6 @@ class DonationController():
     def send_donation_thank_you(self, message):
         """sends donation thank you to donor"""
         pass
+    
+    def send_letters_to_everyone(self):
+        pass
