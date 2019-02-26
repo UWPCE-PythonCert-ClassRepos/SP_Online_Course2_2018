@@ -58,19 +58,21 @@ class DonationController():
         the donation amount should be in dollar cents (eg ###.##)
         the donor name should be full name of donor.
         Optional parameter is date which should be datetime object."""
+        self.logger.info(f'creating donation of amount {amount}')
         if not self.find_donor(donor_name=donor):
+            self.logger.info('donor not found, creating donor')
             self.create_donor(donor_name=donor)
-            
+        self.logger.info('creating donation finally')
         return Donation.create(donation_donor=donor, donation_amount=amount, date=date)
 
     def get_total_donations(self):
         """returns total donations in controller"""
         return (Donation
-         .select(fn.Sum(Donation.donation_amount).alias('total_donation'))
+         .select(fn.Sum(Donation.donation_amount).alias('total_donation')))
 
     def display_donors(self):
         """displays a list of donors in printed format"""
-        print("\n".join(Donor.select(Donor.donor_name)))
+        print("\n".join([donor.donor_name for donor in Donor.select(Donor.donor_name)]))
 
     def donor_report(self):
         """handles process for main screens report selection
@@ -99,11 +101,42 @@ class DonationController():
         print(f"{'Donor Name':<26}|{'Total Given':^15}|"
             f"{'Num Gifts':^11}|{'Average Gift':^15}")
         print('-'*70)
-        donor_stats = [donor.summarize_donor() for id, donor in self.donors.items()]
-        donor_stats.sort(key=lambda tup: tup[2], reverse=True)
-        for summary in donor_stats:
-            print(f"{summary[1]:<26} ${summary[2]/100:>13.2f}  "
-                f"{summary[3]:>10}  ${summary[4]/100:>14.2f}")
+        donor_stats = self.summarize_donors()
+        for person, stats in donor_stats.items():
+            print(f"{person:<26} ${stats['donation_total']:>13.2f}  "
+                f"{stats['donation_count']:>10}  ${stats['average_donation']:>14.2f}")
+
+    def summarize_donors(self):
+        """creats summar report of donors.  Default values to 0 if no donations present.
+        returns:
+            dict of donors summary
+                donor_name: key str of donors name
+                total_donations: float of total given to date
+                donation_count: int of total gifts
+                average_donation: float of average amount per donation"""
+        query = (Donor
+                 .select(Donor.donor_name, 
+			     fn.sum(Donation.donation_amount_cents).alias('donation_total')
+				 , fn.count(Donation.donation_amount_cents).alias('donation_count')
+				 , fn.avg(Donation.donation_amount_cents).alias('average_donation')
+				 )
+                .join(Donation, JOIN.LEFT_OUTER)
+                .group_by(Donor).dicts()
+                .order_by(-fn.sum(Donation.donation_amount_cents))
+                )
+        results = {i['donor_name']: i for i in query}
+
+        # normailze results to have 0s in place of None
+        results_mod = {}
+        for key, value in results.items():
+            inner_results = {}
+            for key_, value_ in value.items():
+                if value_ is None:
+                    value_ = 0
+                inner_results[key_] = value_
+            results_mod[key] = inner_results
+        return results_mod
+
 
     def create_donation_thank_you(self, donor, amount):
         """prints thank you message to terminal for donation"""
