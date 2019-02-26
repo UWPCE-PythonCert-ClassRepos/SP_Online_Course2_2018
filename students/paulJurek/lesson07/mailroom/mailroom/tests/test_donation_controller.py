@@ -48,4 +48,4 @@ def test_error_when_create_donation_for_missing_donor(donation_controller):
     if donation_controller.find_donor(donor):
         donation_controller.create_donation(donor='not a donor', amount=500)
     else:
-        donation_controller.create_donor()
+        donation_controller.create_donor(donor_name=donor)
