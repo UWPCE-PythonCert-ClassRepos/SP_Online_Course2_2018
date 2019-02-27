@@ -70,7 +70,10 @@ def send_thank_you_letters():
 def edit_donation_menu():
     """menu to control editing the donations.  The donation 
     database allows modification of donations but not of donors.  Donation
-    amounts and dates can be modified"""
+    amounts and dates can be modified.
+    
+    To support editing donation, this menu provides ability for user to 
+    explore donations prior to selecting edits."""
 
     MENU_OPTIONS = {
                     '1': controller.display_donors,
@@ -87,7 +90,10 @@ def edit_donation_menu():
     menu_selection(user_input, MENU_OPTIONS)
 
 def list_donations():
-    pass
+    """displays a list of donations for the donor"""
+    donor = input('Input Donor Name: ')
+    print(donor)
+    controller.display_donor_donations(donor)
 
 def edit_donations():
     pass

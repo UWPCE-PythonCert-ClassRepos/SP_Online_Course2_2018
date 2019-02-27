@@ -73,6 +73,19 @@ class DonationController():
     def display_donors(self):
         """displays a list of donors in printed format"""
         print("\n".join([donor.donor_name for donor in Donor.select(Donor.donor_name)]))
+    
+    def display_donor_donations(self, donor: str):
+        """displays donor donations with most recent first"""
+        query = (Donation
+                 .select(Donation.id,
+                         Donation.donation_amount_cents, 
+                         Donation.donation_date)
+                 .where(Donation.donation_donor == donor).dicts()
+                 .order_by(-Donation.donation_date)
+                )
+        for i in query:
+            print(i)
+
 
     def donor_report(self):
         """handles process for main screens report selection
