@@ -33,7 +33,7 @@ class IterateMe_1:
 if __name__ == "__main__":
 
     print("Testing the iterator")
-    for i in IterateMe_1(5,35,5):
+    for i in IterateMe_1():
         print(i)
 
     print("Testing again")
@@ -49,3 +49,6 @@ if __name__ == "__main__":
         print(i)
 
 
+##Does range() behave the same? Yes, range() and IterateMe() are both iterable objects,
+# but the objects are not iterators. You can use the iter() function to return an iterator,
+#and iterate through the range of the object with next().
