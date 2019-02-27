@@ -92,11 +92,17 @@ def edit_donation_menu():
 def list_donations():
     """displays a list of donations for the donor"""
     donor = input('Input Donor Name: ')
-    print(donor)
     controller.display_donor_donations(donor)
 
 def edit_donations():
-    pass
+    donation_id = int(input('Input donation id: '))
+    donation = Donation.get(Donation.id == donation_id)
+    print(f'donation.id: {donation.id} '
+          f'donation.donation_donor: {donation.donation_donor} '
+          f'donation.donation_amount: {donation.donation_amount} '
+          f'donation.donation_date: {donation.donation_date}')
+    donation.donation_amount = int(input('Please enter new donation amount: '))
+    donation.save()    
 
 if __name__ == '__main__':
     main_menu()
