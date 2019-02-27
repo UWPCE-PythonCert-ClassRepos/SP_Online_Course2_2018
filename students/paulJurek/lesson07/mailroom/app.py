@@ -30,7 +30,7 @@ def main_menu():
                   '\t1: Create Donation\n'
                   '\t2: Create Donor Report\n'
                   '\t3: Send donors Thank Yous\n'
-                  '\t4: Edit Donations\n'    
+                  '\t4: Edit Records\n'
                   '\t0: Quit\n'
                   'Please input number for option: ')
 
@@ -39,7 +39,7 @@ def main_menu():
 
 def create_donation_menu():
     """calls create donation menu
-    
+
     this menu allows users to create donations for users"""
 
     while True:
@@ -54,7 +54,7 @@ def create_donation_menu():
         else:
             donation_amount = int(input("Select donation amount: "))
             controller.create_donation(donor=donor_selection, amount=donation_amount)
-            
+
             break
 
 
@@ -68,22 +68,28 @@ def send_thank_you_letters():
     controller.send_letters_to_everyone()
 
 def edit_donation_menu():
-    """menu to control editing the donations.  The donation 
+    """menu to control editing the donations.  The donation
     database allows modification of donations but not of donors.  Donation
     amounts and dates can be modified.
-    
-    To support editing donation, this menu provides ability for user to 
+
+    To support editing donation, this menu provides ability for user to
     explore donations prior to selecting edits."""
 
     MENU_OPTIONS = {
                     '1': controller.display_donors,
                     '2': list_donations,
-                    '3': edit_donations
+                    '3': edit_donations,
+                    '4': edit_donor,
+                    '5': delete_donation,
+                    '6': delete_donor,
                     }
     user_input = ('Options:\n'
                   '\t1: List Donors\n'
                   '\t2: List Donations for Donor\n'
                   '\t3: Edit Donation\n'
+                  '\t4: Edit Donor\n'
+                  '\t5: Delete Donation\n'
+                  '\t6: Delete Donor\n'
                   '\t0: Quit\n'
                   'Please input number for option: ')
 
@@ -104,6 +110,26 @@ def edit_donations():
     new_donation_amount = int(input('Please enter new donation amount: '))
     # in future look at adding more options on donations here
     controller.update_donation(donation, 'donation_amount', new_donation_amount)
+
+def edit_donor():
+    """editing script for donor.  Only email edits allowed"""
+    donor_name = input('Input donor name to edit: ')
+    donor = Donor.get(Donor.donor_name == donor_name)
+    print(f'donor.donor_name: {donor.donor_name} '
+          f'donor.email: {donor.email} ')
+    new_email = input('Please enter new email: ')
+    # in future look at adding more options on donations here
+    controller.update_donor(donor=donor, value=new_email)
+
+def delete_donation():
+    """deletes donation record from database"""
+    donation_id = int(input('Input donation id: '))
+    controller.delete_donation(donation_id)
+
+def delete_donor():
+    """deletes donor and donations from database"""
+    donor_name = input('Input donor name to edit: ')
+    controller.delete_donor(donor_name)
 
 if __name__ == '__main__':
     main_menu()
