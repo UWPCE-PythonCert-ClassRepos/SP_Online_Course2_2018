@@ -1,0 +1,95 @@
+
+"""
+File Name: brackneyDebugging.txt
+Author: Travis Brackney
+Class: Python 220 - Self paced online
+Date Created 2/18/2019
+"""
+
+The my_fun function gets stuck in an infinite recursion loop because the function will only return if the value equals 2.  The function will only
+return if the argument is a power of two.  Otherwise it will keep calling the function with smaller fractions of the initial value until the recursion
+limit is reached.
+
+Here is my debugging log:
+(lesson1) PS C:\Users\Travis\code\SP_Online_Course2_2018\students\tbrackney\Lesson5> python -m pdb .\recursive.py 15
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(1)<module>()
+-> import sys
+(Pdb) s
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(4)<module>()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) s
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(11)<module>()
+-> n = int(sys.argv[1])
+(Pdb) pp n
+*** NameError: name 'n' is not defined
+(Pdb) s
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(12)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+15
+(Pdb) s
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+7.5
+(Pdb) pp n--KeyboardInterrupt--
+(Pdb) s
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+7.5
+(Pdb) s
+--Call--
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+3.75
+(Pdb) ll
+  4  -> def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7         return my_fun(n/2)
+(Pdb) l
+  1     import sys
+  2
+  3
+  4  -> def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7         return my_fun(n/2)
+  8
+  9
+ 10     if __name__ == '__main__':
+ 11         n = int(sys.argv[1])
+(Pdb) s
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+3.75
+(Pdb) s
+--Call--
+> c:\users\travis\code\sp_online_course2_2018\students\tbrackney\lesson5\recursive.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+1.875
+(Pdb)
