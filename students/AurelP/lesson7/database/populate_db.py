@@ -175,13 +175,13 @@ def pp_print():
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
         query = (Job.select())
-        print ("----------------------------------------------------------------------------")
-        pprint('{:30} - {:15} - {:10} - {:5}'.format(
-            'Job Name', 'Duration (days)', 'Name', 'Department'))
-        print ("----------------------------------------------------------------------------")
+        print ("--------------------------------------------------------------------------------------")
+        pprint('{:25} - {:10} - {:15} - {:5}'.format(
+            'Job Name', 'Duration', 'Name', 'Department'))
+        print ("--------------------------------------------------------------------------------------")
         for job in query:
-            pprint('{:30} - {:15} - {:10} - {:5}'.format(
-                job.job_name, str(job.duration_days), str(job.person_employed), str(job.job_department)
+            pprint('{:25} - {:10} - {:15} - {:5}'.format(
+                job.job_name, str(job.duration_days), str(job.person_employed.person_name), str(job.job_department.dept_name)
             ))
     except Exception as e:
         logger.info(f'Error printing')
