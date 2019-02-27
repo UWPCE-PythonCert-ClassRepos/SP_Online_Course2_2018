@@ -168,3 +168,13 @@ class DonationController():
     
     def send_letters_to_everyone(self):
         pass
+
+    def update_donation(self, donation, field, value):
+        """update interface to update donation field in database
+        args:
+            donation: id for donation to update
+            field: filed in donation database to update
+            value: new value for update"""
+        donation = Donation.get(Donation.id == donation)
+        setattr(donation, field, value)
+        donation.save()

@@ -101,8 +101,9 @@ def edit_donations():
           f'donation.donation_donor: {donation.donation_donor} '
           f'donation.donation_amount: {donation.donation_amount} '
           f'donation.donation_date: {donation.donation_date}')
-    donation.donation_amount = int(input('Please enter new donation amount: '))
-    donation.save()    
+    new_donation_amount = int(input('Please enter new donation amount: '))
+    # in future look at adding more options on donations here
+    controller.update_donation(donation, 'donation_amount', new_donation_amount)
 
 if __name__ == '__main__':
     main_menu()
