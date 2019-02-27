@@ -24,11 +24,13 @@ def main_menu():
     """calls main menu for program"""
     MAIN_MENU_OPTIONS = {'1': create_donation_menu,
                          '2': donor_report_menu,
-                         '3': send_thank_you_letters}
+                         '3': send_thank_you_letters,
+                         '4': edit_donation_menu}
     user_input = ('Options:\n'
                   '\t1: Create Donation\n'
                   '\t2: Create Donor Report\n'
                   '\t3: Send donors Thank Yous\n'
+                  '\t4: Edit Donations\n'    
                   '\t0: Quit\n'
                   'Please input number for option: ')
 
@@ -64,6 +66,31 @@ def donor_report_menu():
 def send_thank_you_letters():
     """sends thank you letters to all our donors"""
     controller.send_letters_to_everyone()
+
+def edit_donation_menu():
+    """menu to control editing the donations.  The donation 
+    database allows modification of donations but not of donors.  Donation
+    amounts and dates can be modified"""
+
+    MENU_OPTIONS = {
+                    '1': controller.display_donors,
+                    '2': list_donations,
+                    '3': edit_donations
+                    }
+    user_input = ('Options:\n'
+                  '\t1: List Donors\n'
+                  '\t2: List Donations for Donor\n'
+                  '\t3: Edit Donation\n'
+                  '\t0: Quit\n'
+                  'Please input number for option: ')
+
+    menu_selection(user_input, MENU_OPTIONS)
+
+def list_donations():
+    pass
+
+def edit_donations():
+    pass
 
 if __name__ == '__main__':
     main_menu()
