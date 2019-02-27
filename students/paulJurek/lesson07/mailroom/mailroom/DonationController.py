@@ -169,7 +169,7 @@ class DonationController():
     def send_letters_to_everyone(self):
         pass
 
-    def update_donation(self, donation, field, value):
+    def update_donation(self, donation, value, field='donation_amount'):
         """update interface to update donation field in database
         args:
             donation: id for donation to update
@@ -178,3 +178,26 @@ class DonationController():
         donation = Donation.get(Donation.id == donation)
         setattr(donation, field, value)
         donation.save()
+    
+    def update_donor(self, donor, value, field='email'):
+        """update interface to update donor field in database. 
+        Defaults to email only but setup to easily expand in future.
+        args:
+            donor: donor name to adjust
+            field: filed in donation database to update
+            value: new value for update"""
+        donor = Donor.get(Donor.donor_name == donor)
+        setattr(donor, field, value)
+        donor.save()
+
+    def delete_donation(self, donation):
+        """deletes donation from database.  Has 
+        not impact on donors"""
+        donation = Donation.get(Donation.id == donation)
+        donation.delete_instance()
+    
+    def delete_donor(self, donor):
+        """deletes donor from database.  deletes all donations 
+        associated with donor as well"""
+        donor = Donor.get(Donor.donor_name == donor)
+        donor.delete_instance(recursive=True)
