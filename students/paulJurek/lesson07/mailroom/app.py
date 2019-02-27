@@ -1,7 +1,6 @@
 """entry point to mailroom application"""
 
 import logging
-from pathlib import Path
 from mailroom.DonationController import DonationController
 from mailroom.helpers import menu_selection
 from mailroom.Donation import Donation
@@ -19,6 +18,7 @@ database.create_tables([Donation, Donor])
 
 # start initial controller
 controller = DonationController()
+
 
 def main_menu():
     """calls main menu for program"""
@@ -53,8 +53,8 @@ def create_donation_menu():
             break
         else:
             donation_amount = int(input("Select donation amount: "))
-            controller.create_donation(donor=donor_selection, amount=donation_amount)
-
+            controller.create_donation(donor=donor_selection,
+                                       amount=donation_amount)
             break
 
 
@@ -66,6 +66,7 @@ def donor_report_menu():
 def send_thank_you_letters():
     """sends thank you letters to all our donors"""
     controller.send_letters_to_everyone()
+
 
 def edit_donation_menu():
     """menu to control editing the donations.  The donation
@@ -95,10 +96,12 @@ def edit_donation_menu():
 
     menu_selection(user_input, MENU_OPTIONS)
 
+
 def list_donations():
     """displays a list of donations for the donor"""
     donor = input('Input Donor Name: ')
     controller.display_donor_donations(donor)
+
 
 def edit_donations():
     donation_id = int(input('Input donation id: '))
@@ -111,6 +114,7 @@ def edit_donations():
     # in future look at adding more options on donations here
     controller.update_donation(donation, 'donation_amount', new_donation_amount)
 
+
 def edit_donor():
     """editing script for donor.  Only email edits allowed"""
     donor_name = input('Input donor name to edit: ')
@@ -121,10 +125,12 @@ def edit_donor():
     # in future look at adding more options on donations here
     controller.update_donor(donor=donor, value=new_email)
 
+
 def delete_donation():
     """deletes donation record from database"""
     donation_id = int(input('Input donation id: '))
     controller.delete_donation(donation_id)
+
 
 def delete_donor():
     """deletes donor and donations from database"""

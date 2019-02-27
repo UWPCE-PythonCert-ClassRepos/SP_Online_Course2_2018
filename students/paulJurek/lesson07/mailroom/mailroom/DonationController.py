@@ -7,7 +7,6 @@ and management of donations"""
 import copy
 import datetime
 import logging
-from pathlib import Path
 
 from peewee import *
 
@@ -17,12 +16,12 @@ from . Donation import Donation
 
 class DonationController():
     """organization controller for donations
-    upon initiation, the Donation controller will first look if the file 
-    already exists in the directory.  If so, this will be loaded.  
-    If not, a new one will be created.  The application is initalized with 
+    upon initiation, the Donation controller will first look if the file
+    already exists in the directory.  If so, this will be loaded.
+    If not, a new one will be created.  The application is initalized with
     empty donors.
 
-    Through the controller new donors, donation and reports are created.  
+    Through the controller new donors, donation and reports are created.
     """
 
     def __init__(self):
@@ -41,9 +40,9 @@ class DonationController():
             return None
 
     def create_donor(self, donor_name: str, donor_email: str = None) -> Donor:
-        """creates donor in donation controller.  Accepts donor_name and email 
-        then creates object.  This first checks if donor already exists and raises
-        error to avoid duplication.  
+        """creates donor in donation controller.  Accepts donor_name and email
+        then creates object.  This first checks if donor already exists and
+        raises error to avoid duplication.
         args:
             donor_name: name for donor
             donor_email: contact email for donor
@@ -63,26 +62,30 @@ class DonationController():
             self.logger.info('donor not found, creating donor')
             self.create_donor(donor_name=donor)
         self.logger.info('creating donation finally')
-        return Donation.create(donation_donor=donor, donation_amount=amount, date=date)
+        return Donation.create(donation_donor=donor,
+                               donation_amount=amount,
+                               date=date)
 
     def get_total_donations(self):
         """returns total donations in controller"""
         return (Donation
-         .select(fn.Sum(Donation.donation_amount).alias('total_donation')))
+                .select(fn.Sum(Donation.donation_amount)
+                .alias('total_donation')))
 
     def display_donors(self):
         """displays a list of donors in printed format"""
-        print("\n".join([donor.donor_name for donor in Donor.select(Donor.donor_name)]))
-    
+        print("\n".join([donor.donor_name for donor in
+                         Donor.select(Donor.donor_name)]))
+
     def display_donor_donations(self, donor: str):
         """displays donor donations with most recent first"""
         query = (Donation
                  .select(Donation.id,
-                         Donation.donation_amount_cents, 
+                         Donation.donation_amount_cents,
                          Donation.donation_date)
                  .where(Donation.donation_donor == donor).dicts()
                  .order_by(-Donation.donation_date)
-                )
+                 )
         for i in query:
             print(i)
 
@@ -90,7 +93,8 @@ class DonationController():
     def donor_report(self):
         """handles process for main screens report selection
 
-        If the user (you) selected “Create a Report”, print a list of your donors,
+        If the user (you) selected “Create a Report”, print a list of your
+        donors,
         sorted by total historical donation amount.
         Include Donor Name, total donated, number of donations and average
         donation amount as values in each row. You do not need to print out all
@@ -128,11 +132,11 @@ class DonationController():
                 donation_count: int of total gifts
                 average_donation: float of average amount per donation"""
         query = (Donor
-                 .select(Donor.donor_name, 
-			     fn.sum(Donation.donation_amount_cents).alias('donation_total')
-				 , fn.count(Donation.donation_amount_cents).alias('donation_count')
-				 , fn.avg(Donation.donation_amount_cents).alias('average_donation')
-				 )
+                 .select(Donor.donor_name,
+                 fn.sum(Donation.donation_amount_cents).alias('donation_total')
+                 , fn.count(Donation.donation_amount_cents).alias('donation_count')
+                 , fn.avg(Donation.donation_amount_cents).alias('average_donation')
+                 )
                 .join(Donation, JOIN.LEFT_OUTER)
                 .group_by(Donor).dicts()
                 .order_by(-fn.sum(Donation.donation_amount_cents))
@@ -165,7 +169,7 @@ class DonationController():
     def send_donation_thank_you(self, message):
         """sends donation thank you to donor"""
         pass
-    
+
     def send_letters_to_everyone(self):
         pass
 
@@ -178,9 +182,9 @@ class DonationController():
         donation = Donation.get(Donation.id == donation)
         setattr(donation, field, value)
         donation.save()
-    
+
     def update_donor(self, donor, value, field='email'):
-        """update interface to update donor field in database. 
+        """update interface to update donor field in database.
         Defaults to email only but setup to easily expand in future.
         args:
             donor: donor name to adjust
@@ -191,13 +195,13 @@ class DonationController():
         donor.save()
 
     def delete_donation(self, donation):
-        """deletes donation from database.  Has 
+        """deletes donation from database.  Has
         not impact on donors"""
         donation = Donation.get(Donation.id == donation)
         donation.delete_instance()
-    
+
     def delete_donor(self, donor):
-        """deletes donor from database.  deletes all donations 
+        """deletes donor from database.  deletes all donations
         associated with donor as well"""
         donor = Donor.get(Donor.donor_name == donor)
         donor.delete_instance(recursive=True)
