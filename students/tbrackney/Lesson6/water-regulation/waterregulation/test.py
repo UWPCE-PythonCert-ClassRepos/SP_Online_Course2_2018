@@ -20,6 +20,12 @@ class DeciderTests(unittest.TestCase):
     # TODO: write a test or tests for each of the behaviors defined for
     #       Decider.decide
 
+    def setup(self):
+        """Create dummy instance"""
+        self.decider = Decider(100, 0.05)
+        self.actions = {"PUMP_IN": 1, "PUMP_OUT": -1, "PUMP_OFF": 0}
+
+
     def test_dummy(self):
         """
         Just some example syntax that you might use
@@ -29,6 +35,11 @@ class DeciderTests(unittest.TestCase):
         pump.set_state = MagicMock(return_value=True)
 
         self.fail("Remove this test.")
+
+    def test_pump_in(self):
+        call = self.decider.decide(90, self.actions['PUMP_OFF'], self.actions)
+        expected = self.actions['PUMP_IN']
+        self.assertEqual(call, expected)
 
 
 class ControllerTests(unittest.TestCase):
