@@ -10,7 +10,7 @@ class Locke():
         return "Locke({})".format(self.capacity)
 
     def __enter__(self):
-        print("\nEntering locke {}".format(self))
+        print("\nEntering {}".format(self))
         self.stop_pumps()
         self.open_doors()
         self.close_doors()
@@ -18,7 +18,7 @@ class Locke():
         return self
 
     def __exit__(self, type, value, traceback):
-        print("\nExiting locke {}".format(self))
+        print("\nExiting {}".format(self))
         self.stop_pumps()
         self.open_doors()
         self.close_doors()
@@ -44,15 +44,16 @@ class Locke():
             raise ValueError('Locke of size {} only fits up to {} boats.'
                 .format(self.capacity, self.capacity))
         else:
-            print('\nMoving boats through Locke({}).'.format(self.capacity))
+            print('\nMoving {} boats through Locke({}).'.format(boats,
+                self.capacity))
 
 if __name__ == '__main__':
     small_locke = Locke(5)
     large_locke = Locke(10)
     boats = 8
 
-    with small_locke as locke:
+    with large_locke as locke:
         locke.move_boats_through(boats)
 
-    with large_locke as locke:
+    with small_locke as locke:
         locke.move_boats_through(boats)
