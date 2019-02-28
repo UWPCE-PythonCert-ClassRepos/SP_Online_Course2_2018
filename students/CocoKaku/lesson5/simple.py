@@ -42,7 +42,7 @@ def my_fun(n):
         try:
             100 / (50 - i)
         except ZeroDivisionError:
-            logging.error(f"Tried to divide by zero. Var i was {i}. Recovered gracefully.")
+            logging.error("Tried to divide by zero. Var i was %d. Recovered gracefully.", i)
 
 
 if __name__ == "__main__":
