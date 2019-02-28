@@ -1,0 +1,98 @@
+The function is recursive but has not catch for input values which are not powers of 2.  This results in inputs like 15 missing the n==2 catch and getting stuck in the recursion.  The value being input keeps getting smaller and causing value to skip catch criteria (2) and approach 0.  Since there is nothing in logic to increase value it keeps running.  A simple fix would put catch if n<2 return False.  
+
+Below is my debuggin log:
+PS C:\Users\pjure\Documents\software\python\SP_Online_Course2_2018\students\paulJurek\lesson05> python -m pdb recursive.
+py 15
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3     def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6
+  7         return my_fun(n/2)
+  8
+  9     if __name__ == '__main__':
+ 10         n = int(sys.argv[1])
+ 11         print(my_fun(n))
+(Pdb) b 7
+Breakpoint 1 at c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py:7
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(9)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(10)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(11)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+15
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+7.5
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+1.875
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.9375
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb)
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) n
+> c:\users\pjure\documents\software\python\sp_online_course2_2018\students\pauljurek\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb)  pp n
+0.00091552734375
+(Pdb)

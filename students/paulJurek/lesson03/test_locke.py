@@ -31,7 +31,6 @@ def test_locke_rejects_boats_count_over_limit():
     (-1),
     (1.2),
     (0.123),
-    ('hello')
 ])
 def test_locke_errors_on_bad_inputs(bad_input):
     """given inputs other than positive ints or 0
@@ -39,6 +38,15 @@ def test_locke_errors_on_bad_inputs(bad_input):
     locke1 = Locke(5)
     boats = bad_input
     with pytest.raises(ValueError):
+        with locke1:
+            locke1.move_boats_through(boats)
+
+def test_locke_typeerrors_on_str_inputs():
+    """given inputs other than positive ints or 0
+    the locke sends inputerror on initialization"""
+    locke1 = Locke(5)
+    boats = 'hello'
+    with pytest.raises(TypeError):
         with locke1:
             locke1.move_boats_through(boats)
 
@@ -56,7 +64,8 @@ def test_std_output_tells_story(capsys):
     assert captured[2] == "moving boats"
     assert captured[3] == "closing door1"
     assert captured[4] == "starting pumps"
-    assert captured[5] == "open door 2"
-    assert captured[6] == "moving boats"
-    assert captured[7] == "closing door 2"
+    assert captured[5] == "moving 4 boats through locks"
+    assert captured[6] == "open door 2"
+    assert captured[7] == "moving boats"
+    assert captured[8] == "closing door 2"
 
