@@ -10,10 +10,15 @@ import logging
 
 from peewee import *
 
+# TODO: database imports should only be performed on initation
 from . Donor import Donor
 from . Donation import Donation
 
-
+# TODO: create database ABC
+# TODO: create subclasses for sqlite
+# TODO: create subclass for mongodb
+# TODO: create subclass for Redis
+# TODO: create subclass for New4J
 class DonationController():
     """organization controller for donations
     upon initiation, the Donation controller will first look if the file
@@ -26,6 +31,7 @@ class DonationController():
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        # TODO: create composition of database
 
     def find_donor(self, donor_name: str):
         """searches through donor list and returns donor
@@ -35,7 +41,9 @@ class DonationController():
         returns:
             donor object"""
         try:
+            # TODO: use database composition
             return Donor.get(Donor.donor_name == donor_name)
+        # TODO: create custom error for abstraction
         except Donor.DoesNotExist:
             return None
 
@@ -50,6 +58,7 @@ class DonationController():
             donor inctance
             """
         self.logger.info('creating new donor')
+        # TODO: abstract creation of donor to Donor composition
         return Donor.create(donor_name=donor_name, donor_email=donor_email)
 
     def create_donation(self, amount, donor, date=datetime.datetime.utcnow()):
@@ -62,23 +71,27 @@ class DonationController():
             self.logger.info('donor not found, creating donor')
             self.create_donor(donor_name=donor)
         self.logger.info('creating donation finally')
+        # TODO: abstract creation on donation to donation composition
         return Donation.create(donation_donor=donor,
                                donation_amount=amount,
                                date=date)
 
     def get_total_donations(self):
         """returns total donations in controller"""
+        # TODO: abstract report to database
         return (Donation
                 .select(fn.Sum(Donation.donation_amount)
                 .alias('total_donation')))
 
     def display_donors(self):
         """displays a list of donors in printed format"""
+        # TODO: abstract to database
         print("\n".join([donor.donor_name for donor in
                          Donor.select(Donor.donor_name)]))
 
     def display_donor_donations(self, donor: str):
         """displays donor donations with most recent first"""
+        # TODO: abstract to database
         query = (Donation
                  .select(Donation.id,
                          Donation.donation_amount_cents,
@@ -124,6 +137,7 @@ class DonationController():
                 f"{stats['donation_count']:>10}  ${stats['average_donation']:>14.2f}")
 
     def summarize_donors(self):
+        # TODO: abstract to database
         """creats summar report of donors.  Default values to 0 if no donations present.
         returns:
             dict of donors summary
@@ -168,10 +182,11 @@ class DonationController():
 
     def send_donation_thank_you(self, message):
         """sends donation thank you to donor"""
-        pass
+        print('we sent a thank you!')
 
     def send_letters_to_everyone(self):
-        pass
+        """dummy here as this isn't really needed"""
+        print('a lot of letters sent!')
 
     def update_donation(self, donation, value, field='donation_amount'):
         """update interface to update donation field in database
@@ -182,6 +197,7 @@ class DonationController():
         donation = Donation.get(Donation.id == donation)
         setattr(donation, field, value)
         donation.save()
+        # TODO: abstract to database
 
     def update_donor(self, donor, value, field='email'):
         """update interface to update donor field in database.
@@ -193,15 +209,18 @@ class DonationController():
         donor = Donor.get(Donor.donor_name == donor)
         setattr(donor, field, value)
         donor.save()
+        # TODO: abstract to database
 
     def delete_donation(self, donation):
         """deletes donation from database.  Has
         not impact on donors"""
+        # TODO: abstract to database
         donation = Donation.get(Donation.id == donation)
         donation.delete_instance()
 
     def delete_donor(self, donor):
         """deletes donor from database.  deletes all donations
         associated with donor as well"""
+        # TODO: abstract to database
         donor = Donor.get(Donor.donor_name == donor)
         donor.delete_instance(recursive=True)

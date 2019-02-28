@@ -7,11 +7,15 @@ from mailroom.Donation import Donation
 from mailroom.Donor import Donor
 from mailroom.config import database
 
+# TODO: remove peewee import
 from peewee import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# TODO: move database connection to controller depending on database selection
+# TODO: setup config which drives database used
+# TODO: setup confit to build database on setup
 database.connect()
 database.execute_sql('PRAGMA foreign_keys = ON;')
 database.create_tables([Donation, Donor])
@@ -102,9 +106,10 @@ def list_donations():
     donor = input('Input Donor Name: ')
     controller.display_donor_donations(donor)
 
-
+# TODO: move this to controller
 def edit_donations():
     donation_id = int(input('Input donation id: '))
+    # TODO: add get donation detail to controller
     donation = Donation.get(Donation.id == donation_id)
     print(f'donation.id: {donation.id} '
           f'donation.donation_donor: {donation.donation_donor} '
@@ -114,10 +119,11 @@ def edit_donations():
     # in future look at adding more options on donations here
     controller.update_donation(donation, 'donation_amount', new_donation_amount)
 
-
+# TODO: move this to controller
 def edit_donor():
     """editing script for donor.  Only email edits allowed"""
     donor_name = input('Input donor name to edit: ')
+    # TODO: add get_donor_info to controller
     donor = Donor.get(Donor.donor_name == donor_name)
     print(f'donor.donor_name: {donor.donor_name} '
           f'donor.email: {donor.email} ')
@@ -138,4 +144,7 @@ def delete_donor():
     controller.delete_donor(donor_name)
 
 if __name__ == '__main__':
-    main_menu()
+    try:
+        main_menu()
+    finally:
+        database.close()
