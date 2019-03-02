@@ -1,0 +1,52 @@
+{
+    "__obj_type": "DonorDict",
+    "_donors": {
+        "han solo": {
+            "__obj_type": "Donor",
+            "_name": "han solo",
+            "_donations": [
+                3468.34,
+                457,
+                34.2
+            ]
+        },
+        "luke skywalker": {
+            "__obj_type": "Donor",
+            "_name": "luke skywalker",
+            "_donations": [
+                5286286.3,
+                567,
+                23.5678
+            ]
+        },
+        "chewbacca": {
+            "__obj_type": "Donor",
+            "_name": "chewbacca",
+            "_donations": [
+                432,
+                679.4553
+            ]
+        },
+        "princess leia": {
+            "__obj_type": "Donor",
+            "_name": "princess leia",
+            "_donations": [
+                5.3434
+            ]
+        },
+        "bobba fett, bounty hunter": {
+            "__obj_type": "Donor",
+            "_name": "bobba fett, bounty hunter",
+            "_donations": [
+                67
+            ]
+        },
+        "mom": {
+            "__obj_type": "Donor",
+            "_name": "mom",
+            "_donations": [
+                45.0
+            ]
+        }
+    }
+}
