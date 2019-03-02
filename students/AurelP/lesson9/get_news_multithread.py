@@ -8,7 +8,6 @@ import queue
 WORD = "trump"
 
 NEWS_API_KEY = '610b65498b3144de80fb46640912ef5e'
-# my key:   610b65498b3144de80fb46640912ef5e
 
 base_url = 'https://newsapi.org/v1/'
 
