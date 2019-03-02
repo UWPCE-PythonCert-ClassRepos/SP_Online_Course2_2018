@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+class BoatError(Exception):
+    """Locke too small to accomodate boats."""
+    def __init__(self, boats):
+        self.boats = boats
 
 class Locke():
     """Class to model behavior of canal lockes."""
@@ -23,8 +27,9 @@ class Locke():
         self.open_doors()
         self.close_doors()
         self.start_pumps()
-
-        if type:
+        if type is BoatError:
+            return True
+        else:
             return False
 
     def start_pumps(self):
@@ -41,8 +46,9 @@ class Locke():
 
     def move_boats_through(self, boats):
         if boats > self.capacity:
-            raise ValueError('Locke of size {} only fits up to {} boats.'
-                .format(self.capacity, self.capacity))
+            print('\nError: unable to move {} boats through Locke of size {}.'
+                .format(boats, self.capacity))
+            raise BoatError(boats)
         else:
             print('\nMoving {} boats through Locke({}).'.format(boats,
                 self.capacity))

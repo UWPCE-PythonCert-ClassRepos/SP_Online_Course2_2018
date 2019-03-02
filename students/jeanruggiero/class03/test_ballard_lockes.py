@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from ballard_lockes import Locke
+from ballard_lockes import BoatError
 import pytest
 
 small_locke = Locke(5)
@@ -30,7 +31,7 @@ def test_exit():
 
 def test_move_boats_through_error():
     l = Locke(7)
-    with pytest.raises(ValueError):
+    with pytest.raises(BoatError):
         l.move_boats_through(10)
 
 def test_move_boats_through(capsys):
