@@ -123,8 +123,8 @@ def edit_donations():
 def edit_donor():
     """editing script for donor.  Only email edits allowed"""
     donor_name = input('Input donor name to edit: ')
-    # TODO: add get_donor_info to controller
-    donor = Donor.get(Donor.donor_name == donor_name)
+    donor = controller.get_donor_details(donor_name)
+
     print(f'donor.donor_name: {donor.donor_name} '
           f'donor.email: {donor.email} ')
     new_email = input('Please enter new email: ')

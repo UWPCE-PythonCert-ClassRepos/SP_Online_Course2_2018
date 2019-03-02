@@ -224,3 +224,7 @@ class DonationController():
         # TODO: abstract to database
         donor = Donor.get(Donor.donor_name == donor)
         donor.delete_instance(recursive=True)
+
+    def get_donor_details(self, donor_name):
+        """returns donor details in dict give input"""
+        return Donor.get(Donor.donor_name == donor_name)
