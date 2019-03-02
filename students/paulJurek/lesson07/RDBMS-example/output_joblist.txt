@@ -1,0 +1,8 @@
+{'person_name': 'Andrew', 'department_name': 'Marketing', 'job_name': 'Analyst'}
+{'person_name': 'Andrew', 'department_name': 'Marketing', 'job_name': 'Senior analyst'}
+{'person_name': 'Andrew', 'department_name': 'Engineering', 'job_name': 'Senior business analyst'}
+{'person_name': 'Pam', 'department_name': None, 'job_name': None}
+{'person_name': 'Peter', 'department_name': 'Engineering', 'job_name': 'Admin supervisor'}
+{'person_name': 'Peter', 'department_name': 'Engineering', 'job_name': 'Admin manager'}
+{'person_name': 'Steven', 'department_name': None, 'job_name': None}
+{'person_name': 'Susan', 'department_name': None, 'job_name': None}
