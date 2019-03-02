@@ -1,4 +1,7 @@
-"""entry point to mailroom application"""
+"""entry point to mailroom application
+
+TODO:
+* add error catching if inputs for edits don't exist.  """
 
 import logging
 from mailroom.DonationController import DonationController
@@ -110,7 +113,7 @@ def list_donations():
 def edit_donations():
     donation_id = int(input('Input donation id: '))
     # TODO: add get donation detail to controller
-    donation = Donation.get(Donation.id == donation_id)
+    donation = controller.get_donation_details(donation_id)
     print(f'donation.id: {donation.id} '
           f'donation.donation_donor: {donation.donation_donor} '
           f'donation.donation_amount: {donation.donation_amount} '

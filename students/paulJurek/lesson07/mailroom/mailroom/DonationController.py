@@ -228,3 +228,7 @@ class DonationController():
     def get_donor_details(self, donor_name):
         """returns donor details in dict give input"""
         return Donor.get(Donor.donor_name == donor_name)
+
+    def get_donation_details(self, donation_id):
+        """gets details for specific donation"""
+        return Donation.get(Donation.id == donation_id)
