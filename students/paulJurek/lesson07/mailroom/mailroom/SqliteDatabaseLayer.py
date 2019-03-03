@@ -3,11 +3,12 @@
 from peewee import *
 import datetime
 
+database = SqliteDatabase('mailroom.db')
 
 class BaseModel(Model):
     class Meta:
         # to be redifined by DataAccessLayer
-        database = None
+        database = database
 
 
 class Donor(BaseModel):
@@ -34,11 +35,24 @@ class Donation(BaseModel):
         self.donation_amount_cents = int(donation_amount * 100)
 
 
-class SQLiteAccessLayer(DataAccessLayer):
+class SQLiteAccessLayer:
+    """has db_init over just __init__ as some connection 
+    expected to self populate __init__ (eg. sqlalchemy) so 
+    this allows common interface on all layers"""
 
-    def db_init(self, database):
-        """initiates connection to sqlite database"""
-        BaseModel.Meta.database = database
-        self.database = database
+    # tables which this layer controls
+    registered_tables = [Donation, Donor]
+
+    def db_init(self, database: str):
+        """initiates connection to sqlite database
+        args: 
+            database: string representing sqlite database to connect to.  
+                assuming only sqlite databases."""
+        self.database = SqliteDatabase(database)
+        for tbl in self.registered_tables:
+            tbl._meta.database = self.database
         self.database.execute_sql('PRAGMA foreign_keys = ON;')
         self.database.create_tables([Donation, Donor])
+
+    def close(self):
+        self.database.close()

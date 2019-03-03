@@ -9,13 +9,24 @@ from mailroom.Donation import Donation
 from mailroom.config import database
 
 @pytest.fixture
-def donation_controller():
+def sqlite_dbaccess():
+    """setup of initial sqlite database for testing"""
+    from peewee import SqliteDatabase
+    from mailroom.SqliteDatabaseLayer import SQLiteAccessLayer
+
+    access_layer = SQLiteAccessLayer()
+    access_layer.db_init(':memory:')
+
+    yield access_layer
+
+    access_layer.close()
+
+
+@pytest.fixture
+def donation_controller(sqlite_dbaccess):
     """sample controller for save the whales foundation
     setup with basic information and no donations"""
-    database.connect()
-    database.create_tables([Donor, Donation])
-    yield DonationController()
-    database.close()
+    yield DonationController(sqlite_dbaccess)
 
 
 def test_create_new_donor(donation_controller):

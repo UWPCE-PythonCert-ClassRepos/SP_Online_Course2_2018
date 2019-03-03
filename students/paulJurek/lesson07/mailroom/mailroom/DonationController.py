@@ -29,8 +29,9 @@ class DonationController():
     Through the controller new donors, donation and reports are created.
     """
 
-    def __init__(self):
+    def __init__(self, database):
         self.logger = logging.getLogger(__name__)
+        self.database = database
         # TODO: create composition of database
 
     def find_donor(self, donor_name: str):

@@ -1,6 +1,6 @@
 """entry point to mailroom application
 
-TODO:
+TODO: 
 * add error catching if inputs for edits don't exist.  """
 
 import logging
@@ -8,23 +8,16 @@ from mailroom.DonationController import DonationController
 from mailroom.helpers import menu_selection
 from mailroom.Donation import Donation
 from mailroom.Donor import Donor
-from mailroom.config import database
-
-# TODO: remove peewee import
-from peewee import *
+#from mailroom.config import database
+from mailroom.SqliteDatabaseLayer import SQLiteAccessLayer
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# TODO: move database connection to controller depending on database selection
-# TODO: setup config which drives database used
-# TODO: setup confit to build database on setup
-database.connect()
-database.execute_sql('PRAGMA foreign_keys = ON;')
-database.create_tables([Donation, Donor])
 
-# start initial controller
-controller = DonationController()
+database = SQLiteAccessLayer()
+database.db_init('test.db')
+controller = DonationController(database=database)
 
 
 def main_menu():
@@ -112,7 +105,6 @@ def list_donations():
 # TODO: move this to controller
 def edit_donations():
     donation_id = int(input('Input donation id: '))
-    # TODO: add get donation detail to controller
     donation = controller.get_donation_details(donation_id)
     print(f'donation.id: {donation.id} '
           f'donation.donation_donor: {donation.donation_donor} '
