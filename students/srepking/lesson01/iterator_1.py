@@ -17,21 +17,25 @@ class IterateMe_1:
         self.start = start
         self.step = step
 
+    def __next__(self):
+        self.current += self.step
+        if self.current < self.stop:
+            return self.current
+        else:
+            raise StopIteration
+
     def __iter__(self):
-        return IterateMe2(self.start,self.stop,self.step)
+        return IterateMe_helper(self.start,self.stop,self.step)
 
+class IterateMe_helper:
+    """This class is used to generate an interator for the IterateMe_1 Class, so that everytime the for loop is
+    used on an IterateMe_1 instance, a new iterator is created."""
 
-
-# If we wantered IterateMe_1 to behave more like range, we could create a seperate class to handle the iterator object.
-
-
-class IterateMe2:
-    def __init__(self, start, stop, step):
+    def __init__(self, start=0, stop=5, step=1):
         self.current = start-step
         self.stop = stop
         self.start = start
         self.step = step
-
 
     def __next__(self):
         self.current += self.step
@@ -43,37 +47,68 @@ class IterateMe2:
     def __iter__(self):
         return self
 
+
+
+
+# Or create this class that behaves like Range because we are using the range function.
+
+
+class PsuedoRange:
+    def __init__(self, start=0, stop=5, step=1):
+        self.current = start-step
+        self.stop = stop
+        self.start = start
+        self.step = step
+        self.range = range(start, stop, step)
+
+
+    def __iter__(self):
+        for n in self. range:
+            yield int(n)
+
+
+
 if __name__ == "__main__":
 
-    print("Testing the iterator")
-    for i in IterateMe_1():
+    print("Testing PsuedoRange")
+    for i in PsuedoRange():
         print(i)
 
-    print("Testing again with start, stop, and step size set:")
-    it = iter(IterateMe_1(2,20,2)) #'it' is an iterable object. You need to call __iter__ to get the iterator. Just like
-    # in range.
+    print("Testing PsuedoRange again with start, stop, and step size set:")
+    it = PsuedoRange(2,20,2)
     for i in it:
         if i > 10:
             break
         print(i)
 
-    print("Try to pick up the iteration")
-    print(i)
-    print(next(it))
+    print("Emulating range with PsuedoRange, so the cycle should start again after break")
+    for i in it:
+        print(i)
 
 
-
-    print("Compare to range() function, you can't pick up where you left off unless you specifically "
-          "create an iterator with iter(range()). So I proceed by creating an iterator of a range object.")
-    range_it = iter(range(2,20,2))  # this is not an iterator object, and next() wont work on 'range_it'.
-    for i in range_it:  # the for loop would create an iterator object,
-                            # but I wound't be able to call it to continue the iteration after the break.
+    print("Testing IterateMe_1:")
+    it = IterateMe_1(2,20,2)
+    for i in it:
         if i > 10:
             break
         print(i)
-    print("Try to pick up the range iteration")
-    print(i)
-    print(next(range_it))
+
+    print("Emulating range with IterateMe_1, so the cycle should start again after break")
+    for i in it:
+        print(i)
+
+
+    print("Now Testing Range")
+    range_it = range(2,20,2)
+    for i in range_it:
+
+        if i > 10:
+            break
+        print(i)
+    print("The real range after break:")
+    for i in range_it:
+        print(i)
+
 
 
 
