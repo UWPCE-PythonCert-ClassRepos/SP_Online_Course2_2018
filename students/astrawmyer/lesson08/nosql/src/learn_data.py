@@ -46,7 +46,7 @@ def get_furniture_data():
         },
         {
             'product_type': 'Chair',
-            'color': 'white'
+            'color': 'white',
             'description': 'Plastic',
             'monthly_rental_cost': 1.00,
             'in_stock_quantity': 45

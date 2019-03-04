@@ -36,10 +36,10 @@ def run_example(furniture_items):
         pprint.pprint(results)
 
         log.info('Step 5: Delete the blue couch (actually deletes all blue couches)')
-        furniture.remove({"product": {"$eq": "Blue couch"}})
+        furniture.remove({"product_type": {"$eq": "Couch"}, "color": {"$eq": "blue"}})
 
         log.info('Step 6: Check it is deleted with a query and print')
-        query = {'product': 'Blue couch'}
+        query = {'product_type': 'Couch', 'color': 'blue'}
         results = furniture.find_one(query)
         print('The blue couch is deleted, print should show none:')
         pprint.pprint(results)
@@ -52,7 +52,7 @@ def run_example(furniture_items):
         log.info('Notice how we parse out the data from the document')
 
         for doc in cursor:
-            print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['product']} Stock: {doc['in_stock_quantity']}")
+            print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['color']} {doc['product_type']} Stock: {doc['in_stock_quantity']}")
 
         log.info('Step 8: Delete the collection so we can start over')
         db.drop_collection('furniture')
