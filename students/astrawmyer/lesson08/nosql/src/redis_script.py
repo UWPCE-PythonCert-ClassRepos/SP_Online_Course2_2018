@@ -54,5 +54,20 @@ def run_example():
         cover_type = r.lindex('186675', 2)
         log.info(f'Type of cover = {cover_type}')
 
+        log.info('Step 9: (assignment) add customer name, telephone, zip. Display zip and number for customer.')
+        r.hmset('Adam', {'phone':'123-555-1234', 'zip':'74012'})
+        r.hmset('Drew', {'phone':'123-555-2460', 'zip':'73160'})
+        r.hmset('Brent', {'phone':'123-555-1337', 'zip':'74077'})
+        r.hmset('Josh', {'phone':'123-555-9874', 'zip':'73135'})
+        r.hmset('Jake', {'phone':'123-555-8888', 'zip':'81234'})
+        r.hmset('Kyle', {'phone':'123-555-6542', 'zip':'74078'})
+
+        name_dict = r.hgetall('Adam')
+        phone = name_dict['phone']
+        log.info(f'Adams phone is {phone}')
+        zip_code = name_dict['zip']
+        log.info(f'Adams zip is {zip_code}')
+
+
     except Exception as e:
         print(f'Redis error: {e}')
