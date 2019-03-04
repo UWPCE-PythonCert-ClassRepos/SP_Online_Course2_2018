@@ -34,7 +34,17 @@ def run_example(furniture_items):
         log.info('Step 4: Print the plastic products')
         print('Plastic products')
         pprint.pprint(results)
-
+        
+        log.info('Step 4.1: Search for all red items.')
+        query = {'color': 'red'}
+        for item in furniture.find(query):
+            pprint.pprint(item)
+        
+        log.info('Step 4.2: Search for all couches.')
+        query = {'product_type': 'Couch'}
+        for item in furniture.find(query):
+            pprint.pprint(item)
+        
         log.info('Step 5: Delete the blue couch (actually deletes all blue couches)')
         furniture.remove({"product_type": {"$eq": "Couch"}, "color": {"$eq": "blue"}})
 
@@ -44,8 +54,7 @@ def run_example(furniture_items):
         print('The blue couch is deleted, print should show none:')
         pprint.pprint(results)
 
-        log.info(
-            'Step 7: Find multiple documents, iterate though the results and print')
+        log.info('Step 7: Find multiple documents, iterate though the results and print')
 
         cursor = furniture.find({'monthly_rental_cost': {'$gte': 15.00}}).sort('monthly_rental_cost', 1)
         print('Results of search')
@@ -53,6 +62,6 @@ def run_example(furniture_items):
 
         for doc in cursor:
             print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['color']} {doc['product_type']} Stock: {doc['in_stock_quantity']}")
-
+        
         log.info('Step 8: Delete the collection so we can start over')
         db.drop_collection('furniture')
