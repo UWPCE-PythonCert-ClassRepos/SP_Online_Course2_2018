@@ -31,6 +31,9 @@ def run_example():
                             ('Fred', 'Barnes'),
                             ('Mary', 'Evans'),
                             ('Marie', 'Curie'),
+                            ('Robert', 'Wickens'),
+                            ('Will', 'Power'),
+                            ('Alex', 'Rossi')
                             ]:
             cyph = "CREATE (n:Person {first_name:'%s', last_name: '%s'})" % (
                 first, last)
