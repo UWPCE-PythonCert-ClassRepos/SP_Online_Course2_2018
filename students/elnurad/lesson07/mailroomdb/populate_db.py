@@ -1,4 +1,3 @@
-
 import logging
 from mailroom_db import *
 
@@ -55,4 +54,4 @@ def populate_database():
 
 if __name__ == '__main__':
     populate_database()
-    # populate_donation()
+    
