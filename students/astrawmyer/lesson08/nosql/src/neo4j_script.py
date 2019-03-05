@@ -98,3 +98,59 @@ def run_example():
         for rec in result:
             for friend in rec.values():
                 print(friend['first_name'], friend['last_name'])
+        
+        log.info("Step 7: Adding colors.")
+        for color in ['orange', 'black', 'white', 'blue']:
+            cyph = "CREATE (n:Color {whichcolor:'%s'})" % (color)
+            session.run(cyph)
+        
+        log.info("Get all colors in DB")
+        cyph = """MATCH (c:Color)
+                  RETURN c.whichcolor as color
+                """
+        
+        result = session.run(cyph)
+        result = session.run(cyph)
+        print("Colors in database:")
+        for record in result:
+            print(record['color'])
+        
+        log.info("Step 8: Assign favorite colors to people.")
+        for color in ['orange', 'white']:
+            cypher = """
+              MATCH (p1:Person {first_name:'Bob', last_name:'Jones'})
+              CREATE (p1)-[color:COLOR]->(c1:Color {color:'%s'})
+              RETURN p1
+            """ % (color)
+            session.run(cypher)
+
+        for color in ['blue']:
+            cypher = """
+              MATCH (p1:Person {first_name:'Alex', last_name:'Rossi'})
+              CREATE (p1)-[color:COLOR]->(c1:Color {color:'%s'})
+              RETURN p1
+            """ % (color)
+            session.run(cypher)
+
+        for color in ['orange', 'black']:
+            cypher = """
+              MATCH (p1:Person {first_name:'Robert', last_name:'Wickens'})
+              CREATE (p1)-[color:COLOR]->(c1:Color {color:'%s'})
+              RETURN p1
+            """ % (color)
+            session.run(cypher)
+        
+        for first, last in [('Bob', 'Jones'),
+                            ('Robert', 'Wickens'),
+                            ('Alex', 'Rossi')
+                            ]:
+            cypher = """
+                      MATCH (p1:Person {first_name:'%s', last_name:'%s'})
+                            -[:COLOR]->(favoriteColor)
+                      RETURN favoriteColor
+                      """ % (first, last)
+            result = session.run(cyph)
+            for res in result:
+                for value in res.values():
+                    if value:
+                        print(first, last)
