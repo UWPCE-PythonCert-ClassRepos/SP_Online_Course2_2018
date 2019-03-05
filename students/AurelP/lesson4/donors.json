@@ -1,0 +1,62 @@
+{
+    "__obj_type": "Donors_All",
+    "_donors": [
+        {
+            "__obj_type": "Donor",
+            "_name": "Donor A",
+            "_donations": [
+                3580,
+                34124.31,
+                7654
+            ],
+            "_total_donations": 0.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_name": "Donor B",
+            "_donations": [
+                110.55,
+                3500
+            ],
+            "_total_donations": 0.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_name": "Donor C",
+            "_donations": [
+                11000
+            ],
+            "_total_donations": 0.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_name": "Donor D",
+            "_donations": [
+                2233.1,
+                6543.74,
+                4567.35
+            ],
+            "_total_donations": 0.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_name": "Donor E",
+            "_donations": [
+                546123,
+                99.1,
+                23555,
+                19
+            ],
+            "_total_donations": 0.0
+        },
+        {
+            "__obj_type": "Donor",
+            "_name": "Donor F",
+            "_donations": [
+                78.75,
+                21.75
+            ],
+            "_total_donations": 0.0
+        }
+    ]
+}
