@@ -139,18 +139,5 @@ def run_example():
               RETURN p1
             """ % (color)
             session.run(cypher)
+
         
-        for first, last in [('Bob', 'Jones'),
-                            ('Robert', 'Wickens'),
-                            ('Alex', 'Rossi')
-                            ]:
-            cypher = """
-                      MATCH (p1:Person {first_name:'%s', last_name:'%s'})
-                            -[:COLOR]->(favoriteColor)
-                      RETURN favoriteColor
-                      """ % (first, last)
-            result = session.run(cyph)
-            for res in result:
-                for value in res.values():
-                    if value:
-                        print(first, last)
