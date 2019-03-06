@@ -27,8 +27,8 @@ def showoff_databases():
     log.info("Other databases use data embedded in the modules")
 
     #redis_script.run_example()
-    neo4j_script.run_example()
-    #simple_script.run_example(furniture)
+    #neo4j_script.run_example()
+    simple_script.run_example(furniture)
 
 
 if __name__ == '__main__':
