@@ -16,10 +16,6 @@ class DeciderTests(unittest.TestCase):
     """
     Unit tests for the Decider class
     """
-
-    # TODO: write a test or tests for each of the behaviors defined for
-    #       Decider.decide
-
     def setUp(self):
         """Create dummy instance"""
         self.decider = Decider(100, 0.05)
@@ -88,7 +84,7 @@ class DeciderTests(unittest.TestCase):
     def test_invalid_current_state(self):
         """Value outside of bounds"""
         with self.assertRaises(ValueError):
-            call = self.decider.decide(105, 5, self.actions)
+            self.decider.decide(105, 5, self.actions)
 
 
 class ControllerTests(unittest.TestCase):
@@ -96,6 +92,7 @@ class ControllerTests(unittest.TestCase):
     Unit tests for the Controller class
     """
     def setUp(self):
+        """Create dummy instance"""
         self.sensor = Sensor('127.0.0.1', 1111)
         self.pump = Pump('127.0.0.1', 2222)
         self.decider = Decider(100, 0.05)
@@ -108,6 +105,7 @@ class ControllerTests(unittest.TestCase):
         }
 
     def test_tick(self):
+        """Test behavior of tick method"""
         cur_height = 50
         cur_act = self.actions['PUMP_OFF']
         next_act = self.actions['PUMP_IN']
@@ -126,6 +124,7 @@ class ControllerTests(unittest.TestCase):
         self.pump.set_state.assert_called_with(next_act)
 
     def test_fail(self):
+        """Test for exception in controller.tick method"""
         cur_height = 50
         cur_act = self.actions['PUMP_OFF']
         next_act = self.actions['PUMP_IN']

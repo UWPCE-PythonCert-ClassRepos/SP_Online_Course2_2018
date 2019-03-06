@@ -1,9 +1,9 @@
 """
 Encapsulates decision making in the water-regulation module
 """
+# pylint: disable = too-few-public-methods
 
-
-class Decider(object):
+class Decider():
     """
     Encapsulates decision making in the water-regulation module
     """
@@ -57,21 +57,23 @@ class Decider(object):
 
         if current_action == actions['PUMP_OFF']:
             if current_height < low_lim:
-                return actions['PUMP_IN']
+                next_action = actions['PUMP_IN']
             elif current_height > high_lim:
-                return actions['PUMP_OUT']
+                next_action = actions['PUMP_OUT']
             else:
-                return actions['PUMP_OFF']
+                next_action = actions['PUMP_OFF']
         elif current_action == actions['PUMP_IN']:
             if current_height >= self.target_height:
-                return actions['PUMP_OFF']
+                next_action = actions['PUMP_OFF']
             else:
-                return actions['PUMP_IN']
+                next_action = actions['PUMP_IN']
         elif current_action == actions['PUMP_OUT']:
             if current_height <= self.target_height:
-                return actions['PUMP_OFF']
+                next_action = actions['PUMP_OFF']
             else:
-                return actions['PUMP_OUT']
+                next_action = actions['PUMP_OUT']
         else:
             # if nonsensical action return pump off
             raise ValueError('Current state not in actions dictionary')
+
+        return next_action

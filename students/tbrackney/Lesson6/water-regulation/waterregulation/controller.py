@@ -1,9 +1,10 @@
 """
 Encapsulates command and coordination for the water-regulation module
 """
+# pylint: disable = too-few-public-methods
 
 
-class Controller(object):
+class Controller():
     """
     Encapsulates command and coordination for the water-regulation module
     """
@@ -39,7 +40,6 @@ class Controller(object):
         :return: True if the pump has acknowledged its new state, else False
         """
 
-        # TODO: Implement the above-defined behaviors
         current_level = self.sensor.measure()
         current_state = self.pump.get_state()
         desired_state = self.decider.decide(current_level, current_state, self.actions)
