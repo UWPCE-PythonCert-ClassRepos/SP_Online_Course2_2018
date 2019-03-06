@@ -14,9 +14,7 @@ def print_db():
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
         query = (Job
-                .select(Job, Person,Department)
-                .join(Person, JOIN.INNER)
-                .switch(Job)
+                .select(Job, Department)
                 .join(Department, JOIN.INNER)
                  )
         
@@ -25,7 +23,7 @@ def print_db():
             pp = pprint.PrettyPrinter()
             job_dept = (job.person_employed.person_name,
                         job.job_name,
-                        job.job_department.dept_name)
+                        job.job_department_numb.dept_name)
             pp.pprint(job_dept)
                
 

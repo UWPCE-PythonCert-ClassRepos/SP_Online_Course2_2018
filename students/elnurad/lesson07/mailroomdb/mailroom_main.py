@@ -57,19 +57,22 @@ def list():
 
 def update_donor():
     """
-       update donation history of an existing donor.
+       update donor name of an existing donor.
     """
     database = SqliteDatabase('mailroom.db')
     database.connect()
     database.execute_sql('PRAGMA foreign_keys = ON;')
-    name = input('Please, type the full name of a new donor ')
-    amount = int(input('Please, type the new donation amount '))
+    name = input('Please, type the full name of the donor that needs to be updated ')
+    new_name = input('Please type the new name for this donor ')
     try:
-        donor_record = Donor.get(Donor.donor_name == name) 
-        logger.info(f'got {donor_record}')
-        new_donation = Donation.create(donor_name = donor_record,
-                                       donation_amount = amount)
-        new_donation.save()  
+        query = (Donor
+                 .select(Donor, Donation)
+                 .join(Donation, JOIN.INNER))
+        for donor in query:
+            if donor.donor_name == name:
+                donor.donor_name = new_name
+                donor.save()      
+         
     except Exception as e:
         logger.info(e)
     finally:
@@ -183,6 +186,8 @@ dict_select = {
 5: delete_donor,
 6: quit
 }
+
+
 
 
 if __name__ == '__main__':

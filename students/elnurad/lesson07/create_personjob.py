@@ -39,9 +39,9 @@ class Department(BaseModel):
 
     logger.info('The Department class to define department')
     logger.info("Department number")
-    dept_number = CharField(max_length = 4)
+    dept_number = CharField(primary_key = True, max_length = 4)
     logger.info("Department Name")
-    dept_name = CharField(primary_key = True, max_length = 30)
+    dept_name = CharField(max_length = 30)
     logger.info("Name of Manager")
     manager = CharField(max_length = 30)
     
@@ -57,9 +57,9 @@ class Job(BaseModel):
     start_date = DateField(formats = 'YYYY-MM-DD') 
     end_date = DateField(formats = 'YYYY-MM-DD')   
     salary = DecimalField(max_digits = 7, decimal_places = 2)  
-    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null = False)
+    person_employed = ForeignKeyField(Person, related_name = 'filled by', null = False)
     logger.info('Job Department')
-    job_department = ForeignKeyField(Department, related_name = 'departments', null = False)
+    job_department_numb = ForeignKeyField(Department, related_name = 'departments', null = False)
     logger.info('Job Duration')
     job_duration = IntegerField()
 
