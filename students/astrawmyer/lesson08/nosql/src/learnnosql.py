@@ -22,12 +22,12 @@ def showoff_databases():
     log.info("Mongodb example to use data from Furniture module, so get it")
     furniture = learn_data.get_furniture_data()
 
-    #mongodb_script.run_example(furniture)
+    mongodb_script.run_example(furniture)
 
     log.info("Other databases use data embedded in the modules")
 
-    #redis_script.run_example()
-    #neo4j_script.run_example()
+    redis_script.run_example()
+    neo4j_script.run_example()
     simple_script.run_example(furniture)
 
 
