@@ -14,3 +14,8 @@ Note that all of the command examples below should be run from the project root 
 4. Running `coverage run --source=waterregulation/controller.py,waterregulation/decider.py -m unittest waterregulation/test.py; coverage report` shows 90%+ coverage..
 5. Satisfy the linter such that `pylint waterregulation` gives no errors and and `flake8 waterregulation` gives no errors. You may have to add docstrings to your test files.
 
+Had to run tests like so on windows
+`python -m unittest waterregulation.test`
+`python -m unittest waterregulation.integrationtest`
+
+`coverage run --source=waterregulation.controller,waterregulation.decider -m unittest waterregulation.test; coverage report`

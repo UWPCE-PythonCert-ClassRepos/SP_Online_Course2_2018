@@ -74,4 +74,4 @@ class Decider(object):
                 return actions['PUMP_OUT']
         else:
             # if nonsensical action return pump off
-            return actions['PUMP_OFF']
+            raise ValueError('Current state not in actions dictionary')

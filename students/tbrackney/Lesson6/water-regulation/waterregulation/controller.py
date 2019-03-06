@@ -40,5 +40,9 @@ class Controller(object):
         """
 
         # TODO: Implement the above-defined behaviors
-
-        return None
+        current_level = self.sensor.measure()
+        current_state = self.pump.get_state()
+        desired_state = self.decider.decide(current_level, current_state, self.actions)
+        if self.pump.set_state(desired_state):
+            return True
+        return False
