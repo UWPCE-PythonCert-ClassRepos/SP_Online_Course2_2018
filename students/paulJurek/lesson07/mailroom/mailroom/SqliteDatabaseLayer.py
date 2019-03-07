@@ -158,3 +158,7 @@ class SQLiteAccessLayer:
         return (Donation
                 .select(fn.Sum(Donation.donation_amount)
                 .alias('total_donation')))
+
+    def get_donors(self)->set:
+        """returns set of donors contained in database"""
+        return set(Donor.select(Donor.donor_name))

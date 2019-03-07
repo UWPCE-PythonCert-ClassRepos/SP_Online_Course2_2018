@@ -75,8 +75,9 @@ class DonationController():
     def display_donors(self):
         """displays a list of donors in printed format"""
         # TODO: abstract to database
+        donors = self.database.get_donors()
         print("\n".join([donor.donor_name for donor in
-                         Donor.select(Donor.donor_name)]))
+                         donors]))
 
     def display_donor_donations(self, donor: str):
         """displays donor donations with most recent first"""
