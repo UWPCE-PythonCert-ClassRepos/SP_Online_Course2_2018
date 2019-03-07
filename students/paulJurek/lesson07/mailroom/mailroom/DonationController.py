@@ -36,7 +36,7 @@ class DonationController():
             donor_name: donors name.
         returns:
             donor object"""
-        
+
         return self.database.find_donor(donor_name=donor_name)
 
     def create_donor(self, donor_name: str, donor_email: str = None) -> Donor:
@@ -156,6 +156,7 @@ class DonationController():
         """dummy here as this isn't really needed"""
         print('a lot of letters sent!')
 
+
     def update_donation(self, donation, value, field='donation_amount'):
         """update interface to update donation field in database
         args:
@@ -164,6 +165,7 @@ class DonationController():
             value: new value for update"""
         self.database.update_donation(donation=donation, value=value, field=field)
 
+
     def update_donor(self, donor, value, field='email'):
         """update interface to update donor field in database.
         Defaults to email only but setup to easily expand in future.
@@ -171,10 +173,8 @@ class DonationController():
             donor: donor name to adjust
             field: filed in donation database to update
             value: new value for update"""
-        donor = Donor.get(Donor.donor_name == donor)
-        setattr(donor, field, value)
-        donor.save()
-        # TODO: abstract to database
+        self.database.update_donor(donor=donor, value=value, field=field)
+
 
     def delete_donation(self, donation):
         """deletes donation from database.  Has

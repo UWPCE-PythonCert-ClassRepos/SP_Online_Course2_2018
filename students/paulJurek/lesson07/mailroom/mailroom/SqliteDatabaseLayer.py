@@ -173,3 +173,14 @@ class SQLiteAccessLayer:
         setattr(donation, field, value)
         donation.save()
         # TODO: abstract to database
+
+    def update_donor(self, donor, value, field='email'):
+        """update interface to update donor field in database.
+        Defaults to email only but setup to easily expand in future.
+        args:
+            donor: donor name to adjust
+            field: filed in donation database to update
+            value: new value for update"""
+        donor = Donor.get(Donor.donor_name == donor)
+        setattr(donor, field, value)
+        donor.save()
