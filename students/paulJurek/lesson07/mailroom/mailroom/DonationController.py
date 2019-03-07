@@ -14,11 +14,6 @@ from peewee import *
 from . Donor import Donor
 from . Donation import Donation
 
-# TODO: create database ABC
-# TODO: create subclasses for sqlite
-# TODO: create subclass for mongodb
-# TODO: create subclass for Redis
-# TODO: create subclass for New4J
 class DonationController():
     """organization controller for donations
     upon initiation, the Donation controller will first look if the file
@@ -32,7 +27,7 @@ class DonationController():
     def __init__(self, database):
         self.logger = logging.getLogger(__name__)
         self.database = database
-        # TODO: create composition of database
+
 
     def find_donor(self, donor_name: str):
         """searches through donor list and returns donor
@@ -72,10 +67,10 @@ class DonationController():
             self.logger.info('donor not found, creating donor')
             self.create_donor(donor_name=donor)
         self.logger.info('creating donation finally')
-        # TODO: abstract creation on donation to donation composition
-        return Donation.create(donation_donor=donor,
-                               donation_amount=amount,
+        return self.database.create_donation(donor=donor,
+                               amount=amount,
                                date=date)
+
 
     def get_total_donations(self):
         """returns total donations in controller"""
@@ -93,15 +88,10 @@ class DonationController():
     def display_donor_donations(self, donor: str):
         """displays donor donations with most recent first"""
         # TODO: abstract to database
-        query = (Donation
-                 .select(Donation.id,
-                         Donation.donation_amount_cents,
-                         Donation.donation_date)
-                 .where(Donation.donation_donor == donor).dicts()
-                 .order_by(-Donation.donation_date)
-                 )
-        for i in query:
-            print(i)
+        donation = self.database.get_donations(donor=donor)
+        if donation:
+            for _, i in donation.items():
+                print(f'{i.id}: {i.donation_amount_cents}')
 
 
     def donor_report(self):
@@ -133,11 +123,15 @@ class DonationController():
             f"{'Num Gifts':^11}|{'Average Gift':^15}")
         print('-'*70)
         donor_stats = self.summarize_donors()
-        for person, stats in donor_stats.items():
-            print(f"{person:<26} ${stats['donation_total']:>13.2f}  "
-                f"{stats['donation_count']:>10}  ${stats['average_donation']:>14.2f}")
+        try:
+            for person, stats in donor_stats.items():
+                print(f"{person:<26} ${stats['donation_total']:>13.2f}  "
+                    f"{stats['donation_count']:>10}  ${stats['average_donation']:>14.2f}")
+        except AttributeError:
+            self.logger.warning('no records in donor database to create report')
 
-    def summarize_donors(self):
+
+    def summarize_donors(self) -> dict:
         # TODO: abstract to database
         """creats summar report of donors.  Default values to 0 if no donations present.
         returns:
@@ -146,28 +140,7 @@ class DonationController():
                 total_donations: float of total given to date
                 donation_count: int of total gifts
                 average_donation: float of average amount per donation"""
-        query = (Donor
-                 .select(Donor.donor_name,
-                 fn.sum(Donation.donation_amount_cents).alias('donation_total')
-                 , fn.count(Donation.donation_amount_cents).alias('donation_count')
-                 , fn.avg(Donation.donation_amount_cents).alias('average_donation')
-                 )
-                .join(Donation, JOIN.LEFT_OUTER)
-                .group_by(Donor).dicts()
-                .order_by(-fn.sum(Donation.donation_amount_cents))
-                )
-        results = {i['donor_name']: i for i in query}
-
-        # normailze results to have 0s in place of None
-        results_mod = {}
-        for key, value in results.items():
-            inner_results = {}
-            for key_, value_ in value.items():
-                if value_ is None:
-                    value_ = 0
-                inner_results[key_] = value_
-            results_mod[key] = inner_results
-        return results_mod
+        return self.database.summarize_donors()
 
 
     def create_donation_thank_you(self, donor, amount):

@@ -3,6 +3,9 @@
 from peewee import *
 import datetime
 
+# good reference on setting this at runtime
+# http://timlehr.com/lazy-database-initialization-with-peewee-proxy-subclasses/
+# TODO: update this to be decided at runtime
 database = SqliteDatabase('mailroom.db')
 
 class BaseModel(Model):
@@ -54,5 +57,70 @@ class SQLiteAccessLayer:
         self.database.execute_sql('PRAGMA foreign_keys = ON;')
         self.database.create_tables([Donation, Donor])
 
-    def close(self):
+    def close(self) -> None:
         self.database.close()
+
+    def summarize_donors(self) -> dict:
+        """creats summar report of donors.  Default values to 0 if no donations present.
+        returns:
+            dict of donors summary
+                donor_name: key str of donors name
+                total_donations: float of total given to date
+                donation_count: int of total gifts
+                average_donation: float of average amount per donation"""
+        query = (Donor
+                 .select(Donor.donor_name,
+                 fn.sum(Donation.donation_amount_cents).alias('donation_total')
+                 , fn.count(Donation.donation_amount_cents).alias('donation_count')
+                 , fn.avg(Donation.donation_amount_cents).alias('average_donation')
+                 )
+                .join(Donation, JOIN.LEFT_OUTER)
+                .group_by(Donor).dicts()
+                .order_by(-fn.sum(Donation.donation_amount_cents))
+                )
+        results = {i['donor_name']: i for i in query}
+
+        # normailze results to have 0s in place of None
+        results_mod = {}
+        try: 
+            for key, value in results.items():
+                inner_results = {}
+                for key_, value_ in value.items():
+                    if value_ is None:
+                        value_ = 0
+                    inner_results[key_] = value_
+                results_mod[key] = inner_results
+        except AttributeError:
+            pass
+        return results_mod
+
+    def get_donations(self, donor:str =None) -> dict:
+        """returns dict of donation objects to user
+        if user provides donor, then results limited to just
+        that donor
+        args:
+            donor: donor name from database"""
+        query = (Donation
+                 .select(Donation.id,
+                         Donation.donation_amount_cents,
+                         Donation.donation_date)
+                 .where(Donation.donation_donor == donor).dicts()
+                 .order_by(-Donation.donation_date)
+                 )
+        return {i.id: {'id': i.id,
+                       'donation_date': i.donation_date,
+                       'donation_amount_cents': i.donation_amount_cents} for i in query}
+
+    def create_donation(self, donor, amount, date):
+        """creates donation object"""
+        return Donation.create(donation_donor=donor,
+                        donation_amount=amount,
+                        date=date)
+
+    def find_donor(self, donor: str):
+        """searches through donor list and returns donor
+        returns none if not found.  Search is performed on donor_name.
+        args:
+            donor_name: donors name.
+        returns:
+            donor object"""
