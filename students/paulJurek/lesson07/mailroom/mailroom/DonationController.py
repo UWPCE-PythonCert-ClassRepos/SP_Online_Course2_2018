@@ -36,12 +36,8 @@ class DonationController():
             donor_name: donors name.
         returns:
             donor object"""
-        try:
-            # TODO: use database composition
-            return Donor.get(Donor.donor_name == donor_name)
-        # TODO: create custom error for abstraction
-        except Donor.DoesNotExist:
-            return None
+        
+        return self.database.find_donor(donor_name=donor_name)
 
     def create_donor(self, donor_name: str, donor_email: str = None) -> Donor:
         """creates donor in donation controller.  Accepts donor_name and email

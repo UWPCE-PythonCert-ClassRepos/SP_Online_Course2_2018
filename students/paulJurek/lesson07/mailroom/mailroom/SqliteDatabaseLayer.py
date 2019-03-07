@@ -124,3 +124,15 @@ class SQLiteAccessLayer:
             donor_name: donors name.
         returns:
             donor object"""
+
+    def find_donor(self, donor_name: str):
+        """searches through donor list and returns donor
+        returns none if not found.  Search is performed on donor_name.
+        args:
+            donor_name: donors name.
+        returns:
+            donor object"""
+        try:
+            return Donor.get(Donor.donor_name == donor_name)
+        except Donor.DoesNotExist:
+            return None

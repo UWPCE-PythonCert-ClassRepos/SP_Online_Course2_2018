@@ -36,6 +36,8 @@ def donation_controller(sqlite_dbaccess):
     yield DonationController(sqlite_dbaccess)
 
 
+# TODO: move to integration test
+@pytest.mark.xfail(reason='integration test')
 def test_create_new_donor(donation_controller):
     """given a donation controller
     when user creates new donor
@@ -95,3 +97,13 @@ def test_create_donation_calls_donations(donation_controller, mocker):
     donation_controller.database.create_donation.assert_called_with(donor='test'
                                                                     , amount=123
                                                                     , date=donation_date)
+
+def test_find_donor_calls_database_donor(donation_controller, mocker):
+    """given a donation controller
+    when find_donor is called
+    equivalent function in database is called"""
+    mocker.patch.object(donation_controller, 'database')
+    donation_controller.database.find_donor.return_value = None
+   
+    donation_controller.find_donor(donor_name='test')
+    donation_controller.database.find_donor.assert_called_with(donor_name='test')
