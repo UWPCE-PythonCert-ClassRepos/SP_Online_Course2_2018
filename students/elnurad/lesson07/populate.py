@@ -120,14 +120,14 @@ def populate_jobs():
     END_DATE = 2
     SALARY = 3
     PERSON_EMPLOYED = 4
-    JOB_DEPT = 5
+    JOB_DEPT_ID = 5
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew', 'Analytics'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Peter', 'Analytics'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Peter', 'Analytics'),
-        ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Pam', 'Logistics'),
-        ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Susan', 'Logistics')
+        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew', 'L002'),
+        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Peter', 'L002'),
+        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Peter', 'L002'),
+        ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Pam', 'T000'),
+        ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Susan', 'T000')
         ]
 
     try:
@@ -141,14 +141,14 @@ def populate_jobs():
                     end_date = job[END_DATE],
                     salary = job[SALARY],
                     person_employed = job[PERSON_EMPLOYED],
-                    job_department = job[JOB_DEPT],
+                    job_department_numb = job[JOB_DEPT_ID],
                     job_duration = diff_dates(job[START_DATE], job[END_DATE]))
                 new_job.save()
 
         logger.info('Reading and print all Job rows (note the value of person)...')
         for job in Job:
             logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed}')
-            logger.info(f'{job.person_employed} worked in the {job.job_department} for {job.job_duration} days.')
+            logger.info(f'{job.person_employed} worked in the {job.job_department_numb} for {job.job_duration} days.')
 
     except Exception as e:
         logger.info(f'Error creating = {job.job_name}')
