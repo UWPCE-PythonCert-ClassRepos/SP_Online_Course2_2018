@@ -184,3 +184,17 @@ class SQLiteAccessLayer:
         donor = Donor.get(Donor.donor_name == donor)
         setattr(donor, field, value)
         donor.save()
+
+    def delete_donation(self, donation):
+        """deletes donation from database.  Has
+        not impact on donors"""
+        # TODO: abstract to database
+        donation = Donation.get(Donation.id == donation)
+        donation.delete_instance()
+
+    def delete_donor(self, donor):
+        """deletes donor from database.  deletes all donations
+        associated with donor as well"""
+        # TODO: abstract to database
+        donor = Donor.get(Donor.donor_name == donor)
+        donor.delete_instance(recursive=True)
