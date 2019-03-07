@@ -2,6 +2,7 @@
 
 from peewee import *
 import datetime
+import logging
 
 # good reference on setting this at runtime
 # http://timlehr.com/lazy-database-initialization-with-peewee-proxy-subclasses/
@@ -51,6 +52,7 @@ class SQLiteAccessLayer:
         args: 
             database: string representing sqlite database to connect to.  
                 assuming only sqlite databases."""
+        self.logger = logging.getLogger(__name__)
         self.database = SqliteDatabase(database)
         for tbl in self.registered_tables:
             tbl._meta.database = self.database
@@ -107,9 +109,9 @@ class SQLiteAccessLayer:
                  .where(Donation.donation_donor == donor).dicts()
                  .order_by(-Donation.donation_date)
                  )
-        return {i.id: {'id': i.id,
-                       'donation_date': i.donation_date,
-                       'donation_amount_cents': i.donation_amount_cents} for i in query}
+        return {i['id']: {'id': i['id'],
+                       'donation_date': i['donation_date'],
+                       'donation_amount_cents': i['donation_amount_cents']} for i in query}
 
     def create_donation(self, donor, amount, date):
         """creates donation object"""
@@ -136,3 +138,23 @@ class SQLiteAccessLayer:
             return Donor.get(Donor.donor_name == donor_name)
         except Donor.DoesNotExist:
             return None
+
+    def create_donor(self, donor_name: str, donor_email: str = None) -> Donor:
+        """creates donor in database.  Accepts donor_name and email
+        then creates object.  This first checks if donor already exists and
+        raises error to avoid duplication.
+        args:
+            donor_name: name for donor
+            donor_email: contact email for donor
+        returns:
+            donor inctance
+            """
+        self.logger.info('creating new donor')
+        # TODO: abstract creation of donor to Donor composition
+        return Donor.create(donor_name=donor_name, donor_email=donor_email)
+
+    def get_total_donations(self):
+        """returns total donations"""
+        return (Donation
+                .select(fn.Sum(Donation.donation_amount)
+                .alias('total_donation')))

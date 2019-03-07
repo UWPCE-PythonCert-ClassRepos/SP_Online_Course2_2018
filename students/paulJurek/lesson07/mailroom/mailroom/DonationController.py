@@ -51,7 +51,7 @@ class DonationController():
             """
         self.logger.info('creating new donor')
         # TODO: abstract creation of donor to Donor composition
-        return Donor.create(donor_name=donor_name, donor_email=donor_email)
+        return self.database.create_donor(donor_name=donor_name, donor_email=donor_email)
 
     def create_donation(self, amount, donor, date=datetime.datetime.utcnow()):
         """creates donation in input donor
@@ -70,10 +70,7 @@ class DonationController():
 
     def get_total_donations(self):
         """returns total donations in controller"""
-        # TODO: abstract report to database
-        return (Donation
-                .select(fn.Sum(Donation.donation_amount)
-                .alias('total_donation')))
+        return self.database.get_total_donations()
 
     def display_donors(self):
         """displays a list of donors in printed format"""
@@ -87,7 +84,7 @@ class DonationController():
         donation = self.database.get_donations(donor=donor)
         if donation:
             for _, i in donation.items():
-                print(f'{i.id}: {i.donation_amount_cents}')
+                print(f"{i['id']}: {i['donation_amount_cents']}")
 
 
     def donor_report(self):
