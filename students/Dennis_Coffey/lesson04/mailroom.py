@@ -22,16 +22,16 @@ you out of a jam and do your work for you."""
 
 # Donor class - contains properties and methods for accessing and updating donor's data
 class Donor(js.JsonSaveable):
-    name = js.String()
-    donations = js.List()
+    _name = js.String()
+    _donations = js.List()
     
     def __init__(self, name, donations=None):
         self.name = name
-#        if donations == None:
-#            self._donations = []
-#        else:
-#            self._donations = list(donations)
-        self.donations = donations
+        if donations == None:
+            self._donations = []
+        else:
+            self._donations = list(donations)
+#        self.donations = donations
         
     @property
     def name(self):
@@ -77,7 +77,7 @@ class Donor(js.JsonSaveable):
     
 # DonorCollection class - properties and methods for managing collection of donors
 class DonorCollection(js.JsonSaveable):
-    donors = js.List()
+    _donors = js.List()
         
     def __init__(self, donors=None):
         if donors == None:
@@ -165,26 +165,25 @@ class DonorCollection(js.JsonSaveable):
             donor.multiply_donations(factor)
         return donors_copy
     
+    @classmethod
     # Load donors from json file
-    def load_donors(self):
-#        global donors
+    def load_donors(cls):
         with open('donors.json', 'r') as file:
             donor_load = json.load(file)
-            donors = self.from_json_dict(donor_load)
+            donors = cls.from_json_dict(donor_load)
             print('Donors JSON loaded')
         return donors
 
+    @classmethod
+    # Save donors to json file
+    def save_donors(cls):
+        donor_save = donors.to_json()
+        with open('donors.json', 'w') as file:
+            file.write(donor_save)
+            print('Donors JSON saved')
+        return donors
+
        
-
-# Create dictionary of donors
-#donor1 = Donor('Dennis Coffey', [2500.00,400.00,1400.00,4000.00,75.00])
-#donor2 = Donor('Bill Gates', [120.00,650.00,40.00,75.00])
-#donor3 = Donor('Ethan Coffey', [800.00,150.00,1100.00,2000.00,60.00])
-#donor4 = Donor('Paul Allen', [400.00,45000.00,9000.00])
-#donor5 = Donor('Jeff Bezos', [3.00,8.00])
-
-#donors = DonorCollection([donor1,donor2,donor3,donor4,donor5])
-
 # Total donation for sorting
 def total_donation_key(donor):
     return sum(donor.donations)
@@ -243,13 +242,24 @@ def prompt_donation(full_name, donation_amount = None):
    
 # Quit program
 def user_quit():
+    donors.save_donors()
     print("\nThank you, have a nice day.")
 
 
 if __name__ == '__main__':
     
     # Load donor database from saved json file
-    donors = DonorCollection.load_donors()
+    donors = DonorCollection().load_donors()
+
+    # Create dictionary of donors
+#    donor1 = Donor('Dennis Coffey', [2500.00,400.00,1400.00,4000.00,75.00])
+#    donor2 = Donor('Bill Gates', [120.00,650.00,40.00,75.00])
+#    donor3 = Donor('Ethan Coffey', [800.00,150.00,1100.00,2000.00,60.00])
+#    donor4 = Donor('Paul Allen', [400.00,45000.00,9000.00])
+#    donor5 = Donor('Jeff Bezos', [3.00,8.00])
+#    
+#    donors = DonorCollection([donor1,donor2,donor3,donor4,donor5])
+
 
     # Loop until user selects Quit
     prompt = None

@@ -1,30 +1,54 @@
 {
     "__obj_type": "DonorCollection",
-    "donors": [
+    "_donors": [
         {
             "__obj_type": "Donor",
-            "name": "Dennis Coffey",
-            "donations": [2500.00,400.00,1400.00,4000.00,75.00]
+            "_name": "Dennis Coffey",
+            "_donations": [
+                2500.0,
+                400.0,
+                1400.0,
+                4000.0,
+                75.0
+            ]
         },
         {
             "__obj_type": "Donor",
-            "name": "Ethan Coffey",
-            "donations": [2500.00,400.00,1400.00,4000.00,75.00]
+            "_name": "Bill Gates",
+            "_donations": [
+                120.0,
+                650.0,
+                40.0,
+                75.0
+            ]
         },
         {
             "__obj_type": "Donor",
-            "name": "Paul Allen",
-            "donations": [400.00,45000.00,9000.00]
+            "_name": "Ethan Coffey",
+            "_donations": [
+                800.0,
+                150.0,
+                1100.0,
+                2000.0,
+                60.0
+            ]
         },
         {
             "__obj_type": "Donor",
-            "name": "Jeff Bezos",
-            "donations": [3.00,8.00]
+            "_name": "Paul Allen",
+            "_donations": [
+                400.0,
+                45000.0,
+                9000.0
+            ]
         },
         {
             "__obj_type": "Donor",
-            "name": Bill Gates",
-            "donations": [120.00,650.00,40.00,75.00]
+            "_name": "Jeff Bezos",
+            "_donations": [
+                3.0,
+                8.0
+            ]
         }
     ]
 }
