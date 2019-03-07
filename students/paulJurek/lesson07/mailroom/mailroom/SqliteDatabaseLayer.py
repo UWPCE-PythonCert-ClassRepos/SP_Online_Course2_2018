@@ -162,3 +162,14 @@ class SQLiteAccessLayer:
     def get_donors(self)->set:
         """returns set of donors contained in database"""
         return set(Donor.select(Donor.donor_name))
+
+    def update_donation(self, donation, value, field='donation_amount'):
+        """update interface to update donation field in database
+        args:
+            donation: id for donation to update
+            field: filed in donation database to update
+            value: new value for update"""
+        donation = Donation.get(Donation.id == donation)
+        setattr(donation, field, value)
+        donation.save()
+        # TODO: abstract to database

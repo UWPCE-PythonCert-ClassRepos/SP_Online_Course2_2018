@@ -162,10 +162,7 @@ class DonationController():
             donation: id for donation to update
             field: filed in donation database to update
             value: new value for update"""
-        donation = Donation.get(Donation.id == donation)
-        setattr(donation, field, value)
-        donation.save()
-        # TODO: abstract to database
+        self.database.update_donation(donation=donation, value=value, field=field)
 
     def update_donor(self, donor, value, field='email'):
         """update interface to update donor field in database.
