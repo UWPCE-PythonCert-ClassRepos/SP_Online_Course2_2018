@@ -1,0 +1,22 @@
+{
+    "__obj_type": "DonorDict",
+    "_donors": {
+        "name one": {
+            "__obj_type": "Donor",
+            "_name": "name one",
+            "_donations": [
+                1,
+                2
+            ]
+        },
+        "name two": {
+            "__obj_type": "Donor",
+            "_name": "name two",
+            "_donations": [
+                3,
+                4,
+                5
+            ]
+        }
+    }
+}

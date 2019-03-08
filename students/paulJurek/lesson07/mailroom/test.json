@@ -1,0 +1,1 @@
+{"__obj_type": "DonationController", "name": "Save The Whales", "donors": {"__key_not_string": true, "1": {"__obj_type": "Donor", "id": 1, "firstname": "Fisher", "lasname": "", "email": null, "_donations": [], "_donation_id": 1}}}
