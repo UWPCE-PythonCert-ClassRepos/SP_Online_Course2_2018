@@ -1,6 +1,7 @@
 """
 Module tests for the water-regulation module
 """
+# pylint: disable=duplicate-code
 
 import unittest
 from unittest.mock import MagicMock

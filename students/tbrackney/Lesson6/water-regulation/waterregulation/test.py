@@ -1,6 +1,7 @@
 """
 Unit tests for the water-regulation module
 """
+# pylint: disable=duplicate-code
 
 import unittest
 from unittest.mock import MagicMock
@@ -106,11 +107,11 @@ class ControllerTests(unittest.TestCase):
 
     def test_tick(self):
         """Test behavior of tick method"""
-        cur_height = 50
+        height = 50
         cur_act = self.actions['PUMP_OFF']
         next_act = self.actions['PUMP_IN']
 
-        self.sensor.measure = MagicMock(return_value=cur_height)
+        self.sensor.measure = MagicMock(return_value=height)
         self.pump.get_state = MagicMock(return_value=cur_act)
         self.decider.decide = MagicMock(return_value=next_act)
         self.pump.set_state = MagicMock(return_value=True)
@@ -120,16 +121,16 @@ class ControllerTests(unittest.TestCase):
 
         self.sensor.measure.assert_called_with()
         self.pump.get_state.assert_called_with()
-        self.decider.decide.assert_called_with(cur_height, cur_act, self.actions)
+        self.decider.decide.assert_called_with(height, cur_act, self.actions)
         self.pump.set_state.assert_called_with(next_act)
 
     def test_fail(self):
         """Test for exception in controller.tick method"""
-        cur_height = 50
+        height = 50
         cur_act = self.actions['PUMP_OFF']
         next_act = self.actions['PUMP_IN']
 
-        self.sensor.measure = MagicMock(return_value=cur_height)
+        self.sensor.measure = MagicMock(return_value=height)
         self.pump.get_state = MagicMock(return_value=cur_act)
         self.decider.decide = MagicMock(return_value=next_act)
         self.pump.set_state = MagicMock(return_value=False)
