@@ -145,3 +145,6 @@ students/DennisLee/lesson06/water-regulation/README.md
 students/DennisLee/lesson08/data/
 students/DennisLee/lesson08/logs/
 students/astrawmyer/lesson06/calculator/assignment.txt
+
+#secrets
+.config/
