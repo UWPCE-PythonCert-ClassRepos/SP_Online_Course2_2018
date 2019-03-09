@@ -18,7 +18,6 @@ from mailroom.config import database
 @pytest.fixture
 def sqlite_dbaccess():
     """setup of initial sqlite database for testing"""
-    from peewee import SqliteDatabase
     from mailroom.SqliteDatabaseLayer import SQLiteAccessLayer
 
     access_layer = SQLiteAccessLayer()
@@ -34,20 +33,6 @@ def donation_controller(sqlite_dbaccess):
     """sample controller for save the whales foundation
     setup with basic information and no donations"""
     yield DonationController(sqlite_dbaccess)
-
-
-# TODO: move to integration test
-@pytest.mark.xfail(reason='integration test')
-def test_create_new_donor(donation_controller):
-    """given a donation controller
-    when user creates new donor
-    the user is added to the donation controller"""
-    donor = 'SantaClaus'
-    while donation_controller.find_donor(donor):
-            donor += 'a'
-    assert donation_controller.find_donor(donor) is None
-    donation_controller.create_donor(donor_name=donor)
-    assert donation_controller.find_donor(donor).donor_name == donor
 
 
 @pytest.mark.xfail(reason='error not implemented')

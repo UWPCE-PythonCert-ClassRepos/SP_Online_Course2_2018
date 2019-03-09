@@ -7,7 +7,7 @@ import logging
 # good reference on setting this at runtime
 # http://timlehr.com/lazy-database-initialization-with-peewee-proxy-subclasses/
 # TODO: update this to be decided at runtime
-database = SqliteDatabase('mailroom.db')
+database = SqliteDatabase(None)
 
 class BaseModel(Model):
     class Meta:
@@ -47,15 +47,14 @@ class SQLiteAccessLayer:
     # tables which this layer controls
     registered_tables = [Donation, Donor]
 
-    def db_init(self, database: str):
+    def db_init(self, database_name: str):
         """initiates connection to sqlite database
         args: 
             database: string representing sqlite database to connect to.  
                 assuming only sqlite databases."""
         self.logger = logging.getLogger(__name__)
-        self.database = SqliteDatabase(database)
-        for tbl in self.registered_tables:
-            tbl._meta.database = self.database
+        database.init(database_name)
+        self.database = database
         self.database.execute_sql('PRAGMA foreign_keys = ON;')
         self.database.create_tables([Donation, Donor])
 

@@ -36,7 +36,7 @@ class DonationController():
 
         return self.database.find_donor(donor_name=donor_name)
 
-    def create_donor(self, donor_name: str, donor_email: str = None) -> Donor:
+    def create_donor(self, donor_name: str, donor_email: str = None):
         """creates donor in donation controller.  Accepts donor_name and email
         then creates object.  This first checks if donor already exists and
         raises error to avoid duplication.

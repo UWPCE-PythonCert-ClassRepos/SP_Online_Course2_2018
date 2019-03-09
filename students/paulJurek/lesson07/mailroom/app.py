@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 database = SQLiteAccessLayer()
-database.db_init('test.db')
+database.db_init('mailroom.db')
 controller = DonationController(database=database)
 
 
