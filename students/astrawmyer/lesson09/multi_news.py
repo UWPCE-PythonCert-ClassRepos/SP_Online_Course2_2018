@@ -3,7 +3,7 @@
 import time
 import requests
 
-WORD = "musk"
+WORD = "boeing"
 
 NEWS_API_KEY = "0c90527956054643acefdedb6587d07f"
 
@@ -19,3 +19,22 @@ def get_sources():
     print("all the sources")
     print(sources)
     return sources
+
+def get_articles(source):
+    
+    url = base_url + "articles"
+    params = {'source': source,
+            'apiKey': NEWS_API_KEY,
+            'sortBy': 'top',
+            }
+    print("requesting:", source)
+    resp = requests.get(url, params=params)
+    if resp.status_code != 200:
+        print('something went wrong with {}'.format(source))
+        print(resp)
+        print(resp.text)
+        return[]
+    data = resp.json()
+    titles = [str(art['title']) + str(art['description']) for art in data['articles']]
+    return titles
+
