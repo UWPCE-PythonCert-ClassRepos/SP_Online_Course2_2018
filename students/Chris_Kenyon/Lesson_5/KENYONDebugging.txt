@@ -1,0 +1,95 @@
+Kenyon: Lesson 5: debugger exercise
+
+1. What is wrong with our logic?
+The recursion continues endlessly when n is not power of 2. 
+
+2. Why doesn't the function stop calling itself?
+The only check for stopping recursion is for when n == 2.  If n never equals 2, there is no conditional statement to stop the recursion
+
+3. What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+The value of n keeps getting divided by 2 
+
+
+
+$ python -m pdb recursive.py 7
+> c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py(2)<module>()
+-> """Recursive module"""
+(Pdb) n
+> c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py(3)<module>()
+-> import sys
+(Pdb) n
+> c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py(5)<module>()
+-> def my_func(n):
+(Pdb) n
+> c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py(11)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py(12)<module>()
+-> print(my_func(n))
+(Pdb) pp n
+7
+(Pdb) n
+Traceback (most recent call last):
+  File "C:\Users\chris.kenyon\AppData\Local\Programs\Python\Python36-32\lib\pdb.py", line 1667, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Users\chris.kenyon\AppData\Local\Programs\Python\Python36-32\lib\pdb.py", line 1548, in _runscript
+    self.run(statement)
+  File "C:\Users\chris.kenyon\AppData\Local\Programs\Python\Python36-32\lib\bdb.py", line 431, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py", line 12, in <module>
+    print(my_func(n))
+  File "c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py", line 8, in my_func
+    return my_func(n / 2)
+  File "c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py", line 8, in my_func
+    return my_func(n / 2)
+  File "c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py", line 8, in my_func
+    return my_func(n / 2)
+  [Previous line repeated 980 more times]
+  File "c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py", line 5, in my_func
+    def my_func(n):
+  File "C:\Users\chris.kenyon\AppData\Local\Programs\Python\Python36-32\lib\bdb.py", line 50, in trace_dispatch
+    return self.dispatch_call(frame, arg)
+  File "C:\Users\chris.kenyon\AppData\Local\Programs\Python\Python36-32\lib\bdb.py", line 76, in dispatch_call
+    if not (self.stop_here(frame) or self.break_anywhere(frame)):
+  File "C:\Users\chris.kenyon\AppData\Local\Programs\Python\Python36-32\lib\bdb.py", line 173, in break_anywhere
+    return self.canonic(frame.f_code.co_filename) in self.breaks
+  File "C:\Users\chris.kenyon\AppData\Local\Programs\Python\Python36-32\lib\bdb.py", line 29, in canonic
+    if filename == "<" + filename[1:-1] + ">":
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\users\chris.kenyon\appdata\local\programs\python\python36-32\lib\bdb.py(29)canonic()
+-> if filename == "<" + filename[1:-1] + ">":
+
+**quit**
+
+$ python -m pdb recursive.py 7
+> c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py(2)<module>()
+-> """Recursive module"""
+(Pdb) ll
+  1     #!/usr/bin/env python3
+  2  -> """Recursive module"""
+  3     import sys
+  4
+  5     def my_func(n):
+  6         if n == 2:
+  7             return True
+  8         return my_func(n / 2)
+  9
+ 10     if __name__ == '__main__':
+ 11         n = int(sys.argv[1])
+ 12         print(my_func(n))
+(Pdb) b 6
+Breakpoint 1 at c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py:6
+(Pdb) condition 1 n < 2
+New condition set for breakpoint 1.
+(Pdb) c
+> c:\users\chris.kenyon\documents\kenyon\uwpython2\sp_online_course2_2018\students\chris_kenyon\lesson_5\recursive.py(6)my_func()
+-> if n == 2:
+(Pdb) pp n
+1.75
+(Pdb)
