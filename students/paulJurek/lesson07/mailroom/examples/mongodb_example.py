@@ -1,8 +1,8 @@
 """tests connecting to mongodb"""
 from pathlib import Path
 import configparser
-import pymongo
 import mongoengine
+from mongoengine import Document, StringField, EmailField
 
 config = configparser.ConfigParser()
 config_file = Path.cwd() / 'config' / 'config_mongodb'
@@ -11,9 +11,24 @@ user = config["default"]["user"]
 pw = config["default"]["pw"]
 conn = config["default"]["connect"]
 
-client = mongoengine.connect(f'mongodb://{user}:{pw}'
-                                 '@cluster0-shard-00-00-wphqo.mongodb.net:27017,'
-                                 'cluster0-shard-00-01-wphqo.mongodb.net:27017,'
-                                 'cluster0-shard-00-02-wphqo.mongodb.net:27017/test'
-                                 '?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin')
-print(client)
+RUN_MODE = 'test'
+
+# used to test different mongo engine connections
+client = mongoengine.connect(
+    db=RUN_MODE,
+    username=user,
+    password=pw,
+    host=conn
+)
+
+
+class Donor(Document):
+    """donor giving to organization"""
+    donor_name = StringField(required=True, max_length=55, unique=True)
+    email = EmailField(required=False, max_length=55)
+
+
+d = Donor(donor_name='Paul Jasdfasf')
+d.save()
+
+client.close()
