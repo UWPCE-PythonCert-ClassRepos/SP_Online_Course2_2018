@@ -38,3 +38,10 @@ def get_articles(source):
     titles = [str(art['title']) + str(art['description']) for art in data['articles']]
     return titles
 
+def count_word(word, titles):
+    word = word.lower()
+    count = 0
+    for title in titles:
+        if word in titles:
+            count += 1
+    return count
