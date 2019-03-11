@@ -41,6 +41,7 @@ def count_word(word, titles):
     word = word.lower()
     count = 0
     for title in titles:
+        #print(title)
         if word in titles:
             count += 1
     return count
