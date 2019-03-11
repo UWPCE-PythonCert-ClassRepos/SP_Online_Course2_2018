@@ -8,8 +8,6 @@ import copy
 import datetime
 import logging
 
-from peewee import *
-
 
 class DonationController():
     """organization controller for donations
@@ -153,7 +151,6 @@ class DonationController():
         """dummy here as this isn't really needed"""
         print('a lot of letters sent!')
 
-
     def update_donation(self, donation, value, field='donation_amount'):
         """update interface to update donation field in database
         args:
@@ -161,7 +158,6 @@ class DonationController():
             field: filed in donation database to update
             value: new value for update"""
         self.database.update_donation(donation=donation, value=value, field=field)
-
 
     def update_donor(self, donor, value, field='email'):
         """update interface to update donor field in database.
@@ -172,12 +168,10 @@ class DonationController():
             value: new value for update"""
         self.database.update_donor(donor=donor, value=value, field=field)
 
-
     def delete_donation(self, donation):
         """deletes donation from database.  Has
         not impact on donors"""
         self.database.delete_donation(donation=donation)
-
 
     def delete_donor(self, donor):
         """deletes donor from database.  deletes all donations
@@ -187,7 +181,6 @@ class DonationController():
     def get_donor_details(self, donor_name):
         """returns donor details in dict give input"""
         return self.database.get_donor_details(donor_name=donor_name)
-
 
     def get_donation_details(self, donation_id):
         """gets details for specific donation"""

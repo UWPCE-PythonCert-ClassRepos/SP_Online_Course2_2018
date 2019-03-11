@@ -15,11 +15,11 @@ RUN_MODE = 'test'
 
 # used to test different mongo engine connections
 client = mongoengine.connect(
-    db=RUN_MODE,
-    username=user,
-    password=pw,
-    host=conn
-)
+            db=run_mode,
+            username=config.get('default','user'),
+            password=config.get('default', 'pw'),
+            host=config.get('default', 'connect')
+        )
 
 
 class Donor(Document):
