@@ -3,11 +3,11 @@
 import time
 import requests
 
-WORD = "boeing"
+WORD = "China"
 
 NEWS_API_KEY = "0c90527956054643acefdedb6587d07f"
 
-base_url = 'https://newsapi.org/v2/'
+base_url = 'https://newsapi.org/v1/'
 
 
 def get_sources():
@@ -48,7 +48,7 @@ def count_word(word, titles):
 start = time.time()
 sources = get_sources()
 
-""" art_count = 0
+art_count = 0
 word_count = 0
 for source in sources:
     titles = get_articles(source)
@@ -56,4 +56,4 @@ for source in sources:
     word_count += count_word(WORD, titles)
 
 print(WORD, 'found {} times in {} articles'.format(word_count, art_count))
-print('Process took {:.0f} seconds'.format(time.time()-start)) """
+print('Process took {:.0f} seconds'.format(time.time()-start))
