@@ -60,3 +60,8 @@ def test_get_donations(testing_database):
                    'donation_amount_cents': 200}
                }
     assert testing_database.get_donations(donor) == expected_output
+
+def test_create_donation(testing_database):
+    """when donation is created
+    true is returned if successful"""
+    assert testing_database.create_donation(donor='test1', amount=23) is True

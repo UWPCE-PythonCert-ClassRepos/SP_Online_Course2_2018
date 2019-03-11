@@ -52,9 +52,6 @@ class MongoDBAccessLayer:
         # is entered at class dir
         config_file = Path.cwd() / 'config' / 'config_mongodb.ini'
         config.read(config_file)
-        print('config sections')
-        print(config_file)
-        print(config.sections())
 
         self.client = mongoengine.connect(
             db=run_mode,
@@ -103,14 +100,18 @@ class MongoDBAccessLayer:
                       'donation_amount_cents': donation.donation_amount_cents,
                       'donation_date': donation.donation_date} for num, donation in enumerate(donor.donations, start=1)}
 
-    def create_donation(self, donor: str, amount: int, date: datetime) -> bool:
+    def create_donation(self, donor: str, amount: int, date: datetime=datetime.datetime.utcnow()) -> bool:
         """creates donation object.  Returns"""
         try:
-            donor = Donor.get(donor)
-            donor.donations.append(Donation(donation_amount_cents=amount, donation_date=date))
-            donor.save()
+            print('finding donor')
+            db_donor = Donor.objects.get(donor_name=donor)
+            print('donor found')
+            db_donor.donations.append(Donation(donation_amount_cents=amount, donation_date=date))
+            db_donor.save()
             return True
         except mongoengine.DoesNotExist:
+            return False
+        except:
             return False
 
 
