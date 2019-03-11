@@ -6,7 +6,7 @@ import configparser
 from pathlib import Path
 import mongoengine
 from mongoengine import Document, EmbeddedDocument
-from mongoengine import StringField, IntField, ReferenceField, EmailField, DatetimeField, ListField, EmbeddedDocumentField
+from mongoengine import StringField, IntField, ReferenceField, EmailField, DateTimeField, EmbeddedDocumentListField, EmbeddedDocumentField
 import datetime
 import logging
 
@@ -14,7 +14,7 @@ import logging
 class Donation(EmbeddedDocument):
     donation_amount_cents = IntField(required=True,
                                      min_value=0)
-    donation_date = DatetimeField(required=True,
+    donation_date = DateTimeField(required=True,
                                   default=datetime.datetime.today)
 
     @property
@@ -32,7 +32,7 @@ class Donor(Document):
     """donor giving to organization"""
     donor_name = StringField(required=True, max_length=55, unique=True)
     email = EmailField(required=False, max_length=55)
-    donations = ListField(EmbeddedDocumentField(Donation))
+    donations = EmbeddedDocumentListField(Donation)
 
 
 class MongoDBAccessLayer:
@@ -50,14 +50,17 @@ class MongoDBAccessLayer:
         config = configparser.ConfigParser()
         # May need to adjust depending on where you enter.  Assuming this 
         # is entered at class dir
-        config_file = Path.cwd() / 'config' / 'config_mongodb'
+        config_file = Path.cwd() / 'config' / 'config_mongodb.ini'
         config.read(config_file)
+        print('config sections')
+        print(config_file)
+        print(config.sections())
 
         self.client = mongoengine.connect(
             db=run_mode,
-            username=config["default"]["user"],
-            password=config["default"]["pw"],
-            host=config["default"]["connect"]
+            username=config.get('configuration', 'user'),
+            password=config.get('configuration', 'pw'),
+            host=config.get('configuration', 'connect')
         )
 
     def close(self) -> None:
@@ -72,31 +75,21 @@ class MongoDBAccessLayer:
                 total_donations: float of total given to date
                 donation_count: int of total gifts
                 average_donation: float of average amount per donation"""
-        query = (Donor
-                 .select(Donor.donor_name,
-                 fn.sum(Donation.donation_amount_cents).alias('donation_total')
-                 , fn.count(Donation.donation_amount_cents).alias('donation_count')
-                 , fn.avg(Donation.donation_amount_cents).alias('average_donation')
-                 )
-                .join(Donation, JOIN.LEFT_OUTER)
-                .group_by(Donor).dicts()
-                .order_by(-fn.sum(Donation.donation_amount_cents))
-                )
-        results = {i['donor_name']: i for i in query}
+        output = {}
+        for donor in Donor.objects:
+            total_donations = 0
+            donation_count = 0
+            for donation in donor.donations:
+                total_donations += donation.donation_amount_cents
+                donation_count += 1
+            if donation_count:
+                average_donation = total_donations / donation_count
+            output[donor.donor_name] = {'donor_name': donor.donor_name,
+                                        'total_donations': total_donations,
+                                        'donation_count': donation_count,
+                                        'average_donation': average_donation}
+        return output
 
-        # normailze results to have 0s in place of None
-        results_mod = {}
-        try: 
-            for key, value in results.items():
-                inner_results = {}
-                for key_, value_ in value.items():
-                    if value_ is None:
-                        value_ = 0
-                    inner_results[key_] = value_
-                results_mod[key] = inner_results
-        except AttributeError:
-            pass
-        return results_mod
 
     def get_donations(self, donor:str =None) -> dict:
         """returns dict of donation objects to user
@@ -104,22 +97,22 @@ class MongoDBAccessLayer:
         that donor
         args:
             donor: donor name from database"""
-        query = (Donation
-                 .select(Donation.id,
-                         Donation.donation_amount_cents,
-                         Donation.donation_date)
-                 .where(Donation.donation_donor == donor).dicts()
-                 .order_by(-Donation.donation_date)
-                 )
-        return {i['id']: {'id': i['id'],
-                       'donation_date': i['donation_date'],
-                       'donation_amount_cents': i['donation_amount_cents']} for i in query}
+        donor = Donor.objects.get(donor_name=donor)
 
-    def create_donation(self, donor, amount, date):
-        """creates donation object"""
-        return Donation.create(donation_donor=donor,
-                        donation_amount=amount,
-                        date=date)
+        return {num: {'id': num,
+                      'donation_amount_cents': donation.donation_amount_cents,
+                      'donation_date': donation.donation_date} for num, donation in enumerate(donor.donations, start=1)}
+
+    def create_donation(self, donor: str, amount: int, date: datetime) -> bool:
+        """creates donation object.  Returns"""
+        try:
+            donor = Donor.get(donor)
+            donor.donations.append(Donation(donation_amount_cents=amount, donation_date=date))
+            donor.save()
+            return True
+        except mongoengine.DoesNotExist:
+            return False
+
 
     def find_donor(self, donor: str):
         """searches through donor list and returns donor
@@ -137,7 +130,7 @@ class MongoDBAccessLayer:
         returns:
             donor object"""
         try:
-            return Donor.get(Donor.donor_name == donor_name)
+            return Donor.objects.get(Donor.donor_name == donor_name)
         except Donor.DoesNotExist:
             return None
 
@@ -152,8 +145,9 @@ class MongoDBAccessLayer:
             donor inctance
             """
         self.logger.info('creating new donor')
-        # TODO: abstract creation of donor to Donor composition
-        return Donor.create(donor_name=donor_name, donor_email=donor_email)
+        donor = Donor(donor_name=donor_name, donor_email=donor_email)
+        donor.save()
+        return donor
 
     def get_total_donations(self):
         """returns total donations"""
