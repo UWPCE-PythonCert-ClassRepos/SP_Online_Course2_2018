@@ -1,4 +1,8 @@
-#Your API key is: 0c90527956054643acefdedb6587d07f
+""" 
+    Lesson 9 submision file. 
+    Uses News API to get titles with multithreading.
+"""
+
 
 import time
 import requests

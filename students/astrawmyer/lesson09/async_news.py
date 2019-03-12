@@ -1,3 +1,5 @@
+""" This is a transctiption of the asyncio example in the lecture. """
+
 import time
 import asyncio
 import aiohttp
