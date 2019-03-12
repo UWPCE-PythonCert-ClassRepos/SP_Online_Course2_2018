@@ -2,6 +2,7 @@
 
 import time
 import requests
+import threading
 
 WORD = "China"
 
@@ -51,6 +52,16 @@ sources = get_sources()
 
 art_count = 0
 word_count = 0
+
+threads = []
+for source in sources:
+    thread = threading.Thread(target=get_articles, args=(source,))
+    thread.start()
+    threads.append(thread)
+
+for thread in threads:
+    thread.join()
+
 for source in sources:
     titles = get_articles(source)
     art_count += len(titles)
