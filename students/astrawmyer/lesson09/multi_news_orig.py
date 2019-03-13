@@ -57,7 +57,8 @@ start = time.time()
 #test with partial sources because of API limits
 sources = ['the-new-york-times','associated-press', 'bbc-news','google-news','reuters']
 titles = []
-
+art_count = 0
+word_count = 0
 
 threads = []
 for source in sources:
