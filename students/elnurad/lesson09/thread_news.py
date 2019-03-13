@@ -11,7 +11,8 @@ import queue
 
 WORD = "trump"
 
-NEWS_API_KEY = "a70a2a99a1834ae8a2a738a5a56f24c2"
+# NEWS_API_KEY = "a70a2a99a1834ae8a2a738a5a56f24c2"
+NEWS_API_KEY = "84d0483394c44f288965d7b366e54a74"
 
 base_url = 'https://newsapi.org/v1/'
 q = queue.Queue()
@@ -74,17 +75,18 @@ threads = []
 for source in sources:
     t = threading.Thread(target = get_articles, name = 'thread{}'.format(source), args = (source,))
     t.start()
-    print('requesting {} complete'.format(t.name))
+    print('requesting {} completed'.format(t.name))
     threads.append(t)        
 for t in threads:
     t.join()
 art_count = 0
 word_count = 0
-num = len(sources)
+# num = len(sources)
+num = q.qsize()
 for i in range(num):
     titles = q.get()
     art_count+= len(titles)
-word_count += count_word('trump', titles)
+    word_count += count_word('trump', titles)
 print(WORD, "found {} times in {} articles".format(word_count, art_count))
 print("Process took {:.0f} seconds".format(time.time() - start))
 
