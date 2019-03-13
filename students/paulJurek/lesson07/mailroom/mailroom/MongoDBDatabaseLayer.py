@@ -180,12 +180,14 @@ class MongoDBAccessLayer:
         setattr(donor, field, value)
         donor.save()
 
-    def delete_donation(self, donation):
+    def delete_donation(self, donation, donor):
         """deletes donation from database.  Has
         not impact on donors"""
         # TODO: abstract to database
-        donation = Donation.get(Donation.id == donation)
-        donation.delete_instance()
+        donor = Donor.objects.get(donor_name = donor)
+        donations = donor.donations
+        donations = donations.pop(donation)
+        donor.save()
 
     def delete_donor(self, donor):
         """deletes donor from database.  deletes all donations
