@@ -2,21 +2,17 @@
     Lesson 9 submision file. 
     Uses News API to get titles with multithreading.
 """
-#orioginal API = "0c90527956054643acefdedb6587d07f"
-#alt API 1 = "74c1d999b2bb43feaabb8c3c194fe5b3"
+
 
 import time
 import requests
 import threading
-import queue
 
-WORD = "Boeing"
+WORD = "China"
 
 NEWS_API_KEY = "74c1d999b2bb43feaabb8c3c194fe5b3"
 
 base_url = 'https://newsapi.org/v1/'
-
-
 
 
 def get_sources():
@@ -35,7 +31,7 @@ def get_articles(source):
             'apiKey': NEWS_API_KEY,
             'sortBy': 'top',
             }
-    print("requesting (get articles):", source)
+    print("requesting:", source)
     resp = requests.get(url, params=params)
     if resp.status_code != 200:
         print('something went wrong with {}'.format(source))
@@ -43,62 +39,38 @@ def get_articles(source):
         print(resp.text)
         return[]
     data = resp.json()
-    titles = [str(art['title']) + ' ' + str(art['description']) for art in data['articles']]
-    #print(titles)
+    titles = [str(art['title']) + str(art['description']) for art in data['articles']]
     return titles
 
 def count_word(word, titles):
     word = word.lower()
     count = 0
-    #print(word)
     for title in titles:
         #print(title)
-        if word in title.lower():
+        if word in titles:
             count += 1
     return count
 
-def queue_handler(source):
-    q.put(get_articles(source))
-
-
-q = queue.Queue()
 start = time.time()
 #sources = get_sources()
 
 #test with partial sources because of API limits
 sources = ['the-new-york-times','associated-press', 'bbc-news','google-news','reuters']
+titles = []
 
-#art_count = 0
-#word_count = 0
 
 threads = []
 for source in sources:
-    thread = threading.Thread(target=queue_handler, args=(source,))
+    thread = threading.Thread(target=get_articles, args=(source,))
     thread.start()
     threads.append(thread)
-    #added to see threads
-    print(thread.name)
 
 for thread in threads:
-    print("join", thread.name)
     thread.join()
 
 
+art_count = len(titles)
+word_count = count_word(WORD, titles)
 
-#for source in sources:
-    #titles = get_articles(source)
-    #art_count += len(titles)
-    #word_count += count_word(WORD, titles)
-
-queue_titles = q.get()
-count = 0
-#print(queue_titles)
-for title in queue_titles:
-    print(title)
-    if WORD.lower() in title.lower():
-        count += 1
-print(count)
-
-
-#print(WORD, 'found {} times in {} articles'.format(word_count, art_count))
+print(WORD, 'found {} times in {} articles'.format(word_count, art_count))
 print('Process took {:.0f} seconds'.format(time.time()-start))
