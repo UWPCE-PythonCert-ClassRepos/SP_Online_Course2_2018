@@ -152,7 +152,9 @@ class MongoDBAccessLayer:
 
     def get_donors(self)->set:
         """returns set of donors contained in database"""
-        return set(Donor.select(Donor.donor_name))
+        donors = Donor.objects.only('donor_name')
+
+        return {donor.donor_name for donor in donors}
 
     def update_donation(self, donation, value, field='donation_amount'):
         """update interface to update donation field in database

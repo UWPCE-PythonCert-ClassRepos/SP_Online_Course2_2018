@@ -89,3 +89,9 @@ def test_get_total_donations(testing_database):
     when get_total_donations is called
     the donation total in database is returned"""
     assert testing_database.get_total_donations() == 600
+
+def test_get_donors(testing_database):
+    """given a database
+    when get_donors is called
+    a set of donor names is returned"""
+    assert testing_database.get_donors() == set(['test1', 'test2'])
