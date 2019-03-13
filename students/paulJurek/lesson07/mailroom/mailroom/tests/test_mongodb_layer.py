@@ -1,6 +1,6 @@
 """tests the mongodb database layers work to spec"""
 import datetime
-import pytest 
+import pytest
 
 from mailroom.MongoDBDatabaseLayer import MongoDBAccessLayer, Donor, Donation
 
@@ -98,7 +98,7 @@ def test_get_donors(testing_database):
 
 def test_update_donation(testing_database):
     """given a database
-    when update_donation is called 
+    when update_donation is called
     the total amount is updated"""
     assert testing_database.get_total_donations() == 600
     testing_database.update_donation(donor='test1', donation=1, value=1000)
@@ -126,3 +126,11 @@ def test_delete_donor(testing_database):
     the total donation is modified"""
     testing_database.delete_donor('test1')
     assert testing_database.get_total_donations() == 300
+
+def test_get_donor_details(testing_database):
+    """given a databae
+    when get_donor_details is called
+    the dict with results is returned minus donations"""
+    expected_result = {'donor': 'test1',
+                       'email': 'test1@gmail.com'}
+    assert testing_database.get_donor_details(donor_name='test1')

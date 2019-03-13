@@ -198,7 +198,9 @@ class MongoDBAccessLayer:
 
     def get_donor_details(self, donor_name):
         """returns donor details in dict give input"""
-        return Donor.get(Donor.donor_name == donor_name)
+        donor = Donor.objects.get(donor_name = donor_name)
+        return {'donor': donor.donor_name,
+                'email': donor.email}
 
     def get_donation_details(self, donation_id):
         """gets details for specific donation"""
