@@ -142,11 +142,13 @@ class MongoDBAccessLayer:
         donor.save()
         return donor
 
-    def get_total_donations(self):
+    def get_total_donations(self) -> int:
         """returns total donations"""
-        return (Donation
-                .select(fn.Sum(Donation.donation_amount)
-                .alias('total_donation')))
+        total_donations = 0
+        for donor in Donor.objects():
+            for donation in donor.donations:
+                total_donations += donation.donation_amount_cents
+        return total_donations
 
     def get_donors(self)->set:
         """returns set of donors contained in database"""

@@ -29,7 +29,7 @@ def testing_database():
     yield db
 
     # optionally we can remove this but this resets to normal after test
-    #Donor.drop_collection()
+    Donor.drop_collection()
 
 def test_summarize_donors(testing_database):
     """given a database
@@ -83,3 +83,9 @@ def test_create_donor(testing_database):
     testing_database.create_donor(donor_name='test3')
     donor = testing_database.find_donor(donor_name='test3')
     assert isinstance(donor, Donor)
+
+def test_get_total_donations(testing_database):
+    """given a database
+    when get_total_donations is called
+    the donation total in database is returned"""
+    assert testing_database.get_total_donations() == 600
