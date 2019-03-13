@@ -15,7 +15,7 @@ def testing_database():
 
     # fill in database with updated collections
     d1 = Donor(donor_name='test1',
-               email='test@gmail.com',
+               email='test1@gmail.com',
                donations=[Donation(100, datetime.datetime(2018,1,1)),
                          Donation(200, datetime.datetime(2019,1,1))]
                          )
@@ -29,7 +29,7 @@ def testing_database():
     yield db
 
     # optionally we can remove this but this resets to normal after test
-    Donor.drop_collection()
+    #Donor.drop_collection()
 
 def test_summarize_donors(testing_database):
     """given a database
@@ -65,3 +65,21 @@ def test_create_donation(testing_database):
     """when donation is created
     true is returned if successful"""
     assert testing_database.create_donation(donor='test1', amount=23) is True
+
+def test_find_donor(testing_database):
+    """given a database
+    when we search for donor
+    the correct donor object is returned"""
+    donor = testing_database.find_donor(donor_name='test1')
+    assert isinstance(donor, Donor)
+    assert donor.donor_name == 'test1'
+    assert donor.email == 'test1@gmail.com'
+
+def test_create_donor(testing_database):
+    """given a database
+    when we add a donor
+    we can use find_donor method to get donor"""
+    assert testing_database.find_donor(donor_name='test3') is None
+    testing_database.create_donor(donor_name='test3')
+    donor = testing_database.find_donor(donor_name='test3')
+    assert isinstance(donor, Donor)

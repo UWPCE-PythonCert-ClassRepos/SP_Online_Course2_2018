@@ -115,14 +115,6 @@ class MongoDBAccessLayer:
             return False
 
 
-    def find_donor(self, donor: str):
-        """searches through donor list and returns donor
-        returns none if not found.  Search is performed on donor_name.
-        args:
-            donor_name: donors name.
-        returns:
-            donor object"""
-
     def find_donor(self, donor_name: str):
         """searches through donor list and returns donor
         returns none if not found.  Search is performed on donor_name.
@@ -131,7 +123,7 @@ class MongoDBAccessLayer:
         returns:
             donor object"""
         try:
-            return Donor.objects.get(Donor.donor_name == donor_name)
+            return Donor.objects.get(donor_name = donor_name)
         except Donor.DoesNotExist:
             return None
 
@@ -146,7 +138,7 @@ class MongoDBAccessLayer:
             donor inctance
             """
         self.logger.info('creating new donor')
-        donor = Donor(donor_name=donor_name, donor_email=donor_email)
+        donor = Donor(donor_name=donor_name, email=donor_email)
         donor.save()
         return donor
 
