@@ -2,15 +2,16 @@
     Lesson 9 submision file. 
     Uses News API to get titles with multithreading.
 """
-
+#orioginal API = "0c90527956054643acefdedb6587d07f"
+#alt API 1 = "74c1d999b2bb43feaabb8c3c194fe5b3"
 
 import time
 import requests
 import threading
 
-WORD = "China"
+WORD = "Boeing"
 
-NEWS_API_KEY = "0c90527956054643acefdedb6587d07f"
+NEWS_API_KEY = "74c1d999b2bb43feaabb8c3c194fe5b3"
 
 base_url = 'https://newsapi.org/v1/'
 
@@ -45,14 +46,21 @@ def get_articles(source):
 def count_word(word, titles):
     word = word.lower()
     count = 0
+    print(word)
     for title in titles:
-        #print(title)
-        if word in titles:
+        print(title)
+        if word in title.lower():
             count += 1
     return count
 
+#def queue_handler():
+
+
 start = time.time()
-sources = get_sources()
+#sources = get_sources()
+
+#test with partial sources because of API limits
+sources = ['the-new-york-times','associated-press', 'bbc-news','google-news','reuters']
 
 art_count = 0
 word_count = 0
@@ -62,6 +70,8 @@ for source in sources:
     thread = threading.Thread(target=get_articles, args=(source,))
     thread.start()
     threads.append(thread)
+    #added to see threads
+    print(thread.name)
 
 for thread in threads:
     thread.join()
