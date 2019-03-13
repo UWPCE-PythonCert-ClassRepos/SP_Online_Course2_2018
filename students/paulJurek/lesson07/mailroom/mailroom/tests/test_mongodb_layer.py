@@ -104,3 +104,11 @@ def test_update_donation(testing_database):
     testing_database.update_donation(donor='test1', donation=1, value=1000)
     assert testing_database.get_total_donations() == 1500
 
+def test_update_donor(testing_database):
+    """given a database
+    when update_donor is called
+    the donor is now updated"""
+    testing_database.update_donor(donor='test1',
+                                  value='new_email@gmail.com')
+    donor = testing_database.find_donor('test1')
+    assert donor.email == 'new_email@gmail.com'

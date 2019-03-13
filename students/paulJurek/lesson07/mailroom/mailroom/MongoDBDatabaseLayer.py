@@ -175,7 +175,8 @@ class MongoDBAccessLayer:
             donor: donor name to adjust
             field: filed in donation database to update
             value: new value for update"""
-        donor = Donor.get(Donor.donor_name == donor)
+        
+        donor = Donor.objects.get(donor_name = donor)
         setattr(donor, field, value)
         donor.save()
 
