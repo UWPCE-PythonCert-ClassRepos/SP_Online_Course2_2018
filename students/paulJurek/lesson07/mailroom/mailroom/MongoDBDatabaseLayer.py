@@ -193,8 +193,8 @@ class MongoDBAccessLayer:
         """deletes donor from database.  deletes all donations
         associated with donor as well"""
         # TODO: abstract to database
-        donor = Donor.get(Donor.donor_name == donor)
-        donor.delete_instance(recursive=True)
+        donor = Donor.objects.get(donor_name = donor)
+        donor.delete()
 
     def get_donor_details(self, donor_name):
         """returns donor details in dict give input"""

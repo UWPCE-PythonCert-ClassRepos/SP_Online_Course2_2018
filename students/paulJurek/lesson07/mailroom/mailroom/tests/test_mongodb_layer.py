@@ -119,3 +119,10 @@ def test_delete_donation(testing_database):
     the total donation is modified"""
     testing_database.delete_donation(donation=0, donor='test1')
     assert testing_database.get_total_donations() == 500
+
+def test_delete_donor(testing_database):
+    """given a database
+    when delete_donor is called
+    the total donation is modified"""
+    testing_database.delete_donor('test1')
+    assert testing_database.get_total_donations() == 300
