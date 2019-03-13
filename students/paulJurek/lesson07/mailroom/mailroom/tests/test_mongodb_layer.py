@@ -95,3 +95,12 @@ def test_get_donors(testing_database):
     when get_donors is called
     a set of donor names is returned"""
     assert testing_database.get_donors() == set(['test1', 'test2'])
+
+def test_update_donation(testing_database):
+    """given a database
+    when update_donation is called 
+    the total amount is updated"""
+    assert testing_database.get_total_donations() == 600
+    testing_database.update_donation(donor='test1', donation=1, value=1000)
+    assert testing_database.get_total_donations() == 1500
+

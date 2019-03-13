@@ -156,16 +156,17 @@ class MongoDBAccessLayer:
 
         return {donor.donor_name for donor in donors}
 
-    def update_donation(self, donation, value, field='donation_amount'):
+    def update_donation(self, donation, value, field='donation_amount', donor=None):
         """update interface to update donation field in database
         args:
-            donation: id for donation to update
+            donation: id for donation to update.  For mongodb this is index of donation
             field: filed in donation database to update
-            value: new value for update"""
-        donation = Donation.get(Donation.id == donation)
-        setattr(donation, field, value)
-        donation.save()
-        # TODO: abstract to database
+            value: new value for update
+            donor: donor name"""
+        donor = Donor.objects.get(donor_name = donor)
+        new_donation = donor.donations[donation-1]
+        new_donation.donation_amount_cents = value
+        donor.save()
 
     def update_donor(self, donor, value, field='email'):
         """update interface to update donor field in database.
