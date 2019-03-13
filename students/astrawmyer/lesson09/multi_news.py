@@ -43,7 +43,8 @@ def get_articles(source):
         print(resp.text)
         return[]
     data = resp.json()
-    titles = [str(art['title']) + str(art['description']) for art in data['articles']]
+    titles = [str(art['title']) + ' ' + str(art['description']) for art in data['articles']]
+    #print(titles)
     return titles
 
 def count_word(word, titles):
@@ -67,15 +68,13 @@ start = time.time()
 #test with partial sources because of API limits
 sources = ['the-new-york-times','associated-press', 'bbc-news','google-news','reuters']
 
-art_count = 0
-word_count = 0
+#art_count = 0
+#word_count = 0
 
 threads = []
 for source in sources:
     thread = threading.Thread(target=queue_handler, args=(source,))
-    print("Start")
     thread.start()
-    print("append")
     threads.append(thread)
     #added to see threads
     print(thread.name)
@@ -88,6 +87,15 @@ for thread in threads:
     #titles = get_articles(source)
     #art_count += len(titles)
     #word_count += count_word(WORD, titles)
+
+queue_titles = q.get()
+count = 0
+#print(queue_titles)
+for title in queue_titles:
+    if WORD.lower() in title.lower():
+        count += 1
+print(count)
+
 
 #print(WORD, 'found {} times in {} articles'.format(word_count, art_count))
 print('Process took {:.0f} seconds'.format(time.time()-start))
