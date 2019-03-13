@@ -37,6 +37,7 @@ def record_donation():
             
 def update_donation():
     """
+    Update an existing donation
     """
     # print out name of donors
     for d in donation_records.donors:
