@@ -133,4 +133,12 @@ def test_get_donor_details(testing_database):
     the dict with results is returned minus donations"""
     expected_result = {'donor': 'test1',
                        'email': 'test1@gmail.com'}
-    assert testing_database.get_donor_details(donor_name='test1')
+    assert testing_database.get_donor_details(donor_name='test1') == expected_result
+
+def test_get_donation_details(testing_database):
+    """given a database
+    when get_donation_details is called
+    details of donatoin are returned in dict"""
+    expected_result = {'donation': 0,
+                       'donation_amount_cents': 100,
+                       'donation_date': datetime.datetime(2018,1,1)}
