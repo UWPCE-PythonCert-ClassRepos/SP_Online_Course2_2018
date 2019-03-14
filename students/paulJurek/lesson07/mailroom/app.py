@@ -4,18 +4,15 @@ TODO:
 * add error catching if inputs for edits don't exist.  """
 
 import logging
+
 from mailroom.DonationController import DonationController
 from mailroom.helpers import menu_selection
-from mailroom.Donation import Donation
-from mailroom.Donor import Donor
-#from mailroom.config import database
-from mailroom.SqliteDatabaseLayer import SQLiteAccessLayer
+from mailroom.config import Database
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
-database = SQLiteAccessLayer()
+database = Database()
 database.db_init('mailroom.db')
 controller = DonationController(database=database)
 
