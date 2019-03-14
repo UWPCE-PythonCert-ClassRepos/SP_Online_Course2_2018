@@ -26,17 +26,17 @@ class Donation(BaseModel):
                                          constraints=[Check('donation_amount_cents >= 0')])
     donation_donor = ForeignKeyField(Donor, related_name='was_filled_by',
                                      null=False)
-    donation_date = DateField(null=False, default=datetime.datetime.today())
+    donation_date = DateTimeField(null=False, default=datetime.datetime.utcnow())
 
     @property
     def donation_amount(self):
         """returns donation_amount_cents in dollars"""
-        return self.donation_amount_cents/100
+        return self.donation_amount_cents
 
     @donation_amount.setter
     def donation_amount(self, donation_amount):
         """converts inputs of donation amount to int and stores"""
-        self.donation_amount_cents = int(donation_amount * 100)
+        self.donation_amount_cents = int(donation_amount)
 
 
 class SQLiteAccessLayer:
@@ -112,11 +112,15 @@ class SQLiteAccessLayer:
                        'donation_date': i['donation_date'],
                        'donation_amount_cents': i['donation_amount_cents']} for i in query}
 
-    def create_donation(self, donor, amount, date):
+    def create_donation(self, donor, amount, date=datetime.datetime.utcnow()):
         """creates donation object"""
-        return Donation.create(donation_donor=donor,
+        try:
+            Donation.create(donation_donor=donor,
                         donation_amount=amount,
-                        date=date)
+                        donation_date=date)
+            return True
+        except:
+            return False
 
     def find_donor(self, donor: str):
         """searches through donor list and returns donor
@@ -155,14 +159,15 @@ class SQLiteAccessLayer:
     def get_total_donations(self):
         """returns total donations"""
         return (Donation
-                .select(fn.Sum(Donation.donation_amount)
-                .alias('total_donation')))
+                .select(fn.Sum(Donation.donation_amount_cents)
+                .alias('total_donation')).scalar())
 
     def get_donors(self)->set:
         """returns set of donors contained in database"""
-        return set(Donor.select(Donor.donor_name))
+        donors = Donor.select(Donor.donor_name)
+        return {donor.donor_name for donor in donors}
 
-    def update_donation(self, donation, value, field='donation_amount'):
+    def update_donation(self, donation, value, field='donation_amount', donor=None):
         """update interface to update donation field in database
         args:
             donation: id for donation to update
@@ -184,7 +189,7 @@ class SQLiteAccessLayer:
         setattr(donor, field, value)
         donor.save()
 
-    def delete_donation(self, donation):
+    def delete_donation(self, donation, donor=None):
         """deletes donation from database.  Has
         not impact on donors"""
         # TODO: abstract to database
