@@ -10,7 +10,6 @@ from pytest_mock import mocker
 import sys
 
 from mailroom.DonationController import DonationController
-from mailroom.config import database
 
 # TODO: move this out of donation controller and to integration test
 @pytest.fixture

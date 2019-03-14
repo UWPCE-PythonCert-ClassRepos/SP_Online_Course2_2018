@@ -4,7 +4,6 @@ Expected to have one controller created for each non-profit organization.
 This controller contains information about organization and manages creation
 and management of donations"""
 
-import copy
 import datetime
 import logging
 
