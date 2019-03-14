@@ -90,14 +90,15 @@ for thread in threads:
     #art_count += len(titles)
     #word_count += count_word(WORD, titles)
 
-queue_titles = q.get()
+
 count = 0
-#print(queue_titles)
-for title in queue_titles:
-    print(title)
-    if WORD.lower() in title.lower():
-        count += 1
-print(count)
+while not q.empty():
+    queue_titles = q.get()
+    for title in queue_titles:
+        print(title)
+        if WORD.lower() in title.lower():
+            count += 1
+    print(count)
 
 
 #print(WORD, 'found {} times in {} articles'.format(word_count, art_count))
