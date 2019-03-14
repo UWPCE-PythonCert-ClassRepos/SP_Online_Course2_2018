@@ -22,7 +22,6 @@ class DonationController():
         self.logger = logging.getLogger(__name__)
         self.database = database
 
-
     def find_donor(self, donor_name: str):
         """searches through donor list and returns donor
         returns none if not found.  Search is performed on donor_name.
@@ -45,7 +44,8 @@ class DonationController():
             """
         self.logger.info('creating new donor')
         # TODO: abstract creation of donor to Donor composition
-        return self.database.create_donor(donor_name=donor_name, donor_email=donor_email)
+        return self.database.create_donor(donor_name=donor_name,
+                                          donor_email=donor_email)
 
     def create_donation(self, amount, donor, date=datetime.datetime.utcnow()):
         """creates donation in input donor
@@ -58,9 +58,8 @@ class DonationController():
             self.create_donor(donor_name=donor)
         self.logger.info('creating donation finally')
         return self.database.create_donation(donor=donor,
-                               amount=amount,
-                               date=date)
-
+                                             amount=amount,
+                                             date=date)
 
     def get_total_donations(self):
         """returns total donations in controller"""
@@ -80,7 +79,6 @@ class DonationController():
         if donation:
             for _, i in donation.items():
                 print(f"{i['id']}: {i['donation_amount_cents']}")
-
 
     def donor_report(self):
         """handles process for main screens report selection
@@ -108,16 +106,15 @@ class DonationController():
         Paul Allen                 $     708.42           3  $      236.14
         """
         print(f"{'Donor Name':<26}|{'Total Given':^15}|"
-            f"{'Num Gifts':^11}|{'Average Gift':^15}")
+              f"{'Num Gifts':^11}|{'Average Gift':^15}")
         print('-'*70)
         donor_stats = self.summarize_donors()
         try:
             for person, stats in donor_stats.items():
                 print(f"{person:<26} ${stats['donation_total']:>13.2f}  "
-                    f"{stats['donation_count']:>10}  ${stats['average_donation']:>14.2f}")
+                      f"{stats['donation_count']:>10}  ${stats['average_donation']:>14.2f}")
         except AttributeError:
             self.logger.warning('no records in donor database to create report')
-
 
     def summarize_donors(self) -> dict:
         # TODO: abstract to database
@@ -129,7 +126,6 @@ class DonationController():
                 donation_count: int of total gifts
                 average_donation: float of average amount per donation"""
         return self.database.summarize_donors()
-
 
     def create_donation_thank_you(self, donor, amount):
         """prints thank you message to terminal for donation"""

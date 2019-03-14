@@ -1,6 +1,6 @@
 """entry point to mailroom application
 
-TODO: 
+TODO:
 * add error catching if inputs for edits don't exist.  """
 
 import logging
@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 database = Database()
-database.db_init('mailroom.db')
+database.db_init('prod')
 controller = DonationController(database=database)
 
 
@@ -99,6 +99,7 @@ def list_donations():
     donor = input('Input Donor Name: ')
     controller.display_donor_donations(donor)
 
+
 # TODO: move this to controller
 def edit_donations():
     donation_id = int(input('Input donation id: '))
@@ -109,7 +110,10 @@ def edit_donations():
           f'donation.donation_date: {donation.donation_date}')
     new_donation_amount = int(input('Please enter new donation amount: '))
     # in future look at adding more options on donations here
-    controller.update_donation(donation, 'donation_amount', new_donation_amount)
+    controller.update_donation(donation,
+                               'donation_amount',
+                               new_donation_amount)
+
 
 # TODO: move this to controller
 def edit_donor():
@@ -134,6 +138,7 @@ def delete_donor():
     """deletes donor and donations from database"""
     donor_name = input('Input donor name to edit: ')
     controller.delete_donor(donor_name)
+
 
 if __name__ == '__main__':
     try:

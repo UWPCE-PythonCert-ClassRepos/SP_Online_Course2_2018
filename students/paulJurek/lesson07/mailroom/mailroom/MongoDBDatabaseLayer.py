@@ -6,7 +6,7 @@ import configparser
 from pathlib import Path
 import mongoengine
 from mongoengine import Document, EmbeddedDocument
-from mongoengine import StringField, IntField, ReferenceField, EmailField, DateTimeField, EmbeddedDocumentListField, EmbeddedDocumentField
+from mongoengine import StringField, IntField, EmailField, DateTimeField, EmbeddedDocumentListField
 import datetime
 import logging
 
@@ -36,19 +36,19 @@ class Donor(Document):
 
 
 class MongoDBAccessLayer:
-    """has db_init over just __init__ as some connection 
-    expected to self populate __init__ (eg. sqlalchemy) so 
+    """has db_init over just __init__ as some connection
+    expected to self populate __init__ (eg. sqlalchemy) so
     this allows common interface on all layers"""
 
     # TODO: if set to test ensure it is torn down before start and end
     def db_init(self, run_mode: str):
         """initiates connection to sqlite database
-        args: 
-            database: string representing sqlite database to connect to.  
+        args:
+            database: string representing sqlite database to connect to.
                 assuming only sqlite databases."""
         self.logger = logging.getLogger(__name__)
         config = configparser.ConfigParser()
-        # May need to adjust depending on where you enter.  Assuming this 
+        # May need to adjust depending on where you enter.  Assuming this
         # is entered at class dir
         config_file = Path.cwd() / 'config' / 'config_mongodb.ini'
         config.read(config_file)
@@ -64,7 +64,7 @@ class MongoDBAccessLayer:
         self.client.close()
 
     def summarize_donors(self) -> dict:
-        """creats summar report of donors.  
+        """creats summar report of donors.
         Default values to 0 if no donations present.
         returns:
             dict of donors summary
@@ -87,8 +87,7 @@ class MongoDBAccessLayer:
                                         'average_donation': average_donation}
         return output
 
-
-    def get_donations(self, donor:str =None) -> dict:
+    def get_donations(self, donor: str =None) -> dict:
         """returns dict of donation objects to user
         if user provides donor, then results limited to just
         that donor
@@ -114,7 +113,6 @@ class MongoDBAccessLayer:
         except:
             return False
 
-
     def find_donor(self, donor_name: str):
         """searches through donor list and returns donor
         returns none if not found.  Search is performed on donor_name.
@@ -123,7 +121,7 @@ class MongoDBAccessLayer:
         returns:
             donor object"""
         try:
-            return Donor.objects.get(donor_name = donor_name)
+            return Donor.objects.get(donor_name=donor_name)
         except Donor.DoesNotExist:
             return None
 
@@ -163,7 +161,7 @@ class MongoDBAccessLayer:
             field: filed in donation database to update
             value: new value for update
             donor: donor name"""
-        donor = Donor.objects.get(donor_name = donor)
+        donor = Donor.objects.get(donor_name=donor)
         new_donation = donor.donations[donation-1]
         new_donation.donation_amount_cents = value
         donor.save()
@@ -175,8 +173,8 @@ class MongoDBAccessLayer:
             donor: donor name to adjust
             field: filed in donation database to update
             value: new value for update"""
-        
-        donor = Donor.objects.get(donor_name = donor)
+
+        donor = Donor.objects.get(donor_name=donor)
         setattr(donor, field, value)
         donor.save()
 
@@ -184,7 +182,7 @@ class MongoDBAccessLayer:
         """deletes donation from database.  Has
         not impact on donors"""
         # TODO: abstract to database
-        donor = Donor.objects.get(donor_name = donor)
+        donor = Donor.objects.get(donor_name=donor)
         donations = donor.donations
         donations = donations.pop(donation)
         donor.save()
@@ -193,20 +191,20 @@ class MongoDBAccessLayer:
         """deletes donor from database.  deletes all donations
         associated with donor as well"""
         # TODO: abstract to database
-        donor = Donor.objects.get(donor_name = donor)
+        donor = Donor.objects.get(donor_name=donor)
         donor.delete()
 
     def get_donor_details(self, donor_name):
         """returns donor details in dict give input"""
-        donor = Donor.objects.get(donor_name = donor_name)
+        donor = Donor.objects.get(donor_name=donor_name)
         return {'donor': donor.donor_name,
                 'email': donor.email}
 
-    def get_donation_details(self, donation_id):
+    def get_donation_details(self, donation_id, donor):
         """gets details for specific donation"""
-        donor = Donor.objects.get(donor_name = donor_name)
+        donor = Donor.objects.get(donor_name=donor)
         if donor.donations:
             don = donor.donations[donation_id]
             return {'donation': donation_id,
                     'donation_amount_cents': don.donation_amount_cents,
-                    'donation_date': don.donation_date} 
+                    'donation_date': don.donation_date}

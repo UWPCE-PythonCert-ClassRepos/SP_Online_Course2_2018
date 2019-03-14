@@ -8,6 +8,6 @@ from mailroom.SqliteDatabaseLayer import SQLiteAccessLayer
 # options: sqlite, mongoDb, redis, neo4j
 
 DATABASE_DISPATCH = {'sqlite': SQLiteAccessLayer,
-                      'mongoDB':  MongoDBAccessLayer}
+                     'mongoDB':  MongoDBAccessLayer}
 database_selector = 'mongoDB'
 Database = DATABASE_DISPATCH.get(database_selector)
