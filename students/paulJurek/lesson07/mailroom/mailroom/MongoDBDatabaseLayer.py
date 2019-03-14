@@ -82,7 +82,7 @@ class MongoDBAccessLayer:
             if donation_count:
                 average_donation = total_donations / donation_count
             output[donor.donor_name] = {'donor_name': donor.donor_name,
-                                        'total_donations': total_donations,
+                                        'donation_total': total_donations,
                                         'donation_count': donation_count,
                                         'average_donation': average_donation}
         return output

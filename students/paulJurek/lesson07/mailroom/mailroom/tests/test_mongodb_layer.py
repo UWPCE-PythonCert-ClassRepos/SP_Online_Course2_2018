@@ -36,11 +36,11 @@ def test_summarize_donors(testing_database):
     when summarize_donors is called on database
     a dict with donor summary is returned"""
     expected_result = {'test1': {'donor_name': 'test1',
-                                 'total_donations': 300,
+                                 'donation_total': 300,
                                  'donation_count': 2,
                                  'average_donation': 150},
                        'test2': {'donor_name': 'test2',
-                                 'total_donations': 300,
+                                 'donation_total': 300,
                                  'donation_count': 2,
                                  'average_donation': 150}
                         }
