@@ -39,6 +39,22 @@ class Donor():
                 donor.save()
         except Exception as e:
             logger.error("Exception adding donation {} for {}".format(amt, self._name), e)
+            
+    def update_donation(self, old_amt, new_amt):
+        """
+        Update the given donation amount with the new amount as well as the donor aggregate values
+        """
+        try:
+            with database.transaction():
+                donation = Donation.select().where((Donation.amount == float(old_amt)) & (Donation.donor == self.name))[0]
+                donation.amount = float(new_amt)
+                donation.save()
+                donor = SingleDonor.select().where(SingleDonor.name == self.name)[0]
+                donor.total_donations = donor.total_donations - float(old_amt) + float(new_amt)
+                donor.avg_donation = donor.total_donations / self.num_donations
+                donor.save()
+        except Exception as e:
+            logger.error("Exception updating donation {} for {}".format(old_amt, self._name), e)
         
     @property
     def donations(self):
@@ -78,6 +94,8 @@ class Donor():
         """
         Equality comparator for this donor's total donations to another
         """
+        if other == None:
+            return False
         return self.total_donations == other.total_donations
         
     

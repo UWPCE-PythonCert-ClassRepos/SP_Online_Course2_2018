@@ -35,6 +35,28 @@ def record_donation():
             print(donation_records.send_thanx(donor, amt))
             break
             
+def update_donation():
+    """
+    Update an existing donation
+    """
+    # print out name of donors
+    for d in donation_records.donors:
+        print(d.name)
+    # prompt for donor to update
+    while True:
+        donor_name = input("\nEnter full name of donor to update (or q to quit): ")
+        if donor_name == "q":
+            break
+        donor = donation_records.get_donor(donor_name)
+        if donor != None:
+            for donation in donor.donations:
+                print("Amt: {:.2f}".format(donation.amount))
+            old_amt = input("Enter donation to update: ")
+            new_amt = input("Enter new donation amout: ")
+            donor.update_donation(old_amt, new_amt)
+            break
+        print("Donor not found")
+    
 def print_report():
     """
     Print the donor report to the screen
@@ -85,18 +107,20 @@ def init_db():
 # main menu prompt text
 main_prompt = ("\nPlease choose one of these options:"
                "\n   1 - Record Donation"
-               "\n   2 - Create a Report"
-               "\n   3 - Send letters to Everyone"
-               "\n   4 - Clear donor data"
+               "\n   2 - Update Record"
+               "\n   3 - Create a Report"
+               "\n   4 - Send letters to Everyone"
+               "\n   5 - Clear donor data"
                "\n   q - Quit"
                "\nEnter your selection => "
             )
 
 # main menu dictionary, options and associated functions            
 main_menu = {"1": record_donation,
-             "2": print_report,
-             "3": thank_all,
-             "4": clear_donor_list,
+             "2": update_donation,
+             "3": print_report,
+             "4": thank_all,
+             "5": clear_donor_list,
              "q": quit_menu
             }
     
