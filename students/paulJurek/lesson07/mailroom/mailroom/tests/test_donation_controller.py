@@ -76,10 +76,11 @@ def test_create_donation_calls_donations(donation_controller, mocker):
     donation_date = datetime.datetime.utcnow()
     donation_controller.create_donation(donor='test',
                                         amount=123,
-                                        date = donation_date)
+                                        date=donation_date)
     donation_controller.database.create_donation.assert_called_with(donor='test',
                                                                     amount=123,
                                                                     date=donation_date)
+
 
 def test_find_donor_calls_database_donor(donation_controller, mocker):
     """given a donation controller
