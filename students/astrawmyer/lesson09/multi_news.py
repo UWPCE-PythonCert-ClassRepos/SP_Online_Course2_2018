@@ -63,15 +63,14 @@ def queue_handler(source):
 
 q = queue.Queue()
 start = time.time()
-#sources = get_sources()
-
+sources = get_sources()
 #test with partial sources because of API limits
-sources = ['the-new-york-times','associated-press', 'bbc-news','google-news','reuters']
+#sources = ['the-new-york-times','associated-press', 'bbc-news','google-news','reuters']
 
-#art_count = 0
-#word_count = 0
-
+art_count = 0
+word_count = 0
 threads = []
+
 for source in sources:
     thread = threading.Thread(target=queue_handler, args=(source,))
     thread.start()
@@ -83,23 +82,15 @@ for thread in threads:
     print("join", thread.name)
     thread.join()
 
-
-
-#for source in sources:
-    #titles = get_articles(source)
-    #art_count += len(titles)
-    #word_count += count_word(WORD, titles)
-
-
-count = 0
 while not q.empty():
     queue_titles = q.get()
     for title in queue_titles:
-        print(title)
+        art_count += 1
+        #print(title)
         if WORD.lower() in title.lower():
-            count += 1
-    print(count)
+            word_count += 1
+    #print(count)
 
 
-#print(WORD, 'found {} times in {} articles'.format(word_count, art_count))
+print(WORD, 'found {} times in {} articles'.format(word_count, art_count))
 print('Process took {:.0f} seconds'.format(time.time()-start))
