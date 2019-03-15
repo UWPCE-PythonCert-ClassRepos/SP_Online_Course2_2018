@@ -28,13 +28,15 @@ if __name__ == '__main__':
         value = factorial(n)
         print('If n equals {}, the value of the factorial is {} '.format(n, value))
     print('Factorial series took: {}'.format(time.clock() - init))
-
+   
+    init_two = time.clock()
     for n in range(30):
         value = lucas(n)
         print('If n equals {}, the value of the lucas series is {} '.format(n, value))
-    print('Lucas series took: {}'.format(time.clock() - init))
+    print('Lucas series took: {}'.format(time.clock() - init_two))
     
-#OUTPUT WITH PYTHON3:
+
+# OUTPUT WITH PYTHON 3.6
 
 # If n equals 0, the value of the factorial is 1
 # If n equals 1, the value of the factorial is 1
@@ -66,7 +68,7 @@ if __name__ == '__main__':
 # If n equals 27, the value of the factorial is 10888869450418352160768000000
 # If n equals 28, the value of the factorial is 304888344611713860501504000000
 # If n equals 29, the value of the factorial is 8841761993739701954543616000000
-# Factorial series took: 0.009127452489693984
+# Factorial series took: 0.03734865979028754
 # If n equals 0, the value of the lucas series is 2
 # If n equals 1, the value of the lucas series is 1
 # If n equals 2, the value of the lucas series is 3
@@ -97,10 +99,10 @@ if __name__ == '__main__':
 # If n equals 27, the value of the lucas series is 439204
 # If n equals 28, the value of the lucas series is 710647
 # If n equals 29, the value of the lucas series is 1149851
-# Lucas series took: 2.9301031456868682
+# Lucas series took: 2.863000632900566
 
-#OUTPUT WITH PYPY3:
-# PS C:\Users\elnura\documents\pythoncert\sp_online_course2_2018\students\elnurad\lesson10> pypy3 pypy.py
+# OUTPUT WITH PYPY3
+
 # If n equals 0, the value of the factorial is 1
 # If n equals 1, the value of the factorial is 1
 # If n equals 2, the value of the factorial is 2
@@ -131,7 +133,7 @@ if __name__ == '__main__':
 # If n equals 27, the value of the factorial is 10888869450418352160768000000
 # If n equals 28, the value of the factorial is 304888344611713860501504000000
 # If n equals 29, the value of the factorial is 8841761993739701954543616000000
-# Factorial series took: 0.09531550948495578
+# Factorial series took: 0.13192726775115035
 # If n equals 0, the value of the lucas series is 2
 # If n equals 1, the value of the lucas series is 1
 # If n equals 2, the value of the lucas series is 3
@@ -162,4 +164,4 @@ if __name__ == '__main__':
 # If n equals 27, the value of the lucas series is 439204
 # If n equals 28, the value of the lucas series is 710647
 # If n equals 29, the value of the lucas series is 1149851
-# Lucas series took: 0.46233694257710267
+# Lucas series took: 0.3748372419219651
