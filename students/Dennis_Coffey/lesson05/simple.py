@@ -5,6 +5,8 @@ import logging.handlers
 
 from logging.handlers import SysLogHandler
 
+from datetime import date
+
 
 # Format and formatter for local logging
 format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
@@ -15,7 +17,8 @@ format_syslog = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 formatter_syslog = logging.Formatter(format_syslog)
 
 # Log Warning level messages to log file
-file_handler = logging.FileHandler('mylog.log')
+logfile = str(date.today()) + ".log"
+file_handler = logging.FileHandler(logfile)
 file_handler.setLevel(logging.WARNING)           
 file_handler.setFormatter(formatter)
 
@@ -26,7 +29,6 @@ console_handler.setFormatter(formatter)
 
 # Log Error level messages to server log
 server_handler = SysLogHandler(address=('127.0.0.1', 514))        
-#server_handler = logging.handlers.DatagramHandler('127.0.0.1', 514)
 server_handler.setLevel(logging.ERROR)          
 server_handler.setFormatter(formatter_syslog)          
 
