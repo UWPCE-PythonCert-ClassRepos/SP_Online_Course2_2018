@@ -104,13 +104,6 @@ def init_db(db):
     # clear the data
     db.flushall()
     # populate starting data
-    """
-    db.hmset('Ned Flanders', {'email': 'ned@hididdly.com', 'phone': '800-345-6789', 'Donation': ['1200.25', '850.35']})
-    db.hmset('Martin Prince', {'email': 'coolguy@gmail.com', 'phone': '206-361-9085', 'Donation': ['12.22', '19.56']})
-    db.hmset('Edna Krabappel', {'email': 'chainsmoker@yahoo.com', 'phone': '805-937-7032', 'Donation': ['55.43', '118.67', '75.233']})
-    db.hmset('Homer Simpson', {'email': 'homey@hotmail.com', 'phone': '405-555-1212', 'Donation': ['253.64', '772.50', '99.99']})
-    db.hmset('Moe Szylak', {'email': 'moe@moesplace.com', 'phone': '424-313-5656', 'Donation': ['54.23']})
-    """
     db.hmset('Ned Flanders', {'email': 'ned@hididdly.com', 'phone': '800-345-6789'})
     db.hmset('Martin Prince', {'email': 'coolguy@gmail.com', 'phone': '206-361-9085'})
     db.hmset('Edna Krabappel', {'email': 'chainsmoker@yahoo.com', 'phone': '805-937-7032'})
