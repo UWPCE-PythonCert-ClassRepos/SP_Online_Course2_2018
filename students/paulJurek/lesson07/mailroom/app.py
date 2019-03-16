@@ -1,23 +1,20 @@
-"""entry point to mailroom application"""
+"""entry point to mailroom application
+
+TODO:
+* add error catching if inputs for edits don't exist.  """
 
 import logging
+
 from mailroom.DonationController import DonationController
 from mailroom.helpers import menu_selection
-from mailroom.Donation import Donation
-from mailroom.Donor import Donor
-from mailroom.config import database
-
-from peewee import *
+from mailroom.config import Database
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-database.connect()
-database.execute_sql('PRAGMA foreign_keys = ON;')
-database.create_tables([Donation, Donor])
-
-# start initial controller
-controller = DonationController()
+database = Database()
+database.db_init('prod')
+controller = DonationController(database=database)
 
 
 def main_menu():
@@ -103,22 +100,27 @@ def list_donations():
     controller.display_donor_donations(donor)
 
 
+# TODO: move this to controller
 def edit_donations():
     donation_id = int(input('Input donation id: '))
-    donation = Donation.get(Donation.id == donation_id)
+    donation = controller.get_donation_details(donation_id)
     print(f'donation.id: {donation.id} '
           f'donation.donation_donor: {donation.donation_donor} '
           f'donation.donation_amount: {donation.donation_amount} '
           f'donation.donation_date: {donation.donation_date}')
     new_donation_amount = int(input('Please enter new donation amount: '))
     # in future look at adding more options on donations here
-    controller.update_donation(donation, 'donation_amount', new_donation_amount)
+    controller.update_donation(donation,
+                               'donation_amount',
+                               new_donation_amount)
 
 
+# TODO: move this to controller
 def edit_donor():
     """editing script for donor.  Only email edits allowed"""
     donor_name = input('Input donor name to edit: ')
-    donor = Donor.get(Donor.donor_name == donor_name)
+    donor = controller.get_donor_details(donor_name)
+
     print(f'donor.donor_name: {donor.donor_name} '
           f'donor.email: {donor.email} ')
     new_email = input('Please enter new email: ')
@@ -137,5 +139,9 @@ def delete_donor():
     donor_name = input('Input donor name to edit: ')
     controller.delete_donor(donor_name)
 
+
 if __name__ == '__main__':
-    main_menu()
+    try:
+        main_menu()
+    finally:
+        database.close()
