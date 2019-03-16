@@ -4,7 +4,7 @@
 
 """
 
-from peewee import *
+from peewee import SqliteDatabase, Model, CharField, DateField, DecimalField, ForeignKeyField
 
 database = SqliteDatabase('personjob.db')
 database.connect()
@@ -35,6 +35,7 @@ class Department(BaseModel):
     dept_id = CharField(primary_key=True, max_length=4)
     dept_name = CharField(max_length=30)
     dept_manager = CharField(max_length=30)
+
 
 class Job(BaseModel):
     """

@@ -2,12 +2,12 @@
 Populates personjob Database
 """
 
-from peewee import *
-from personjob_model import *
+from peewee import fn, SqliteDatabase
+from personjob_model import Person, Job, Department
 
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 database = SqliteDatabase('personjob.db')
 
@@ -53,7 +53,7 @@ def populate_person():
         logger.info('Print the Person records we saved...')
         for saved_person in Person:
             logger.info(f'{saved_person.person_name} lives in {saved_person.lives_in_town} ' +\
-                f'and likes to be known as {saved_person.nickname}')
+                        f'and likes to be known as {saved_person.nickname}')
     except Exception as e:
         logger.info(f'Error creating = {person[PERSON_NAME]}')
         logger.info(e)
@@ -75,7 +75,7 @@ def populate_job():
     DEPARTMENT = 5
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew', 'mktg'),
+        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew', 'mktg'),
         ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew', 'mktg'),
         ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew', 'mktg'),
         ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Peter', 'comm'),
@@ -137,22 +137,27 @@ def populate_dept():
         logger.info(f'Error creating = {dept[DEPT_ID]}')
         logger.info(e)
 
+
 def pretty_print():
     query = (Person
-          .select(Person,
-                  Job,
-                  Department,
-                  (fn.JULIANDAY(Job.end_date) - fn.JULIANDAY(Job.start_date)).cast('int').alias('job_length')
-                  )
-          .join(Job)
-          .join(Department)
-          .group_by(Job)
-          .order_by(Person.person_name)
-          )
+             .select(Person,
+                     Job,
+                     Department,
+                     (fn.JULIANDAY(Job.end_date) - fn.JULIANDAY(Job.start_date)).cast('int').alias('job_length')
+                     )
+             .join(Job)
+             .join(Department)
+             .group_by(Job)
+             .order_by(Person.person_name)
+             )
 
+    spacing = "{:<15} | {:<25} | {:<15} | {:>5}\n"
+
+    heading = spacing.format('Person', 'Position', 'Department', 'Days at Job')
+    print(heading)
     for p in query:
-        print(p.person_name, p.job.job_name, p.department.dept_name, p.job_length)
-
+        text = spacing.format(p.person_name, p.job.job_name, p.job.department.dept_name, p.job_length)
+        print(text)
 
 
 if __name__ == '__main__':
