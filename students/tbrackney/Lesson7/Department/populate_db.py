@@ -137,6 +137,23 @@ def populate_dept():
         logger.info(f'Error creating = {dept[DEPT_ID]}')
         logger.info(e)
 
+def pretty_print():
+    query = (Person
+          .select(Person,
+                  Job,
+                  Department,
+                  (fn.JULIANDAY(Job.end_date) - fn.JULIANDAY(Job.start_date)).cast('int').alias('job_length')
+                  )
+          .join(Job)
+          .join(Department)
+          .group_by(Job)
+          .order_by(Person.person_name)
+          )
+
+    for p in query:
+        print(p.person_name, p.job.job_name, p.department.dept_name, p.job_length)
+
+
 
 if __name__ == '__main__':
     try:
@@ -146,6 +163,7 @@ if __name__ == '__main__':
         populate_person()
         populate_dept()
         populate_job()
+        pretty_print()
     except Exception as e:
         logger.info(e)
     finally:
