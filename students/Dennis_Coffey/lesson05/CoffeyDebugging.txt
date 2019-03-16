@@ -1,0 +1,100 @@
+What is wrong with our logic?
+There is no logic to check or return for the False condition
+
+Why doesn't the function stop calling itself?
+If the function doesn't meet the condition to return True, then the my_fun function keeps calling itself indefinitely.
+
+What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+The value of n keeps being halved each time my_fun is called through recursion and therefore will approach zero if the True condition is not met.
+
+Below is my debugging log:
+
+$ python -m pdb recursive.py 11
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3     def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6
+  7         return my_fun(n/2)
+  8
+  9     if __name__ == '__main__':
+ 10         n = int(sys.argv[1])
+ 11         print(my_fun(n))
+(Pdb) n
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(3)<module>()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(9)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(10)<module>()
+-> n = int(sys.argv[1])
+(Pdb) s
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(11)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+11
+(Pdb) ll
+  3     def my_fun(n):
+  4  ->     if n == 2:
+  5             return True
+  6
+  7         return my_fun(n/2)
+(Pdb) b 4
+Breakpoint 1 at c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py:4
+(Pdb) c
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+5.5
+(Pdb) c
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+2.75
+(Pdb) s
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+1.375
+(Pdb) c
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.6875
+(Pdb) c
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) c
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.171875
+(Pdb) c
+> c:\users\denni\pythonclass\sp_online_course2_2018\students\dennis_coffey\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.0859375
+(Pdb) quit
+
