@@ -44,6 +44,18 @@ def get_furniture_data():
             'description': 'Plastic',
             'monthly_rental_cost': 1.00,
             'in_stock_quantity': 45
+        },
+        {
+            'product': 'Big Green Egg',
+            'description': 'Grill',
+            'monthly_rental_cost': 25000.00,
+            'in_stock_quantity': 5
+        },
+        {
+            'product': 'Coffee Table',
+            'description': 'Wood coffee table',
+            'monthly_rental_cost': 123.00,
+            'in_stock_quantity': 10
         }
     ]
     return furniture_data
