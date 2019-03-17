@@ -54,5 +54,21 @@ def run_example():
         cover_type = r.lindex('186675', 2)
         log.info(f'Type of cover = {cover_type}')
 
+        log.info('Step 9: store rich name with name, phone, email')
+        # store phone number then zip for customer
+        for i in range(10):
+            name = f'test_name_{i}'
+            phone = str(i)*3 + '-' + str(i)*3 + "-" + str(i)*4
+            zip_code = str(i)*5
+            r.rpush(name, phone)
+            r.rpush(name,zip_code)
+        
+        log.info('retrieve zip and phone number for known customer')
+        for i in range(10):
+            customer = f'test_name_{i}'
+            log.info(f'customer: {customer} zip: {r.lindex(customer, 1)} phone: {r.lindex(customer, 0)}')
+
+
+
     except Exception as e:
         print(f'Redis error: {e}')
