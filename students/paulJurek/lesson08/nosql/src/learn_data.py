@@ -26,6 +26,14 @@ def get_furniture_data():
             'in_stock_quantity': 3
         },
         {
+            'product': 'Green couch',
+            'product_type': 'couch',
+            'product_color': 'green',
+            'description': 'Cloth high back',
+            'monthly_rental_cost': 9.99,
+            'in_stock_quantity': 3
+        },
+        {
             'product': 'Coffee table',
             'product_type': 'table',
             'product_color': 'brown',

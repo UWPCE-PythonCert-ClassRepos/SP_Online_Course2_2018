@@ -54,5 +54,24 @@ def run_example(furniture_items):
         for doc in cursor:
             print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['product']} Stock: {doc['in_stock_quantity']}")
 
-        log.info('Step 8: Delete the collection so we can start over')
+        log.info(
+            'Step 8: Find red products')
+
+        cursor = furniture.find({'product_color': 'red'}).sort('monthly_rental_cost', 1)
+        print('Results of search')
+
+        for doc in cursor:
+            print(f"Color: {doc['product_color']} product name: {doc['product']} Stock: {doc['in_stock_quantity']}")
+
+        log.info('Step 9: find the couches')
+        
+        cursor = furniture.find({'product_type': 'couch'})
+        print('Results of search')
+
+        for doc in cursor:
+            print(f"Color: {doc['product_color']} product name: {doc['product']} Stock: {doc['in_stock_quantity']}")
+
+
+        log.info('Step 9: Delete the collection so we can start over')
+        
         #db.drop_collection('furniture')
