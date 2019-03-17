@@ -55,4 +55,4 @@ def run_example(furniture_items):
             print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['product']} Stock: {doc['in_stock_quantity']}")
 
         log.info('Step 8: Delete the collection so we can start over')
-        db.drop_collection('furniture')
+        #db.drop_collection('furniture')
