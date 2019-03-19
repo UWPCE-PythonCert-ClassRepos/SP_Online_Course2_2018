@@ -143,7 +143,8 @@ def pretty_print():
              .select(Person,
                      Job,
                      Department,
-                     (fn.JULIANDAY(Job.end_date) - fn.JULIANDAY(Job.start_date)).cast('int').alias('job_length')
+                     (fn.JULIANDAY(Job.end_date) - fn.JULIANDAY(Job.start_date))
+                     .cast('int').alias('job_length')
                      )
              .join(Job)
              .join(Department)
@@ -156,7 +157,10 @@ def pretty_print():
     heading = spacing.format('Person', 'Position', 'Department', 'Days at Job')
     print(heading)
     for p in query:
-        text = spacing.format(p.person_name, p.job.job_name, p.job.department.dept_name, p.job_length)
+        text = spacing.format(p.person_name,
+                              p.job.job_name,
+                              p.job.department.dept_name,
+                              p.job_length)
         print(text)
 
 

@@ -6,21 +6,21 @@ from peewee import SqliteDatabase, Model, CharField, DateField, DecimalField, Fo
 
 # import peewee as pw
 
-# database = SqliteDatabase('personjob.db')
+database = SqliteDatabase('donation_tracker.db')
 # database.connect()
 # database.execute_sql('PRAGMA foreign_keys = ON;')
 
 
 class BaseModel(Model):
     class Meta:
-        db = database
+        database = database
 
 
 class Donor(BaseModel):
     """
         This class defines the donor table
     """
-    donor_name = CharField(primary_key=True, max_length=30)
+    name = CharField(primary_key=True, max_length=30)
 
 
 class Donation(BaseModel):

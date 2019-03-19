@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 File Name: OO_Mailroom.py
 Author: Travis Brackney
@@ -6,13 +5,13 @@ Class: Python 201 - Self paced online
 Date Created 5/20/2018
 Python Version: 3.6.4
 """
-from donation_tracker import Donor, Donorlist
-from io import StringIO
 
-init_donors = ['Tom Selleck', 'Burt Reynolds', 'Nick Offerman', 'Sam Elliot', 'John Waters']
-init_donations = [[2000.00, 1500.00, 500.00], [45.00], [1000.00, 1000.00], [1200.00, 550.00], [20.00, 20.00, 20.00]]
-init_tuple = tuple(zip(init_donors, init_donations))
-dl = Donorlist(init_tuple)
+from donation_tracker import Donorlist
+from io import StringIO
+from peewee import SqliteDatabase
+
+database = SqliteDatabase('donation_tracker.db')
+dl = Donorlist(database)
 
 
 def get_donation(d_name):
