@@ -4,6 +4,7 @@
 
 import logging
 import logging.handlers
+from datetime import date
 
 log_format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 server_format = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
