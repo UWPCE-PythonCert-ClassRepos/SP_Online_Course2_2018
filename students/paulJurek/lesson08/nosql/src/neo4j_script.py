@@ -31,6 +31,8 @@ def run_example():
                             ('Fred', 'Barnes'),
                             ('Mary', 'Evans'),
                             ('Marie', 'Curie'),
+                            ('Bob', 'Dylan'),
+                            ('Santa', 'Claus')
                             ]:
             cyph = "CREATE (n:Person {first_name:'%s', last_name: '%s'})" % (
                 first, last)
@@ -95,3 +97,47 @@ def run_example():
         for rec in result:
             for friend in rec.values():
                 print(friend['first_name'], friend['last_name'])
+
+        log.info('Step 7: add colors to database')
+        colors_2_create = ['red', 'blue', 'green', 'white', 'black']
+        for color in colors_2_create:
+          cyph = "CREATE (n:Color {name:'%s'})" % (color)
+          session.run(cyph)
+
+        log.info("Step 8: Get all of colors in the DB:")
+        cyph = """MATCH (p:Color)
+                  RETURN p.name as color_name
+                """
+        result = session.run(cyph)
+        print("Colors in database:")
+        for record in result:
+            print(record['color_name'])
+
+        log.info('Step 9: Build color relationship')
+        log.info("Bob Jones likes black and white")
+
+        for first, last, color in [("Bob", "Jones", "black"),
+                            ("Bob", "Jones", "white"),
+                            ("Fred", "Barnes", "blue"),
+                            ("Marie", "Curie", "red")]:
+            cypher = """
+              MATCH (p1:Person {first_name:'%s', last_name:'%s'})
+              CREATE (p1)-[color:COLOR]->(c1:Color {color_name:'%s'})
+              RETURN p1
+            """ % (first, last, color)
+            session.run(cypher)
+
+        log.info('Step 10: Report people who like each color')
+        colors = ['red', 'blue', 'green', 'white', 'black']
+        for color in colors:
+          cyph = """
+            MATCH (marie {color_name:'%s'})
+                  -[:PERSON]->(friends)
+            RETURN friends
+            """
+          result = session.run(cyph)
+          print(f'people who like {color}')
+          for rec in result:
+              for friend in rec.values():
+                  print(friend['first_name'], friend['last_name'])
+        

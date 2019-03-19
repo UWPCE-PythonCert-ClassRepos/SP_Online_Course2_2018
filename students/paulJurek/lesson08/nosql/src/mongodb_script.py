@@ -74,4 +74,4 @@ def run_example(furniture_items):
 
         log.info('Step 9: Delete the collection so we can start over')
         
-        #db.drop_collection('furniture')
+        db.drop_collection('furniture')
