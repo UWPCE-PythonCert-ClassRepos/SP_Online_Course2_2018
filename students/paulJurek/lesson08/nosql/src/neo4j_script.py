@@ -131,7 +131,7 @@ def run_example():
         colors = ['red', 'blue', 'green', 'white', 'black']
         for color in colors:
           cyph = """
-            MATCH (marie {color_name:'%s'})
+            MATCH (color {color_name:'%s'})
                   -[:PERSON]->(friends)
             RETURN friends
             """
