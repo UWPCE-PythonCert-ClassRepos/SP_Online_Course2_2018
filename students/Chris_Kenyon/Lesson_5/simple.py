@@ -4,6 +4,7 @@
 
 import logging
 import logging.handlers
+from datetime import date
 
 log_format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 server_format = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
@@ -11,7 +12,7 @@ server_format = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 formatter = logging.Formatter(log_format)
 server_formatter = logging.Formatter(server_format)
 
-file_handler = logging.FileHandler('mylog.log')
+file_handler = logging.FileHandler(date.today().isoformat() + '.log')
 file_handler.setLevel(logging.WARNING)
 file_handler.setFormatter(formatter)
 
