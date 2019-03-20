@@ -1,0 +1,58 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+PS C:\Programming\SP_Online_Course2_2018\students\astrawmyer> & C:/Python36/python.exe c:/Programming/SP_Online_Course2_2018/students/astrawmyer/lesson10/great_circle.py
+[('Migos', 'Bad and Boujee (feat. Lil Uzi Vert)', 0.927, -5.313), ('Drake', 'Fake Love', 0.927, -9.433), ('Kendrick Lamar', 'HUMBLE.', 0.904, -6.8420000000000005), ('21 Savage', 'Bank Account', 0.884, -8.228), ('Jax Jones', "You Don't Know Me - Radio Edit", 0.8759999999999999, -6.053999999999999), ('Jax Jones', 'This is a Real Song', 0.825, -6.053)]
+Filename: c:/Programming/SP_Online_Course2_2018/students/astrawmyer/lesson10/great_circle.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    12  32.6953 MiB  32.6953 MiB   @profile(precision=4)
+    13                             def great_circle_raw(lon1, lat1, lon2, lat2, sample_list):
+    14  32.6992 MiB   0.0039 MiB       radius = 3956 # miles
+    15  32.6992 MiB   0.0000 MiB       x = math.pi / 180.0
+    16  32.6992 MiB   0.0000 MiB       a = (90.0 - lat1) * (x)
+    17  32.6992 MiB   0.0000 MiB       b = (90.0 - lat2) * (x)
+    18  32.6992 MiB   0.0000 MiB       theta = (lon2 - lon1) * (x)
+    19  32.7109 MiB   0.0117 MiB       c = math.acos((math.cos(a) * math.cos(b)) + (math.sin(a) * math.sin(b) * math.cos(theta)))
+    20                                 #adding random calculations for mememory filing purposes
+    21  32.7109 MiB   0.0000 MiB       f = []
+    22  36.4609 MiB   0.0625 MiB       for i in range(100000):
+    23  36.4609 MiB   0.3906 MiB           f.append(math.acos((math.cos(a) * math.cos(b)) + (math.sin(a) * math.sin(b) * math.cos(theta))))
+    24  36.4609 MiB   0.0000 MiB       d = a ** 6 + math.log(b)
+    25  36.4609 MiB   0.0000 MiB       e = c * d / math.factorial(6) + ((math.cos(a) * math.cos(b)) + (math.sin(a) * math.sin(b) * math.cos(theta)))
+    26  36.4609 MiB   0.0000 MiB       sample_list.append(('Jax Jones', "This is a Real Song", 0.825, -6.053))
+    27  36.4688 MiB   0.0078 MiB       print(sample_list)
+    28  36.4688 MiB   0.0000 MiB       return radius * c + e
+
+
+PS C:\Programming\SP_Online_Course2_2018\students\astrawmyer> cd C:\Programming\SP_Online_Course2_2018\students\astrawmyer\lesson10
+PS C:\Programming\SP_Online_Course2_2018\students\astrawmyer\lesson10> mprof run great_circle.py
+mprof: Sampling memory every 0.1s
+running as a Python program...
+[('Migos', 'Bad and Boujee (feat. Lil Uzi Vert)', 0.927, -5.313), ('Drake', 'Fake Love', 0.927, -9.433), ('Kendrick Lamar', 'HUMBLE.', 0.904, -6.8420000000000005), ('21 Savage', 'Bank Account', 0.884, -8.228), ('Jax Jones', "You Don't Know Me - Radio Edit", 0.8759999999999999, -6.053999999999999), ('Jax Jones', 'This is a Real Song', 0.825, -6.053)]
+Filename: great_circle.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    12  32.6992 MiB  32.6992 MiB   @profile(precision=4)
+    13                             def great_circle_raw(lon1, lat1, lon2, lat2, sample_list):
+    14  32.7031 MiB   0.0039 MiB       radius = 3956 # miles
+    15  32.7031 MiB   0.0000 MiB       x = math.pi / 180.0
+    16  32.7031 MiB   0.0000 MiB       a = (90.0 - lat1) * (x)
+    17  32.7031 MiB   0.0000 MiB       b = (90.0 - lat2) * (x)
+    18  32.7031 MiB   0.0000 MiB       theta = (lon2 - lon1) * (x)
+    19  32.7148 MiB   0.0117 MiB       c = math.acos((math.cos(a) * math.cos(b)) + (math.sin(a) * math.sin(b) * math.cos(theta)))
+    20                                 #adding random calculations for mememory filing purposes
+    21  32.7148 MiB   0.0000 MiB       f = []
+    22  36.3125 MiB   0.0000 MiB       for i in range(100000):
+    23  36.3125 MiB   0.3086 MiB           f.append(math.acos((math.cos(a) * math.cos(b)) + (math.sin(a) * math.sin(b) * math.cos(theta))))
+    24  36.3125 MiB   0.0000 MiB       d = a ** 6 + math.log(b)
+    25  36.3125 MiB   0.0000 MiB       e = c * d / math.factorial(6) + ((math.cos(a) * math.cos(b)) + (math.sin(a) * math.sin(b) * math.cos(theta)))
+    26  36.3125 MiB   0.0000 MiB       sample_list.append(('Jax Jones', "This is a Real Song", 0.825, -6.053))
+    27  36.3203 MiB   0.0078 MiB       print(sample_list)
+    28  36.3203 MiB   0.0000 MiB       return radius * c + e
+
+
+PS C:\Programming\SP_Online_Course2_2018\students\astrawmyer\lesson10> mprof plot
+Using last profile data.
