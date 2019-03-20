@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
 # new file for lesson 9 work to incorporate classes.
+import json_save.json_save_meta as jsn
 
-
-class Donor:
+class Donor(jsn.JsonSaveable):
+    name = jsn.String()
+    donations = jsn.List()
+    
     def __init__(self, name, *donation):
         self.name = name
         self.donations = donation[0]
@@ -24,7 +27,9 @@ class Donor:
 
 
 
-class Donors:
+class Donors(jsn.JsonSaveable):
+    data = jsn.Dict()
+
     def __init__(self):
         self.data = {}
     
@@ -76,3 +81,4 @@ class Donors:
             with open('{}.txt'.format(name), 'w') as f:
                 f.write(self.write_letter(name, donation))
         print("Letter files created.")
+    

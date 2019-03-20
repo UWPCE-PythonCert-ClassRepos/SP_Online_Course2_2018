@@ -37,6 +37,14 @@ def thank_you():
             #print(ddonors)
             break
 
+def save_data():
+    with open("donor_file.json") as donor_file:
+        data = donor_set.to_json()
+        donor_file.write(data)
+
+def load_data():
+    with open("donor_file.json") as donor_file:
+        donor_set = jsn.from_json(donor_file)
  
 if __name__ == "__main__":
     # Adding this to import preset data.
@@ -49,10 +57,16 @@ if __name__ == "__main__":
     donor_set.new_donor(c)
 
     # Actual code.
-    main_switch_function = {"1": thank_you, "2": donor_set.write_report, "3": donor_set.letter_files, "4": exit}
+    main_switch_function = {"1": thank_you,
+                            "2": donor_set.write_report,
+                            "3": donor_set.letter_files,
+                            "4": load_data,
+                            "5": save_data,
+                            "6": exit
+                            }
     while True:
         print("What do you want to do?")
-        response = input("1. Send a Thank You, 2. Create a Report, 3. Send all letters, 4. Quit: ")
+        response = input("1. Send a Thank You, 2. Create a Report, 3. Send all letters, 4. Load, 5. Save, 6. Quit: ")
         try:
             main_switch_function.get(response)()
         except TypeError:
