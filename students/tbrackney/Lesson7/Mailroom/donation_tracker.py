@@ -1,9 +1,9 @@
 """
 File Name: donation_tracker.py
 Author: Travis Brackney
-Class: Python 201 - Self paced online
-Date Created 5/16/2018
-Python Version: 3.6.4
+Class: Python 220 - Self paced online
+Date Created 3/19/2019
+Python Version: 3.7.0
 """
 
 import logging
