@@ -208,7 +208,7 @@ class MongoDBAccessLayer:
             return {'donation': donation_id,
                     'donation_amount_cents': don.donation_amount_cents,
                     'donation_date': don.donation_date}
-    
+       
     def get_emails(self):
         """returns a list of email, names from database"""
         donors = Donor.objects.get()
