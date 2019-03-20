@@ -1,0 +1,20 @@
+{
+    "__obj_type": "Donors",
+    "data": {
+        "James Hinchcliffe": [
+            12.2,
+            2.51,
+            3.2
+        ],
+        "Robert Wickens": [
+            1024.14,
+            22.21,
+            323.45
+        ],
+        "Sam Schmidt": [
+            3.2,
+            5.55,
+            4.2
+        ]
+    }
+}

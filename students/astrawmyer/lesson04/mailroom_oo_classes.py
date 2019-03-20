@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # new file for lesson 9 work to incorporate classes.
-import json_save.json_save_meta as jsn
+import json_save.json_save.json_save_meta as jsn
 
 class Donor(jsn.JsonSaveable):
     name = jsn.String()

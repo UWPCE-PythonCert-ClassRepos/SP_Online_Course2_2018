@@ -15,7 +15,7 @@ import json
 
 # import * is a bad idea in general, but helpful for a modules that's part
 # of a package, where you control the names.
-import saveables
+from .saveables import *
 
 
 class MetaJsonSaveable(type):

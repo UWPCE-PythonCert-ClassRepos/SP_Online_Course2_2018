@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import mailroom_oo_classes as mc
+import json_save.json_save.json_save_meta as jsn
+import json
 
 
 def thank_you():
@@ -38,12 +40,14 @@ def thank_you():
             break
 
 def save_data():
-    with open("donor_file.json") as donor_file:
+    with open("donor_file.json", "w") as donor_file:
         data = donor_set.to_json()
         donor_file.write(data)
 
 def load_data():
+    global donor_set
     with open("donor_file.json") as donor_file:
+        #data = donor_file.read()
         donor_set = jsn.from_json(donor_file)
  
 if __name__ == "__main__":
