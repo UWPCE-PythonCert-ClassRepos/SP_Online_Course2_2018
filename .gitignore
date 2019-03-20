@@ -144,6 +144,10 @@ students/DennisLee/lesson06/squarer/test2.py
 students/DennisLee/lesson06/water-regulation/README.md
 students/DennisLee/lesson08/data/
 students/DennisLee/lesson08/logs/
+
 students/paulJurek/lesson08/config/config_redis
 students/paulJurek/lesson08/config/config_mongodb
 students/paulJurek/lesson08/config/config_neo4j
+#secrets
+.config/
+
