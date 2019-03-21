@@ -6,6 +6,8 @@ and management of donations"""
 
 import datetime
 import logging
+import login_database
+import utilities
 
 
 class DonationController():
@@ -21,6 +23,21 @@ class DonationController():
     def __init__(self, database):
         self.logger = logging.getLogger(__name__)
         self.database = database
+        self.email_cache = login_database.login_redis_cloud()
+
+    def cache_donor_email(self, email, name):
+        """caches single email.  Key is email and name is value
+        to support easy lookup if email exists and if so, who it belongs
+        to"""
+        self.email_cache.set(email, name)
+
+
+    def cache_donor_emails(self):
+        """brings emails into cache.  Set to pull emails
+        from persistant database and put these into"""
+        emails = self.database.get_emails()
+        for email in emails:
+            self.cache_donor_email(email[0], email[1])
 
     def find_donor(self, donor_name: str):
         """searches through donor list and returns donor
