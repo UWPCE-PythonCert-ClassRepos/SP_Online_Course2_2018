@@ -1,0 +1,52 @@
+Filename: .\proc_text.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    61     38.3 MiB     38.3 MiB   @profile
+    62                             def comprehension(file):
+    63                                 """
+    64                                 Processes text using a list comprehension
+    65                                 """
+    66     46.0 MiB      7.7 MiB       input = read_text(file)
+    67     49.8 MiB      0.1 MiB       list = [w + w[::-1] for w in input if (len(w) > 4)]
+    68     51.2 MiB      1.5 MiB       return ' '.join(list)
+
+
+Filename: .\proc_text.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    42     40.3 MiB     40.3 MiB   @profile
+    43                             def map_filter(file):
+    44                                 """
+    45                                 processes text using map and filter functions above
+    46                                 """
+    47     49.3 MiB      9.0 MiB       input = read_text(file)
+    48     49.3 MiB      0.0 MiB       output0 = map(map_text, filter(filter_text, input))
+    49     50.9 MiB      1.6 MiB       return ' '.join(output0)
+
+
+Filename: .\proc_text.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    52     43.2 MiB     43.2 MiB   @profile
+    53                             def map_lambda(file):
+    54                                 """
+    55                                 same filter function using inline lambdas
+    56                                 """
+    57     50.8 MiB      7.6 MiB       input = read_text(file)
+    58     54.1 MiB      0.1 MiB       output1 = map(lambda w: w + w[::-1], filter(lambda w: len(w) > 4, input))
+    59     52.4 MiB      0.0 MiB       return ' '.join(output1)
+
+
+Length of comprehension list: 768625
+Length of map list: 768625
+Length of map lambda list: 768625
+
+
+Discussion:
+Returning the string seems to use quite a bit less memory when using
+map filter with lambdas than the other two.  However, there seems
+to be enough variance in memory used reading the file that the gains
+from using this method are mostly cancelled out.
