@@ -1,9 +1,9 @@
 import os
-import donors_10 as d
 import sys
+import donors
 from functools import reduce
 
-mail = d.Group(d.Individual('Shane', [200]), d.Individual('Joe', [1, 2, 3, 4]))
+mail = donors.Group.json_load()
 
 
 def more_choices():
@@ -124,8 +124,11 @@ def run_projections():
         else:
             pass
 
+def load_database():
+    mail = donors.Group.json_load()
 
-
+def save_database():
+    mail.json_save()
 
 def wrong_choice():
     pass
@@ -141,16 +144,19 @@ if __name__ == '__main__':
                    '2': print_report,
                    '3': letters_for_all,
                    '4': run_projections,
-                   '5': quit_program}
+                   '5': load_database,
+                   '6': save_database,
+                   '7': quit_program}
     while True:
         response = input(
             '\nChoose an Action:\n'
             '1 - Send a Thank You\n'
             '2 - Create a Report\n'
-
             '3 - Send letters to everyone\n'
             '4 - Run Projections\n'
-            '5 - Quit\n'
+            '5 - Load Donor Database\n'
+            '6 - Save Donor Database\n'
+            '7 - Quit\n'
             '>>')
 
         switch_dict.get(response, wrong_choice)()
