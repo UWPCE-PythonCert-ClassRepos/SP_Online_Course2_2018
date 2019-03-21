@@ -2,9 +2,7 @@ import json_save.json_save_meta as js
 
 
 class Group(js.JsonSaveable):
-    x = js.Int()
-    y = js.Float()
-    lst = js.List()
+    donor_list = js.List()
 
     def __init__(self, *args):
         self._donor_raw = {d.name: d for d in args}
@@ -144,11 +142,34 @@ class Group(js.JsonSaveable):
 
         return match_total
 
-    def savetojson(self):
-        with open('json.txt', 'w') as to_file:
-            to_file.write('Start Here')
+    def json_save(self):
+        """Save the list of donors for Group() class instance in json format."""
+        temp_list = []
+        for some_name, donor_obj in self._donor_raw.items():
+            temp_list.append(donor_obj.json_format())
 
-class Individual:
+        setattr(self, 'donor_list', temp_list)
+        #return self.to_json_compat()
+
+        with open('json.txt', 'w') as to_file:
+            self.to_json(to_file)
+
+    @staticmethod
+    def json_load():
+        """Create an instance of Group and load into this a list of donors
+        from a file written in json format."""
+        with open('json.txt', 'r') as from_file:
+            from_dict = from_file.read()
+            temp_obj = js.from_json(from_dict)
+            for donor in getattr(temp_obj, 'donor_list'):
+                #create instances of donors and give attributes
+                print(donor.__dict__)
+            return temp_obj
+
+
+class Individual(js.JsonSaveable):
+    donor_name = js.String()
+    donor_donations = js.List()
     def __init__(self, name, donations):
         self.name = name
         self.donations = donations
@@ -169,6 +190,11 @@ class Individual:
     def last_donation(self):
         return self.donations[-1]
 
+    def json_format(self):
+        setattr(self, 'donor_name', self.name)
+        setattr(self,'donor_donations',self.donations)
+        return self.to_json_compat()
+
     @property
     def thank_you(self):
         """Add a donation to a donors records and print a report."""
@@ -178,9 +204,27 @@ class Individual:
 
 if __name__ == '__main__':
     mail = Group(Individual('Shane', [200]), Individual('Joe', [1, 2, 3, 4]))
-    print(mail._donor_raw)
-    print(mail._attrs_to_save)
-    print(mail)
-    #mail.print_donors()
-    #print(mail.__dict__)
-    ##mail.savetojson()
+    shane=Individual('Shane', [300])
+    #print('Print shane.__dict__')
+    #print(shane.__dict__,'\n')
+    #print('Print mail._donor_raw')
+    #print(mail._donor_raw,'\n')
+    #print('Print mail._attrs_to_save')
+    #print(mail._attrs_to_save,'\n')
+    #print('Print mail')
+    #print(mail,'\n')
+    print('Print(shane.__dict__')
+    print(shane.__dict__,'\n')
+    joe = Individual('Joe', [300,500,1000])
+    print('Print(joe.indiv_tojson()')
+    print(joe.json_format(),'\n')
+    print('Print(shane.indiv_tojson()')
+    print(shane.json_format(),'\n')
+    #print('Print mail.save_tojson()')
+    #print(mail.json_save(), '\n')
+    print('loading json from file')
+    new_group = Group.json_load()
+    print(new_group)
+    print('Loading new individuals from imported JSON file')
+    shane1 = new_group.donor_list[0]
+    print(shane1)

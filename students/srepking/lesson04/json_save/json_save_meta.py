@@ -63,6 +63,8 @@ class JsonSaveable(metaclass=MetaJsonSaveable):
         obj = super().__new__(cls)
         # set the instance attributes to defaults
         for attr, typ in cls._attrs_to_save.items():
+            print('In JsonSaveable, The attr is', attr)
+            print('In JasonSaveable, The type is:', typ)
             setattr(obj, attr, typ.default)
         return obj
 
@@ -87,6 +89,7 @@ class JsonSaveable(metaclass=MetaJsonSaveable):
         """
         # add and __obj_type attribute, so it can be reconstructed
         dic = {"__obj_type": self.__class__.__qualname__}
+
         for attr, typ in self._attrs_to_save.items():
             dic[attr] = typ.to_json_compat(getattr(self, attr))
         return dic
