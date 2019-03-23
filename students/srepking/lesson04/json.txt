@@ -5,7 +5,8 @@
             "__obj_type": "Individual",
             "name": "Shane",
             "donations": [
-                300.0
+                400.0,
+                200.0
             ]
         }
     }
