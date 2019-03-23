@@ -161,8 +161,6 @@ class Group(js.JsonSaveable):
         with open('json.txt', 'r') as from_file:
             from_dict = from_file.read()
             if from_dict == '':
-                #print('The file is empty. Add a donor.')
-                #empty_donor = Group(Individual('', []))
                 return
             else:
                 return js.from_json(from_dict)
