@@ -7,35 +7,35 @@ from functools import reduce
 def more_choices():
     while True:
         name = input('\nChoose an Option: \n'
-                     'e - to exit\n'
-                     'list -To see a list of names, or\n'
+                     '>>e - to exit\n'
+                     '>>list -To see a list of names, or\n'
                      'Type a name to start your thank you letter >>')
         if name == 'e':
             return
         if name == 'list':
             mail.print_donors()
-
+        else:
             if mail.search(name) is None:
                 yes_no = input('The name you entered is not in the database.'
                                'Would you like to add this name? y or n >>')
                 if yes_no == 'n':
                     return
 
-                amount = input('\n''What is the donation amount? or '
+            amount = input('\n''What is the donation amount? or '
                         '\'e\' to exit >')
-                if amount == 'e':
-                    return
-                try:
-                    if int(amount) <= 0:
-                        print('\nYou entered an invalid amount!!\n')
-                        return
-                except ValueError:
+            if amount == 'e':
+                return
+            try:
+                if int(amount) <= 0:
                     print('\nYou entered an invalid amount!!\n')
-                    return ValueError
-                else:
-                    mail.add(name, float(amount))
-                    donor_obj = mail._donor_raw[name]
-                    print(donor_obj.thank_you)
+                    return
+            except ValueError:
+                print('\nYou entered an invalid amount!!\n')
+                return ValueError
+            else:
+                mail.add(name, float(amount))
+                donor_obj = mail._donor_raw[name]
+                print(donor_obj.thank_you)
 
 
 
