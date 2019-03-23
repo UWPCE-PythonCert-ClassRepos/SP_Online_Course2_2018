@@ -160,7 +160,12 @@ class Group(js.JsonSaveable):
         from a file written in json format."""
         with open('json.txt', 'r') as from_file:
             from_dict = from_file.read()
-            return js.from_json(from_dict)
+            if from_dict == '':
+                #print('The file is empty. Add a donor.')
+                #empty_donor = Group(Individual('', []))
+                return
+            else:
+                return js.from_json(from_dict)
 
 class Individual(js.JsonSaveable):
     name = js.String()
@@ -197,10 +202,10 @@ class Individual(js.JsonSaveable):
                 .format(self.donations[-1], self.name))
 
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
     #test the save feature
-    mail = Group(Individual('Shane', [1]), Individual('Joe', [1, 2, 3, 4,5]))
-    mail.json_save()
+    #mail = Group(Individual('Shane', [1]), Individual('Joe', [1, 2, 3, 4,5]))
+    #mail.json_save()
     #shane=Individual('Shane', [300])
     #print('Print shane.__dict__')
     #print(shane.__dict__,'\n')
