@@ -1,0 +1,12 @@
+{
+    "__obj_type": "Group",
+    "_donor_raw": {
+        "Shane": {
+            "__obj_type": "Individual",
+            "name": "Shane",
+            "donations": [
+                300.0
+            ]
+        }
+    }
+}
