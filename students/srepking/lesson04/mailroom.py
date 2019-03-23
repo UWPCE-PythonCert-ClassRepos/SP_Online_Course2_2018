@@ -1,9 +1,7 @@
 import os
 import sys
-import donors
+import donors as d
 from functools import reduce
-
-mail = donors.Group.json_load()
 
 
 def more_choices():
@@ -16,9 +14,6 @@ def more_choices():
             return
         if name == 'list':
             mail.print_donors()
-        else:
-            print('\n''Ok, you want to write a letter for {}, '
-                  'lets see what we can do.'.format(name))
 
             if mail.search(name) is None:
                 yes_no = input('The name you entered is not in the database.'
@@ -26,21 +21,22 @@ def more_choices():
                 if yes_no == 'n':
                     return
 
-            amount = input('\n''What is the donation amount? or '
-                           '\'e\' to exit >')
-            if amount == 'e':
-                return
-            try:
-                if int(amount) <= 0:
-                    print('\nYou entered an invalid amount!!\n')
+                amount = input('\n''What is the donation amount? or '
+                        '\'e\' to exit >')
+                if amount == 'e':
                     return
-            except ValueError:
-                print('\nYou entered an invalid amount!!\n')
-                return ValueError
-            else:
-                mail.add(name, float(amount))
-                donor_obj = mail._donor_raw[name]
-                print(donor_obj.thank_you)
+                try:
+                    if int(amount) <= 0:
+                        print('\nYou entered an invalid amount!!\n')
+                        return
+                except ValueError:
+                    print('\nYou entered an invalid amount!!\n')
+                    return ValueError
+                else:
+                    mail.add(name, float(amount))
+                    donor_obj = mail._donor_raw[name]
+                    print(donor_obj.thank_you)
+
 
 
 def print_report():
@@ -139,6 +135,15 @@ def quit_program():
 
 
 if __name__ == '__main__':
+
+    mail = d.Group.json_load()
+    try:
+        getattr(mail, '_donor_raw')
+    except AttributeError:
+        print('The database was empty, please add a donor:')
+        name = input('\nName:')
+        amount = input('\nAmount:')
+        mail = d.Group(d.Individual(name, [float(amount)]))
 
     switch_dict = {'1': more_choices,
                    '2': print_report,
