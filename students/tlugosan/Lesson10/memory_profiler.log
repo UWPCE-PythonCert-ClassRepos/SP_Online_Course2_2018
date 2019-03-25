@@ -1,0 +1,2124 @@
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11                                     return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+
+Filename: C:/Users/tlugo/Desktop/PythonUW/Class220/SP_Online_Course2_2018/students/tlugosan/Lesson10/sandbox_profiling.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+     6     33.0 MiB     33.0 MiB   @profile(stream=fp)
+     7                             def fib_profiling(n):
+     8     33.0 MiB      0.0 MiB       if n <= 1:
+     9     33.0 MiB      0.0 MiB           return n
+    10                                 else:
+    11     33.0 MiB      0.0 MiB           return fib_profiling(n-1) + fib_profiling(n-2)
+
+

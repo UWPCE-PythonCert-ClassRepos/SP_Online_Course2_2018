@@ -1,0 +1,17 @@
+C:\Users\tlugo\Desktop\PythonUW\Class220\SP_Online_Course2_2018\students\tlugosan\Lesson10>pypy3 sandbox.py
+9227465
+Memoized implemematation: 0.0007040500640869141
+9227465
+Regualr recursive implemematation: 0.24724817276000977
+9227465
+Using clock: 0.00022580148530457542
+
+C:\Users\tlugo\Desktop\PythonUW\Class220\SP_Online_Course2_2018\students\tlugosan\Lesson10>python sandbox.py
+9227465
+Memoized implemematation: 0.0
+9227465
+Regualr recursive implemematation: 5.455860137939453
+9227465
+Using clock: 0.00014173686306997158
+
+C:\Users\tlugo\Desktop\PythonUW\Class220\SP_Online_Course2_2018\students\tlugosan\Lesson10>
