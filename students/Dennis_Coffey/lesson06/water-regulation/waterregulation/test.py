@@ -23,10 +23,10 @@ class DeciderTests(unittest.TestCase):
         unit tests.
         """
 
-        margin = self.decider.margin
         self.pump = Pump('127.0.0.1', 8000)
         self.sensor = Sensor('127.0.0.1', 8000)
         self.decider = Decider(target_height=100, margin=0.05)
+        margin = self.decider.margin
         self.controller = Controller(self.sensor, self.pump, self.decider)
         self.low_height = self.decider.target_height * (1 - 2 * margin)
         self.high_height = self.decider.target_height * (1 + 2 * margin)
