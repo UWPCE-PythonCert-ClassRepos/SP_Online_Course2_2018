@@ -1,8 +1,9 @@
 """
     Simple database example with Peewee ORM, sqlite and Python
     Here we define the schema
-
 """
+
+
 from peewee import *
 
 database = SqliteDatabase('personjobdept.db')

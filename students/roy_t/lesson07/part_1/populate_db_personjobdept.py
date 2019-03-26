@@ -82,9 +82,9 @@ def populate_jobs():
     jobs = [
         ('Reverse Software Engineer', '2011-02-28', '2012-04-24', 135000, 'Peter', 'IT'),
         ('Database Normalizer', '2000-03-12', '2009-12-12', 99000, 'Peter', 'IT'),
-        ('Structural Engineer', '2015-12-09', '2019-02-02', 140000, 'Andrew1', 'SA'),
-        ('Administrator', '2017-07-19', '2018-03-04', 75000, 'Andrew2', 'SA'),
-        ('Staff Analyst', '2012-05-05', '2015-04-30', 89000, 'Andrew3', 'SA')
+        ('Structural Engineer', '2015-12-09', '2019-02-02', 140000, 'Andrew', 'SA'),
+        ('Administrator', '2017-07-19', '2018-03-04', 75000, 'Andrew', 'SA'),
+        ('Staff Analyst', '2012-05-05', '2015-04-30', 89000, 'Andrew', 'SA')
     ]
 
     try:
@@ -163,4 +163,4 @@ def populate_departments():
 if __name__ == '__main__':
     populate_people()
     populate_departments()
-    # populate_jobs()
+    populate_jobs()
