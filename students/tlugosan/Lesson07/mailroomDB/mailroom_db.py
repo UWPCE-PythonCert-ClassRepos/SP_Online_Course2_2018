@@ -102,7 +102,7 @@ class DonorDB:
             self.database.connect()
             self.database.execute_sql('PRAGMA foreign_keys = ON;')
 
-            query = (Donations
+            query = (Donor
                      .select(Donor.person_name, fn.COUNT(
                 Donations.donation_amount).alias(
                 'donation_count'), fn.SUM(Donations.donation_amount).alias(
@@ -110,15 +110,19 @@ class DonorDB:
                              (fn.SUM(Donations.donation_amount) / fn.COUNT(
                                  Donations.donation_amount)).alias(
                                  'average'))
-                     .join(Donor, JOIN.INNER)
-                     .group_by(Donor)
+                     .join(Donations, JOIN.LEFT_OUTER)
+                     .group_by(Donor.person_name)
                      .order_by(fn.SUM(Donations.donation_amount) / fn.COUNT(
                 Donations.donation_amount))
                      )
 
             for d in query:
-                print("{:<20}| ${:<19}| {:<19}| ${:<19}".format(str(
-                    d.donor_name),
+                if(d.donation_count==0):
+                    d.total_amount = 0
+                    d.average = 0
+
+                print("{:<20}| ${:>18}| {:>19}| ${:>19}".format(str(
+                    d.person_name),
                     str(round(d.total_amount, 2)),
                     str(d.donation_count),
                     str(round(d.average, 2))))
@@ -161,19 +165,41 @@ class DonorDB:
         finally:
             self.database.close()
 
+    def print_db2(self):
+        """Prints each donnation of each donor"""
+        try:
+            self.database.connect()
+            self.database.execute_sql('PRAGMA foreign_keys = ON;')
+            query = (Donor
+                     .select(Donor.person_name, Donations)
+                     .join(Donations, JOIN.LEFT_OUTER))
+            print("doug")
+            for d in query:
+                try:
+                    print("{:<20}: {}".format(str(d.person_name),
+                                          str(d.donations.donation_amount)))
+                except Exception as e1:
+                    print("{:<20}: did not donate".format(str(d.person_name)))
+
+        except Exception as e:
+            logger.info(e)
+
+        finally:
+            self.database.close()
+
     def print_db(self):
         """Prints each donnation of each donor"""
         try:
             self.database.connect()
             self.database.execute_sql('PRAGMA foreign_keys = ON;')
-            query = (Donations
+            query = (Donor
                      .select(Donor.person_name, Donations.donation_amount)
-                     .join(Donor, JOIN.INNER)
-                     )
+                     .join(Donations, JOIN.LEFT_OUTER)
+                    )
 
             for d in query:
-                print("{:<20}: ${}".format(str(d.donor_name),
-                                           str(d.donation_amount)))
+                print("{:<20}: ".format(str(d.person_name)),
+                                        str(d.donations.donation_amount))
 
         except Exception as e:
             logger.info(e)
@@ -201,7 +227,7 @@ class DonorDB:
 
         finally:
             self.database.close()
-            
+
         return donor_list
 
     def send_everyone_letters(self, target_directory=os.getcwd()):
@@ -347,4 +373,5 @@ switch_func_dict = {
 }
 
 if __name__ == '__main__':
-    select_action_dictionary(print_menu(), switch_func_dict)
+    # select_action_dictionary(print_menu(), switch_func_dict)
+    myDB.print_db2()
