@@ -1,0 +1,132 @@
+If n, the input, is not divisible by 2, or 2*2, or 2*2*2, or 2*2*2*2, or 2*2*2*.........*2, then it will not converge,
+and the program will continue to iterate indefinitely as n gets infinitely small.
+
+There is nothing in the program to keep the recursion from continuing after n becomes smaller than 2. Once smaller than 2, 
+the equality will never be satisfied, and the program will continue making recursive calls as n approaches zero.
+
+
+
+
+
+repkins@SCL1712238 MINGW64 /h/GitHub/Python220/SP_Online_Course2_2018/students/srepking/lesson05 (master)
+$ python -m pdb debugger.py 17
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(1)<module>()
+-> import sys
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(11)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(12)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+17
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+8.5
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+4.25
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+2.125
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.0625
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.53125
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.265625
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.1328125
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> h:\github\python220\sp_online_course2_2018\students\srepking\lesson05\debugger.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.06640625
+(Pdb)
