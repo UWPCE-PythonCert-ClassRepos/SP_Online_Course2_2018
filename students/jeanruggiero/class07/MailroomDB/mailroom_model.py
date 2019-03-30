@@ -7,6 +7,7 @@ Define database model for mailroom application.
 from peewee import *
 import statistics
 
+
 database = SqliteDatabase('mailroom.db', pragmas={'foreign_keys': 1})
 database.connect()
 
@@ -26,6 +27,7 @@ class Donor(BaseModel):
 
     # Use person name as primary key
     name = CharField(primary_key=True, max_length=50)
+    date_added = DateField(formats='YYYY-MM-DD')
 
     @property
     def donation_count(self):
@@ -57,6 +59,7 @@ class Donor(BaseModel):
             print('Error')
         return statistics.mean([donation.amount for donation in query])
 
+
 class Donation(BaseModel):
     """
     This class defines Donation, which maintains details of all
@@ -66,6 +69,7 @@ class Donation(BaseModel):
     # Use a generated primary key for donations since there is no
     # natural unique identifier
     amount = DecimalField(decimal_places=2, auto_round=True)
+    date = DateField(formats='YYYY-MM-DD')
     donor = ForeignKeyField(Donor, null=False)
 
 

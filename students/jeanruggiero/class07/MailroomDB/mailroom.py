@@ -1,5 +1,10 @@
 #!/usr/bin/env python
-# This script maintains a databse of donors including name and donation amounts
+
+"""
+This script maintains a database of donors including name and donation
+amounts
+"""
+
 import datetime
 import donor_report
 from mailroom_model import *
@@ -7,7 +12,8 @@ from peewee import *
 
 
 # Define exception to exit script
-class ExitScript(Exception): pass
+class ExitScript(Exception):
+    pass
 
 
 # Define main menu functions
@@ -24,19 +30,25 @@ def add_donation():
                     print(donor.name)
             else:
                 try:
-                    new_donor = Donor.create(name=name)
+                    new_donor = Donor.create(
+                        name=name,
+                        date_added=datetime.date.today()
+                        )
                     new_donor.save()
-                except Exception as e:
-                    raise e
-                break
+                    break
+                except IntegrityError:
+                    print('This donor already exists. Adding a new donation...')
+                    break
 
         while True:
             amount = input('Enter the donation amount: ')
             if amount.lower() == 'return':
                 return
             try:
+                amount = float(amount)
                 new_donation = Donation.create(
                     amount=amount,
+                    date=datetime.date.today(),
                     donor=name
                     )
                 new_donation.save()
@@ -59,19 +71,38 @@ def send_letters():
     """
 
     d = datetime.date.today()
+    thanked_donors = []
+    for donor in Donor.select():
+        donations = (Donation
+                     .select()
+                     .where(Donation.donor == donor)
+                     .order_by(-Donation.date))
 
-    for donor in self:
-        filename = '_'.join([donor.name.replace(' ', '_'), str(d.month),
-                             str(d.day), str(d.year)]) + '.txt'
+        if donor not in thanked_donors:
+            filename = '_'.join([donor.name.replace(' ', '_'), str(d.month),
+                                 str(d.day), str(d.year)]) + '.txt'
+            with open(filename, 'w') as f:
+                f.write(thank(donor.name, donations[0].amount))
 
-        with open(filename, 'w') as f:
-            f.write(donor.thank(donor.donations[-1]))
+            thanked_donors.append(donor)
 
 
 def delete_donor():
     """
     Delete a donor from the database.
     """
+    with database.transaction():
+        while True:
+            name = input("Enter the donor's Full Name, or 'list': ").lower()
+            if name == 'return':
+                return
+            elif name == 'list':
+                for donor in (Donor.select()):
+                    print(donor.name)
+            else:
+                donor_del = Donor.get(Donor.name == name)
+                donor_del.delete_instance(recursive=True)
+                break
     pass
 
 
@@ -87,9 +118,7 @@ def thank(name, amount):
     return f"Dear {name},\n\n" + \
         "Thank you so much for your generous donation of " + \
         f"${amount:.2f}.\n\nWe really appreciate your donations " + \
-        f"totalling ${donor.total_donations:.2f}.\n" + \
-        f"You are ${1000000000-donor.total_donations:.2f} away from a" + \
-        " gift of Spaceballs: The Flamethrower!\n\n" + \
+        f"totalling ${donor.donation_total:.2f}.\n" + \
         "Sincerely, The Wookie Foundation"
 
 
@@ -112,7 +141,7 @@ if __name__ == '__main__':
             # Main menu - prompt user for an action
             print('''
                 \nSelect an action to perform...\n
-                Type "return" at any time to return to main menu.\n
+                Type "return" at any time to return to main menu.
                 ''')
             action = input('''
                 1: Add a Donation & Send Thank You
@@ -124,6 +153,6 @@ if __name__ == '__main__':
             actions.get(action)()
         except ExitScript:
             break
-        except TypeError:
-            if action not in actions:
-                continue
+        # except TypeError:
+        #     if action not in actions:
+        #         continue
