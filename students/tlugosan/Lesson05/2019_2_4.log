@@ -1,0 +1,6 @@
+2019-02-04 18:57:04,450 logging_ex.py:39  WARNING The value of i is 50.
+2019-02-04 18:57:04,450 logging_ex.py:43  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2019-02-04 18:57:33,932 logging_ex.py:39  WARNING The value of i is 50.
+2019-02-04 18:57:33,932 logging_ex.py:43  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.
+2019-02-04 23:26:17,497 logging_ex.py:39  WARNING The value of i is 50.
+2019-02-04 23:26:17,502 logging_ex.py:43  ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.

@@ -1,0 +1,135 @@
+What is wrong with our logic?
+- Logic requires n reach an absolute value of 2 to exit the recursion, with no alternative escape.
+
+Why doesn't the function stop calling itself?
+- After n reaches a value less than 2, it continues to divide it in half, ensuring it will never equal 2. 
+  Another check for n < 2 to escape the recursion would fix the problem.
+
+What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+- It continues to get smaller and smaller, approaching (but never reaching) zero.
+
+
+Output of Debug session:
+
+DESKTOP-RD8SBOK:lesson05 rbill$ python -m pdb recursive.py 15
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3     def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6         return my_fun(n/2)
+  7
+  8     if __name__ == '__main__':
+  9         n = int(sys.argv[1])
+ 10         print(my_fun(n))
+(Pdb) n
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(8)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(9)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(10)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) ll
+  3  -> def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6         return my_fun(n/2)
+(Pdb) n
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) n
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) ll
+  3  -> def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6         return my_fun(n/2)
+(Pdb) pp n
+7.5
+(Pdb) b 6
+Breakpoint 1 at c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py:6
+(Pdb) c
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+7.5
+(Pdb) c
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+3.75
+(Pdb) c
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+1.875
+(Pdb) c
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.9375
+(Pdb) c
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.46875
+(Pdb) disable 1
+Disabled breakpoint 1 at c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py:6
+(Pdb) c
+Traceback (most recent call last):
+  File "C:\Users\rbill\AppData\Local\Programs\Python\Python36\lib\pdb.py", line 1667, in main
+    pdb._runscript(mainpyfile)
+  File "C:\Users\rbill\AppData\Local\Programs\Python\Python36\lib\pdb.py", line 1548, in _runscript
+    self.run(statement)
+  File "C:\Users\rbill\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 434, in run
+    exec(cmd, globals, locals)
+  File "<string>", line 1, in <module>
+  File "c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py", line 10, in <module>
+    print(my_fun(n))
+  File "c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py", line 6, in my_fun
+    return my_fun(n/2)
+  File "c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py", line 6, in my_fun
+    return my_fun(n/2)
+  File "c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py", line 6, in my_fun
+    return my_fun(n/2)
+  [Previous line repeated 980 more times]
+  File "c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py", line 3, in my_fun
+    def my_fun(n):
+  File "C:\Users\rbill\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 53, in trace_dispatch
+    return self.dispatch_call(frame, arg)
+  File "C:\Users\rbill\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 79, in dispatch_call
+    if not (self.stop_here(frame) or self.break_anywhere(frame)):
+  File "C:\Users\rbill\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 176, in break_anywhere
+    return self.canonic(frame.f_code.co_filename) in self.breaks
+  File "C:\Users\rbill\AppData\Local\Programs\Python\Python36\lib\bdb.py", line 32, in canonic
+    if filename == "<" + filename[1:-1] + ">":
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\users\rbill\appdata\local\programs\python\python36\lib\bdb.py(32)canonic()
+-> if filename == "<" + filename[1:-1] + ">":
+(Pdb) exit
+Post mortem debugger finished. The recursive.py will be restarted
+> c:\users\rbill\git\sp_online_course2_2018\students\royc\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) exit
+[master *=]
+DESKTOP-RD8SBOK:lesson05 rbill$
+
