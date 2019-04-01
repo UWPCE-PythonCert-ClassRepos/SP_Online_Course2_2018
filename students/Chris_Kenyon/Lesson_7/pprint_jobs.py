@@ -14,17 +14,13 @@ def main():
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
         logger.info("Querying the database")
-        
         query = (Job.select())
-        
-        ppt('{:30} | {:15} | {:10} | {:5}'.format(
-            'Job Name', 'Duration(Days)', 'Name', 'Department'))
+        ppt('{:25} | {:10} | {:10} | {:20}'.format(
+            'Job Name', 'Duration', 'Name', 'Department'))
         ppt('-'*(75))
-        
         for job in query:
-            ppt('{:30} | {:15} | {:10} | {:5}'.format(
-                job.job_name, job.duration, str(job.person_employed), job.job_department_id))
-    
+            ppt('{:25} | {:10} | {:10} | {:20}'.format(
+                job.job_name, job.duration, str(job.person_employed), job.job_department.dpt_name))
     except Exception as e:
         logger.info(e)
     finally:

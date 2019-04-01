@@ -87,7 +87,7 @@ from init_mailroom_db import *
         #return dc_max_filt
 
 def get_donor_list():
-    """retreive list of names from Donor DB"""
+    
     database = SqliteDatabase('mailroom.db')
     try:
         database.connect()
@@ -189,6 +189,11 @@ def create_report():
     report.append(f"Total raised = $ {sum(donor.donation_total for donor in donor_list):,.2f} "
                    "from {donors_obj.total_donations} donations")
     return '\n'.join(report)
+
+
+def total_key(donor):
+    """ Return total donation key for sorting function """
+    return(donor.donation_total)
 
 
 def print_report(donors_obj=None):
