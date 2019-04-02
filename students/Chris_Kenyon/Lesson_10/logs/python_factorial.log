@@ -1,0 +1,4 @@
+2019-04-01 20:20:54 - INFO - Running series generators from python environment
+2019-04-01 20:21:23 - INFO - Runtime for Fibonacci function, n = 35: 29.234105971592868
+2019-04-01 20:21:23 - INFO - Runtime for factorial function, n = 35: 0.0006531089541219615
+2019-04-01 20:21:23 - INFO - Runtime for lucas function, n = 35: 0.000272750739412686
