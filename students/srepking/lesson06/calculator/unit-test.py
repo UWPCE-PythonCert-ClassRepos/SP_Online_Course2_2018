@@ -1,3 +1,5 @@
+"""Test suite for calculator."""
+
 from unittest import TestCase
 from unittest.mock import MagicMock
 
@@ -8,11 +10,6 @@ from calculator.divider import Divider
 from calculator.calculator import Calculator
 from calculator.exceptions import InsufficientOperands
 from calculator.exceptions import StackError
-
-
-
-
-
 
 
 class AdderTests(TestCase):
