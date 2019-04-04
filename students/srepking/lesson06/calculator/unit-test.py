@@ -7,6 +7,13 @@ from calculator.multiplier import Multiplier
 from calculator.divider import Divider
 from calculator.calculator import Calculator
 from calculator.exceptions import InsufficientOperands
+from calculator.exceptions import StackError
+
+
+
+
+
+
 
 class AdderTests(TestCase):
 
@@ -60,7 +67,6 @@ class CalculatorTests(TestCase):
         self.subtracter = Subtracter()
         self.multiplier = Multiplier()
         self.divider = Divider()
-
         self.calculator = Calculator(self.adder, self.subtracter, self.multiplier, self.divider)
 
     def test_enter_number(self):
@@ -74,7 +80,6 @@ class CalculatorTests(TestCase):
 
         with self.assertRaises(InsufficientOperands):
             self.calculator.add()
-
 
 
     def test_adder_call(self):
@@ -110,3 +115,15 @@ class CalculatorTests(TestCase):
         self.calculator.enter_number(2)
         self.calculator.multiply()
         self.multiplier.calc.assert_called_with(1, 2)
+
+    def test_enter_one_number(self):
+        self.calculator.enter_number(1)
+        with self.assertRaises(InsufficientOperands):
+            self.calculator.subtract()
+
+    def test_stackError(self):
+        self.calculator.enter_number(1)
+        self.calculator.enter_number(1)
+
+        with self.assertRaises(StackError):
+            self.calculator.enter_number(1)
