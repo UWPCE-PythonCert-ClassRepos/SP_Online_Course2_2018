@@ -1,6 +1,8 @@
-"""theading example of news downloaders"""
-import threading
+"""theading example of news downloaders
 
+reference: https://realpython.com/intro-to-python-threading/#using-a-threadpoolexecutor"""
+import threading
+import concurrent.futures
 import requests
 
 WORD = "trump"
@@ -8,6 +10,13 @@ WORD = "trump"
 NEWS_API_KEY = "1918a54606cc493488e94ed11baf3202"
 
 BASE_URL = 'https://newsapi.org/v1/'
+
+# sets max number of threads which will be initiated
+THREAD_LIMIT = 10
+
+# test - test mode which limits number of records
+# prod - production mode
+RUN_MODE = 'test'
 
 def get_sources():
     """
@@ -25,8 +34,9 @@ def get_sources():
 
 def get_articles(source):
     """gets articles from source"""
-
-    url = base_url + "articles"
+   
+    url = BASE_URL + "articles"
+    print(url)
     params = {"source": source,
               "apiKey": NEWS_API_KEY,
               "sortBy": "top"
@@ -47,7 +57,9 @@ def get_articles(source):
 
 if __name__ == '__main__':
     sources = get_sources()
-    for i in sources:
-        my_thread = threading.Thread(target=get_articles, args=(i,))
-        my_thread.start()
-        # my_thread.join()
+    if RUN_MODE == 'test':
+        sources = sources[:5]
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=THREAD_LIMIT) as executor:
+        executor.map(get_articles, sources)
+
