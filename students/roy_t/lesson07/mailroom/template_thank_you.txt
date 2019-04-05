@@ -1,0 +1,19 @@
+From:    A Charity Thankful For Your Kindness
+To:      {name}
+Subject:  This Year's Challenge!
+
+Dear {name},
+
+First, we would like to thank you for your continued generosity throughout the
+years. Without contributions like yours, the good things that we are able to do
+simply would not be possible.
+
+Your contributions to date have totaled ${amount}.
+
+This years challenge is to see if you can donate more than your current total
+in one year. This would effectively double your current donations to the
+organization!  Remember, it is for a good cause!
+
+Sincerely,
+
+The good guys at the best organization
