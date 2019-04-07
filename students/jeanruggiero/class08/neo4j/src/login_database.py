@@ -1,29 +1,28 @@
 """
-    module that will login to mongodb
+    module that will login to neo4j
 """
 
 import configparser
 from pathlib import Path
-import pymongo
+from neo4j.v1 import GraphDatabase, basic_auth
 
 
 config_file = Path(__file__).parent.parent / '.config/config.ini'
 config = configparser.ConfigParser()
 
 
-def login_mongodb_cloud():
+def login_neo4j_cloud():
     """
-        connect to mongodb and login
+        connect to neo4j and login
     """
 
-    try:
-        config.read(config_file)
-        user = config["mongodb_cloud"]["user"]
-        pw = config["mongodb_cloud"]["pw"]
+    config.read(config_file)
 
-    except Exception as e:
-        print(f'error: {e}')
+    graphenedb_user = config["neo4j_cloud"]["user"]
+    graphenedb_pass = config["neo4j_cloud"]["pw"]
+    graphenedb_url = "bolt://hobby-hegikgbadkkkgbkedcfoiacl.dbs.graphenedb.com:24787"
+    driver = GraphDatabase.driver(graphenedb_url,
+                                  auth=basic_auth(graphenedb_user, graphenedb_pass))
 
-    client = pymongo.MongoClient(f"mongodb://{user}:{pw}@cluster0-shard-00-00-ofcip.mongodb.net:27017,cluster0-shard-00-01-ofcip.mongodb.net:27017,cluster0-shard-00-02-ofcip.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
+    return driver
 
-    return client

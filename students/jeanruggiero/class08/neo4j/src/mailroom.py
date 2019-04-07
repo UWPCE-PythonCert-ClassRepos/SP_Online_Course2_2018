@@ -8,7 +8,7 @@ amounts
 import datetime
 import statistics
 import login_database
-import pymongo
+from pprint import pprint
 
 
 class ExitScript(Exception):
@@ -23,9 +23,6 @@ class MainMenu(Exception):
 
 # Define main menu functions
 class Mailroom():
-
-    def __init__(self, db_name):
-        self.db_name = db_name
 
     def add_or_get_donor_add_donation(self):
         """
@@ -147,20 +144,20 @@ class Mailroom():
         :param name: donor's full name
         :return: None
         """
-        with login_database.login_mongodb_cloud() as client:
-            db = client[self.db_name]
-            donors = db['donors']
-
-            if donors.find_one({'name': name}):
+        driver = login_database.login_neo4j_cloud()
+        with driver.session() as session:
+            cyph = """
+                MATCH (d:Donor {name: '%s'})
+                RETURN d.name as name
+                """ % name
+            if session.run(cyph).value():
                 print('This donor already exists. Adding a new donation...')
                 return
             else:
                 print('Donor not in database. Adding donor.')
-
-                donors.insert_one({
-                    'name': name,
-                    'date_added': datetime.date.today().isoformat()
-                    })
+                cyph = "CREATE (n:Donor {name:'%s', date_added:'%s'})" % (
+                    name, datetime.date.today().isoformat())
+                session.run(cyph)
 
     def add_donation(self, name, amount):
         """
@@ -169,30 +166,43 @@ class Mailroom():
         :param amount: donation amount
         :return: None
         """
-        with login_database.login_mongodb_cloud() as client:
-            db = client[self.db_name]
-            donations = db['donations']
-
-            donations.insert_one({
-                'amount': round(amount, 2),
-                'date': datetime.date.today().isoformat(),
-                'donor': name
-                })
+        driver = login_database.login_neo4j_cloud()
+        with driver.session() as session:
+            cyph = "CREATE (n:Donation {amount:%.2f, date:'%s'})" % (
+                amount, datetime.date.today().isoformat())
+            session.run(cyph)
+            cyph = """
+                MATCH (d1:Donor {name:'%s'})
+                CREATE (d1)-[donated:DONATED]->(a1:Donation {amount: %.2f, date: '%s'})
+                RETURN d1
+                """ % (name, amount, datetime.date.today().isoformat())
+            session.run(cyph)
 
     def get_donors(self):
         """Returns a dictionary of all donors and their donations."""
         donor_dict = {}
 
-        with login_database.login_mongodb_cloud() as client:
-            db = client[self.db_name]
-            donors = db['donors']
-            donations = db['donations']
+        driver = login_database.login_neo4j_cloud()
+        with driver.session() as session:
+            cyph = """
+                MATCH (d:Donor)
+                RETURN d.name as name
+                """
+            donors = session.run(cyph)
 
-            for donor in donors.find({}):
-                donor_dict[donor['name']] = [
-                    donation['amount'] for donation in
-                    donations.find({'donor': donor['name']})
-                             .sort("date", pymongo.DESCENDING)]
+            for donor in donors:
+                cyph = """
+                    MATCH (d1 {name:'%s'})
+                        -[:DONATED]->(donations)
+                    RETURN donations""" % donor['name']
+                donations = session.run(cyph)
+                donation_list = []
+                for rec in donations:
+                    for donation in rec.values():
+                        donation_list.append((donation['amount'], donation['date']))
+                donor_dict[donor['name']] = [donation[0] for donation in
+                                             sorted(donation_list, key=lambda x:x[1], reverse=True)]
+
         return donor_dict
 
     @staticmethod
@@ -228,25 +238,29 @@ class Mailroom():
         :param name: donor's full name
         :return: None
         """
-
-        with login_database.login_mongodb_cloud() as client:
-            db = client[self.db_name]
-            donors = db['donors']
-            donations = db['donations']
-
-            if donors.find_one({'name': name}):
-                donors.delete_one({'name': {"$eq": name}})
-                donations.delete_many({'donor': {"$eq": name}})
+        driver = login_database.login_neo4j_cloud()
+        with driver.session() as session:
+            cyph = """
+                            MATCH (d:Donor {name: '%s'})
+                            RETURN d.name as name
+                            """ % name
+            if session.run(cyph).value():
+                cyph = """
+                    MATCH (:Donor {name:'%s'})
+                        -[r:DONATED]-(donations)
+                    DELETE r""" % name
+                session.run(cyph)
+                cyph = """
+                    MATCH (d:Donor {name:'%s'})
+                    DELETE d""" % name
+                session.run(cyph)
             else:
                 print("This donor doesn't exist.")
 
     def thank(self, name, amount):
         """Return a string thanking donor name for a donation of amount."""
-        with login_database.login_mongodb_cloud() as client:
-            db = client[self.db_name]
-            donations = db['donations']
-            donation_list = donations.find({'donor': name})
-            total_donations = sum(donation['amount'] for donation in donation_list)
+        donors = self.get_donors()
+        total_donations = sum(donors[name])
 
         return f"Dear {name},\n\n" + \
             "Thank you so much for your generous donation of " + \
@@ -294,6 +308,6 @@ class Mailroom():
 
 if __name__ == '__main__':
 
-    mailroom = Mailroom('mailroom')
+    mailroom = Mailroom()
     mailroom.main_menu()
 

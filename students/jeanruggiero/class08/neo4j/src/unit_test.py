@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, call
 from unittest.mock import patch
 
 import unittest
-unittest.util._MAX_LENGTH = 500
+unittest.util._MAX_LENGTH = 1000
 
 from decimal import Decimal
 
@@ -23,13 +23,13 @@ donors = [
     ('joe', '2017-06-01', [(5286286.3, '2019-03-21'), (567.5879, '2019-03-24'), (23, '2017-07-06')]),
     ('becky sue', '2011-01-01', [(432, '2011-09-06'), (679.4553, '2013-05-24')])
     ]
-populate_db(donors, 'mailroom_test')
+populate_db(donors)
 
 
 class AddOrGetTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
         self.mailroom.add_donor = MagicMock()
         self.mailroom.add_donation = MagicMock()
         self.mailroom.thank = MagicMock()
@@ -70,7 +70,7 @@ class AddOrGetTests(TestCase):
 class CreateReportTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     def test_create_report(self):
         captured_output = io.StringIO()
@@ -99,7 +99,7 @@ class SendLettersTests(TestCase):
             'becky sue': [679.46, 432]
         }
 
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
         self.mailroom.thank = MagicMock()
         self.mailroom.get_donors = MagicMock(return_value=donors)
 
@@ -124,7 +124,7 @@ class SendLettersTests(TestCase):
 class DeleteDonorTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
         self.mailroom.delete_from_db = MagicMock()
 
     def test_delete_donor(self):
@@ -141,7 +141,7 @@ class DeleteDonorTests(TestCase):
 class QuitTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     def test_quit(self):
         self.mailroom.database = MagicMock()
@@ -155,7 +155,7 @@ class QuitTests(TestCase):
 class InputDonorNameTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     @patch('builtins.input', MagicMock(return_value='bob'))
     def test_name_input(self):
@@ -170,7 +170,7 @@ class InputDonorNameTests(TestCase):
 class InputDonationAmountTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     @patch('builtins.input', MagicMock(return_value=55.4))
     def test_amount_input(self):
@@ -185,7 +185,7 @@ class InputDonationAmountTests(TestCase):
 class GetDonorsTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     def test_get_donors(self):
         donors = {
@@ -200,7 +200,7 @@ class GetDonorsTests(TestCase):
 class ListDonorsTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     def test_list_donors(self):
         captured_output = io.StringIO()
@@ -213,12 +213,11 @@ class ListDonorsTests(TestCase):
 class AddDonorTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     def test_add_new_donor(self):
-        with login_database.login_mongodb_cloud() as client:
-            db = client['mailroom_test']
-            donors = db['donors']
+        driver = login_database.login_neo4j_cloud()
+        with driver.session() as session:
 
             captured_output = io.StringIO()
             sys.stdout = captured_output
@@ -226,19 +225,18 @@ class AddDonorTests(TestCase):
             sys.stdout = sys.__stdout__
             self.assertEqual(captured_output.getvalue(),
                                 'Donor not in database. Adding donor.\n')
-            self.assertEqual(donors.find({'name': 'fred'}).count(), 1)
-
+            cyph = """
+                MATCH (d:Donor {name: 'fred'})
+                RETURN d.name as name
+                """
+            self.assertEqual(session.run(cyph).value(), ['fred'])
             self.mailroom.delete_from_db('fred')
 
     def test_add_existing_donor(self):
-        with login_database.login_mongodb_cloud() as client:
-            db = client['mailroom_test']
-            donors = db['donors']
-
-            donors.insert_one({
-                'name': 'fred',
-                'date_added': '2019-04-07'
-                })
+        driver = login_database.login_neo4j_cloud()
+        with driver.session() as session:
+            cyph = "CREATE (n:Donor {name:'fred', date_added:'2019-04-07'})"
+            session.run(cyph)
 
             captured_output = io.StringIO()
             sys.stdout = captured_output
@@ -252,42 +250,44 @@ class AddDonorTests(TestCase):
 class AddDonationTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     def test_add_donation(self):
-        with login_database.login_mongodb_cloud() as client:
-            db = client['mailroom_test']
-            donors = db['donors']
-            donations = db['donations']
-
-            donors.insert_one({
-                'name': 'fred',
-                'date_added': '2019-04-07'
-            })
+        driver = login_database.login_neo4j_cloud()
+        with driver.session() as session:
+            cyph = "CREATE (n:Donor {name:'fred', date_added:'2019-04-07'})"
+            session.run(cyph)
 
             self.mailroom.add_donation('fred', 78.9812)
-            self.assertEqual(donations.find_one({'amount': 78.98})['amount'], 78.98)
-            self.assertEqual(donations.find_one({'amount': 78.98})['donor'], 'fred')
+            cyph = """
+                MATCH (d1 {name:'fred'})
+                    -[:DONATED]->(donations)
+                RETURN donations"""
+            donations = session.run(cyph)
+            for rec in donations:
+                for donation in rec:
+                    self.assertEqual(donation['amount'], 78.98)
             self.mailroom.delete_from_db('fred')
 
 
 class DeleteFromDbTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     def test_delete_from_db(self):
-        with login_database.login_mongodb_cloud() as client:
-            db = client['mailroom_test']
-            donors = db['donors']
-
-            donors.insert_one({
-                'name': 'fred',
-                'date_added': '2019-04-07'
-                })
+        driver = login_database.login_neo4j_cloud()
+        with driver.session() as session:
+            cyph = "CREATE (n:Donor {name:'fred', date_added:'2019-04-07'})"
+            session.run(cyph)
 
             self.mailroom.delete_from_db('fred')
-            self.assertEqual(donors.find_one({'name': 'fred'}), None)
+
+            cyph = """
+                MATCH (d:Donor {name: 'fred'})
+                RETURN d.name as name
+                """
+            self.assertEqual(session.run(cyph).value(), [])
 
     def test_delete_from_db_nonexistant_donor(self):
         captured_output = io.StringIO()
@@ -301,7 +301,7 @@ class DeleteFromDbTests(TestCase):
 class ThankTest(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     def test_thank(self):
         self.assertEqual(
@@ -316,7 +316,7 @@ class ThankTest(TestCase):
 class SizeReportTests(TestCase):
 
     def setUp(self):
-        self.mailroom = Mailroom('mailroom_test')
+        self.mailroom = Mailroom()
 
     def test_size_report(self):
         donors = {

@@ -6,26 +6,25 @@ import pprint
 import login_database
 
 
-def populate_db(donor_list, db_name):
+def populate_db(donor_list):
 
-    with login_database.login_mongodb_cloud() as client:
-        db = client[db_name]
-        db.drop_collection('donors')
-        db.drop_collection('donations')
-        donors = db['donors']
-        donations = db['donations']
-
+    driver = login_database.login_neo4j_cloud()
+    with driver.session() as session:
+        session.run("MATCH (n) DETACH DELETE n")
         for donor, date_added, donation_list in donor_list:
-            donors.insert_one({
-                'name': donor,
-                'date_added': date_added
-                })
+            cyph = "CREATE (n:Donor {name:'%s', date_added:'%s'})" % (
+                donor, date_added)
+            session.run(cyph)
             for amount, date_donated in donation_list:
-                donations.insert_one({
-                    'amount': round(amount, 2),
-                    'date': date_donated,
-                    'donor': donor
-                    })
+                cyph = "CREATE (n:Donation {amount:%.2f, date:'%s'})" % (
+                    amount, date_donated)
+                session.run(cyph)
+                cyph = """
+                    MATCH (d1:Donor {name:'%s'})
+                    CREATE (d1)-[donated:DONATED]->(a1:Donation {amount: %.2f, date: '%s'})
+                    RETURN d1
+                    """ % (donor, amount, date_donated)
+                session.run(cyph)
 
 
 if __name__ == '__main__':
@@ -38,4 +37,4 @@ if __name__ == '__main__':
         ('bobba fett, bounty hunter', '1954-07-05', [(67, '1954-07-05')])
     ]
 
-    populate_db(donors, 'mailroom')
+    populate_db(donors)
