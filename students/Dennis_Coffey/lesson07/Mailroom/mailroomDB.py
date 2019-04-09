@@ -5,6 +5,8 @@ import os
 import logging
 from peewee import *
 from create_mailroom_db import *
+from populate_mailroom_db import *
+#import create_mailroom_db as createdb
 
 """
 Created on Wed Apr 3 19:30:19 2019
@@ -20,87 +22,11 @@ you out of a jam and do your work for you."""
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Donor class - contains properties and methods for accessing and updating donor's data
-class Donor:
-    
-    def __init__(self, name, donations=None):
-        self.name = name
-        if donations == None:
-            self._donations = []
-        else:
-            self._donations = list(donations)
-        
-    @property
-    def name(self):
-        return self._name
-    
-    @name.setter
-    def name(self, value):
-        self._name = value
- 
-    @property
-    def donations(self):
-        return self._donations
- 
-    def add_donation(self, amount):
-        try:
-            self.donations.append(float(amount))
-        # Handle error if user doesn't input a valid numerical donation
-        except ValueError:
-            print('Not a valid donation.')
-            prompt_donation(self.name)
-    
-#    # Create email to donor thanking them for their generous donation
-#    def create_email(self, amount):
-#        return '\nDear {},\n\nThank you so much for generous donation of ${}.\n\n\t\t\tSincerely,\n\t\t\tPython Donation Team'.format(self.name, amount)
-
-#    def sum_donations(self):
-#        return sum(self.donations)
-    
-#    def number_donations(self):
-#        return len(self.donations)
-        
-#    def avg_donations(self):
-#        return self.sum_donations() / self.number_donations()
-
-    
-# DonorCollection class - properties and methods for managing collection of donors
-class DonorCollection:
-        
-    def __init__(self, donors=None):
-        if donors == None:
-            donors = []
-        else:
-            self._donors = donors
-
-    @property
-    def donors(self):
-        return self._donors
- 
-    # Display list of donors by name
-    def donor_list(self):
-        list_donors = ''
-        for donor in self.donors:
-            list_donors += donor.name + '\n'
-        return list_donors
-
-    # Set donor
-    def set_donor(self, full_name):
-        exists = False
-        # Check if existing donor
-        for donor in self.donors:
-            if donor.name == full_name:
-                exists = True
-                break
-        # Not existing donor, so create new donor
-        if not exists:
-            donor = Donor(full_name)
-            donors.add_donor(donor)
-        return donor
-
-    # Add new donor to donor collection
-    def add_donor(self, donor):
-        self.donors.append(donor)
+# Define database
+database = SqliteDatabase('donors.db')
+   
+# DonorDatabase class - properties and methods for managing donors database
+class DonorDatabase:
         
     # Add new donor to donor collection
     def delete_donor(self):
@@ -115,10 +41,6 @@ class DonorCollection:
             logger.info(f'Error deleting donor from database')
             logger.info(e)
      
-#    def sort_on_total_donation(self):
-#        return(sorted(self.donors, key=total_donation_key, reverse=True))
-
-
     # Create report
     def create_report(self):
         #Create list of summarized donations so that total can be sorted
@@ -138,7 +60,6 @@ class DonorCollection:
             logger.info(e)
             
         finally:
-            print('Database closed - report')
             database.close()
                  
         # Print summarized data
@@ -154,8 +75,8 @@ class DonorCollection:
 
         now = datetime.datetime.now()
         now = str(now.year) + '-' + str(now.month) + "-" + str(now.day)
-        path = os.getcwd() + '/letters'
-#        path = os.getcwd()
+        current_path = os.getcwd()
+        new_path = current_path + '/letters'
     
         # Query database for donors and last donation
         try:
@@ -166,50 +87,48 @@ class DonorCollection:
                              fn.MAX(Donation.donation_amount).alias('last_donation'))
                      .group_by(Donation.donor_name)
                      .order_by(Donation.donor_name))
+            for donor in sorted_donors:
+                print(donor.donor_name)
             
         except Exception as e:
             logger.info(f'Error retrieving donors last donation from database')
             logger.info(e)
             
         finally:
-            print('Database closed - send')
             database.close()
             
         # Change directory to letters directory, if it doesn't exist, create it
         try:
-            os.chdir(path)
+            os.chdir(new_path)
         except FileNotFoundError:
-            os.makedirs(path)  
-            os.chdir(path)
+            os.makedirs(new_path)  
+            os.chdir(new_path)
                 
         # Loop through each donor and send thank you email
-#        try:
-        for donor in sorted_donors:
-            with open(donor.donor_name + '_' + str(now) + '.txt', 'w') as outfile:
-                print(donor.donor_name)
-                outfile.write(donor.create_email(donor.last_donation))
-            
-        print('\nThe thank you emails were sent!')
-#        except:
-#            print('\nThere was an error sending the thank you emails.')
+        try:
+            for donor in sorted_donors:
+                with open(donor.donor_name + '_' + str(now) + '.txt', 'w') as outfile:
+                    outfile.write(create_email(donor.donor_name, donor.last_donation))
+    
+            print('\nThe thank you emails were sent!\n')
+        except:
+            print('\nThere was an error sending the thank you emails.')
 
-# Create dictionary of donors
-#donor1 = Donor('Dennis Coffey', [2500.00,400.00,1400.00])
-#donor2 = Donor('Bill Gates', [120.00,650.00])
-#donor3 = Donor('Ethan Coffey', [800.00,150.00,1100.00])
-#donor4 = Donor('Paul Allen', [45000.00,9000.00])
-#donor5 = Donor('Jeff Bezos', [3.00])
-
-#donors = DonorCollection([donor1,donor2,donor3,donor4,donor5])
-donors = DonorCollection()
-
-# Total donation for sorting
-#def total_donation_key(donor):
-#    return sum(donor.donations)
-
+        # Set directory back to base directory
+        os.chdir(current_path)
+                   
+# Create email to donor thanking them for their generous donation
+def create_email(donor_name, amount):
+    return '\nDear {},\n\nThank you so much for generous donation of ${}.\n\n\t\t\tSincerely,\n\t\t\tPython Donation Team'.format(donor_name, amount)
 
 # Sending a Thank You
 def send_thankyou():
+    """
+    Prompts for donor name and donation amount.  If donor does not exist, donor 
+    and donation will be added to database.  If donor does exist, donation
+    will be updated for donor.
+    """
+    
     # Loop if user selects list
     full_name = 'list'
     while full_name.lower() == 'list':
@@ -219,39 +138,75 @@ def send_thankyou():
             
         # Check user input and perform appropriate action    
         if full_name.lower() == 'list':
-            # Create list of donors
-            print(donors.donor_list())
+            # Query database for list of donors
+            try:
+                database.connect()
+                database.execute_sql('PRAGMA foreign_keys = ON;')
+                sorted_donors = (Donation
+                         .select(Donation.donor_name)
+                         .group_by(Donation.donor_name)
+                         .order_by(Donation.donor_name))
+                for donor in sorted_donors:
+                    print(donor.donor_name)
+                
+            except Exception as e:
+                logger.info(f'Error retrieving donors last donation from database')
+                logger.info(e)
+                
+            finally:
+                database.close()
         else:
             prompt_donation(full_name)
             break
 
 # Prompt for donation amount and append donation to user    
 def prompt_donation(full_name, donation_amount = None):
-    current_donor = donors.set_donor(full_name)
+
     # Promt for donation amount
-    if donation_amount == None:
-        donation_amount = input('Please enter a donation amount $')
-    try:
-        current_donor.add_donation(donation_amount)
-        print(current_donor.create_email(donation_amount))
-        
-    # Handle error if user doesn't input a valid numerical donation
-    except ValueError:
+    donation_amount = input('Please enter a donation amount $')
+    
+    if not donation_amount.isnumeric():
         print('Not a valid donation.')
-        prompt_donation(full_name) 
+        prompt_donation(full_name)
+    else:
+    
+        # Open database and add donation information
+        try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+    
+            # Find max donation_id
+            results = Donation.select(fn.MAX(Donation.donation_id).alias('max_donation_id'))
+            for result in results:
+                max_donation_id = result.max_donation_id        
+            
+            # Insert donor and donation into database
+            res = Donation.insert({
+                Donation.donation_id: max_donation_id + 1,
+                Donation.donor_name: full_name,
+                Donation.donation_amount: donation_amount}).execute()        
+    
+        except Exception as e:
+            logger.info(f'Error adding donor and donation info to database')
+            logger.info(e)
+    
+        finally:
+            print(create_email(full_name, donation_amount) + '\n')
+            database.close()
 
 def name_prompt ():
     """Prompt for donor's name to delete"""
     return input('\nPlease enter the name of the Donor you want to delete:  ')
 
-    
-# Quit program
 def user_quit():
+    """Quit program"""
     database.close()
     print("\nThank you, have a nice day.")
 
 
 if __name__ == '__main__':
+
+    donors = DonorDatabase()
 
     # Loop until user selects Quit
     prompt = None
