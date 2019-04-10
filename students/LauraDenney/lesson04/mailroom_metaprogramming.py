@@ -15,8 +15,10 @@
 #   Laura Denney, 2/27/19, Started MailRoom Metaprogramming
 #-------------------------------------------------#
 
-#class decorator for saing purposes
+#class decorator for saving purposes
 import json_save.json_save_dec as js
+from json_save.saveables import *
+import json
 
 #adding date to txt file
 from datetime import date
@@ -27,6 +29,8 @@ import os
 #Donor Class contains name, donations
 @js.json_save
 class Donor(object):
+    name = String()
+    donations = List()
 
     def __init__(self, name, *args):
         self.name = name.lower()
@@ -86,9 +90,10 @@ class Donor(object):
 #Donors Class - manipulates a list of donors
 @js.json_save
 class Donors(object):
-    donor_list = []
+    donor_list = List()
 
     def __init__(self, *args):
+        self.donor_list = []
         if args:
             if type(args[0]) is list:
                 args = tuple(args[0])
@@ -159,22 +164,13 @@ Donor Name                | Total Given | Num Gifts | Average Gift
             total_letters += send_email(donor, each_donor.sum_donations, "{}_{}_{}.txt".format(first, last, date.today().isoformat()))
         return total_letters
 
-    # @classmethod
-    # def load_list_donors(cls):
-    #     with open("donor_list.json", "r") as infile:
-    #         infile_str = infile.read()
-    #     self = eval(infile_str)
-    #     return self
-    #@classmethod
     def load_list_donors(self):
-        with open("donor_list.json", "r") as infile:
-            self = js.from_json(infile)
-        return self
+        global donors
+        with open("donor_list.json") as json_file:
+            donors = js.from_json(json_file)
 
-    #@classmethod
     def save_list_donors(self):
         with open("donor_list.json", 'w') as outfile:
-            #outfile.write(repr(self))
             self.to_json(fp=outfile)
 
 #*****Map and Filter
@@ -185,7 +181,7 @@ Donor Name                | Total Given | Num Gifts | Average Gift
 
 #Non-class variables and functions
 
-donors = None
+donors = Donors()
 
 main_prompt = '''
 What would you like to do today?
@@ -290,22 +286,21 @@ def send_email(donor, amount, dest = 0):
         return 1
 
 def load_list():
-    global donors
-    donors = Donors.load_list_donors()
+    donors.load_list_donors()
     print("\nYou have successfully loaded a saved list into working memory.")
 
 def save_list():
     donors.save_list_donors()
+    print("\nYou have successfully saved your donor list to working memory.")
 
 def first_run():
-    exists = os.path.isfile("donor_list.json")
-    if not exists:
-        global donors
-        donors = Donors(Donor("john doe",100.50, 200.00),
-        Donor("laura denney",5.00),
-        Donor("bill gates",4000),
-        Donor("samuel jackson",1,2,3),
-        Donor("mr. bean", 500, 100))
+    donors.donor_list = [Donor('john doe', [100.5, 200.0]),
+    Donor('laura denney', [5.0]),
+    Donor('bill gates', [4000]),
+    Donor('samuel jackson', [1, 2, 3]),
+    Donor('mr. bean', [500, 100])]
+    print("Welcome to the MailRoom program. This is your first time running\n\
+the program, we have started you off with our seasoned donors.")
 
 
 #Main Menu options for user
@@ -328,7 +323,6 @@ sub_choice_dict = {
 
 #Main menu to prompt user
 def prompt_user():
-    first_run()
     while True:
         try:
             response = input(main_prompt)
@@ -344,6 +338,10 @@ def prompt_user():
 ##########################################################
 
 if __name__ == '__main__':
+    exists = os.path.isfile("donor_list.json")
+    if not exists:
+        first_run()
+    else: print("Welcome to the MailRoom program. \nThere is a saved list on file to use if you would like.")
     prompt_user()
 
 
