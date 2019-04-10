@@ -1,5 +1,5 @@
 import unittest
-import donors_10 as d
+import donors as d
 import os
 import sys
 

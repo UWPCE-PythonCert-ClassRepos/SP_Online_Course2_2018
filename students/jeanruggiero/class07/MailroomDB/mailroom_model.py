@@ -5,11 +5,10 @@ Define database model for mailroom application.
 #!/usr/bin/env python
 
 from peewee import *
+from playhouse.hybrid import *
 import statistics
 
-
-database = SqliteDatabase('mailroom.db', pragmas={'foreign_keys': 1})
-database.connect()
+database = SqliteDatabase(None)
 
 
 class BaseModel(Model):
@@ -29,7 +28,7 @@ class Donor(BaseModel):
     name = CharField(primary_key=True, max_length=50)
     date_added = DateField(formats='YYYY-MM-DD')
 
-    @property
+    @hybrid_property
     def donation_count(self):
         try:
             query = (Donation
@@ -39,17 +38,14 @@ class Donor(BaseModel):
             print('Error')
         return len(query)
 
-    @property
+    @hybrid_property
     def donation_total(self):
-        try:
-            query = (Donation
-                     .select()
-                     .where(Donation.donor == self.name))
-        except Exception:
-            print('Error')
-        return sum(donation.amount for donation in query)
+        query = (Donation
+                 .select(fn.SUM(Donation.amount))
+                 .where(Donation.donor == self.name)).scalar()
+        return query
 
-    @property
+    @hybrid_property
     def donation_average(self):
         try:
             query = (Donation
@@ -71,11 +67,3 @@ class Donation(BaseModel):
     amount = DecimalField(decimal_places=2, auto_round=True)
     date = DateField(formats='YYYY-MM-DD')
     donor = ForeignKeyField(Donor, null=False)
-
-
-database.create_tables([Donor, Donation])
-database.close()
-
-
-
-

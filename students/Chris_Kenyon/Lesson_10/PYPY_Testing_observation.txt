@@ -1,0 +1,1 @@
+As can be seen in the log files, the pypy environment runs the sequence gnerators much faster, especially the fibonacci series
