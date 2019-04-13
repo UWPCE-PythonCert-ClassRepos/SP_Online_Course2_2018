@@ -26,7 +26,7 @@ class Mailroom():
 
     def __init__(self, db_name):
         self.db_name = db_name
-        self.donors = self.populate_redis()
+        self.populate_redis()
 
     def add_or_get_donor_add_donation(self):
         """
@@ -101,30 +101,35 @@ class Mailroom():
 
     @staticmethod
     def quit():
+        # Clear redis cache on logout
+        r = login_database.login_redis_cloud()
+        for key in r.keys():
+            r.delete(key)
         raise ExitScript
+
 
     # Define helper functions
     def populate_redis(self):
-        donor_dict = {}
+        '''
+        Cache all donor and donation data in Redis.
+        '''
+
         r = login_database.login_redis_cloud()
+        for key in r.keys():
+            r.delete(key)
+
         with login_database.login_mongodb_cloud() as client:
             db = client[self.db_name]
             donors = db['donors']
             donations = db['donations']
 
             for donor in donors.find({}):
+                #r.lpush("donors", donor['name'])
+
                 for donation in donations.find(
-                        {'donor': donor['name']}).sort("date", pymongo.DESCENDING):
+                        {'donor': donor['name']}).sort("date", pymongo.ASCENDING):
+                    r.lpush(donor['name'], donation['amount'])
 
-                    r.set(donor['name'], )
-                donor_dict[donor['name']] = [
-                    donation['amount'] for donation in
-                    donations.find({'donor': donor['name']})
-                             .sort("date", pymongo.DESCENDING)]
-
-
-
-        return donor_dict
 
     def input_donor_name(self):
         """
@@ -161,8 +166,9 @@ class Mailroom():
 
     def list_donors(self):
         """List donors from the donors database in alphabetical order."""
-        for donor in sorted(self.get_donors().keys()):
-            print(donor)
+        r = login_database.login_redis_cloud()
+        for key in sorted(r.keys()):
+            print(key)
 
     def add_donor(self, name):
         """
@@ -192,6 +198,9 @@ class Mailroom():
         :param amount: donation amount
         :return: None
         """
+        r = login_database.login_redis_cloud()
+        r.lpush(name, round(amount, 2))
+
         with login_database.login_mongodb_cloud() as client:
             db = client[self.db_name]
             donations = db['donations']
@@ -205,18 +214,11 @@ class Mailroom():
     def get_donors(self):
         """Returns a dictionary of all donors and their donations."""
         donor_dict = {}
-
-        with login_database.login_mongodb_cloud() as client:
-            db = client[self.db_name]
-            donors = db['donors']
-            donations = db['donations']
-
-            for donor in donors.find({}):
-                donor_dict[donor['name']] = [
-                    donation['amount'] for donation in
-                    donations.find({'donor': donor['name']})
-                             .sort("date", pymongo.DESCENDING)]
+        r = login_database.login_redis_cloud()
+        for donor in r.keys():
+            donor_dict[donor] = [float(n) for n in r.lrange(donor, 0, -1)]
         return donor_dict
+
 
     @staticmethod
     def size_report(donors):
@@ -251,6 +253,9 @@ class Mailroom():
         :param name: donor's full name
         :return: None
         """
+
+        r = login_database.login_redis_cloud()
+        r.delete(name)
 
         with login_database.login_mongodb_cloud() as client:
             db = client[self.db_name]

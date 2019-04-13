@@ -27,6 +27,14 @@ def populate_db(donor_list, db_name):
                     'donor': donor
                     })
 
+def clear_redis():
+    '''
+    Clear all keys from redis.
+    '''
+    r = login_database.login_redis_cloud()
+    for key in r.keys():
+        r.delete(key)
+
 
 if __name__ == '__main__':
 
@@ -39,3 +47,4 @@ if __name__ == '__main__':
     ]
 
     populate_db(donors, 'mailroom')
+    clear_redis()

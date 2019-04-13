@@ -146,10 +146,12 @@ class QuitTests(TestCase):
     def test_quit(self):
         self.mailroom.database = MagicMock()
         self.mailroom.database.close = MagicMock()
+        r = login_database.login_redis_cloud()
 
         with self.assertRaises(ExitScript):
             self.mailroom.quit()
             self.mailroom.database.close.assert_called_once()
+            self.assertIsNone(r.keys())
 
 
 class InputDonorNameTests(TestCase):
@@ -255,6 +257,8 @@ class AddDonationTests(TestCase):
         self.mailroom = Mailroom('mailroom_test')
 
     def test_add_donation(self):
+        r = login_database.login_redis_cloud()
+
         with login_database.login_mongodb_cloud() as client:
             db = client['mailroom_test']
             donors = db['donors']
@@ -268,6 +272,8 @@ class AddDonationTests(TestCase):
             self.mailroom.add_donation('fred', 78.9812)
             self.assertEqual(donations.find_one({'amount': 78.98})['amount'], 78.98)
             self.assertEqual(donations.find_one({'amount': 78.98})['donor'], 'fred')
+            self.assertIn('fred', r.keys())
+            self.assertEqual([float(n) for n in r.lrange('fred', 0, -1)], [78.98])
             self.mailroom.delete_from_db('fred')
 
 
@@ -277,6 +283,8 @@ class DeleteFromDbTests(TestCase):
         self.mailroom = Mailroom('mailroom_test')
 
     def test_delete_from_db(self):
+        r = login_database.login_redis_cloud()
+
         with login_database.login_mongodb_cloud() as client:
             db = client['mailroom_test']
             donors = db['donors']
@@ -286,7 +294,10 @@ class DeleteFromDbTests(TestCase):
                 'date_added': '2019-04-07'
                 })
 
+            r.lpush('fred', 45)
+
             self.mailroom.delete_from_db('fred')
+            self.assertNotIn('fred', r.keys())
             self.assertEqual(donors.find_one({'name': 'fred'}), None)
 
     def test_delete_from_db_nonexistant_donor(self):

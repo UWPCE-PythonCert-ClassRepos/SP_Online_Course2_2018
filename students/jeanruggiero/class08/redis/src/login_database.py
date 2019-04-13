@@ -26,15 +26,13 @@ def login_redis_cloud():
     except Exception as e:
         print(f'error: {e}')
 
-    log.info('Here is where we use the connect to redis.')
-
     try:
         r = redis.StrictRedis(host=host, port=port, password=pw, decode_responses=True)
-
     except Exception as e:
         print(f'error: {e}')
 
     return r
+
 
 def login_mongodb_cloud():
     """
