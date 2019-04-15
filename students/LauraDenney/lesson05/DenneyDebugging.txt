@@ -1,0 +1,59 @@
+This function doesn't stop calling itself for values that are not powers of 2. The logic needs
+a second base case for what to do with odd numbers. 
+Each recursive function call, n gets divided by 2, and for odd numbers, n will never be equal 
+to 2, so it continues dividing by 2, and eventually approaches zero. 
+
+Below is my debugging logic
+$ python -m pdb recursive.py 15
+> c:\users\cspage66\python_cert\sp_online_course2_2018\students\lauradenney\lesson05\recurs
+ive.py(3)<module>()
+-> import sys
+(Pdb) b 9
+Breakpoint 1 at c:\users\cspage66\python_cert\sp_online_course2_2018\students\lauradenney\l
+esson05\recursive.py:9
+(Pdb) condition 1 (n% 2 != 0)
+New condition set for breakpoint 1.
+(Pdb) continue
+> c:\users\cspage66\python_cert\sp_online_course2_2018\students\lauradenney\lesson05\recurs
+ive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+15
+(Pdb) s
+--Call--
+> c:\users\cspage66\python_cert\sp_online_course2_2018\students\lauradenney\lesson05\recurs
+ive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+7.5
+(Pdb) s
+> c:\users\cspage66\python_cert\sp_online_course2_2018\students\lauradenney\lesson05\recurs
+ive.py(6)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\cspage66\python_cert\sp_online_course2_2018\students\lauradenney\lesson05\recurs
+ive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\cspage66\python_cert\sp_online_course2_2018\students\lauradenney\lesson05\recurs
+ive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+3.75
+(Pdb) s
+> c:\users\cspage66\python_cert\sp_online_course2_2018\students\lauradenney\lesson05\recurs
+ive.py(6)my_fun()
+-> if n == 2:
+(Pdb) s
+> c:\users\cspage66\python_cert\sp_online_course2_2018\students\lauradenney\lesson05\recurs
+ive.py(9)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> c:\users\cspage66\python_cert\sp_online_course2_2018\students\lauradenney\lesson05\recurs
+ive.py(5)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+1.875
+(Pdb)
