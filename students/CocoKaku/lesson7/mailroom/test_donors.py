@@ -1,6 +1,5 @@
 """
-updated Donors class for Python 220 Lesson 4 assignment (metaprogramming)
-(1) ensuring that tests still run with updated Donors class
+updated tests for Python 220 Lesson 7 assignment (relational databases)
 """
 from donors_model import *
 import os

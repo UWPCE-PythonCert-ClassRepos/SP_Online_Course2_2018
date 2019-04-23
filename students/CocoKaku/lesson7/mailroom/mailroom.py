@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 """
 updated mailroom program for Python 220 Lesson 7 assignment (relational databases)
-(1) changed data model from JSON to peewee/sqlite database
-(2) added logging
+changed json database to peewee/sqlite implementation
 """
-from donors_model import *
+
+from donors_model import Donation
 
 def send_thank_you():
     """Add a donor/donation and print out a thank you letter"""
@@ -70,15 +70,13 @@ def main_menu_error():
 
 def quit_program():
     """close database, then exit program"""
-    database.close()
+    Donation.close_db()
     exit()
 
 
 def main():
     """Main menu for mailroom program"""
-    database.init('donations.db')
-    database.connect()
-    database.execute_sql('PRAGMA foreign_keys = ON;')
+    Donation.open_db("donations.db")
 
     switch_menu_dict = {
         "1": send_thank_you,
