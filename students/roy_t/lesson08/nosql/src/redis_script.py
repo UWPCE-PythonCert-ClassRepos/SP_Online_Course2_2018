@@ -55,28 +55,35 @@ def run_example():
         log.info(f'Type of cover = {cover_type}')
 
 
-        log.info('Step 9: store customer data')
-        r.rpush('Andy Dwyer', '456-555-7946')
-        r.rpush('Andy Dwyer', '97456')
-        r.rpush('Leslie Knope', '456-555-9654')
-        r.rpush('Leslie Knope', '97453')
-        r.rpush('Ron Swanson', 'Unknown')
-        r.rpush('Ron Swanson', 'Unknown')
-        r.rpush('Chris Trager', '456-555-9874')
-        r.rpush('Chris Trager', '97453')
-        r.rpush('Tom Havaford', '456-555-3214')
-        r.rpush('Tom Havaford', '97456')
-        r.rpush('Donna Smigle', '456-555-6544')
-        r.rpush('Donna Smigle', '97456')
+        log.info('ASSIGNMENT: store customer data')
+        r.rpush('Franklin Tulipvelt', '111-555-1212')
+        r.rpush('Franklin Tulipvelt', '99888')
+        r.rpush('Poppy McGee', '111-555-1343')
+        r.rpush('Poppy McGee', '99888')
+        r.rpush('Pat Nosayjak', 'Unknown')
+        r.rpush('Pat Nosayjak', 'Unknown')
+        r.rpush('Chris Rockerford', '111-555-1211')
+        r.rpush('Chris Rockerford', '99811')
+        r.rpush('Mary Littlelamb', '111-555-1111')
+        r.rpush('Mary Littlelamb', '99811')
+        r.rpush('Georgia Peach', '111-555-3232')
+        r.rpush('Georgia Peach', '99811')
 
-        log.info('Step 10: pull some customer data from the structure')
-        customer_names = ['Andy Dwyer', 'Leslie Knope', 'Ron Swanson',
-                            'Chris Trager', 'Tom Havaford', 'Donna Smigle']
+        log.info('ASSIGNMENT: pull some customer data from the structure')
+        customer_names = ['Franklin Tulipvelt', 'Poppy McGee', 'Pat Nosayjak',
+                            'Chris Rockerford', 'Mary Littlelamb', 'Georgia Peach']
+
         for customer in customer_names:
             phone = r.lindex(customer, 0)
             zipcode = r.lindex(customer, 1)
-            log.info(f'Customer {customer} is located in {zipcode} and can be reached at {phone}')
+            log.info(f'ASSIGNMENT: Customer Name: {customer} Zip: {zipcode} Phone: {phone}')
 
+        log.info('ASSIGNMENT: Printing only Poppy McGee\'s information:')
+        for customer in customer_names:
+            phone = r.lindex(customer, 0)
+            zipcode = r.lindex(customer, 1)
+            if customer == 'Poppy McGee':
+                log.info(f'ASSIGNMENT: Customer Name: {customer} Zip: {zipcode} Phone: {phone}')
 
     except Exception as e:
         print(f'Redis error: {e}')
