@@ -105,9 +105,32 @@ def run_example(furniture_items):
         log.info("Step 14: print the string")
         pprint.pprint(furniture_object)
 
-    run_pickle()
-    run_shelve()
-    run_csv()
-    run_json()
+    def my_json():
+        log.info('ASSIGNMENT - Step 11: Work with JSON data')
+        golf_clubs = [{'club': 'Driver', 'brand': 'Taylormade', 'color': 'black', 'description': 'used', 'loft': 9},
+                      {'club': 'Driver', 'brand': 'Titleist', 'color': 'black', 'description': 'used', 'loft': 11},
+                      {'club': 'Hybrid', 'brand': 'Callaway', 'color': 'black', 'description': 'used', 'loft': 21},
+                      {'club': 'Wedge', 'brand': 'Taylormade', 'color': 'black', 'description': 'used', 'loft': 50},
+                      {'club': 'Putter', 'brand': 'Ping', 'color': 'black', 'description': 'used', 'loft': 4},
+                      {'club': 'Wedge', 'brand': 'Callaway', 'color': 'black', 'description': 'used', 'loft': 56},
+                      {'club': 'Putter', 'brand': 'Cobra', 'color': 'black', 'description': 'used', 'loft': 3},
+                      {'club': 'Driver', 'brand': 'Ping', 'color': 'black', 'description': 'used', 'loft': 8},
+                   ]
+        log.info('Serializing a Python object and writing it to a file as a JSON object')
+        with open('golf_clubs.json', 'w') as f:
+            json.dump(golf_clubs, f)
+
+        log.info('Deserializing a JSON object from the file and printing it')
+        with open('golf_clubs.json', 'r') as f:
+            all_clubs = json.load(f)
+        print(all_clubs)
+
+
+    # run_pickle()
+    # run_shelve()
+    # run_csv()
+    # run_json()
+    my_json()
+
 
     return

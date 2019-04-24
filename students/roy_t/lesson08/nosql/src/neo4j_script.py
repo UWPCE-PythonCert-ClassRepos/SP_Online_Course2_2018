@@ -97,34 +97,31 @@ def run_example():
             for friend in rec.values():
                 print(friend['first_name'], friend['last_name'])
 
-        log.info('Step 7: Adding a few new Person nodes')
-        for first, last in [('Curious', 'George'),
-                            ('Man', 'Yellowhat'),
-                            ('Professor', 'Wiseman'),
-                            ('Bill', 'Neighbor'),
-                            ]:
+        log.info('ASSIGNMENT - Step 7: Adding a few new People')
+        new_people = [('Frank', 'Ton'),
+                            ('Thi', 'Sorthat'),
+                            ('Guy', 'Pringles'),
+                            ('Pat', 'Nosayjak'),
+                            ]
+        for first, last in new_people:
             cyph = "CREATE (n:Person {first_name:'%s', last_name: '%s'})" % (
                 first, last)
             session.run(cyph)
 
-        log.info('Step 8: Adding colors')
-        color_list = ['Cyan', 'Amaranth', 'Burgundy', 'Coral', 'Mauve',
-                        'Olive', 'Periwinkle', 'Taupe', 'Ultramarine']
+        log.info('ASSIGNMENT - Step 8: Add some colors')
+        color_list = ['Blue', 'Red', 'Purple', 'Teal',  'Green', 'White', 'Black', 'Brown']
         for color_name in color_list:
             cyph = "CREATE (n:Color {name: '%s'})" % (color_name)
             session.run(cyph)
 
-        log.info('Step 9: Assign favorite colors')
+        log.info('ASSIGNMENT - Step 9: Assign a favorite color to a person.')
         log.info("Get all of people in the DB:")
         cyph = """MATCH (p:Person)
                   RETURN p.first_name as first_name, p.last_name as last_name
                 """
         people = session.run(cyph)
         log.info("assign 2 fav colors")
-        for first, last in [("Curious", "George"),
-                            ("Professor", "Wiseman"),
-                            ('Bill', 'Neighbor'),
-                            ]:
+        for first, last in new_people:
             first_color = random.choice(color_list)
             cypher = """
               MATCH (p1:Person {first_name:'%s', last_name:'%s'})
@@ -140,7 +137,7 @@ def run_example():
             """ % (first, last, second_color)
             session.run(cypher)
 
-        log.info('Step 10: print all people for each favorite color')
+        log.info('ASSIGNMENT - Step 10: Print the person and their favorite color.')
         for color in color_list:
             cyph = """
               MATCH (people)
@@ -148,23 +145,20 @@ def run_example():
               RETURN people
               """% (color)
             result = session.run(cyph)
-            print("\nThe people who like %s are:"%(color))
+            print(f"\nThe people who like {color} are:")
             for rec in result:
                 for person in rec.values():
                     print(person['first_name'], person['last_name'])
 
-        log.info('Step 11: print all colors for each person')
-        for first, last in [("Curious", "George"),
-                            ("Professor", "Wiseman"),
-                            ('Bill', 'Neighbor'),
-                            ]:
+        log.info('ASSIGNMENT - Step 11: Print each person\'s favorite color:')
+        for first, last in new_people:
             cyph = """
               MATCH (person {first_name:'%s', last_name:'%s'})
                     -[:FAVORITE]->(colors)
               RETURN colors
               """% (first, last)
             result = session.run(cyph)
-            print("\n '%s' '%s' likes the following colors:"%(first, last))
+            print(f"\n {first} {last} likes the following colors:")
             for rec in result:
                 for color in rec.values():
                     print(color['name'])
