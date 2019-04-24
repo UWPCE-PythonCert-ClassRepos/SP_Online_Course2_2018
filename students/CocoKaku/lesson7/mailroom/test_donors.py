@@ -120,7 +120,7 @@ def test_donors_challenge_min_donation():
     assert Donation.challenge(2, min_donation=4) == expected
 
 
-def test_donors_challenge_max_donation():
+def test_donation_challenge_max_donation():
     Donation.add_donation("Ann", 1)
     Donation.add_donation("Ann", 2)
     Donation.add_donation("Ann", 3)
@@ -133,7 +133,7 @@ def test_donors_challenge_max_donation():
     assert Donation.challenge(2, max_donation=4) == expected
 
 
-def test_donors_challenge_min_and_max_donation():
+def test_donation_challenge_min_and_max_donation():
     Donation.add_donation("Ann", 1)
     Donation.add_donation("Ann", 2)
     Donation.add_donation("Ann", 3)
@@ -144,3 +144,78 @@ def test_donors_challenge_min_and_max_donation():
                "   Barry: $18.00 = 2 * $9.00\n" \
                "\n   Total contribution required: $28.00\n"
     assert Donation.challenge(2, min_donation=2, max_donation=5) == expected
+
+
+def test_donation_delete_donation():
+    Donation.add_donation("Ann", 3)
+    Donation.add_donation("Ann", 2)
+    Donation.add_donation("Bill", 2)
+    Donation.add_donation("Joe", 1)
+    Donation.add_donation("Joe", 1)
+    op1 = Donation.delete_donation("Bill", 2)
+    op2 = Donation.delete_donation("Ann", 2)
+    op3 = Donation.delete_donation("Bill", 2)
+    expected = "DONOR NAME             TOTAL DONATED   NUM DONATIONS   AVG DONATION\n" \
+               "Ann                    $        3.00   1               $       3.00\n" \
+               "Joe                    $        2.00   2               $       1.00\n"
+    assert Donation.summary_report() == expected
+    assert op1
+    assert op2
+    assert not op3
+
+
+def test_donation_delete_donor():
+    Donation.add_donation("Ann", 3)
+    Donation.add_donation("Ann", 2)
+    Donation.add_donation("Bill", 2)
+    Donation.add_donation("Joe", 1)
+    Donation.add_donation("Joe", 1)
+    op1 = Donation.delete_donor("Bill")
+    op2 = Donation.delete_donor("Joe")
+    op3 = Donation.delete_donor("Clancy")
+    expected = "DONOR NAME             TOTAL DONATED   NUM DONATIONS   AVG DONATION\n" \
+               "Ann                    $        5.00   2               $       2.50\n"
+    assert Donation.summary_report() == expected
+    assert op1
+    assert op2
+    assert not op3
+
+
+def test_donation_update_donation():
+    Donation.add_donation("Ann", 3)
+    Donation.add_donation("Ann", 2)
+    Donation.add_donation("Bill", 2)
+    Donation.add_donation("Joe", 1)
+    Donation.add_donation("Joe", 1)
+    op1 = Donation.update_donation("Bill", 2, 4)
+    op2 = Donation.update_donation("Joe", 1, 2)
+    op3 = Donation.update_donation("Clancy", 2, 3)
+    expected = "DONOR NAME             TOTAL DONATED   NUM DONATIONS   AVG DONATION\n" \
+               "Ann                    $        5.00   2               $       2.50\n" \
+               "Bill                   $        4.00   1               $       4.00\n" \
+               "Joe                    $        3.00   2               $       1.50\n"
+    assert Donation.summary_report() == expected
+    assert op1
+    assert op2
+    assert not op3
+
+
+def test_donation_update_donor():
+    Donation.add_donation("Ann", 3)
+    Donation.add_donation("Ann", 2)
+    Donation.add_donation("Bill", 2)
+    Donation.add_donation("Joe", 1)
+    Donation.add_donation("Joe", 1)
+    op1 = Donation.update_donor("Bill", "Bolliver")
+    op2 = Donation.update_donor("Joe", "Ann")
+    op3 = Donation.update_donor("Clancy", "Cleaver")
+    expected = "DONOR NAME             TOTAL DONATED   NUM DONATIONS   AVG DONATION\n" \
+               "Ann                    $        5.00   2               $       2.50\n" \
+               "Bolliver               $        2.00   1               $       2.00\n" \
+               "Joe                    $        2.00   2               $       1.00\n"
+    assert Donation.summary_report() == expected
+    assert op1
+    assert not op2
+    assert not op3
+
+    pass

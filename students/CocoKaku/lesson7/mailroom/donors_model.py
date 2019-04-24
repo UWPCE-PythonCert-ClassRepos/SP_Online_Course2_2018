@@ -62,6 +62,7 @@ class Donation(BaseModel):
                f"Sincerely,\n" \
                f"PYTHON220 Class of 2019"
 
+
     @classmethod
     def send_all_letters(cls, dir_name):
         if not isdir(dir_name):
@@ -112,6 +113,58 @@ class Donation(BaseModel):
             total += factor * float(d.sum)
         report += f"\n   Total contribution required: ${total:,.2f}\n"
         return report
+
+
+    @classmethod
+    def delete_donation(cls, name, amount):
+        found = Donation.get_or_none(name=name, amount=amount)
+        if found:
+            found.delete_instance()
+            found_again = Donation.get_or_none(name=name)
+            if not found_again:
+                Donor.get(name=name).delete_instance()
+            return True
+        else:
+            return False
+
+
+    @classmethod
+    def delete_donor(cls, name):
+        found = Donation.select().where(Donation.name==name)
+        if found:
+            for item in found:
+                item.delete_instance()
+            Donor.get_or_none(name=name).delete_instance()
+            return True
+        else:
+            return False
+
+
+    @classmethod
+    def update_donation(cls, name, old_amount, new_amount):
+        query = Donation.get_or_none(name=name, amount=old_amount)
+        if query:
+            query.amount = new_amount
+            query.save()
+            return True
+        else:
+            return False
+
+
+    @classmethod
+    def update_donor(cls, old_name, new_name):
+        found_old = Donor.get_or_none(name=old_name)
+        found_new = Donor.get_or_none(name=new_name)
+        if found_new:
+            return False
+        if found_old:
+            donations = Donation.select().where(Donation.name == old_name)
+            for item in donations:
+                Donation.add_donation(new_name, item.amount)
+            Donation.delete_donor(old_name)
+            return True
+        else:
+            return False
 
 
     @classmethod

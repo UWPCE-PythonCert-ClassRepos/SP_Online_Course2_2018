@@ -63,6 +63,44 @@ def run_projection():
             break
 
 
+def update_donor_info():
+    while True:
+        name = input("\nDonor name ('q' to quit): ")
+        if name in ('q', 'quit'):
+            return
+        info = input("   Update name or donation amount ('name', 'amount', or 'q' to quit: ")
+        if info in ('q', 'quit'):
+            return
+        if info == 'name':
+            new_name = input("   New name: ")
+            if not Donation.update_donor(name, new_name):
+                print("   Update failed, invalid inputs")
+            continue
+        if info == 'amount':
+            old_amount = input("   Amount: ")
+            new_amount = input("   New amount: ")
+            if not Donation.update_donation(name, old_amount, new_amount):
+                print("   Update failed, invalid inputs")
+
+
+def delete_donor_info():
+    while True:
+        name = input("\nDonor name ('q' to quit): ")
+        if name in ('q', 'quit'):
+            return
+        info = input("   Delete name or donation amount ('name', 'amount', or 'q' to quit): ")
+        if info in ('q', 'quit'):
+            return
+        if info == 'name':
+            if not Donation.delete_donor(name):
+                print("   Delete failed, invalid inputs")
+            continue
+        if info == 'amount':
+            amount = input("   Amount: ")
+            if not Donation.delete_donation(name, amount):
+                print("   Delete failed, invalid inputs")
+
+
 def main_menu_error():
     """print error message if invalid menu item is entered"""
     print("Invalid choice, try again")
@@ -83,6 +121,8 @@ def main():
         "2": create_a_report,
         "3": send_all_letters,
         "4": run_projection,
+        "5": update_donor_info,
+        "6": delete_donor_info,
         "q": quit_program,
         "quit": quit_program
         }
@@ -92,6 +132,8 @@ def main():
         print("   2 = Create a Report")
         print("   3 = Send Letters to Everyone")
         print("   4 = Run A Projection")
+        print("   5 = Update Donor Name/Donation")
+        print("   6 = Delete Donor Name/Donation")
         print("   q = Quit")
         choice = input("   ? ")
         switch_menu_dict.get(choice, main_menu_error)()
