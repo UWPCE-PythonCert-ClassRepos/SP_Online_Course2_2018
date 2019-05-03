@@ -11,7 +11,6 @@ import pprint
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 from datetime import datetime
-from datetime import date
 
 
 def populate_people():
@@ -19,11 +18,8 @@ def populate_people():
     add person data to database
     """
 
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
-
-
-
+    # logging.basicConfig(level=logging.INFO)
+    # logger = logging.getLogger(__name__)
     logger.info('Starting to load people')
 
     PERSON_NAME = 0
@@ -38,21 +34,17 @@ def populate_people():
         ('Steven', 'Colchester', None)
         ]
 
-
     try:
         for person in people:
             with database.transaction():
                 new_person = Person.create(
-                        person_name = person[PERSON_NAME],
-                        lives_in_town = person[LIVES_IN_TOWN],
-                        nickname = person[NICKNAME])
+                        person_name=person[PERSON_NAME],
+                        lives_in_town=person[LIVES_IN_TOWN],
+                        nickname=person[NICKNAME])
                 new_person.save()
                 logger.debug('People data add successful')
 
         logger.debug('Print the Person records we saved...')
-        for saved_person in Person:
-            print(f'{saved_person.person_name} lives in {saved_person.lives_in_town} ' +\
-                f'and likes to be known as {saved_person.nickname}')
 
     except Exception as e:
         logger.info(f'Error creating = {person[PERSON_NAME]}')
@@ -75,9 +67,10 @@ def populate_jobs():
     logger.info('Starting to load jobs')
 
     jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30',65500, 'Andrew'),
+        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew'),
         ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
+        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000,
+         'Andrew'),
         ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Peter'),
         ('CEO', '2014-11-14', '2018-01-05', 45900, 'Peter')
         ]
@@ -86,17 +79,18 @@ def populate_jobs():
         for job in jobs:
             with database.transaction():
                 new_job = Job.create(
-                    job_name = job[JOB_NAME],
-                    start_date = job[START_DATE],
-                    end_date = job[END_DATE],
-                    salary = job[SALARY],
-                    person_employed = job[PERSON_EMPLOYED])
+                    job_name=job[JOB_NAME],
+                    start_date=job[START_DATE],
+                    end_date=job[END_DATE],
+                    salary=job[SALARY],
+                    person_employed=job[PERSON_EMPLOYED])
                 new_job.save()
 
     finally:
         logger.info('finished loading jobs')
 
-def populate_Departments():
+
+def populate_departments():
     """
     Add department data to database with columns Department Number,
     Department Name, Department Manager, Job Name, and Total Days
@@ -104,15 +98,14 @@ def populate_Departments():
     """
     DEPT_number = 0
     DEPT_name = 1
-    DEPT_manager =2
+    DEPT_manager = 2
     JOB_name = 3
-
 
     logger.info('Starting to load deparatment data.')
 
     department_data = [
         ('C191', 'Operations', 'Dick', 'Analyst'),
-        ('C191', 'Transmission', 'Mary','Senior analyst'),
+        ('C191', 'Transmission', 'Mary', 'Senior analyst'),
         ('C291', 'Generation', 'Pat', 'Senior business analyst'),
         ('C291', 'Operations', 'Rob',  'Admin supervisor'),
         ('C391', 'Distribution', 'Cindy', 'CEO')
@@ -121,7 +114,7 @@ def populate_Departments():
     try:
         for Departments in department_data:
             with database.transaction():
-                jobrow= Job.get(Job.job_name == Departments[JOB_name])
+                jobrow = Job.get(Job.job_name == Departments[JOB_name])
                 date_format = "%Y-%m-%d"
                 # Get start_date and end_date from Job Table and parse
                 # date string into python format
@@ -129,53 +122,34 @@ def populate_Departments():
                 endday = datetime.strptime(jobrow.end_date, date_format)
                 totaldays = (endday - startday).days  # returning the days only
                 new_job = Department.create(
-                    dept_number = Departments[DEPT_number],
-                    dept_name = Departments[DEPT_name],
-                    dept_manager = Departments[DEPT_manager],
-                    job_name = Departments[JOB_name],
-                    days_held = totaldays
+                    dept_number=Departments[DEPT_number],
+                    dept_name=Departments[DEPT_name],
+                    dept_manager=Departments[DEPT_manager],
+                    job_name=Departments[JOB_name],
+                    days_held=totaldays
                     )
                 new_job.save()
 
     finally:
         logger.info('finished loading department data.')
 
+
 def join_classes():
     """
-        Joins the Person table to Job table for all
-        people with jobs. For all people with jobs
-        the results of the person table and the job table will get
-        joined to the Department table.
+        Joins the Person table to Job table, and then those results get joined
+        to the Department table.
     """
-
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
-
-    database = SqliteDatabase('personjob.db')
-
-    logger.info('Working with Job class')
-
-    logger.info('Now resolve the join and print (INNER shows only jobs'
-                'that match person)...')
-    logger.info('Notice how we use a query variable in this case')
-    logger.info('We select the classes we need, and we join Person to Job')
-    logger.info('Inner join (which is the default) shows only records'
-                'that match')
 
     try:
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
         query = (Person
                  .select(Person, Job.job_name, Department.dept_name)
-                 .join(Job, JOIN.INNER) # Joins person - > Job
-                 .join(Department, JOIN.INNER) #Joins Job -> Department
-                )
-        print(query)
-        query_tuple=[]
+                 .join(Job, JOIN.INNER)  # Joins person - > Job
+                 .join(Department, JOIN.INNER))  # Joins Job -> Department
+
+        query_tuple = []  # Create a list to hold person, job, and dept.
         for person in query:
-            logger.info(f'Person {person.person_name} had '
-                        f'job {person.job.job_name} in '
-                        f'department {person.job.department.dept_name}')
             query_tuple.append((person.person_name, person.job.job_name,
                                 person.job.department.dept_name))
         return query_tuple
@@ -187,7 +161,6 @@ def join_classes():
     finally:
         logger.info('database closes after join_classes')
         database.close()
-
 
 
 if __name__ == '__main__':
@@ -205,10 +178,8 @@ if __name__ == '__main__':
     database.execute_sql('PRAGMA foreign_keys = ON;')
     populate_people()
     populate_jobs()
-    populate_Departments()
+    populate_departments()
     database.close()
-
-    logger.info('Joining tables Person and Job to filter'
-                'only people in Job table'
-                'with jobs remain.')
+    logger.info('Call join_classes and print the person, '
+                'their job, and the department they were in.')
     pprint.pprint(join_classes())
