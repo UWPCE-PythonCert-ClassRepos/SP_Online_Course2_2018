@@ -105,7 +105,7 @@ def json_save(cls):
     attr_dict = vars(cls)
     cls._attrs_to_save = {}
     for key, attr in attr_dict.items():
-        if not key.startswith('__'):
+        if isinstance(attr, Saveable):
             cls._attrs_to_save[key] = attr
     if not cls._attrs_to_save:
         raise TypeError(f"{cls.__name__} class has no saveable attributes.\n"
@@ -114,7 +114,7 @@ def json_save(cls):
     Saveable.ALL_SAVEABLES[cls.__qualname__] = cls
 
     # add the methods:
-    #cls.__new__ = __new__
+    cls.__new__ = __new__
     cls.to_json_compat = _to_json_compat
     cls.__eq__ = __eq__
     cls.from_json_dict = _from_json_dict

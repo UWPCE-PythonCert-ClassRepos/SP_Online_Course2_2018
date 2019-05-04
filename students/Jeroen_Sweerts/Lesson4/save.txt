@@ -1,0 +1,1 @@
+{"__obj_type": "MyClass", "x": {"papa": [100, 5, 15], "mama": [12, 200, 2, 66], "bompa": [1000], "bobonne": [500, 500], "onbekende": [1000000]}}
