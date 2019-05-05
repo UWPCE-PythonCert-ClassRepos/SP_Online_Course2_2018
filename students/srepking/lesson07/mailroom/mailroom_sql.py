@@ -6,36 +6,60 @@ from peewee import *
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-mail = d.Group(d.Individual('Shane', [200]))
-
-
-if os.path.exists("demofile.txt"):
-  os.remove("demofile.txt")
-else:
-  print("The file does not exist")
 
 
 def create_database():
 
-    file_name = input('\nAre you sure you want to delete?\n'
+    file_name = input('\nWhat would you like to name your new database?\n'
                             'e - to exit\n')
     if file_name == 'e':
         return
     else:
-        if os.path.exists("mailroom.db"):
-            logging.info('Trying to delete the database.')
-            os.remove("mailroom.db")
+        if os.path.exists(file_name):
+            logging.info('This database already exists.')
+            return
 
         cwd = os.getcwd()
-        os.path.join(cwd, 'mailroom.db')
-        logger.info('Connecting to mailroom.db database.')
-        database = SqliteDatabase('mailroom.db')
+        file_name = file_name + '.db'
+        #os.path.join(cwd, file_name)
+        logger.info(f'Creating new database {file_name}.')
+        # database = SqliteDatabase('mailroom.db')
+        new_database.database.init(file_name)
+        database = new_database.database
         database.connect()
         logger.info('Creating Modules in database')
-        database.create_tables([new_database.Donor, new_database.Donations])
+        database.create_tables([new_database.Donor])
         database.close()
-        logger.info('Database is closed.')
+        logger.info('Database has been created and is closed.')
 
+
+def delete_database():
+    cur_dir = os.getcwd()
+    logger.debug(f'Current Directory is {cur_dir}')
+    file_list = os.listdir(cur_dir)
+    logger.debug(f'File list is {file_list}')
+    db_file = []
+    for file in file_list:
+        logger.debug(f'Print file in file_list {file}')
+        if file.endswith('.db'):
+            db_file.append(file)
+            logger.debug(f'Print db_file,{db_file}')
+    if db_file is not None:
+        print(f"The following databases exist in current working directory,\n")
+        for file in db_file:
+            print(f"{file}\n")
+    if len(db_file) == 0:
+        print('No database exists. Please create a database.')
+        return
+    file_name = input('\nWhat database do you want to delete? Include ".db" \n'
+                            'e - to exit\n')
+    if file_name == 'e':
+        return
+    else:
+        if os.path.exists(file_name):
+            logging.info('Trying to delete the database.')
+            os.remove(file_name)
+            logger.info(f'Database is {file_name} has been deleted.')
 
 def more_choices():
     while True:
@@ -105,7 +129,8 @@ if __name__ == '__main__':
                    '3': letters_for_all,
                    '4': delete_donor,
                    '5': create_database,
-                   '6': quit_program}
+                   '6': delete_database,
+                   '7': quit_program}
     while True:
         response = input(
             '\nChoose an Action:\n'
@@ -114,7 +139,8 @@ if __name__ == '__main__':
             '3 - Send letters to everyone\n'
             '4 - Delete a Donor\n'
             '5 - Create a new database\n'
-            '6 - Quit\n'
+            '6 - Delete a database\n'
+            '7 - Quit\n'
             '>>')
 
         switch_dict.get(response, wrong_choice)()

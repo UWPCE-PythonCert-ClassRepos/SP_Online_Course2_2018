@@ -162,7 +162,7 @@ def join_classes():
         # #############################################3
 
         query = (Job
-                 .select(Job, Department)
+                 .select(Job, Department.dept_name)
                  .join(Department, JOIN.INNER))  # Joins Job -> Department
 
         query_tuple = []  # Create a list to hold person, job, and dept.

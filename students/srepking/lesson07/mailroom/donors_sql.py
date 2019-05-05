@@ -4,6 +4,8 @@ from peewee import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+import create_mr_tables as new_database
+from create_mr_tables import *
 
 
 
@@ -18,11 +20,6 @@ class Group:
     def search(self, donor):
         return self._donor_raw.get(donor)
 
-    def add(self, donor, donation):
-        if self._donor_raw.get(donor):
-            self._donor_raw[donor].add_donation(donation)
-        else:
-            self._donor_raw[donor] = Individual(donor, [donation])
 
     def print_donors(self):
         # This prints the list of donors
@@ -120,15 +117,40 @@ class Group:
 
 
 class Individual:
-    """Creates Class Individual, except instead of returning andn instance
-    of a class, we will not create a table 'Individual' in an SQL database
+    """Creates Class Individual, except instead of returning an instance
+    of a class, we will now create a table 'Individual' in an SQL database
     with the following properties 'name', 'donation', '"""
-    def __init__(self, name, donations):
-        self.name = name
-        self.donations = donations
+    def __init__(self, filename):
+        #new_database.database.init(filename)
+        #self.database = new_database.database
+        self.filename = filename
 
-    def add_donation(self, donation):
-        self.donations.append(donation)
+    @staticmethod
+    def add_donation(person, contribution):
+        try:
+            new_database.database.init('mailroom.db')
+
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+            with database.transaction():
+                new_person = new_database.Donor.create(
+                        donor_name=person,
+                        donations=contribution)
+                new_person.save()
+                logger.info('Database add successful')
+
+                logger.info('Print the Person records we saved...')
+            #for saved_person in self.database.Donor:
+                #logger.info(f'{saved_person.donor_name} donated {saved_person.donation}')
+
+        except Exception as e:
+            logger.info(f'Error creating = {person}')
+            logger.info(e)
+            logger.info('Failed to add new donor.')
+
+        finally:
+            logger.info('database closes')
+            database.close()
 
     def number_donations(self):
         return int(len(self.donations))
