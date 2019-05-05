@@ -30,6 +30,17 @@ class Person(BaseModel):
     nickname = CharField(max_length=20, null=True)
 
 
+class Department(BaseModel):
+    """
+        This class defines Department, which maintains details of past
+        department_names and corresponding department details.
+    """
+    dept_number = CharField(primary_key=True, max_length=4)
+    dept_name = CharField(max_length=30)
+    dept_manager = CharField(max_length=30)
+
+
+
 class Job(BaseModel):
     """
         This class defines Job, which maintains details of past Jobs
@@ -39,8 +50,12 @@ class Job(BaseModel):
     start_date = DateField(formats='YYYY-MM-DD')
     end_date = DateField(formats='YYYY-MM-DD')
     salary = DecimalField(max_digits=7, decimal_places=2)
+    days_held = CharField(null=True)
     person_employed = ForeignKeyField(Person,
                                       related_name='was_filled_by',
+                                      null=False)
+    dept_num = ForeignKeyField(Department,
+                               related_name='was_filled_by',
                                       null=False)
 
 
@@ -55,17 +70,4 @@ class PersonNumKey(BaseModel):
     nickname = CharField(max_length=20, null=True)
 
 
-class Department(BaseModel):
-    """
-        This class defines Department, which maintains details of past
-        department_names and corresponding department details.
-    """
-    dept_number = CharField(max_length=4)
-    dept_name = CharField(max_length=30)
-    dept_manager = CharField(max_length=30)
-    job_name = ForeignKeyField(Job, null=False)  # Job name is a
-    # primary key in the Job Table and so can be used as
-    # foreign key. There is no need to have employee name in this table
-    # since job_name is unique and points back to Person table with a
-    # foreign key.
-    days_held = CharField(null=True)
+
