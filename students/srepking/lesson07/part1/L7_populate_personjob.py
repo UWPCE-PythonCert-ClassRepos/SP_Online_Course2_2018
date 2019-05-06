@@ -4,6 +4,7 @@
 """
 
 import logging
+import sqlite3
 from L7_create_personjob import *
 from peewee import *
 import pprint
@@ -156,19 +157,15 @@ def join_classes():
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
 
-        # #######################################################
-        # Getting this error for this
-        # query. 'Job' object has no attribute 'department'
-        # #############################################3
-
-        query = (Job
-                 .select(Job, Department.dept_name)
-                 .join(Department, JOIN.INNER))  # Joins Job -> Department
+        query = (Person
+                 .select(Person.person_name, Job.job_name, Department.dept_name.alias("dept_name"))
+                 .join(Job, JOIN.INNER).objects()
+                 .join(Department, JOIN.INNER).objects())  # Joins Job -> Department
 
         query_tuple = []  # Create a list to hold person, job, and dept.
         for job in query:
-            query_tuple.append((job.person_employed, job.job_name,
-                                job.department.dept_name))
+            query_tuple.append((job.person_name, job.job_name,
+                                job.dept_name))
 
         return query_tuple
 
