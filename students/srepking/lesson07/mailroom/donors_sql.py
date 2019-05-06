@@ -142,12 +142,11 @@ class Individual:
         database.execute_sql('PRAGMA foreign_keys = ON;')
 
         try:
-            #with database.transaction():
-                #logger.info('Trying to add new donor.')
-
-                #new_donor = new_database.Donor.create(donor_name=person)
+            with database.transaction():
+                logger.info('Trying to add new donor.')
+                new_donor = new_database.Donor.get_or_create(donor_name=person)
                 #new_donor.save()
-                #logger.info('Success adding donor.')
+                logger.info('Success adding donor.')
 
             with database.transaction():
                 logger.info('Trying to add new donation.')
@@ -158,7 +157,8 @@ class Individual:
                 logger.info('Database added donation successful')
 
                 logger.info('Print the Person records we saved...')
-            for donation in Donations:
+                query = Donations.select()
+            for donation in query:
                     logger.info(f'{donation.donor_name} donated {donation.donation}')
 
 
