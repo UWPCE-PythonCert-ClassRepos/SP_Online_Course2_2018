@@ -28,7 +28,7 @@ def create_database():
         database = new_database.database
         database.connect()
         logger.info('Creating Modules in database')
-        database.create_tables([new_database.Donor])
+        database.create_tables([new_database.Donor, new_database.Donations])
         database.close()
         logger.info('Database has been created and is closed.')
 

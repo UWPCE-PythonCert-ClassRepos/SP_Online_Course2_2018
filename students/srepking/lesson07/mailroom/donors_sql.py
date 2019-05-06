@@ -1,11 +1,20 @@
 import logging
 from peewee import *
-
+from create_mr_tables import *
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 import create_mr_tables as new_database
-from create_mr_tables import *
+#database = SqliteDatabase(None)
+#d.database.init(file_name)
+#database = SqliteDatabase('mailroom.db')
+#database.connect()
+#database.execute_sql('PRAGMA foreign_keys = ON;') # needed for sqlite only
+
+
+
 
 
 
@@ -121,34 +130,46 @@ class Individual:
     of a class, we will now create a table 'Individual' in an SQL database
     with the following properties 'name', 'donation', '"""
     def __init__(self, filename):
-        #new_database.database.init(filename)
+        new_database.database.init(filename)
         #self.database = new_database.database
-        self.filename = filename
+        #self.filename = filename
 
     @staticmethod
     def add_donation(person, contribution):
-        try:
-            new_database.database.init('mailroom.db')
+        database = SqliteDatabase('mailroom.db')
+        database.connect()
+        logger.info('Connected to database')
+        database.execute_sql('PRAGMA foreign_keys = ON;')
 
-            database.connect()
-            database.execute_sql('PRAGMA foreign_keys = ON;')
+        try:
+            #with database.transaction():
+                #logger.info('Trying to add new donor.')
+
+                #new_donor = new_database.Donor.create(donor_name=person)
+                #new_donor.save()
+                #logger.info('Success adding donor.')
+
             with database.transaction():
-                new_person = new_database.Donor.create(
+                logger.info('Trying to add new donation.')
+                new_donation = new_database.Donations.create(
                         donor_name=person,
-                        donations=contribution)
-                new_person.save()
-                logger.info('Database add successful')
+                        donation=contribution)
+                new_donation.save()
+                logger.info('Database added donation successful')
 
                 logger.info('Print the Person records we saved...')
-            #for saved_person in self.database.Donor:
-                #logger.info(f'{saved_person.donor_name} donated {saved_person.donation}')
+            for donation in Donations:
+                    logger.info(f'{donation.donor_name} donated {donation.donation}')
+
 
         except Exception as e:
             logger.info(f'Error creating = {person}')
             logger.info(e)
             logger.info('Failed to add new donor.')
 
+
         finally:
+
             logger.info('database closes')
             database.close()
 
@@ -172,7 +193,6 @@ class Individual:
                 .format(self.donations[-1], self.name))
 
 
-
-
-
+#database.create_tables([Donor, Donations])
+#database.close()
 
