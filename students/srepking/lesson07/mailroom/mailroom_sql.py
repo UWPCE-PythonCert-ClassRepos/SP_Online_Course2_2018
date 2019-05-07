@@ -3,6 +3,8 @@ import donors_sql as d
 import create_mr_tables as new_database
 import logging
 from peewee import *
+mail = d.Group('mailroom.db')
+individual = d.Individual
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -61,6 +63,7 @@ def delete_database():
             os.remove(file_name)
             logger.info(f'Database is {file_name} has been deleted.')
 
+
 def more_choices():
     while True:
         name = input('\nChoose an Option: \n'
@@ -93,9 +96,9 @@ def more_choices():
                 print('\nYou entered an invalid amount!!\n')
                 return ValueError
             else:
-                mail.add(name, float(amount))
-                donor_obj = mail._donor_raw[name]
-                print(donor_obj.thank_you)
+                individual.add_donation(name, float(amount))
+                #donor_obj = mail._donor_raw[name]
+                print(individual.thank_you(name, float(amount)))
 
 
 def print_report():

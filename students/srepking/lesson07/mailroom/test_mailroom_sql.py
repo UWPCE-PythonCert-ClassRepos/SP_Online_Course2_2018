@@ -1,4 +1,5 @@
 import unittest
+from peewee import *
 import donors_sql as d
 import create_mr_tables as new_database
 from create_mr_tables import *
@@ -26,6 +27,7 @@ class TestMailbox(unittest.TestCase):
         aperson = Donor.get(Donor.donor_name == 'Shane')
 
         self. assertEqual(aperson.donor_name, 'Shane')
+
 
 
 #    def test_Group_get(self):

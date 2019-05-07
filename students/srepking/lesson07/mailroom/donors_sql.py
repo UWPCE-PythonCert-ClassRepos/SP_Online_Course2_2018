@@ -22,18 +22,46 @@ class Group:
     """This Class will be used to query the database and return the results
     of the required queries."""
 
-    def __init__(self, *args):
+    def __init__(self, filename):
+        new_database.database.init(filename)
 
-        self._donor_raw = {d.name: d for d in args}
-
-    def search(self, donor):
-        return self._donor_raw.get(donor)
+    def search(self, search_for):
+        database.connect()
+        logger.info('Connected to database')
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        try:
+            with database.transaction():
+                logger.info(f'Searching through donors for {search_for}.')
+                query = Donor.get_or_none(Donor.donor_name == search_for)  # Select all donors
+        except Exception as e:
+            logger.info(f'Error searching for donors.')
+            logger.info(e)
+            logger.info('Failed to execute donor search.')
+        finally:
+            logger.info('database closes')
+            database.close()
+        return query
 
 
     def print_donors(self):
         # This prints the list of donors
-        for x in self._donor_raw:
-            print(x)
+        database.connect()
+        logger.info('Connected to database')
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+        try:
+            with database.transaction():
+                logger.info('Trying print all the donors.')
+                query = Donor.select()  #  Select all donors
+                for donor in query:
+                    print(donor.donor_name)
+
+        except Exception as e:
+            logger.info(f'Error printing donors.')
+            logger.info(e)
+            logger.info('Failed to print a list of donors.')
+        finally:
+            logger.info('database closes')
+            database.close()
 
     def summary(self):
         """Create a new dictionary with Total, number of donations,
@@ -183,11 +211,11 @@ class Individual:
     def last_donation(self):
         return self.donations[-1]
 
-    @property
-    def thank_you(self):
+    @staticmethod
+    def thank_you(person, contribution):
         """Add a donation to a donors records and print a report."""
         return ('Thank you so much for the generous gift of ${0:.2f}, {1}!'
-                .format(self.donations[-1], self.name))
+                .format(contribution, person))
 
 
 #database.create_tables([Donor, Donations])
