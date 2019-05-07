@@ -1,5 +1,7 @@
 import unittest
 import donors_sql as d
+import create_mr_tables as new_database
+from create_mr_tables import *
 from create_mr_tables import *
 import os
 
@@ -11,10 +13,19 @@ class TestMailbox(unittest.TestCase):
     #database.execute_sql('PRAGMA foreign_keys = ON;')
 
     def test_Individual_Add_Donation1(self):
-        # specify database that we are connecting to
-        connect = d.Individual('mailroom.db')
+        #Creating a new database for testing
+        new_database.database.init('test1.db')
+        database.connect()
+        logger.info('Creating Modules in database')
+        database.create_tables([new_database.Donor, new_database.Donations])
+        database.execute_sql('PRAGMA foreign_keys = ON;')
+    # specify database that we are connecting to
+        connect = d.Individual('test1.db')
         connect.add_donation('Shane', 5)
-        self. assertEqual(Donor.donor_name, 'Shane')
+            #logger.info('Find and display by selecting a spcific Person name...')
+        aperson = Donor.get(Donor.donor_name == 'Shane')
+
+        self. assertEqual(aperson.donor_name, 'Shane')
 
 
 #    def test_Group_get(self):

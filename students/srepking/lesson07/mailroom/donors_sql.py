@@ -136,7 +136,7 @@ class Individual:
 
     @staticmethod
     def add_donation(person, contribution):
-        database = SqliteDatabase('mailroom.db')
+        #database = SqliteDatabase(self.filename)
         database.connect()
         logger.info('Connected to database')
         database.execute_sql('PRAGMA foreign_keys = ON;')
@@ -146,7 +146,7 @@ class Individual:
                 logger.info('Trying to add new donor.')
                 new_donor = new_database.Donor.get_or_create(donor_name=person)
                 #new_donor.save()
-                logger.info('Success adding donor.')
+                logger.info(f'Success adding donor {person}.')
 
             with database.transaction():
                 logger.info('Trying to add new donation.')
@@ -154,20 +154,17 @@ class Individual:
                         donor_name=person,
                         donation=contribution)
                 new_donation.save()
-                logger.info('Database added donation successful')
+                logger.info(f'Database added a donation of '
+                            f'{contribution} by {person}.')
 
-                logger.info('Print the Person records we saved...')
-                query = Donations.select()
-            for donation in query:
-                    logger.info(f'{donation.donor_name} donated {donation.donation}')
-
+                #query = Donations.select()
+            #for donation in query:
+                    #logger.info(f'{donation.donor_name} donated {donation.donation}')
 
         except Exception as e:
             logger.info(f'Error creating = {person}')
             logger.info(e)
             logger.info('Failed to add new donor.')
-
-
         finally:
 
             logger.info('database closes')
