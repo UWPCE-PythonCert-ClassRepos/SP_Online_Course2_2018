@@ -1,0 +1,90 @@
+WHAT IS WRONG WITH OUR LOGIC?
+There is no stop condition for inputs that are not a power of 2. The recursion keeps looping until the maximum number of recursions have reached to trigger a RecursionError.
+
+ 
+WHY DOESN'T THE FUNCTION STOP CALLING ITSELF?
+Because there is no stop condition in the if-clause in line 4 that returns False if valua of n is smaller than 2.
+
+
+WHAT'S HAPPENING TO THE VALUE OF 'N' AS THE FUNCTION GETS DEEPER AND DEEPER INTO RECURSION?
+It gets smaller and smaller because it is devided by 2 after each recursion.
+
+
+BELOW IS MY DEBUGGING LOG:
+-> import sys
+(Pdb) ll
+  1  ->	import sys
+  2  	
+  3  	def my_fun(n):
+  4  		if n == 2:
+  5  			return True
+  6  	
+  7  		return my_fun(n/2)
+  8  	
+  9  	if __name__ == '__main__':
+ 10  		n = int(sys.argv[1])
+ 11  		print(my_fun(n))
+(Pdb) b 4
+Breakpoint 1 at /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py:4
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.46875
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.234375
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.1171875
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.05859375
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.029296875
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.0146484375
+(Pdb) c
+> /media/sweerts/Data/UW/SP_Online_Course2_2018/students/Jeroen_Sweerts/Lesson5/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.00732421875
+(Pdb) 
+
