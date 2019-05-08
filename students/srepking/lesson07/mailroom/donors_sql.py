@@ -203,7 +203,7 @@ class Individual:
     @staticmethod
     def add_donation(person, contribution):
         #database = SqliteDatabase(self.filename)
-        database.connect()
+        database.connect(reuse_if_open=True)
         logger.info('Connected to database')
         database.execute_sql('PRAGMA foreign_keys = ON;')
 

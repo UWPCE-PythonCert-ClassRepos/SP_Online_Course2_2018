@@ -12,22 +12,81 @@ class TestMailbox(unittest.TestCase):
     #database = SqliteDatabase('mailroom.db')
     #database.connect()
     #database.execute_sql('PRAGMA foreign_keys = ON;')
+# Delete test.db first
+
+    cur_dir = os.getcwd()
+    logger.debug(f'Current Directory is {cur_dir}')
+    file_list = os.listdir(cur_dir)
+    logger.debug(f'File list is {file_list}')
+    db_file = []
+    if os.path.exists('test.db'):
+        logging.info('Trying to delete the database.')
+        os.remove('test.db')
+        logger.info(f'Database test.db has been deleted.')
+
+# Create a new database named test.db
+
+    cwd = os.getcwd()
+    logger.info(f'Creating new database test.db.')
+    new_database.database.init('test.db')
+    #database = new_database.database
+    database.connect()
+    logger.info('Creating Modules in database')
+    database.create_tables([new_database.Donor, new_database.Donations])
+    database.close()
+    logger.info('Database has been created and is closed.')
+
+
+
+# Loading tables in new database
+    # connect = d.Individual('test.db')
+    database.connect()
+    logger.info('Connected to database')
+    database.execute_sql('PRAGMA foreign_keys = ON;')
+    donors=['Shane', 'Pete', 'Zach', 'Joe', 'Fitz']
+    donations = [('Shane', 6), ('Shane', 5), ('Shane', 10), ('Joe', 5), ('Zach',10)]
+
+    try:
+        for donor in donors:
+            with database.transaction():
+                logger.info(f'Trying to add new donor {donor}.')
+                new_donor = Donor.get_or_create(donor_name=donor)
+                #new_donor.save()
+                logger.info(f'Success adding donor {donor}.')
+    except Exception as e:
+        logger.info(f'Error loading database')
+        logger.info(e)
+        logger.info('Failed to add new donor.')
+    finally:
+
+        logger.info('Completed loading donors')
+
+    try:
+        for donation in donations:
+            with database.transaction():
+                logger.info('Trying to add new donation.')
+                new_donation = Donations.create(
+                    donor_name=donation[0],
+                    donation=donation[1])
+                new_donation.save()
+                logger.info(f'Database added a donation of '
+                            f'{donation[0]} by {donation[1]}.')
+    except Exception as e:
+        logger.info(f'Error loading donations')
+        logger.info(e)
+        logger.info('Failed to add donations.')
+    finally:
+
+        logger.info('database closes')
+        database.close()
+
 
     def test_Individual_Add_Donation1(self):
-        #Creating a new database for testing
-        new_database.database.init('test1.db')
-        database.connect()
-        logger.info('Creating Modules in database')
-        database.create_tables([new_database.Donor, new_database.Donations])
+        database.connect(reuse_if_open=True)
         database.execute_sql('PRAGMA foreign_keys = ON;')
-    # specify database that we are connecting to
-        connect = d.Individual('test1.db')
-        connect.add_donation('Shane', 5)
-            #logger.info('Find and display by selecting a spcific Person name...')
-        aperson = Donor.get(Donor.donor_name == 'Shane')
-
-        self. assertEqual(aperson.donor_name, 'Shane')
-
+        d.Individual.add_donation('Luke', 5)
+        aperson = Donor.get(Donor.donor_name == 'Luke')
+        self.assertEqual(aperson.donor_name, 'Luke')
 
 
 #    def test_Group_get(self):
