@@ -114,7 +114,24 @@ def letters_for_all():
 
 
 def delete_donor():
-    pass
+    while True:
+        name = input('\nWhich donor would you like to delete? \n'
+                     'e - to exit\n'
+                     'list To see a list of names, or\n'
+                     'Type the name of the donor to delete.>>')
+        if name == 'e':
+            return
+        if name == 'list':
+            mail.print_donors()
+        else:
+            print('\n''Ok, you want to delete {}, '
+                  'lets see what we can do.'.format(name))
+
+            if mail.search(name) is None:
+                print('The name you entered is not in the database.')
+                return
+            else:
+                individual.delete_donor(name)
 
 
 def wrong_choice():

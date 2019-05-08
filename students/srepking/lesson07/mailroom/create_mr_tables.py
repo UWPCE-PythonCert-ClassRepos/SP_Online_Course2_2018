@@ -28,7 +28,7 @@ class Donations(BaseModel):
         This class hold donations.
     """
 
-    donor_name = ForeignKeyField(Donor)
+    donor_name = ForeignKeyField(Donor, on_delete='CASCADE')
     donation = DecimalField(max_digits=100, decimal_places=2)
 
 
