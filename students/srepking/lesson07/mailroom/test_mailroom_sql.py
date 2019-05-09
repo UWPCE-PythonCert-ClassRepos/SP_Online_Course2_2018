@@ -3,17 +3,14 @@ from peewee import *
 import donors_sql as d
 import create_mr_tables as new_database
 from create_mr_tables import *
-from create_mr_tables import *
+from create_mr_tables import database
 import os
 
 
 
 class TestMailbox(unittest.TestCase):
-    #database = SqliteDatabase('mailroom.db')
-    #database.connect()
-    #database.execute_sql('PRAGMA foreign_keys = ON;')
-# Delete test.db first
 
+# Delete test.db first
     cur_dir = os.getcwd()
     logger.debug(f'Current Directory is {cur_dir}')
     file_list = os.listdir(cur_dir)
@@ -25,26 +22,22 @@ class TestMailbox(unittest.TestCase):
         logger.info(f'Database test.db has been deleted.')
 
 # Create a new database named test.db
-
     cwd = os.getcwd()
     logger.info(f'Creating new database test.db.')
     new_database.database.init('test.db')
-    #database = new_database.database
     database.connect()
     logger.info('Creating Modules in database')
     database.create_tables([new_database.Donor, new_database.Donations])
     database.close()
     logger.info('Database has been created and is closed.')
 
-
-
 # Loading tables in new database
-    # connect = d.Individual('test.db')
     database.connect()
     logger.info('Connected to database')
     database.execute_sql('PRAGMA foreign_keys = ON;')
-    donors=['Shane', 'Pete', 'Zach', 'Joe', 'Fitz']
-    donations = [('Shane', 6), ('Shane', 5), ('Shane', 10), ('Joe', 5), ('Zach',10)]
+    donors = ['Shane', 'Pete', 'Zach', 'Joe', 'Fitz']
+    donations = [('Shane', 6), ('Shane', 5), ('Shane', 10), ('Joe', 5), ('Zach',10),
+                 ('Pete', 7), ('Pete', 8), ('Fitz', 1)]
 
     try:
         for donor in donors:
@@ -86,154 +79,129 @@ class TestMailbox(unittest.TestCase):
         database.execute_sql('PRAGMA foreign_keys = ON;')
         d.Individual.add_donation('Luke', 5)
         aperson = Donor.get(Donor.donor_name == 'Luke')
-        self.assertEqual(aperson.donor_name, 'Luke')
+        adonation = Donations.get(Donations.donor_name == 'Luke')
+        self.assertEqual(aperson.donor_name, 'Luke')  # Test donor was added
+        self.assertEqual(adonation.donation, 5) # Test donation was added for Luke
 
 
-#    def test_Group_get(self):
-#        new_group = d.Group(d.Individual('Joe', [3, 3, 3]))
-#        self.assertEqual(new_group._donor_raw['Joe'].donations, [3, 3, 3])
-#        self.assertEqual(new_group._donor_raw['Joe'].name, 'Joe')
+    def test_Group_search1(self):
+        """Returns None when name does not exist"""
+        #database.connect(reuse_if_open=True)
+        group_instance = d.Group('test.db')
+        search_result = group_instance.search('Bob') # Bob is not in database
+        self.assertEqual(search_result, None)
 
-#    def test_Group_search1(self):
-#        """Returns None when name does not exist"""
-#        new_group = d.Group(d.Individual('Joe', [3, 3, 3]))
-#        self.assertEqual(new_group.search('Bob'), None)
+    def test_Group_search2(self):
+        """Returns 'name' when name does exist"""
+        database.connect(reuse_if_open=True)
+        group_instance = d.Group('test.db')
+        search_result = group_instance.search('Zach') # 'Zach is in database
+        self.assertEqual(search_result, 'Zach')
 
-#    def test_Group_search2(self):
-#        """Returns 'name' when name does exist"""
-#        new_group = d.Group(d.Individual('Joe', [3, 3, 3]))
-#        self.assertEqual(new_group.search('Joe').name, 'Joe')
 
-#    def test_Group_Add(self):
-#        """Test that the new donors are being appended to the donor list."""
-#        new_group = d.Group(d.Individual('Joe', [3, 3, 3]))
-#        new_group.add('Jill', 5)
-#        self.assertEqual(new_group._donor_raw['Jill'].name, 'Jill')
-#        self.assertEqual(new_group._donor_raw['Jill'].donations, [5])
+    def test_thankyou(self):
+        test_text = 'Thank you so much for the generous gift of $5.00, Shane!'
+#        thank_you = d.Individual('Shane', [5])
+        self.assertEqual(d.Individual.thank_you('Shane', 5), test_text)
 
-#    def test_thankyou(self):
-#        test_text = 'Thank you so much for the generous gift of $5.00, Shane!'
-#        new_group = d.Group(d.Individual('Shane', [5]))
-#        self.assertEqual(d.Individual('Shane', [5]).thank_you, test_text)
+    def test_summary(self):
+        """Test dictionary set with {Donor: Total, number of donations,
+        and average donation amount}"""
+        group_instance = d.Group('test.db')
+        summary = group_instance.summary() # 'Zach is in database
+        self.assertDictEqual(summary, {'Shane': [21, 3, 7.0],
+                                   'Joe': [5, 1, 5.0],
+                                   'Zach': [10, 1, 10.0],
+                                   'Pete':[15, 2, 7.5],
+                                   'Fitz':[1,1,1.0],
+                                   'Luke':[5, 1, 5.0]})
 
-#    def test_summary(self):
-#        """Add a donor to the list and test that the donor summary
-#        is correct"""
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        new_group.add('Joe', 3)
-#        new_group.add('Joe', 3)
-#        new_group.add('Joe', 3)
-#        new_group.add('Jack', 4)
-#        new_group.add('Jack', 5)
-#        donor_summary = new_group.summary()
-#        self.assertEqual(donor_summary, {'Shane': [3, 1, 3],
-#                                         'Joe': [9, 3, 3],
-#                                         'Jack': [9, 2, 4.5]})
-#
-#    def test_column_name_width(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        donors_f = {'Joe': [9, 3, 3], 'Jack': [9, 2, 4.5]}
-#        self.assertEqual(new_group.column_name_width(donors_f), 11)
+    def test_sort_list(self):
+        """sorts the dictionary by largest to smallest donation"""
+        group_instance = d.Group('test.db')
+        summary = group_instance.summary()
+        sorted = group_instance.sort_list(summary)
+        self.assertEqual(sorted, ['Shane', 'Pete', 'Zach', 'Joe', 'Luke', 'Fitz'])
 
-#    def test_column_name_width_1(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        donors_f = {'Joeeeeeeeeee': [9, 3, 3], 'Jack': [9, 2, 4.5]}
-#        self.assertEqual(new_group.column_name_width(donors_f), 12)
 
-#    def test_column_total_width(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        donors_f = {'Joe': [9, 3, 3], 'Jack': [9, 2, 4.5]}
-#        self.assertEqual(new_group.column_total_width(donors_f), 12)
+    def test_number_donations(self):
+        num_donations = d.Individual.number_donations('Shane')
+        self.assertEqual(num_donations, 3)
 
-#    def test_column_total_width_2(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        donors_f = {'Joe': [1555555555555, 3, 3], 'Jack': [9, 2, 4.5]}
-#        self.assertEqual(new_group.column_total_width(donors_f), 16)
+    def test_sum_donations(self):
+        sum_donation = d.Individual.sum_donations('Shane')
+        self.assertEqual(sum_donation, 21)
 
-#    def test_column_average_width(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        donors_f = {'Joe': [9, 3, 3], 'Jack': [9, 2, 4.5]}
-#        self.assertEqual(new_group.column_average_width(donors_f), 12)
+    def test_avg_donations(self):
+        avg_donations = d.Individual.avg_donations('Shane')
+        self.assertEqual(avg_donations, 7)
 
-#    def test_column_average_width_1(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        donors_f = {'Joe': [9, 3, 3555555555222], 'Jack': [9, 2, 4.5]}
-#        self.assertEqual(new_group.column_average_width(donors_f), 16)
 
-#    def test_column_number_width(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        donors_f = {'Joe': [9, 3, 3], 'Jack': [9, 2, 4.5]}
-#        self.assertEqual(new_group.column_number_width(donors_f), 12)
+class TestDelete(unittest.TestCase):
+    """Test deleting a donor. Need to recreate the database to ensure deletion
+    doesn't happen before other test cases."""
+    cur_dir = os.getcwd()
+    logger.debug(f'Current Directory is {cur_dir}')
+    file_list = os.listdir(cur_dir)
+    logger.debug(f'File list is {file_list}')
+    db_file = []
+    if os.path.exists('test2.db'):
+        logging.info('Trying to delete the database.')
+        os.remove('test2.db')
+        logger.info(f'Database test.db has been deleted.')
 
-#    def test_column_number_width_1(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        donors_f = {'Joe': [9, 33333333333333, 35555], 'Jack': [9, 2, 4.5]}
-#        self.assertEqual(new_group.column_number_width(donors_f), 17)
+    # Create a new database named test.db
+    cwd = os.getcwd()
+    logger.info(f'Creating new database test.db.')
+    database.init('test2.db')
+    database.connect()
+    logger.info('Creating Modules in database')
+    database.create_tables([Donor, Donations])
+    database.close()
+    logger.info('Database has been created and is closed.')
 
-#    def test_sort_list(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        donors_f = {'Joe': [15, 3, 35], 'Jack': [9, 2, 4.5]}
-#        self.assertEqual(new_group.sort_list(donors_f), ['Joe', 'Jack'])
+    # Loading tables in new database
+    database.connect()
+    logger.info('Connected to database')
+    database.execute_sql('PRAGMA foreign_keys = ON;')
+    donors = ['Shane', 'Pete', 'Zach', 'Joe', 'Fitz']
+    donations = [('Shane', 6), ('Shane', 5), ('Shane', 10), ('Joe', 5), ('Zach', 10),
+                 ('Pete', 7), ('Pete', 8), ('Fitz', 1)]
 
-#    def test_sort_list_2(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        donors_f = {'Joe': [15, 3, 35], 'Jack': [9, 2, 4.5],
-#                    'Fred': [2000, 2, 60]}
-#        self.assertEqual(new_group.sort_list(donors_f),
-#                         ['Fred', 'Joe', 'Jack'])
+    def test_delete_donor(self):
+        """Delete a donor and check that the name is deleted in both the Donor table
+        and the Donations table."""
+        #indiv_initalize = d.Individual('test2.db')
+        database.connect(reuse_if_open=True)
+        database.execute_sql('PRAGMA foreign_keys = ON;')
 
-#    def test_report(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        new_group.add('Joe', 3)
-#        new_group.add('Joe', 3)
-#        new_group.add('Joe', 3)
-#        new_group.add('Jack', 4)
-#        new_group.add('Jack', 5)
-#        assert "Joe        $" in new_group.report()
-#        assert "9.00     3         " in new_group.report()
-#        assert '$        3.00' in new_group.report()
+        #show that you can find 'Shane'
+        aperson = Donor.get(Donor.donor_name == 'Shane')
+        self.assertEqual(aperson.donor_name, 'Shane')  # Test donor exists
 
-#    def test_letters_for_all(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        new_group.add('Joe', 3)
-#        new_group.add('Joe', 3)
-#        new_group.add('Joe', 3)
-#        new_group.add('Jack', 4)
-#        new_group.add('Jack', 5)
-#        try:
-#            new_group.letters()
-#            with open('Jack.txt', 'rU') as f:
-#                text = f.read()
-#        finally:
-#            os.remove('Jack.txt')
 
-#       expected_text = 'Dear Jack, thank you so much for your last ' \
-#                        'contribution of $5.00! You have contributed ' \
-#                        'a total of $9.00, and we appreciate your ' \
-#                        'support!'
-#        self.assertEqual(expected_text, text)
+        # Delete the donor 'Shane'
+        d.Individual.delete_donor('Shane')
 
-#    def test_number_donations(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        new_group.add('Joe', 1)
-#        new_group.add('Joe', 4)
-#        new_group.add('Joe', 5)
-#        self.assertEqual(new_group._donor_raw['Joe'].number_donations(), 3)
+        # After deleting 'Shane', search donor table for shane
+        query_donor = Donor.select().where(Donor.donor_name == 'Shane')
+        donor_list = []  # Create a list of donations for 'name'.
+        for result in query_donor:
+            # logger.info(f'{result.donor_name}')
+            donor_list.append(int(result.donor_name))
+        self.assertEqual(donor_list, [])
 
-#    def test_sum_donations(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        new_group.add('Joe', 3)
-#        new_group.add('Joe', 3)
-#        new_group.add('Joe', 3)
-#        self.assertEqual(new_group._donor_raw['Joe'].sum_donations(), 9)
+        # After deleting 'Shane', search donation table for shane
+        query_donation = Donations.select().where(Donations.donor_name == 'Shane')
+        donation_list = []  # Create a list of donations for 'name'.
+        for result in query_donation:
+            # logger.info(f'{result.donor_name}')
+            donation_list.append(int(result.donation))
+        self.assertEqual(donation_list, [])
 
-#    def test_avg_donations(self):
-#        new_group = d.Group(d.Individual('Shane', [3]))
-#        new_group.add('Joe', 10)
-#        new_group.add('Joe', 5)
-#        new_group.add('Joe', 6)
-#        self.assertEqual(new_group._donor_raw['Joe'].avg_donations(), 7)
-
+        # After deleting a donor, show that you can still find other donors.
+        aperson = Donor.get(Donor.donor_name == 'Pete')
+        self.assertEqual(aperson.donor_name, 'Pete')  # Test donor was added
 
 
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ logger.info('Connected to database')
 database.execute_sql('PRAGMA foreign_keys = ON;')
 
 donors=['Shane', 'Pete', 'Zach', 'Joe', 'Fitz']
-donations = [('Shane', 6), ('Shane', 5), ('Shane', 10), ('Joe', 5), ('Zach',10)]
+donations = [('Shane', 6), ('Shane', 5), ('Shane', 10), ('Joe', 5), ('Zach',10), ('Pete', 500), ('Fitz', 150)]
 
 try:
     for donor in donors:

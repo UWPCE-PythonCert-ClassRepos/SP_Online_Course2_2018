@@ -2,18 +2,18 @@ import os
 import donors_sql as d
 import create_mr_tables as new_database
 import logging
-from peewee import *
+# from peewee import *
 mail = d.Group('mailroom.db')
-individual = d.Individual
+individual = d.Individual('mailroom.db')
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
 def create_database():
 
     file_name = input('\nWhat would you like to name your new database?\n'
-                            'e - to exit\n')
+                      'e - to exit\n')
     if file_name == 'e':
         return
     else:
@@ -21,11 +21,9 @@ def create_database():
             logging.info('This database already exists.')
             return
 
-        cwd = os.getcwd()
+        # cwd = os.getcwd()
         file_name = file_name + '.db'
-        #os.path.join(cwd, file_name)
         logger.info(f'Creating new database {file_name}.')
-        # database = SqliteDatabase('mailroom.db')
         new_database.database.init(file_name)
         database = new_database.database
         database.connect()
@@ -54,7 +52,7 @@ def delete_database():
         print('No database exists. Please create a database.')
         return
     file_name = input('\nWhat database do you want to delete? Include ".db" \n'
-                            'e - to exit\n')
+                      'e - to exit\n')
     if file_name == 'e':
         return
     else:
@@ -68,7 +66,7 @@ def more_choices():
     while True:
         name = input('\nChoose an Option: \n'
                      'e - to exit\n'
-                     'list To see a list of names, or\n'
+                     'list - To see a list of names, or\n'
                      'Type a name to start your thank you letter >>')
         if name == 'e':
             return
@@ -96,8 +94,7 @@ def more_choices():
                 print('\nYou entered an invalid amount!!\n')
                 return ValueError
             else:
-                individual.add_donation(name, float(amount))
-                #donor_obj = mail._donor_raw[name]
+                d.Individual.add_donation(name, float(amount))
                 print(individual.thank_you(name, float(amount)))
 
 

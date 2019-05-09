@@ -1,21 +1,9 @@
 import logging
-from peewee import *
-from create_mr_tables import *
-
+from create_mr_tables import database
+from create_mr_tables import Donor
+from create_mr_tables import Donations
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-import create_mr_tables as new_database
-#database = SqliteDatabase(None)
-#d.database.init(file_name)
-#database = SqliteDatabase('mailroom.db')
-#database.connect()
-#database.execute_sql('PRAGMA foreign_keys = ON;') # needed for sqlite only
-
-
-
-
 
 
 class Group:
@@ -23,17 +11,20 @@ class Group:
     of the required queries."""
 
     def __init__(self, filename):
-        new_database.database.init(filename)
+        database.init(filename)
         self.filename = filename
 
     def search(self, search_for):
+        """Return None if donor is not in database."""
         database.connect()
         logger.info('Connected to database')
         database.execute_sql('PRAGMA foreign_keys = ON;')
         try:
             with database.transaction():
-                logger.info(f'Searching through donors for {search_for}.')
-                query = Donor.get_or_none(Donor.donor_name == search_for)  # Select all donors
+                logger.info(f'Searching through donors for '
+                            f'{search_for}.')
+                query = Donor.get_or_none(
+                    Donor.donor_name == search_for)  # Select all donors
         except Exception as e:
             logger.info(f'Error searching for donors.')
             logger.info(e)
@@ -41,59 +32,64 @@ class Group:
         finally:
             logger.info('database closes')
             database.close()
-        return query
-
+            if query is None:
+                return query
+            else:
+                return query.donor_name
 
     def print_donors(self):
         # This prints the list of donors
         database.connect()
-        logger.info('Connected to database')
+        logger.debug('Connected to database')
         database.execute_sql('PRAGMA foreign_keys = ON;')
         try:
             with database.transaction():
-                logger.info('Trying print all the donors.')
-                query = Donor.select()  #  Select all donors
+                logger.debug('Trying print all the donors.')
+                query = Donor.select()  # Select all donors
                 for donor in query:
                     print(donor.donor_name)
 
         except Exception as e:
-            logger.info(f'Error printing donors.')
-            logger.info(e)
-            logger.info('Failed to print a list of donors.')
+            logger.debug(f'Error printing donors.')
+            logger.debug(e)
+            logger.debug('Failed to print a list of donors.')
         finally:
-            logger.info('database closes')
+            logger.debug('database closes')
             database.close()
 
     def summary(self):
         """Create a new dictionary with Total, number of donations,
         and average donation amount"""
         database.connect()
-        logger.info('Connected to database')
+        logger.debug('Connected to database')
         database.execute_sql('PRAGMA foreign_keys = ON;')
-        #indiv = Individual(self.filename)  # passes .db filename to Individual Class and initiates class.
         donor_summary = {}
 
         try:
             with database.transaction():
                 donor_list = Donor.select(Donor.donor_name)
-                logger.info(f'Printing a list of all the donors in the database')
+                logger.debug(f'Printing a list of all the donors '
+                             f'in the database')
                 for donor in donor_list:
-                    logger.info(f'{donor.donor_name}')
-                    donor_summary[donor.donor_name] = [Individual.sum_donations(donor.donor_name),
-                                                       Individual.number_donations(donor.donor_name),
-                                                       Individual.avg_donations(donor.donor_name)]
+                    logger.debug(f'{donor.donor_name}')
+                    donor_summary[donor.donor_name] = \
+                        [Individual.sum_donations(donor.donor_name),
+                         Individual.number_donations(donor.donor_name),
+                         Individual.avg_donations(donor.donor_name)]
         except Exception as e:
-            logger.info(f'Error creating database summary.')
-            logger.info(e)
-            logger.info('Failed to iterate through database to create a summary.')
+            logger.debug(f'Error creating database summary.')
+            logger.debug(e)
+            logger.debug('Failed to iterate through database '
+                         'to create a summary.')
         finally:
-            logger.info('database closes')
+            logger.debug('database closes')
             database.close()
             return donor_summary
 
     @staticmethod
     def column_name_width(donor_summary):
-        name_list = list(donor_summary.keys())  # creates a list of keys
+        # creates a list of keys
+        name_list = list(donor_summary.keys())
         name_wi = 11  # Establish minimum column width
         for i in name_list:
             if len(i) > name_wi:
@@ -156,23 +152,24 @@ class Group:
             rows.append(f"{key:{name_wi}}${temp[0]:{tot_wi}.2f}"
                         f"{temp[1]:^{num_wi}}   "
                         f"${temp[2]:>{ave_wi}.2f}")
-
         return '\n'.join(rows)
 
     def letters(self):
         """Send letters to everyone base on thier last donation amount."""
         database.connect()
-        logger.info('Connected to database')
+        logger.debug('Connected to database')
         database.execute_sql('PRAGMA foreign_keys = ON;')
-        #indiv = Individual(self.filename)  # passes .db filename to Individual Class and initiates class.
         try:
             with database.transaction():
                 donor_list = Donor.select(Donor.donor_name)
-                logger.info(f'Sending a thank you to every donor in database.')
+                logger.debug(f'Sending a thank you to every donor '
+                             f'in database.')
                 for donor in donor_list:
-                    logger.info(f'{donor.donor_name}')
-                    letter = f'Dear {donor.donor_name}, thank you so much for your ' \
-                             f'last contribution of ${Individual.last_donation(donor.donor_name):.2f}! ' \
+                    logger.debug(f'{donor.donor_name}')
+                    letter = f'Dear {donor.donor_name}, ' \
+                             f'thank you so much for your ' \
+                             f'last contribution of ' \
+                             f'${Individual.last_donation(donor.donor_name):.2f}! ' \
                              f'You have contributed a total of $' \
                              f'{Individual.sum_donations(donor.donor_name):.2f}, ' \
                              f'and we appreciate your support!'
@@ -180,15 +177,11 @@ class Group:
                     with open(donor.donor_name + '.txt', 'w') as to_file:
                         to_file.write(letter)
         except Exception as e:
-            logger.info(f'Error writing letters to everyone.')
-            logger.info(e)
+            logger.debug(f'Error writing letters to everyone.')
+            logger.debug(e)
         finally:
-            logger.info('database closes')
+            logger.debug('database closes')
             database.close()
-
-
-
-
 
 
 class Individual:
@@ -196,13 +189,10 @@ class Individual:
     of a class, we will now create a table 'Individual' in an SQL database
     with the following properties 'name', 'donation', '"""
     def __init__(self, filename):
-        new_database.database.init(filename)
-        #self.database = new_database.database
-        #self.filename = filename
+        database.init(filename)
 
     @staticmethod
     def add_donation(person, contribution):
-        #database = SqliteDatabase(self.filename)
         database.connect(reuse_if_open=True)
         logger.info('Connected to database')
         database.execute_sql('PRAGMA foreign_keys = ON;')
@@ -210,22 +200,17 @@ class Individual:
         try:
             with database.transaction():
                 logger.info('Trying to add new donor.')
-                new_donor = new_database.Donor.get_or_create(donor_name=person)
-                #new_donor.save()
+                Donor.get_or_create(donor_name=person)
                 logger.info(f'Success adding donor {person}.')
 
             with database.transaction():
                 logger.info('Trying to add new donation.')
-                new_donation = new_database.Donations.create(
+                new_donation = Donations.create(
                         donor_name=person,
                         donation=contribution)
                 new_donation.save()
                 logger.info(f'Database added a donation of '
                             f'{contribution} by {person}.')
-
-                #query = Donations.select()
-            #for donation in query:
-                    #logger.info(f'{donation.donor_name} donated {donation.donation}')
 
         except Exception as e:
             logger.info(f'Error creating = {person}')
@@ -238,7 +223,6 @@ class Individual:
 
     @staticmethod
     def number_donations(name):
-        #database = SqliteDatabase(self.filename)
         database.connect(reuse_if_open=True)
         logger.info('Connected to database')
         database.execute_sql('PRAGMA foreign_keys = ON;')
@@ -247,22 +231,18 @@ class Individual:
             with database.transaction():
                 logger.info('Trying to count number of donations.')
                 query = Donations.select().where(Donations.donor_name == name)
-                donation_list = [] # Create a list of donations for 'name'.
+                donation_list = []  # Create a list of donations for 'name'.
                 for result in query:
-                    #logger.info(f'{result.donor_name}')
                     donation_list.append(int(result.donation))
         except Exception as e:
             logger.info(f'Error counting # of donations.')
             logger.info(e)
         finally:
-            #logger.info('database closes')
-            #database.close()
             logger.info(f'Returning the # of donations made by {name}')
             return int(len(donation_list))
 
     @staticmethod
     def sum_donations(name):
-        #database = SqliteDatabase(self.filename)
         database.connect(reuse_if_open=True)
         logger.info('In Individual.sum_donations')
         database.execute_sql('PRAGMA foreign_keys = ON;')
@@ -271,16 +251,13 @@ class Individual:
             with database.transaction():
                 logger.info(f'Summing all the donations by {name}.')
                 query = Donations.select().where(Donations.donor_name == name)
-                donation_list = [] # Create a list of donations for 'name'.
+                donation_list = []  # Create a list of donations for 'name'.
                 for result in query:
-                    #logger.info(f'{result.donor_name}')
                     donation_list.append(int(result.donation))
         except Exception as e:
             logger.info(f'Error counting # of donations.')
             logger.info(e)
         finally:
-            #logger.info('database closes')
-            #database.close()
             logger.info(f'Returning the # of donations made by {name}')
             return sum(donation_list)
 
@@ -297,17 +274,15 @@ class Individual:
         try:
             with database.transaction():
                 logger.info(f'Trying to find the last record of {name}.')
-                query = Donations.select().where(Donations.donor_name == name).order_by(Donations.id)
-                donation_list = [] # Create a list of donations for 'name'.
+                query = Donations.select().where(Donations.donor_name == name)\
+                    .order_by(Donations.id)
+                donation_list = []  # Create a list of donations for 'name'.
                 for result in query:
-                    #logger.info(f'{result.donor_name}')
                     donation_list.append(int(result.donation))
         except Exception as e:
             logger.info(f'Error finding last donation.')
             logger.info(e)
         finally:
-            #logger.info('database closes')
-            #database.close()
             logger.info(f'Returning the last donation made by {name}.')
             return donation_list[-1]
 
@@ -319,16 +294,17 @@ class Individual:
 
     @staticmethod
     def delete_donor(person):
-        #database = SqliteDatabase(self.filename)
-        database.connect()
+        database.connect(reuse_if_open=True)
         logger.info('Connected to database')
         database.execute_sql('PRAGMA foreign_keys = OFF;')
 
         try:
             with database.transaction():
                 logger.info('Trying to delete donor.')
-                Donations.delete().where(Donations.donor_name == person).execute()
-                Donor.delete().where(Donor.donor_name == person).execute()
+                Donations.delete().where(Donations.donor_name == person)\
+                    .execute()
+                Donor.delete().where(Donor.donor_name == person)\
+                    .execute()
                 logger.info(f'Success deleting donor {person}.')
 
         except Exception as e:
@@ -339,8 +315,3 @@ class Individual:
 
             logger.info('database closes')
             database.close()
-
-
-#database.create_tables([Donor, Donations])
-#database.close()
-
