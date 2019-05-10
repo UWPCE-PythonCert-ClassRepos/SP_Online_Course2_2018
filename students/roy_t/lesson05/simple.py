@@ -28,7 +28,6 @@ def configure_logging():
 
     # NETWORK HANDLER
     syslog_handler = logging.handlers.SysLogHandler(address=('127.0.0.1', 514))
-    # dg_handler = logging.handlers.DatagramHandler(host='127.0.0.1', port=514)
 
     # LOGGER
     logger = logging.getLogger()

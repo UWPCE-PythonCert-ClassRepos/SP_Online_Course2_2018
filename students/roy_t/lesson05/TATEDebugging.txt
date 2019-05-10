@@ -1,6 +1,9 @@
-1. The logic is configured in such a way that there will always be a case where division by zero is a guarantee.
-2. The function is stuck in a for loop.
-3. The value of n is static. However, the variable of i is incremented by range(0, n)
+1. The function is set to return True for the intended condition, but does not have a test condition to return False
+2. If n is not a power of 2, then each call to the function, my_fun(n/2) will never == 2. It will continue to call itself.
+3. It gets smaller and smaller, being divided by 2 each time, getting closer to zero each time.
+
+
+
 
 In [14]: import logging
     ...:
