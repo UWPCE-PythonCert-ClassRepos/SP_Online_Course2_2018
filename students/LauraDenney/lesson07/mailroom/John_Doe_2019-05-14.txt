@@ -1,0 +1,9 @@
+
+    Dear John Doe,
+
+    We would like to thank you for your generous donation
+    of $300.50. It will be put to great use!
+
+    Thank you!
+    <3 The MailRoom
+    
