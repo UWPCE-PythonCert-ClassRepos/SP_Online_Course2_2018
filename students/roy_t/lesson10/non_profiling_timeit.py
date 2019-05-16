@@ -1,9 +1,10 @@
 import time
 from timeit import timeit
-import logging
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger()
+"""
+Generate the fibonacci sequence in three different ways and determine which method works best.
+Three different methods are timed using the timeit module.
+"""
 
 
 def memoize(f):
@@ -33,6 +34,7 @@ def fib_recursive(n):
 
 if __name__ == '__main__':
     start = time.time()
+
     print('Fib(35) =', fib_memo(35))
     print("Time to process memoized version: " + str(time.time() - start))
 
@@ -40,12 +42,8 @@ if __name__ == '__main__':
     print('\nFib(35) =', fib_recursive(35))
     print("Time to process recursive version: " + str(time.time() - start))
 
-    print('\nNow generating timeit information for memoized version:')
-    print(timeit('fib_memo(35)',
-                 globals=globals(),
-                 number=1))
+    print('\nGenerating timeit information for memoized version:')
+    print(timeit('fib_memo(35)',globals=globals(), number=1))
 
-    print('\nNow generating timeit information for recursive version:')
-    print(timeit('fib_recursive(35)',
-           globals=globals(),
-           number=1))
+    print('\nGenerating timeit information for recursive version:')
+    print(timeit('fib_recursive(35)',globals=globals(), number=1))
