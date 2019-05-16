@@ -34,7 +34,7 @@ What would you like to do today?
 2) Create a Report
 3) Send letters to everyone
 4) See projections for matching contributions
-5) Update or Remove a Donor in the system
+5) Update Donation or Remove a Donor in the system
 6) Quit
 Please choose the number of your choice >> '''
 
@@ -46,19 +46,16 @@ You have chosen to Send a Thank You.
 Please choose the number of your choice >> '''
 
 update_prompt = '''
-You have chosen to Update or Remove a Donor.
-1) Update Donor information
-2) Update Donation amount
-3) Remove a Donor and all their Donations
-4) Quit this submenu
-Please choose the number of your choice >>
-'''
+You have chosen to Update a Donation or Remove a Donor.
+1) Update Donation amount
+2) Remove a Donor and all their Donations
+3) Quit this submenu
+Please choose the number of your choice >>'''
 
 yes_no_prompt = '''
 1) Yes
 2) No
-Please choose the number of your choice >>
-'''
+Please choose the number of your choice >>'''
 
 #************Map function
 def map_projection(multiplier=0, min_donation=0, max_donation=0, projection_list=None):
@@ -87,6 +84,16 @@ Your contribution if quadrupling contributions between $50 and $100: ${:.2f}
             sum(map_projection(4,50,100, projection_list = projection_list))
             )
           )
+
+def update_remove_donor():
+    while True:
+        try:
+            response = input(update_prompt)
+            if sub_update_remove_dict[response]() == 'quit':
+                print("\nYou have chosen to leave this submenu.")
+                break
+        except KeyError:
+            print("\nThat is not a valid selection. Please choose 1, 2, or 3.")
 
 def send_thank_you():
     while True:
@@ -127,13 +134,16 @@ def quit(donor=0):
     return 'quit'
 
 def print_list():
-    print(dh.get_list())
+    names = dh.get_list()
+    strformat = "\nWe have {} current donors: " + ", ".join(["{}"]
+                * len(names))
+    print(strformat.format(len(names), *names))
 
-def validate_yes_no(name):
+def validate_add_donor(name):
     while True:
         try:
             yesno = input(yes_no_prompt)
-            if yes_no_dict[yesno](name)  == 'quit':
+            if add_donor_dict[yesno](name)  == 'quit':
                 return False
             else:
                 print("Thank you, we will add them to our system")
@@ -142,15 +152,77 @@ def validate_yes_no(name):
         except KeyError:
             print("\nThat is not a valid selection. Please choose 1 or 2.")
 
+def update_donation():
+    try:
+        name = input("\nPlease enter the full name of the donor whose donation you \
+would like to update >> ").lower()
+        if not dh.is_current_donor(name):
+            print("\n{} is not a current donor, unable to make adjustment.\n".format(
+                    name.title()))
+            return
+        else:
+            print("\n{} is indeed a current donor.".format(name.title()))
+            donation = validate_update_donation()
+            if not dh.is_current_donation(name, donation):
+                print("${} is not an existing donation for {}, unable to change".format(
+                        donation, name.title()))
+                return
+            else:
+                new_donation =
+    except Exception as e:
+        logger.info(e)
+
+def  validate_update_donation():
+    while True:
+        try:
+            donation = input("What is the amount of the donation we are adjusting? >> ")
+            num = float(donation)
+        except ValueError:
+            print("\nERROR: Invalid donation amount entered. Please enter valid number.")
+        else:
+            return num
+
+
+def validate_remove_donor(name):
+    while True:
+        try:
+            yesno = input(yes_no_prompt)
+            if remove_donor_dict[yesno](name)  == 'quit':
+                return False
+            else:
+                print("Alright, we will remove them from our system.")
+                dh.remove_donor(name)
+                return True
+        except KeyError:
+            print("\nThat is not a valid selection. Please choose 1 or 2.")
+
+def remove_donor():
+    try:
+        name = input("\nPlease enter the full name of the donor you would \
+like to remove >> ").lower()
+        if not dh.is_current_donor(name):
+            print("\n{} is not a current donor, unable to remove.\n".format(name.title()))
+            return
+        else:
+            print("\n{} is indeed a current donor.".format(name.title()))
+            print("Are you sure you would like to remove them from the system?")
+            if not validate_remove_donor(name):
+                return
+    except Exception as e:
+        logger.info(e)
+    else:
+        print("\n That donor and all donation instances have successfully been removed.")
+        print_list()
+
 def thank_a_donor():
     try:
         name = input("\nPlease enter the full name of the donor you would \
-like to thank: ").lower()
+like to thank >> ").lower()
         if not dh.is_current_donor(name):
             print("\n{} is not a current donor, would you like to add \
-them as a new donor?\n".format(name.title()))
+them as a new donor?".format(name.title()))
             #ask_yes_no returns False if no
-            if not validate_yes_no(name):
+            if not validate_add_donor(name):
                 return
         else:
             print("\n{} is a current donor, we will update their donations."
@@ -222,7 +294,7 @@ main_choice_dict = {
     "2": print_report,
     "3": send_letters,
     "4": projections,
-#    "5": update_remove_donor,
+    "5": update_remove_donor,
     "6": quit
 }
 
@@ -234,16 +306,20 @@ sub_choice_dict = {
 }
 
 #Update Remove Donor submenu
-sub_update_remove = {
-    "1":
-    "2":
-    "3":
-    "4": quit
+sub_update_remove_dict = {
+    "1": update_donation,
+    "2": remove_donor,
+    "3": quit
 }
 
-#yes no dict
-yes_no_dict = {
+#dict for adding donor response
+add_donor_dict = {
     "1": dh.add_donor,
+    "2": quit
+}
+
+remove_donor_dict = {
+    "1": dh.remove_donor,
     "2": quit
 }
 
@@ -256,12 +332,8 @@ def prompt_user():
             if main_choice_dict[response]() == 'quit':
                 print("\nYou have chosen to quit. Have a good day!")
                 break
-        except AttributeError:
-            print("\nA saved list of donors was found, please load the saved list.")
         except KeyError:
             print("\nThat is not a valid selection. Please choose option 1 - 6.")
-        except FileNotFoundError:
-            print("\nNo saved list of donors found, please work with current list.")
 ##########################################################
 
 if __name__ == '__main__':

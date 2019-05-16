@@ -63,16 +63,46 @@ class Database_Handler():
         except Exception as e:
             logger.info(e)
 
+    def is_current_donation(self, donor, donation):
+        try:
+            query = Donation.get(
+                            (Donation.donor_donated == donor) &
+                            (Donation.donation == donation))
+        except Exception as e:
+            return False
+        #if donation in query no Error is raised
+        else:
+            return True
+
     def get_list(self):
         '''select statement to get all full names of donors'''
         try:
             query = Donor.select()
             names = [donor.full_name.title() for donor in query]
-            strformat = "\nWe have {} current donors: " + ", ".join(["{}"]
-                    * len(names))
-            return strformat.format(len(names), *names)
+            return names
         except Exception as e:
             logger.info(e)
+
+    def remove_donor(self, donor_name):
+        '''removes donor information from all tables'''
+        try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+            logger.info('connecting to database')
+
+            donation_delete_query = Donation.delete().where(Donation.donor_donated==donor_name)
+            donor_query = Donor.get(Donor.full_name==donor_name)
+
+            logger.info("Deleting donation instances")
+            donation_delete_query.execute()
+
+            logger.info('Deleting Donor instance.')
+            donor_query.delete_instance()
+        except Exception as e:
+            logger.info(e)
+        finally:
+            logger.info('Closing database')
+            database.close()
 
     def add_donor(self, donor_name):
         try:
