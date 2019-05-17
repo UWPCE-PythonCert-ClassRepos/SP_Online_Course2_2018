@@ -11,12 +11,16 @@ logger = logging.getLogger(__name__)
 
 class Database_Handler():
     '''this class adds, deletes, updates donor data in the
-        database'''
+        database and runs queries'''
     database = SqliteDatabase('mailroom.db')
 
     def projection_query(self):
         '''select statement to get donations for projections'''
         try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+            logger.info('connecting to database')
+
             query = (Donation.select(Donation.donation,
                                      Donation.donor_donated
                                      ).order_by(Donation.donor_donated))
@@ -24,11 +28,20 @@ class Database_Handler():
         except Exception as e:
             logger.info(e)
         else:
+            logger.info('query successful')
+        finally:
+            database.close()
+            logger.info('closing database')
             return projection_list
+
 
     def report_query(self):
         '''select statement to get report values'''
         try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+            logger.info('connecting to database')
+
             query = (Donation.select(
                                 Donation.donor_donated,
                                 fn.sum(Donation.donation).alias('sum_donation'),
@@ -38,11 +51,21 @@ class Database_Handler():
             report_list = [(x.donor_donated.full_name, x.sum_donation, x.count_donation) for x in query]
         except Exception as e:
             logger.info(e)
-        else: return report_list
+        else:
+            logger.info('query successful')
+        finally:
+            logger.info('closing database')
+            database.close()
+            return report_list
+
 
     def letter_query(self):
-        '''select statement to get letters values'''
+        '''select statement to get thank you letters values'''
         try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+            logger.info('connecting to database')
+
             query = (Donation.select(
                                 Donation.donor_donated,
                                 fn.sum(Donation.donation).alias('sum_donation')
@@ -50,38 +73,96 @@ class Database_Handler():
             report_list = [(x.donor_donated.full_name, x.sum_donation) for x in query]
         except Exception as e:
             logger.info(e)
-        else: return report_list
+        else:
+            logger.info('query successful')
+        finally:
+            logger.info('closing database')
+            database.close()
+            return report_list
+
 
     def is_current_donor(self, donor):
+        '''query to check if donor exists in database'''
         try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+            logger.info('connecting to database')
+
             query = Donor.select(Donor.full_name).where(Donor.full_name == donor)
-            #if donor in query length will be 1
-            if len(query):
-                return True
-            else:
-                return False
         except Exception as e:
             logger.info(e)
+        finally:
+            logger.info('closing database')
+            #if donor in query length will be 1
+            if len(query):
+                database.close()
+                logger.info('donor exists')
+                return True
+            else:
+                database.close()
+                logger.info('donor does not exist')
+                return False
 
     def is_current_donation(self, donor, donation):
+        '''query to check if donor and donation exist in Donation'''
         try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+            logger.info('connecting to database')
+
             query = Donation.get(
                             (Donation.donor_donated == donor) &
                             (Donation.donation == donation))
         except Exception as e:
+            logger.info(e)
+            logger.info('{} donation does not exist for {}'.format(donation, donor))
+            database.close()
+            logger.info('closing database')
             return False
         #if donation in query no Error is raised
         else:
+            logger.info('donation exists')
+            database.close()
+            logger.info('closing database')
             return True
+
+    def update_donation(self, donor, donation):
+        '''changes a donation amount in Donation'''
+        try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+            logger.info('connecting to database')
+
+            adonation = Donation.get(
+                            (Donation.donor_donated == donor) &
+                            (Donation.donation == donation))
+            adonation.donation = donation
+            adonation.save()
+        except Exception as e:
+            logger.info(e)
+        else:
+            logger.info('update successful')
+        finally:
+            logger.info('closing database')
+            database.close()
 
     def get_list(self):
         '''select statement to get all full names of donors'''
         try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
+            logger.info('connecting to database')
+
             query = Donor.select()
             names = [donor.full_name.title() for donor in query]
-            return names
         except Exception as e:
             logger.info(e)
+        else:
+            logger.info('query successful')
+        finally:
+            logger.info('closing database')
+            database.close()
+            return names
 
     def remove_donor(self, donor_name):
         '''removes donor information from all tables'''
@@ -100,6 +181,8 @@ class Database_Handler():
             donor_query.delete_instance()
         except Exception as e:
             logger.info(e)
+        else:
+            logger.info('delete successful')
         finally:
             logger.info('Closing database')
             database.close()
@@ -124,9 +207,10 @@ class Database_Handler():
                 last_name = last,
                 full_name = donor_name)
             new_donor.save()
-            logger.info('Donor added to Database')
         except Exception as e:
             logger.info(e)
+        else:
+            logger.info('Donor added to Database')
         finally:
             database.close()
             logger.info('closing database')
@@ -142,9 +226,10 @@ class Database_Handler():
                 donor_donated = name,
                 date_donation = date.today().isoformat())
             new_donation.save()
-            logger.info('Donation added to Database')
         except Exception as e:
             logger.info(e)
+        else:
+            logger.info('Donation added to Database')
         finally:
             database.close()
             logger.info('closing database')
@@ -167,6 +252,8 @@ def create_tables():
             Donation])
     except Exception as e:
         logger.info('Error: ', e)
+    else:
+        logger.info('successfully added tables')
     finally:
         database.close()
 
@@ -198,10 +285,11 @@ def populate_donor():
                     full_name = '{} {}'.format(donor[FIRST_NAME],
                                                donor[LAST_NAME]))
                 new_donor.save()
-                logger.info('Database add successful')
 
     except Exception as e:
         logger.info('Error: ', e)
+    else:
+        logger.info('Database add successful')
     finally:
         database.close()
         logger.info('closing database')
@@ -238,10 +326,11 @@ def populate_donation():
                     donor_donated = donation[DONOR_DONATED],
                     date_donation = donation[DATE_DONATION])
                 new_donation.save()
-                logger.info('Database add successful')
 
     except Exception as e:
         logger.info('Error: ', e)
+    else:
+        logger.info('Database add successful')
     finally:
         database.close()
         logger.info('closing database')

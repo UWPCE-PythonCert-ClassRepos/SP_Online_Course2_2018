@@ -13,6 +13,7 @@
 #   Laura Denney, 12/17/18, Added Saving / Loading Functionality
 #   Laura Denney, 1/1/19, Started Functional Programming MailRoom
 #   Laura Denney, 5/10/19, Started Database MailRoom
+#   Laura Denney, 5/10/19, Finished Database MailRoom
 #-------------------------------------------------#
 
 #importing models, logging, datetime, peewee
@@ -162,21 +163,29 @@ would like to update >> ").lower()
             return
         else:
             print("\n{} is indeed a current donor.".format(name.title()))
+            print("\nPlease enter the donation amount we will be adjusting below.")
             donation = validate_update_donation()
-            if not dh.is_current_donation(name, donation):
-                print("${} is not an existing donation for {}, unable to change".format(
+            if not dh.is_current_donation(name.lower(), donation):
+                print("${} is not an existing donation for {}, unable to make adjustment".format(
                         donation, name.title()))
                 return
             else:
-                new_donation =
+                print("\nPlease enter the new donation amount below.")
+                new_donation = validate_update_donation()
+                dh.update_donation(name, new_donation)
     except Exception as e:
         logger.info(e)
+    else:
+        print("\n{}'s donation for ${} succesfully updated to ${}.".format(
+                name.title(), donation, new_donation))
 
 def  validate_update_donation():
     while True:
         try:
-            donation = input("What is the amount of the donation we are adjusting? >> ")
+            donation = input("What is the amount of the donation? >> ")
             num = float(donation)
+            if num < 0:
+                raise ValueError
         except ValueError:
             print("\nERROR: Invalid donation amount entered. Please enter valid number.")
         else:
@@ -240,6 +249,8 @@ def validate_donation():
         try:
             donation = input("How much money did they donate? (type 100 for $100) >> ")
             num = float(donation)
+            if num < 0:
+                raise ValueError
         except ValueError:
             print("\nERROR: Invalid donation amount entered. Please enter valid number.")
         else:
