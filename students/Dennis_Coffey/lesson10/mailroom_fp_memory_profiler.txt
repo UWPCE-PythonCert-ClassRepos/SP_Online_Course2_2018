@@ -1,0 +1,124 @@
+Filename: mailroom_fp2.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    47   27.938 MiB   27.938 MiB       @profile
+    48                                 def add_donation(self, amount):
+    49   27.938 MiB    0.000 MiB           try:
+    50   27.938 MiB    0.000 MiB               self.donations.append(float(amount))
+    51                                     # Handle error if user doesn't input a valid numerical donation
+    52                                     except ValueError:
+    53                                         print('Not a valid donation.')
+    54                                         prompt_donation(self.name)
+
+
+Filename: mailroom_fp2.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    57   27.980 MiB   27.980 MiB       @profile
+    58                                 def create_email(self, amount):
+    59   27.980 MiB    0.000 MiB           return '\nDear {},\n\nThank you so much for generous donation of ${}.\n\n\t\t\tSincerely,\n\t\t\tPython Donation Team'.format(self.name, amount)
+
+
+Filename: mailroom_fp2.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    61   27.938 MiB   27.938 MiB       @profile
+    62                                 def sum_donations(self):
+    63   27.938 MiB    0.000 MiB           return sum(self.donations)
+
+
+Filename: mailroom_fp2.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    65   27.938 MiB   27.938 MiB       @profile
+    66                                 def number_donations(self):
+    67   27.938 MiB    0.000 MiB           return len(self.donations)
+
+
+Filename: mailroom_fp2.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    69   27.938 MiB   27.938 MiB       @profile
+    70                                 def avg_donations(self):
+    71   27.938 MiB   27.938 MiB           return self.sum_donations() / self.number_donations()
+
+
+Filename: mailroom_fp2.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   106   27.938 MiB   27.938 MiB       @profile
+   107                                 def set_donor(self, full_name):
+   108   27.938 MiB    0.000 MiB           exists = False
+   109                                     # Check if existing donor
+   110   27.938 MiB    0.000 MiB           for donor in self.donors:
+   111   27.938 MiB    0.000 MiB               if donor.name == full_name:
+   112   27.938 MiB    0.000 MiB                   exists = True
+   113   27.938 MiB    0.000 MiB                   break
+   114                                     # Not existing donor, so create new donor
+   115   27.938 MiB    0.000 MiB           if not exists:
+   116                                         donor = Donor(full_name)
+   117                                         donors.add_donor(donor)
+   118   27.938 MiB    0.000 MiB           return donor
+
+
+Filename: mailroom_fp2.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   126   27.934 MiB   27.934 MiB       @profile
+   127                                 def sort_on_total_donation(self):
+   128   27.934 MiB    0.000 MiB           return(sorted(self.donors, key=total_donation_key, reverse=True))
+
+
+Filename: mailroom_fp2.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   132   27.934 MiB   27.934 MiB       @profile
+   133                                 def create_report(self):
+   134                                     #Create list of summarized donations so that total can be sorted
+   135   27.934 MiB   27.934 MiB           sorted_donors = donors.sort_on_total_donation()
+   136
+   137                                     # Print summarized data
+   138   27.934 MiB    0.000 MiB           report = '\nDonor Name                | Total Given | Num Gifts | Average Gift\n'
+   139   27.934 MiB    0.000 MiB           report += '-'*66 + '\n'
+   140   27.938 MiB    0.000 MiB           for donor in sorted_donors:
+   141   27.938 MiB    0.000 MiB               if donor.donations != []:
+   142   27.938 MiB   27.938 MiB                   report +=  f'{donor.name: <27}${donor.sum_donations(): >12.2f}{donor.number_donations(): >12}  ${round(donor.avg_donations(),2): >11.2f}\n'
+   143   27.938 MiB    0.000 MiB           print(report)
+   144   27.938 MiB    0.000 MiB           return report
+
+
+Filename: mailroom_fp2.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   147   27.969 MiB   27.969 MiB       @profile
+   148                                 def send_letters(self):
+   149   27.973 MiB    0.004 MiB           now = datetime.datetime.now()
+   150   27.977 MiB    0.004 MiB           now = str(now.year) + '-' + str(now.month) + "-" + str(now.day)
+   151   27.977 MiB    0.000 MiB           path = os.getcwd() + '/letters'
+   152
+   153                                     # Change directory to letters directory, if it doesn't exist, create it
+   154   27.977 MiB    0.000 MiB           try:
+   155   27.980 MiB    0.004 MiB               os.chdir(path)
+   156   27.980 MiB    0.000 MiB           except FileNotFoundError:
+   157   27.980 MiB    0.000 MiB               os.makedirs(path)
+   158   27.980 MiB    0.000 MiB               os.chdir(path)
+   159
+   160                                     # Loop through each donor and send thank you email
+   161   27.980 MiB    0.000 MiB           try:
+   162   27.980 MiB    0.000 MiB               for donor in self.donors:
+   163   27.980 MiB    0.000 MiB                   with open(donor.name + '_' + str(now) + '.txt', 'w') as outfile:
+   164   27.980 MiB    0.000 MiB                       print(donor.name)
+   165   27.980 MiB   27.980 MiB                       outfile.write(donor.create_email(donor.donations[-1]))
+   166
+   167   27.980 MiB    0.000 MiB               print('\nThe thank you emails were sent!')
+   168                                     except:
+   169                                         print('\nThere was an error sending the thank you emails.')
