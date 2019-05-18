@@ -22,7 +22,7 @@ def get_people_data():
         },
         {
             'donor': 'Joe',
-            'donations': [5],
+            'donations': [5, 4, 3, 2, 1],
         }
 
     ]

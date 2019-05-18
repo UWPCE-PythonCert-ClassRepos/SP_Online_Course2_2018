@@ -1,7 +1,8 @@
 import logging
-from create_mr_tables import database
-from create_mr_tables import Donor
-from create_mr_tables import Donations
+from pymongo import ReturnDocument
+#from create_mr_tables import database
+#from create_mr_tables import Donor
+#from create_mr_tables import Donations
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -10,44 +11,35 @@ class Group:
     """This Class will be used to query the database and return the results
     of the required queries."""
 
-    def __init__(self, filename):
-        database.init(filename)
-        self.filename = filename
+    def __init__(self, client_path):
+        self.db = client_path
 
-    def search(self, search_for):
+    def search(self, person):
         """Return None if donor is not in database."""
-        database.connect()
-        logger.info('Connected to database')
-        database.execute_sql('PRAGMA foreign_keys = ON;')
         try:
-            with database.transaction():
-                logger.info(f'Searching through donors for '
-                            f'{search_for}.')
-                query = Donor.get_or_none(
-                    Donor.donor_name == search_for)  # Select all donors
-        except Exception as e:
-            logger.info(f'Error searching for donors.')
-            logger.info(e)
-            logger.info('Failed to execute donor search.')
-        finally:
-            logger.info('database closes')
-            database.close()
-            if query is None:
-                return query
+            logger.info('Search for donor.')
+            result = self.db.find_one({'donor': person})
+            if result is None:
+                logger.info('Could not find the donor.')
+                return result
             else:
-                return query.donor_name
+                logger.info(f'Found {result["donor"]}')
+                return result['donor']
+
+        except Exception as e:
+            logger.info(f'Error searching for = {person}')
+            logger.info(e)
+        finally:
+            print(f'All done searching donors for {person}.')
 
     def print_donors(self):
         # This prints the list of donors
-        database.connect()
-        logger.debug('Connected to database')
-        database.execute_sql('PRAGMA foreign_keys = ON;')
+
         try:
-            with database.transaction():
-                logger.debug('Trying print all the donors.')
-                query = Donor.select()  # Select all donors
-                for donor in query:
-                    print(donor.donor_name)
+            donor_list = []
+            for doc in self.db.find():
+                donor_list.append(doc['donor'])
+                print(doc['donor'])
 
         except Exception as e:
             logger.debug(f'Error printing donors.')
@@ -55,27 +47,21 @@ class Group:
             logger.debug('Failed to print a list of donors.')
         finally:
             logger.debug('database closes')
-            database.close()
+            return donor_list
 
     def summary(self):
         """Create a new dictionary with Total, number of donations,
         and average donation amount"""
-        database.connect()
-        logger.debug('Connected to database')
-        database.execute_sql('PRAGMA foreign_keys = ON;')
         donor_summary = {}
+        individual = Individual(self.db)
 
         try:
-            with database.transaction():
-                donor_list = Donor.select(Donor.donor_name)
-                logger.debug(f'Printing a list of all the donors '
-                             f'in the database')
-                for donor in donor_list:
-                    logger.debug(f'{donor.donor_name}')
-                    donor_summary[donor.donor_name] = \
-                        [Individual.sum_donations(donor.donor_name),
-                         Individual.number_donations(donor.donor_name),
-                         Individual.avg_donations(donor.donor_name)]
+            for doc in self.db.find():
+                donor_summary[doc['donor']] = \
+                    [individual.sum_donations(doc['donor']),
+                     individual.number_donations(doc['donor']),
+                     individual.avg_donations(doc['donor'])]
+
         except Exception as e:
             logger.debug(f'Error creating database summary.')
             logger.debug(e)
@@ -83,7 +69,6 @@ class Group:
                          'to create a summary.')
         finally:
             logger.debug('database closes')
-            database.close()
             return donor_summary
 
     @staticmethod
@@ -185,106 +170,87 @@ class Group:
 
 
 class Individual:
-    """Creates Class Individual, except instead of returning an instance
-    of a class, we will now create a table 'Individual' in an SQL database
-    with the following properties 'name', 'donation', '"""
-    def __init__(self, filename):
-        database.init(filename)
+    """Connects to MongoDB and works with individual data 'donor' and
+     a list of 'donations'.
+     """
+    def __init__(self, client_path):
+        self.db = client_path
 
-    @staticmethod
-    def add_donation(person, contribution):
-        database.connect(reuse_if_open=True)
-        logger.info('Connected to database')
-        database.execute_sql('PRAGMA foreign_keys = ON;')
+    def add_donation(self, person, contribution):
 
         try:
-            with database.transaction():
-                logger.info('Trying to add new donor.')
-                Donor.get_or_create(donor_name=person)
-                logger.info(f'Success adding donor {person}.')
-
-            with database.transaction():
-                logger.info('Trying to add new donation.')
-                new_donation = Donations.create(
-                        donor_name=person,
-                        donation=contribution)
-                new_donation.save()
-                logger.info(f'Database added a donation of '
-                            f'{contribution} by {person}.')
+            logger.info('Search for donor.')
+            result = self.db.find_one({'donor': person})
+            if result is None:
+                logger.info('Inserting a new donor')
+                self.db.insert_one({'donor': person, 'donations': [contribution]})
+            else:
+                logger.info(f'Found {result["donor"]}')
+                logger.info('Adding a new donation to record of donations')
+                self.db.find_one_and_update({'donor': person}, {'$push': {'donations': contribution}}, return_document= ReturnDocument.AFTER)
 
         except Exception as e:
             logger.info(f'Error creating = {person}')
             logger.info(e)
             logger.info('Failed to add new donor.')
         finally:
+            print('All done adding donor contribution')
 
-            logger.info('database closes')
-            database.close()
-
-    @staticmethod
-    def number_donations(name):
-        database.connect(reuse_if_open=True)
-        logger.info('Connected to database')
-        database.execute_sql('PRAGMA foreign_keys = ON;')
+    def number_donations(self, name):
 
         try:
-            with database.transaction():
-                logger.info('Trying to count number of donations.')
-                query = Donations.select().where(Donations.donor_name == name)
-                donation_list = []  # Create a list of donations for 'name'.
-                for result in query:
-                    donation_list.append(int(result.donation))
+            logger.info('Trying to count number of donations.')
+            result = self.db.find_one({'donor': name})
+            if result is None:
+                return None
+            donations = result['donations']
+            return int(len(donations))
+
         except Exception as e:
             logger.info(f'Error counting # of donations.')
             logger.info(e)
         finally:
             logger.info(f'Returning the # of donations made by {name}')
-            return int(len(donation_list))
 
-    @staticmethod
-    def sum_donations(name):
-        database.connect(reuse_if_open=True)
-        logger.info('In Individual.sum_donations')
-        database.execute_sql('PRAGMA foreign_keys = ON;')
+
+    def sum_donations(self, name):
 
         try:
-            with database.transaction():
-                logger.info(f'Summing all the donations by {name}.')
-                query = Donations.select().where(Donations.donor_name == name)
-                donation_list = []  # Create a list of donations for 'name'.
-                for result in query:
-                    donation_list.append(int(result.donation))
+            logger.info(f'Summing all the donations by {name}.')
+            result = self.db.find_one({'donor': name})
+            if result is None:
+                return None
+            sum_donations = sum(result['donations'])
+            return sum_donations
+
         except Exception as e:
             logger.info(f'Error counting # of donations.')
             logger.info(e)
         finally:
             logger.info(f'Returning the # of donations made by {name}')
-            return sum(donation_list)
 
-    @staticmethod
-    def avg_donations(name):
-        return Individual.sum_donations(name)/Individual.number_donations(name)
 
-    @staticmethod
-    def last_donation(name):
-        database.connect(reuse_if_open=True)
-        logger.info('Connected to database')
-        database.execute_sql('PRAGMA foreign_keys = ON;')
 
+    def avg_donations(self, name):
+        return self.sum_donations(name)/self.number_donations(name)
+
+
+    def last_donation(self, name):
         try:
-            with database.transaction():
-                logger.info(f'Trying to find the last record of {name}.')
-                query = Donations.select().where(Donations.donor_name == name)\
-                    .order_by(Donations.id)
-                donation_list = []  # Create a list of donations for 'name'.
-                for result in query:
-                    donation_list.append(int(result.donation))
+            logger.info(f'Trying to find the last record of {name}.')
+            result = self.db.find_one({'donor': name})
+            if result is None:
+                return None
+            logger.info(f'Finding the last donation made by {name}')
+            donation_list = result['donations']
+            return donation_list[-1]
+
         except Exception as e:
             logger.info(f'Error finding last donation.')
             logger.info(e)
         finally:
             logger.info(f'Returning the last donation made by {name}.')
-            return donation_list[-1]
+
 
     @staticmethod
     def thank_you(person, contribution):
@@ -292,20 +258,12 @@ class Individual:
         return ('Thank you so much for the generous gift of ${0:.2f}, {1}!'
                 .format(contribution, person))
 
-    @staticmethod
-    def delete_donor(person):
-        database.connect(reuse_if_open=True)
-        logger.info('Connected to database')
-        database.execute_sql('PRAGMA foreign_keys = OFF;')
-
+    def delete_donor(self, person):
         try:
-            with database.transaction():
-                logger.info('Trying to delete donor.')
-                Donations.delete().where(Donations.donor_name == person)\
-                    .execute()
-                Donor.delete().where(Donor.donor_name == person)\
-                    .execute()
-                logger.info(f'Success deleting donor {person}.')
+            logger.info(f'Trying to delete {person}.')
+            result = self.db.delete_one({'donor': person})
+            if result is None:
+                return None
 
         except Exception as e:
             logger.info(f'Error deleting {person}')
@@ -313,5 +271,4 @@ class Individual:
             logger.info('Failed to delete donor.')
         finally:
 
-            logger.info('database closes')
-            database.close()
+            logger.info(f'Deletion of {person} successful.')

@@ -8,17 +8,17 @@ import pymongo
 import redis
 from neo4j import GraphDatabase, basic_auth
 
-import utilities as utilities
+import utilities
 
 log = utilities.configure_logger('default', '../logs/login_databases_dev.log')
 config_file = Path(__file__).parent.parent / '.config/config.ini'
 #config_file = 'config.ini'
-log.info('Print config_file to make sure it is found.')
-log.info(f'{config_file}')
+#log.info('Print config_file to make sure it is found.')
+#log.info(f'{config_file}')
 config = configparser.ConfigParser()
 config.read(config_file)
-log.info(f'Print config.read.{config.read(config_file)}')
-log.info(f'Print user name in mongodb config file.{config["mongodb_cloud"]["user"]}')
+#log.info(f'Print config.read.{config.read(config_file)}')
+#log.info(f'Print user name in mongodb config file.{config["mongodb_cloud"]["user"]}')
 
 def login_mongodb_cloud():
     """
