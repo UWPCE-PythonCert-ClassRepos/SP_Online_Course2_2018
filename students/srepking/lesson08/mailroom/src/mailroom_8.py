@@ -142,13 +142,13 @@ def update_redis(path, name):
                                      '2 - Telephone\n'
                                      '3 - email\n'
                                      '>>>')
-    if update == 1:
+    if update == '1':
         last_name = input(f"What is {name}'s last name?\n")
         d.Individual.update_last_name(path, name, last_name)
-    if update == 2:
+    if update == '2':
         telephone = input(f"What is {name}'s telephon #?\n")
         d.Individual.update_telephone(path, name, telephone)
-    if update == 3:
+    if update == '3':
         email = input(f"What is {name}'s telephon #?\n")
         d.Individual.update_email(path, name, email)
 
