@@ -1,23 +1,11 @@
 import unittest
 import collections
-import pymongo
-#from peewee import *
 import donors_8 as d
-import logging
-import logging.config
 import utilities
-#import create_mr_tables as new_database
-#from create_mr_tables import *
-#from create_mr_tables import database
-import os
 import login_database
 import Load_Tables
 log = utilities.configure_logger('default', '../logs/test_dev.log')
 people = Load_Tables.get_people_data()
-
-
-
-
 
 
 class TestMailbox(unittest.TestCase):
@@ -43,7 +31,7 @@ class TestMailbox(unittest.TestCase):
     log.info('Completed loading donors')
 
     def test_Connection(self):
-        #with login_database.login_mongodb_cloud() as client:
+        # with login_database.login_mongodb_cloud() as client:
         log.info('Find the person Zach')
         query = {'donor': 'Zach'}
         results = self.__class__.people_collection.find_one(query)
@@ -51,7 +39,7 @@ class TestMailbox(unittest.TestCase):
 
     def test_Individual_Add_Donation1(self):
         """Test Add_Donation when donor does not exist"""
-        #pass db instance to Individulal Class Instance
+        # pass db instance to Individulal Class Instance
         individual = d.Individual(self.__class__.people_collection)
         individual.add_donation('Luke', 5)
         result = self.__class__.people_collection.find_one({"donor": "Luke"})
@@ -62,7 +50,7 @@ class TestMailbox(unittest.TestCase):
 
     def test_Individual_Add_Donation2(self):
         """Test Add_Donation when it is an existing donor."""
-        #pass db instance to Individulal Class Instance
+        # pass db instance to Individulal Class Instance
         individual = d.Individual(self.__class__.people_collection)
         individual.add_donation('Shane', 500)
         result = self.__class__.people_collection.find_one({"donor": "Shane"})
@@ -73,7 +61,7 @@ class TestMailbox(unittest.TestCase):
 
     def test_Count(self):
         """Test that there is only one Shane in database"""
-        #pass db instance to Individulal Class Instance
+        # pass db instance to Individulal Class Instance
         count = self.__class__.people_collection.count_documents({'donor': 'Shane'})
         self.assertEqual(count, 1)
 
@@ -92,7 +80,6 @@ class TestMailbox(unittest.TestCase):
         sum_ind = sum(result['donations'])
         log.info(f"The sum of Joe's donations is {sum_ind}")
         self.assertEqual(sum_ind, individual.sum_donations('Joe'))
-
 
     def test_AVG_Donations(self):
         """Test Individual.avg_Donations"""
@@ -121,7 +108,6 @@ class TestMailbox(unittest.TestCase):
         # Show that we can no longer find entry
         result = self.__class__.people_collection.find_one({"donor": "Pete"})
         self.assertEqual(result, None)
-
 
     def test_Group_search1(self):
         """Returns None when name does not exist"""
@@ -161,11 +147,6 @@ class TestMailbox(unittest.TestCase):
         expected = collections.Counter(['Shane', 'Zach', 'Joe', 'Pete', 'Fitz'])
         self.assertEqual(result, expected)
 
-#    def test_thankyou(self):
-#        test_text = 'Thank you so much for the generous gift of $5.00, Shane!'
-##        thank_you = d.Individual('Shane', [5])
-#        self.assertEqual(d.Individual.thank_you('Shane', 5), test_text)
-
     def test_summary(self):
         """Test dictionary set with {Donor: Total, number of donations,
 #        and average donation amount}"""
@@ -192,104 +173,64 @@ class TestMailbox(unittest.TestCase):
         self.assertDictEqual(result, test_against)
 
 
+class TestRedis(unittest.TestCase):
+    # connect to database
+    r = login_database.login_redis_cloud()
+    # Populate the Redis database
+    Load_Tables.populate_redis(r)
 
+    def test_Exists(self):
+        """ Test to see if your donor exists in database"""
+        result = self.__class__.r.exists('Zach')
+        self.assertEqual(result, 1)
 
-#        group_instance = d.Group('test.db')
-#        summary = group_instance.summary() # 'Zach is in database
-#        self.assertDictEqual(summary, {'Shane': [21, 3, 7.0],
-#                                   'Joe': [5, 1, 5.0],
-#                                   'Zach': [10, 1, 10.0],
-#                                   'Pete':[15, 2, 7.5],
-#                                   'Fitz':[1,1,1.0],
-#                                   'Luke':[5, 1, 5.0]})
+        # Test to see if your donor does NOT exist in database
+        result = self.__class__.r.exists('John')
+        self.assertEqual(result, 0)
 
-#    def test_sort_list(self):
-#        """sorts the dictionary by largest to smallest donation"""
-#        group_instance = d.Group('test.db')
-#        summary = group_instance.summary()
-#        sorted = group_instance.sort_list(summary)
-#        self.assertEqual(sorted, ['Shane', 'Pete', 'Zach', 'Joe', 'Luke', 'Fitz'])
+    def test_Get_CheckEntry(self):
+        """Test that when the database loads,
+        first it deletes existing entries"""
+        result = self.__class__.r.llen('Zach')
+        self.assertEqual(result, 3)
 
+    def test_Get_Email(self):
+        """Test that we can collect the email from Zach"""
+        result = self.__class__.r.lindex('Zach', 2)
+        self.assertEqual(result, 'zg@gmail.com')
 
-#    def test_number_donations(self):
-#        num_donations = d.Individual.number_donations('Shane')
-#        self.assertEqual(num_donations, 3)
+    def test_donor_verification(self):
+        """Test that we can confirm donor information in Redis"""
+        Load_Tables.populate_redis(self.__class__.r)
+        result = d.Individual.donor_verification(self.__class__.r, 'Joe')
+        self.assertEqual(result, ['Slinger', '677-0182', 'js@gmail.com'])
 
-#    def test_sum_donations(self):
-#        sum_donation = d.Individual.sum_donations('Shane')
-#        self.assertEqual(sum_donation, 21)
+    def test_update_last_name(self):
+        """Test that we can confirm donor information in Redis"""
+        Load_Tables.populate_redis(self.__class__.r)
+        result = d.Individual.update_last_name(self.__class__.r, 'Joe', 'Sling')
+        self.assertEqual(result, ['Sling', '677-0182', 'js@gmail.com'])
 
-#    def test_avg_donations(self):
-#        avg_donations = d.Individual.avg_donations('Shane')
-#        self.assertEqual(avg_donations, 7)
+    def test_update_telephone(self):
+        """Test that we can confirm donor information in Redis"""
+        Load_Tables.populate_redis(self.__class__.r)
+        result = d.Individual.update_telephone(self.__class__.r, 'Joe', '312-000-0000')
+        self.assertEqual(result, ['Slinger', '312-000-0000', 'js@gmail.com'])
 
+    def test_update_email(self):
+        """Test that we can confirm donor information in Redis"""
+        Load_Tables.populate_redis(self.__class__.r)
+        result = d.Individual.update_email(self.__class__.r, 'Joe', 'joe@hotmail.com')
+        self.assertEqual(result, ['Slinger', '677-0182', 'joe@hotmail.com'])
 
-#class TestDelete(unittest.TestCase):
-#    """Test deleting a donor. Need to recreate the database to ensure deletion
-#    doesn't happen before other test cases."""
-#    cur_dir = os.getcwd()
-#    logger.debug(f'Current Directory is {cur_dir}')
-#    file_list = os.listdir(cur_dir)
-#    logger.debug(f'File list is {file_list}')
-#    db_file = []
-#    if os.path.exists('test2.db'):
-#        logging.info('Trying to delete the database.')
-#        os.remove('test2.db')
-#        logger.info(f'Database test.db has been deleted.')
-
-    # Create a new database named test.db
-#    cwd = os.getcwd()
-#    logger.info(f'Creating new database test.db.')
-#    database.init('test2.db')
-#    database.connect()
-#    logger.info('Creating Modules in database')
-#    database.create_tables([Donor, Donations])
-#    database.close()
-#    logger.info('Database has been created and is closed.')
-
-    # Loading tables in new database
-#    database.connect()
-#    logger.info('Connected to database')
-#    database.execute_sql('PRAGMA foreign_keys = ON;')
-#    donors = ['Shane', 'Pete', 'Zach', 'Joe', 'Fitz']
-#    donations = [('Shane', 6), ('Shane', 5), ('Shane', 10), ('Joe', 5), ('Zach', 10),
-#                 ('Pete', 7), ('Pete', 8), ('Fitz', 1)]
-
-#    def test_delete_donor(self):
-#        """Delete a donor and check that the name is deleted in both the Donor table
-#        and the Donations table."""
-#        #indiv_initalize = d.Individual('test2.db')
-#        database.connect(reuse_if_open=True)
-#        database.execute_sql('PRAGMA foreign_keys = ON;')
-
-        #show that you can find 'Shane'
-#        aperson = Donor.get(Donor.donor_name == 'Shane')
-#        self.assertEqual(aperson.donor_name, 'Shane')  # Test donor exists
-
-
-        # Delete the donor 'Shane'
-#        d.Individual.delete_donor('Shane')
-
-        # After deleting 'Shane', search donor table for shane
-#        query_donor = Donor.select().where(Donor.donor_name == 'Shane')
-#        donor_list = []  # Create a list of donations for 'name'.
-#        for result in query_donor:
-            # logger.info(f'{result.donor_name}')
-#            donor_list.append(int(result.donor_name))
-#        self.assertEqual(donor_list, [])
-
-        # After deleting 'Shane', search donation table for shane
-#        query_donation = Donations.select().where(Donations.donor_name == 'Shane')
-#        donation_list = []  # Create a list of donations for 'name'.
-#        for result in query_donation:
-            # logger.info(f'{result.donor_name}')
-#            donation_list.append(int(result.donation))
-#        self.assertEqual(donation_list, [])
-
-        # After deleting a donor, show that you can still find other donors.
-#        aperson = Donor.get(Donor.donor_name == 'Pete')
-#        self.assertEqual(aperson.donor_name, 'Pete')  # Test donor was added
-
+    def test_redis_add_new(self):
+        """Test that we can confirm donor information in Redis"""
+        result = d.Individual.redis_add_new(self.__class__.r, 'Sally',
+                                            'Hines',
+                                            '847-987-4567',
+                                            'sally@hotmail.com'
+                                            )
+        self.assertEqual(result, ['Hines', '847-987-4567', 'sally@hotmail.com'])
 
 if __name__ == '__main__':
     unittest.main()

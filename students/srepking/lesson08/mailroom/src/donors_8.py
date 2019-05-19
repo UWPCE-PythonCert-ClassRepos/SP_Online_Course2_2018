@@ -1,8 +1,5 @@
 import logging
 from pymongo import ReturnDocument
-#from create_mr_tables import database
-#from create_mr_tables import Donor
-#from create_mr_tables import Donations
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -17,18 +14,18 @@ class Group:
     def search(self, person):
         """Return None if donor is not in database."""
         try:
-            logger.info('Search for donor.')
+            logger.debug('Search for donor.')
             result = self.db.find_one({'donor': person})
             if result is None:
-                logger.info('Could not find the donor.')
+                logger.debug('Could not find the donor.')
                 return result
             else:
-                logger.info(f'Found {result["donor"]}')
+                logger.debug(f'Found {result["donor"]}')
                 return result['donor']
 
         except Exception as e:
-            logger.info(f'Error searching for = {person}')
-            logger.info(e)
+            logger.debug(f'Error searching for = {person}')
+            logger.debug(e)
         finally:
             print(f'All done searching donors for {person}.')
 
@@ -140,33 +137,27 @@ class Group:
         return '\n'.join(rows)
 
     def letters(self):
-        """Send letters to everyone base on thier last donation amount."""
-        database.connect()
-        logger.debug('Connected to database')
-        database.execute_sql('PRAGMA foreign_keys = ON;')
+        """Send letters to everyone base on their last donation amount."""
+        individual = Individual(self.db)
+
         try:
-            with database.transaction():
-                donor_list = Donor.select(Donor.donor_name)
-                logger.debug(f'Sending a thank you to every donor '
-                             f'in database.')
-                for donor in donor_list:
-                    logger.debug(f'{donor.donor_name}')
-                    letter = f'Dear {donor.donor_name}, ' \
-                             f'thank you so much for your ' \
-                             f'last contribution of ' \
-                             f'${Individual.last_donation(donor.donor_name):.2f}! ' \
-                             f'You have contributed a total of $' \
-                             f'{Individual.sum_donations(donor.donor_name):.2f}, ' \
-                             f'and we appreciate your support!'
-                    # Write the letter to a destination
-                    with open(donor.donor_name + '.txt', 'w') as to_file:
-                        to_file.write(letter)
+            for doc in self.db.find():
+                logger.debug(f'{doc["donor"]}')
+                letter = f'Dear {doc["donor"]}, ' \
+                            f'thank you so much for your ' \
+                            f'last contribution of ' \
+                            f'${individual.last_donation(doc["donor"]):.2f}! ' \
+                            f'You have contributed a total of $' \
+                            f'{individual.sum_donations(doc["donor"]):.2f}, ' \
+                            f'and we appreciate your support!'
+                # Write the letter to a destination
+                with open(doc["donor"] + '.txt', 'w') as to_file:
+                    to_file.write(letter)
         except Exception as e:
             logger.debug(f'Error writing letters to everyone.')
             logger.debug(e)
         finally:
-            logger.debug('database closes')
-            database.close()
+            logger.debug('Done writing letters.')
 
 
 class Individual:
@@ -179,27 +170,27 @@ class Individual:
     def add_donation(self, person, contribution):
 
         try:
-            logger.info('Search for donor.')
+            logger.debug('Search for donor.')
             result = self.db.find_one({'donor': person})
             if result is None:
-                logger.info('Inserting a new donor')
+                logger.debug('Inserting a new donor')
                 self.db.insert_one({'donor': person, 'donations': [contribution]})
             else:
-                logger.info(f'Found {result["donor"]}')
-                logger.info('Adding a new donation to record of donations')
+                logger.debug(f'Found {result["donor"]}')
+                logger.debug('Adding a new donation to record of donations')
                 self.db.find_one_and_update({'donor': person}, {'$push': {'donations': contribution}}, return_document= ReturnDocument.AFTER)
 
         except Exception as e:
-            logger.info(f'Error creating = {person}')
-            logger.info(e)
-            logger.info('Failed to add new donor.')
+            logger.debug(f'Error creating = {person}')
+            logger.debug(e)
+            logger.debug('Failed to add new donor.')
         finally:
             print('All done adding donor contribution')
 
     def number_donations(self, name):
 
         try:
-            logger.info('Trying to count number of donations.')
+            logger.debug('Trying to count number of donations.')
             result = self.db.find_one({'donor': name})
             if result is None:
                 return None
@@ -207,16 +198,16 @@ class Individual:
             return int(len(donations))
 
         except Exception as e:
-            logger.info(f'Error counting # of donations.')
-            logger.info(e)
+            logger.debug(f'Error counting # of donations.')
+            logger.debug(e)
         finally:
-            logger.info(f'Returning the # of donations made by {name}')
+            logger.debug(f'Returning the # of donations made by {name}')
 
 
     def sum_donations(self, name):
 
         try:
-            logger.info(f'Summing all the donations by {name}.')
+            logger.debug(f'Summing all the donations by {name}.')
             result = self.db.find_one({'donor': name})
             if result is None:
                 return None
@@ -224,10 +215,10 @@ class Individual:
             return sum_donations
 
         except Exception as e:
-            logger.info(f'Error counting # of donations.')
-            logger.info(e)
+            logger.debug(f'Error counting # of donations.')
+            logger.debug(e)
         finally:
-            logger.info(f'Returning the # of donations made by {name}')
+            logger.debug(f'Returning the # of donations made by {name}')
 
 
 
@@ -237,19 +228,19 @@ class Individual:
 
     def last_donation(self, name):
         try:
-            logger.info(f'Trying to find the last record of {name}.')
+            logger.debug(f'Trying to find the last record of {name}.')
             result = self.db.find_one({'donor': name})
             if result is None:
                 return None
-            logger.info(f'Finding the last donation made by {name}')
+            logger.debug(f'Finding the last donation made by {name}')
             donation_list = result['donations']
             return donation_list[-1]
 
         except Exception as e:
-            logger.info(f'Error finding last donation.')
-            logger.info(e)
+            logger.debug(f'Error finding last donation.')
+            logger.debug(e)
         finally:
-            logger.info(f'Returning the last donation made by {name}.')
+            logger.debug(f'Returning the last donation made by {name}.')
 
 
     @staticmethod
@@ -260,15 +251,80 @@ class Individual:
 
     def delete_donor(self, person):
         try:
-            logger.info(f'Trying to delete {person}.')
+            logger.debug(f'Trying to delete {person}.')
             result = self.db.delete_one({'donor': person})
             if result is None:
                 return None
 
         except Exception as e:
-            logger.info(f'Error deleting {person}')
-            logger.info(e)
-            logger.info('Failed to delete donor.')
+            logger.debug(f'Error deleting {person}')
+            logger.debug(e)
+            logger.debug('Failed to delete donor.')
         finally:
 
-            logger.info(f'Deletion of {person} successful.')
+            logger.debug(f'Deletion of {person} successful.')
+
+    @staticmethod
+    def donor_verification(path, name):
+        """Before entering a new  donor or donation into the database,
+         verify that the donor's email, telephone, and address
+         of the donor are correct. Add or revise data on record."""
+
+        print(f'Check the information on file for {name}.')
+        print(f"{name}'s last name is {path.lindex(name,0)}")
+        print(f"{name}'s telephone is {path.lindex(name, 1)}")
+        print(f"{name}'s email is {path.lindex(name, 2)}")
+        return [path.lindex(name, 0),
+                path.lindex(name, 1),
+                path.lindex(name, 2)]
+
+    @staticmethod
+    def update_last_name(path, name, new_last_name):
+        """Update donor's last name in REDIS cache"""
+        path.lset(name, 0, new_last_name)
+        print(f'Check the information on file for {name}.')
+        print(f"{name}'s last name is {path.lindex(name,0)}")
+        print(f"{name}'s telephone is {path.lindex(name, 1)}")
+        print(f"{name}'s email is {path.lindex(name, 2)}")
+        return [path.lindex(name, 0),
+                path.lindex(name, 1),
+                path.lindex(name, 2)]
+
+    @staticmethod
+    def update_telephone(path, name, new_telephone):
+        """Update donor's last name in REDIS cache"""
+        path.lset(name, 1, new_telephone)
+        print(f'Check the information on file for {name}.')
+        print(f"{name}'s last name is {path.lindex(name,0)}")
+        print(f"{name}'s telephone is {path.lindex(name, 1)}")
+        print(f"{name}'s email is {path.lindex(name, 2)}")
+        return [path.lindex(name, 0),
+                path.lindex(name, 1),
+                path.lindex(name, 2)]
+
+    @staticmethod
+    def update_email(path, name, new_email):
+        """Update donor's last name in REDIS cache"""
+        path.lset(name, 2, new_email)
+        print(f'Check the information on file for {name}.')
+        print(f"{name}'s last name is {path.lindex(name,0)}")
+        print(f"{name}'s telephone is {path.lindex(name, 1)}")
+        print(f"{name}'s email is {path.lindex(name, 2)}")
+        return [path.lindex(name, 0),
+                path.lindex(name, 1),
+                path.lindex(name, 2)]
+
+    @staticmethod
+    def redis_add_new(path, name, last_name, tele, email):
+        """Update donor's last name in REDIS cache"""
+        path.delete(name)
+        path.rpush(name, last_name)
+        path.rpush(name, tele)
+        path.rpush(name, email)
+        print(f'Confirm the information on file for {name}.')
+        print(f"{name}'s last name is {path.lindex(name,0)}")
+        print(f"{name}'s telephone is {path.lindex(name, 1)}")
+        print(f"{name}'s email is {path.lindex(name, 2)}")
+        return [path.lindex(name, 0),
+                path.lindex(name, 1),
+                path.lindex(name, 2)]

@@ -1,69 +1,44 @@
 import os
-import donors_sql as d
-import create_mr_tables as new_database
-import logging
+import donors_8 as d
 import utilities
 import login_database
-# from peewee import *
-mail = d.Group('mailroom.db')
-individual = d.Individual('mailroom.db')
-
-logging.basicConfig(level=logging.WARNING)
-logger = logging.getLogger(__name__)
+import Load_Tables
+log = utilities.configure_logger('default', '../logs/mailroom_8.log')
 
 
-def create_database():
+def load_mailroom():
+    client = login_database.login_mongodb_cloud()
+    db = client['mailroom']
 
-    file_name = input('\nWhat would you like to name your new database?\n'
+    file_name = input('\nYou are working with database "mailroom"'
+                      'on MongoDB.\n'
+                      'Would you like to delete existing people and start over?'
                       'e - to exit\n')
     if file_name == 'e':
         return
 
-    if os.path.exists(file_name):
-        logging.info('This database already exists.')
-        return
+    # Delete 'people' from 'mailroom'.
+    db.drop_collection('people')
 
-        # cwd = os.getcwd()
-    file_name = file_name + '.db'
-    logger.info(f'Creating new database {file_name}.')
-    new_database.database.init(file_name)
-    database = new_database.database
-    database.connect()
-    logger.info('Creating Modules in database')
-    database.create_tables([new_database.Donor, new_database.Donations])
-    database.close()
-    logger.info('Database has been created and is closed.')
+    # Populate the database with 'Load_Tables.py' document file.
+    people = Load_Tables.get_people_data()
+    people_collection = db['people']
+    people_collection.insert_many(people)
 
-
-def delete_database():
-    cur_dir = os.getcwd()
-    logger.debug(f'Current Directory is {cur_dir}')
-    file_list = os.listdir(cur_dir)
-    logger.debug(f'File list is {file_list}')
-    db_file = []
-    for file in file_list:
-        logger.debug(f'Print file in file_list {file}')
-        if file.endswith('.db'):
-            db_file.append(file)
-            logger.debug(f'Print db_file,{db_file}')
-    if db_file is not None:
-        print(f"The following databases exist in current working directory,\n")
-        for file in db_file:
-            print(f"{file}\n")
-    if len(db_file) == 0:
-        print('No database exists. Please create a database.')
-        return
-    file_name = input('\nWhat database do you want to delete? Include ".db" \n'
-                      'e - to exit\n')
-    if file_name == 'e':
-        return
-    if os.path.exists(file_name):
-        logging.info('Trying to delete the database.')
-        os.remove(file_name)
-        logger.info(f'Database is {file_name} has been deleted.')
+    # load the Redis database
+    r = login_database.login_redis_cloud()
+    Load_Tables.populate_redis(r)
+    log.info('Database has been created and is closed.')
 
 
 def more_choices():
+    client = login_database.login_mongodb_cloud()
+    db = client['mailroom']
+    people_collection = db['people']
+    mail = d.Group(people_collection)
+    individual = d.Individual(people_collection)
+    r = login_database.login_redis_cloud()
+
     while True:
         name = input('\nChoose an Option: \n'
                      'e - to exit\n'
@@ -79,10 +54,26 @@ def more_choices():
 
             if mail.search(name) is None:
                 yes_no = input('The name you entered is not in the database.'
-                               'Would you like to add this name? y or n >>')
+                               'Would you like to add this name? y or n >>\n')
                 if yes_no == 'n':
                     return
 
+                if yes_no == 'y':
+                    last_name = input(f"What is {name}'s last name?\n")
+                    email = input(f"What is {name}'s email?\n")
+                    telephone = input(f"What is {name}'s telephone #?\n")
+                    d.Individual.redis_add_new(r,
+                                               name,
+                                               last_name,
+                                               telephone,
+                                               email)
+                else:
+                    return
+            print(f"First confirm {name}'s information")
+            individual.donor_verification(r, name)
+            confirm_info = input("Does the donor info look ok? y or n >>\n")
+            if confirm_info == 'n':
+                update_redis(r, name)
             amount = input('\n''What is the donation amount? or '
                            '\'e\' to exit >')
             if amount == 'e':
@@ -95,15 +86,23 @@ def more_choices():
                 print('\nYou entered an invalid amount!!\n')
                 return ValueError
             else:
-                d.Individual.add_donation(name, float(amount))
+                individual.add_donation(name, float(amount))
                 print(individual.thank_you(name, float(amount)))
 
 
 def print_report():
+    client = login_database.login_mongodb_cloud()
+    db = client['mailroom']
+    people_collection = db['people']
+    mail = d.Group(people_collection)
     print(mail.report())
 
 
 def letters_for_all():
+    client = login_database.login_mongodb_cloud()
+    db = client['mailroom']
+    people_collection = db['people']
+    mail = d.Group(people_collection)
     path_letters = os.getcwd()
     print(f"You chose to send letters for everyone. "
           f"The letters have been completed and you "
@@ -112,6 +111,11 @@ def letters_for_all():
 
 
 def delete_donor():
+    client = login_database.login_mongodb_cloud()
+    db = client['mailroom']
+    people_collection = db['people']
+    mail = d.Group(people_collection)
+    individual = d.Individual(people_collection)
     while True:
         name = input('\nWhich donor would you like to delete? \n'
                      'e - to exit\n'
@@ -132,6 +136,22 @@ def delete_donor():
                 individual.delete_donor(name)
 
 
+def update_redis(path, name):
+    update = input('Which entry would you like to update?\n'
+                                     '1 - Last Name\n'
+                                     '2 - Telephone\n'
+                                     '3 - email\n'
+                                     '>>>')
+    if update == 1:
+        last_name = input(f"What is {name}'s last name?\n")
+        d.Individual.update_last_name(path, name, last_name)
+    if update == 2:
+        telephone = input(f"What is {name}'s telephon #?\n")
+        d.Individual.update_telephone(path, name, telephone)
+    if update == 3:
+        email = input(f"What is {name}'s telephon #?\n")
+        d.Individual.update_email(path, name, email)
+
 def wrong_choice():
     pass
 
@@ -141,15 +161,13 @@ def quit_program():
 
 
 if __name__ == '__main__':
-    log = utilities.configure_logger('default', '../logs/mailroom_dev.log')
 
     switch_dict = {'1': more_choices,
                    '2': print_report,
                    '3': letters_for_all,
                    '4': delete_donor,
-                   '5': create_database,
-                   '6': delete_database,
-                   '7': quit_program}
+                   '5': load_mailroom,
+                   '6': quit_program}
     while True:
         response = input(
             '\nChoose an Action:\n'
@@ -157,9 +175,8 @@ if __name__ == '__main__':
             '2 - Create a Report\n'
             '3 - Send letters to everyone\n'
             '4 - Delete a Donor\n'
-            '5 - Create a new database\n'
-            '6 - Delete a database\n'
-            '7 - Quit\n'
+            '5 - Reset Database\n'
+            '6 - Quit\n'
             '>>')
 
         switch_dict.get(response, wrong_choice)()
