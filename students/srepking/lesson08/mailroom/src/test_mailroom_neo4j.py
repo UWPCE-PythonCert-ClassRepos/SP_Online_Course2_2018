@@ -24,30 +24,55 @@ class TestMailbox(unittest.TestCase):
                     RETURN p.donor as donor"""
             result = session.run(cyph)
             for person in result: # .values():
-                log.info(f"{person['donor']} is in neo4j database.")
-                self.assertEqual(person['donor'], 'Zach')  # Test donor was added
+                log.info("In test_connection.")
+                log.info(f"{person} is person")
+                log.info(f"{person['donor']} is person['donor']")
+            self.assertEqual(person['donor'], 'Zach')  # Test donor was added
 
-#    def test_Individual_Add_Donation1(self):
-#        """Test Add_Donation when donor does not exist"""
-#        # pass db instance to Individulal Class Instance
-#        individual = d.Individual(self.__class__.people_collection)
-#        individual.add_donation('Luke', 5)
-#        result = self.__class__.people_collection.find_one({"donor": "Luke"})
-#        aperson = result['donor']
-#        adonation = result['donations']
-#        self.assertEqual(aperson, 'Luke')  # Test donor was added
-#        self.assertEqual(adonation[0], 5)  # Test donation was added for Luke
+    def test_Empty_Match(self):
+        """Confirm Match will return None when entry does not exist"""
+        with self.__class__.driver.session() as session:
+            log.info('In test_Empty_Match')
+            log.info('Find the person Emily')
+            cyph = """MATCH (p:Person {donor: 'Emily'})
+                    RETURN p.donor as donor"""
+            result1 = session.run(cyph)
+            log.info(f'{result1} is result1')
+            log.info(f"{result1.single()} is result1.single()")
+            self.assertEqual(result1.single(), None)  # Test donor was added
 
-#    def test_Individual_Add_Donation2(self):
-#        """Test Add_Donation when it is an existing donor."""
-#        # pass db instance to Individulal Class Instance
-#        individual = d.Individual(self.__class__.people_collection)
-#        individual.add_donation('Shane', 500)
-#        result = self.__class__.people_collection.find_one({"donor": "Shane"})
-#        aperson = result['donor']
-#        adonation = result['donations']
-#        self.assertEqual(aperson, 'Shane')  # Test donor was added
-#        self.assertEqual(adonation, [6, 5, 10, 500])  # Test donation was added for Luke
+
+    def test_Individual_Add_Donation1(self):
+        """Test Add_Donation when donor does not exist"""
+        # pass db instance to Individulal Class Instance
+        individual = d.Individual(self.__class__.driver)
+        individual.add_donation('Luke', 5)
+
+        with self.__class__.driver.session() as session:
+            result = session.run("Match (a:Person {donor:'Luke'}) "
+                                 "RETURN a.donor as donor, a.donations as donations")
+            aperson = result.single()
+            log.info("In test_Individual_Add_Donation1")
+            log.info(f'Is {aperson} is aperson')
+            log.info(f"{aperson['donor']} is aperson['donor']")
+            log.info(f"{aperson['donations']} is aperson['donations']")
+            log.info(f"{aperson.get('donations')} is aperson.get('donations') ")
+            self.assertEqual(aperson['donor'], 'Luke')  # Test donor was added
+            self.assertEqual(aperson['donations'], [5])  # Test donation was added for Luke
+
+    def test_Individual_Add_Donation2(self):
+        """Test Add_Donation when it is an existing donor."""
+        # pass db instance to Individulal Class Instance
+        individual = d.Individual(self.__class__.driver)
+        individual.add_donation('Shane', 700)
+
+        with self.__class__.driver.session() as session:
+            log.info("In test_Individual_Add_Donation2")
+            result = session.run("Match (a:Person {donor:'Shane'}) "
+                                 "RETURN a.donor as donor, a.donations as donations")
+            aperson = result.single()
+            self.assertEqual(aperson['donor'], 'Shane')  # Test donor was added
+            self.assertEqual(aperson['donations'], [6, 5, 10, 700])  # Test donation was added for Luke
 
 #    def test_Count(self):
 #        """Test that there is only one Shane in database"""

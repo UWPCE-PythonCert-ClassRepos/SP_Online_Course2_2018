@@ -92,9 +92,14 @@ def load_neo4j(driver):
     # driver = login_database.login_neo4j_cloud()
     with driver.session() as session:
         session.run("MATCH (n) DETACH DELETE n")
-
-    log.info("Step 2: Add a few people")
-
-    with driver.session() as session:
+        log.info("Step 2: Add a few people")
         cyph = "CREATE (n:Person {donor:'Zach', donations:[10]})"
+        session.run(cyph)
+        cyph = "CREATE (n:Person {donor:'Shane', donations:[6, 5, 10]})"
+        session.run(cyph)
+        cyph = "CREATE (n:Person {donor:'Pete', donations:[7, 8]})"
+        session.run(cyph)
+        cyph = "CREATE (n:Person {donor:'Fitz', donations:[1]})"
+        session.run(cyph)
+        cyph = "CREATE (n:Person {donor:'Joe', donations:[5, 4, 3, 2, 1]})"
         session.run(cyph)

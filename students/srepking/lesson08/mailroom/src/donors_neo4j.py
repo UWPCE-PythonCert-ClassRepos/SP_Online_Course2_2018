@@ -1,7 +1,9 @@
 import logging
+import utilities
 from pymongo import ReturnDocument
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+log = utilities.configure_logger('default', '../logs/donors_neo4j.log')
 
 
 class Group:
@@ -161,24 +163,50 @@ class Group:
 
 
 class Individual:
-    """Connects to MongoDB and works with individual data 'donor' and
+    """Connects to neo4j and works with individual data 'donor' and
      a list of 'donations'.
      """
-    def __init__(self, client_path):
-        self.db = client_path
+    def __init__(self, driver):
+        #self.db = client_path
+        self.driver = driver
+
 
     def add_donation(self, person, contribution):
 
+        log.info('In add_donation')
         try:
-            logger.debug('Search for donor.')
-            result = self.db.find_one({'donor': person})
-            if result is None:
-                logger.debug('Inserting a new donor')
-                self.db.insert_one({'donor': person, 'donations': [contribution]})
-            else:
-                logger.debug(f'Found {result["donor"]}')
-                logger.debug('Adding a new donation to record of donations')
-                self.db.find_one_and_update({'donor': person}, {'$push': {'donations': contribution}}, return_document= ReturnDocument.AFTER)
+            # first look to see if the donor exists
+            log.info('Search for donor.')
+            with self.driver.session() as session:
+                cyph = """MATCH (p:Person {donor: '%s'})
+                    RETURN p.donor as donor, p.donations as donations""" % (person)
+                result = session.run(cyph)
+                record = result.single()
+                # if person does not exist in the database, create a new entry
+                log.info(f'{record} is record.')
+                if record is None:
+                    log.info('Inserting a new donor')
+                    cyph = "CREATE (n:Person {donor:'%s', donations:[%s]})" \
+                        % (person, contribution)
+                    session.run(cyph)
+
+                else:
+                    # if person does exist, update the donation
+                    log.info('in else......')
+                    log.info(f'{result} is result')
+                    log.info(f'{record} is record')
+                    log.info(f'{record["donor"]} is record["donor"].')
+                    donations = record['donations']
+                    log.info(f'donations are {donations}')
+                    # append new donation to list
+                    donations.append(contribution)
+                    log.info('Just added a donation')
+                    log.info(f' Donor is {record["donor"]}, Donations are {donations}')
+
+                    cyph = """MATCH (p:Person {donor: '%s'})
+                              SET p.donations= %s
+                              """ % (person, donations )
+                    session.run(cyph)
 
         except Exception as e:
             logger.debug(f'Error creating = {person}')
@@ -191,7 +219,7 @@ class Individual:
 
         try:
             logger.debug('Trying to count number of donations.')
-            result = self.db.find_one({'donor': name})
+            result = self.driver.find_one({'donor': name})
             if result is None:
                 return None
             donations = result['donations']
@@ -208,7 +236,7 @@ class Individual:
 
         try:
             logger.debug(f'Summing all the donations by {name}.')
-            result = self.db.find_one({'donor': name})
+            result = self.driver.find_one({'donor': name})
             if result is None:
                 return None
             sum_donations = sum(result['donations'])
@@ -229,7 +257,7 @@ class Individual:
     def last_donation(self, name):
         try:
             logger.debug(f'Trying to find the last record of {name}.')
-            result = self.db.find_one({'donor': name})
+            result = self.driver.find_one({'donor': name})
             if result is None:
                 return None
             logger.debug(f'Finding the last donation made by {name}')
@@ -252,7 +280,7 @@ class Individual:
     def delete_donor(self, person):
         try:
             logger.debug(f'Trying to delete {person}.')
-            result = self.db.delete_one({'donor': person})
+            result = self.driver.delete_one({'donor': person})
             if result is None:
                 return None
 
