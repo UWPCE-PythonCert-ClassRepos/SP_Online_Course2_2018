@@ -1,4 +1,6 @@
 import unittest
+import pytest
+import warnings
 import collections
 import donors_neo4j as d
 import utilities
@@ -74,55 +76,88 @@ class TestMailbox(unittest.TestCase):
             self.assertEqual(aperson['donor'], 'Shane')  # Test donor was added
             self.assertEqual(aperson['donations'], [6, 5, 10, 700])  # Test donation was added for Luke
 
-#    def test_Count(self):
-#        """Test that there is only one Shane in database"""
-#        # pass db instance to Individulal Class Instance
-#        count = self.__class__.people_collection.count_documents({'donor': 'Shane'})
-#        self.assertEqual(count, 1)
+    def test_Count(self):
+        """See what happens when more than one person by the same name is in the database."""
+        with self.__class__.driver.session() as session:
+            # add another Zach
+            cyph = "CREATE (n:Person {donor:'Zach', donations:[100]})"
+            session.run(cyph)
+            log.info('Find the person Zach')
+            cyph = """MATCH (p:Person {donor: 'Zach'})
+                    RETURN p.donor as donor"""
+            result = session.run(cyph)
+            with pytest.warns(UserWarning):
+                warnings.warn(result.single(), UserWarning)
 
-#    def test_Number_Donations(self):
-#        """Test Individual.Number_of_Donations"""
-#        individual = d.Individual(self.__class__.people_collection)
-#        number = individual.number_donations('Shane')
-#        result = self.__class__.people_collection.find_one({"donor": "Shane"})
-#        donations = result['donations']
-#        self.assertEqual(number, len(donations))
 
-#    def test_Sum_Donations(self):
-#        """Test Individual.Sum_Donations"""
-#        individual = d.Individual(self.__class__.people_collection)
-#        result = self.__class__.people_collection.find_one({"donor": "Joe"})
-#        sum_ind = sum(result['donations'])
-#        log.info(f"The sum of Joe's donations is {sum_ind}")
-#        self.assertEqual(sum_ind, individual.sum_donations('Joe'))
+    def test_Number_Donations(self):
+        """Test Individual.Number_of_Donations"""
+        # pass db instance to Individulal Class Instance
+        individual = d.Individual(self.__class__.driver)
 
-#    def test_AVG_Donations(self):
-#        """Test Individual.avg_Donations"""
-#        individual = d.Individual(self.__class__.people_collection)
-#        result = self.__class__.people_collection.find_one({"donor": "Joe"})
-#        sum_ind = sum(result['donations'])
-#        len_ind = len(result['donations'])
-#        log.info(f"The average of Joe's donations is {sum_ind/len_ind}")
-#        self.assertEqual(sum_ind/len_ind, individual.avg_donations('Joe'))
+        with self.__class__.driver.session() as session:
+            log.info("In test_Number_Donations")
+            result = session.run("Match (a:Person {donor:'Shane'}) "
+                                 "RETURN a.donor as donor, a.donations as donations")
+            aperson = result.single()
+            from_donors = individual.number_donations('Shane')
+            donations = aperson['donations']
+            self.assertEqual(from_donors, len(donations))
 
-#    def test_Last_Donation(self):
-#        """Test Individual.last_donation"""
-#        individual = d.Individual(self.__class__.people_collection)
-#        result = self.__class__.people_collection.find_one({"donor": "Joe"})
-#        last_donation = result['donations'][-1]
-#        self.assertEqual(last_donation, individual.last_donation('Joe'))
+    def test_Sum_Donations(self):
+        """Test Individual.Sum_Donations"""
+        # pass db instance to Individulal Class Instance
+        individual = d.Individual(self.__class__.driver)
+        with self.__class__.driver.session() as session:
+            log.info("In test_Sum_Donations")
+            result = session.run("Match (a:Person {donor:'Joe'}) "
+                                 "RETURN a.donor as donor, a.donations as donations")
+            aperson = result.single()
+            log.info(f"Joe's donations are {aperson['donations']}")
+            sum_ind = sum(aperson['donations'])
+            log.info(f"The sum of Joe's donations is {sum_ind}")
+            self.assertEqual(sum_ind, individual.sum_donations('Joe'))
 
-#    def test_delete_donor(self):
-#        """Test delete_donor"""
-#        individual = d.Individual(self.__class__.people_collection)
-#        log.info(f"Show that we can find donor.")
-#        result = self.__class__.people_collection.find_one({"donor": "Pete"})
-#        self.assertEqual(result['donor'], 'Pete')
-#        # Delete the document
-#        individual.delete_donor('Pete')
-        # Show that we can no longer find entry
-#        result = self.__class__.people_collection.find_one({"donor": "Pete"})
-#        self.assertEqual(result, None)
+    def test_AVG_Donations(self):
+        """Test Individual.avg_Donations"""
+        individual = d.Individual(self.__class__.driver)
+        with self.__class__.driver.session() as session:
+            log.info("In test_Sum_Donations")
+            result = session.run("Match (a:Person {donor:'Joe'}) "
+                                 "RETURN a.donor as donor, a.donations as donations")
+            record = result.single()
+            sum_ind = sum(record['donations'])
+            len_ind = len(record['donations'])
+            log.info(f"The average of Joe's donations is {sum_ind/len_ind}")
+            self.assertEqual(sum_ind/len_ind, individual.avg_donations('Joe'))
+
+    def test_Last_Donation(self):
+        """Test Individual.last_donation"""
+        individual = d.Individual(self.__class__.driver)
+        with self.__class__.driver.session() as session:
+            log.info("In test_Sum_Donations")
+            result = session.run("Match (a:Person {donor:'Joe'}) "
+                                 "RETURN a.donor as donor, a.donations as donations")
+            record = result.single()
+            last_donation = record['donations'][-1]
+            self.assertEqual(last_donation, individual.last_donation('Joe'))
+
+    def test_delete_donor(self):
+        """Test delete_donor"""
+        individual = d.Individual(self.__class__.driver)
+        log.info(f"Show that we can find donor.")
+        with self.__class__.driver.session() as session:
+            result = session.run("Match (a:Person {donor:'Pete'}) "
+                                 "RETURN a.donor as donor, a.donations as donations")
+            record = result.single()
+            self.assertEqual(record['donor'], 'Pete')
+            # Delete the document
+            individual.delete_donor('Pete')
+            # Show that we can no longer find entry
+            result = session.run("Match (a:Person {donor:'Pete'}) "
+                                 "RETURN a.donor as donor, a.donations as donations")
+            record = result.single()
+            self.assertEqual(record, None)
 
 #    def test_Group_search1(self):
 #        """Returns None when name does not exist"""

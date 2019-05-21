@@ -196,13 +196,17 @@ class Individual:
                     log.info(f'{result} is result')
                     log.info(f'{record} is record')
                     log.info(f'{record["donor"]} is record["donor"].')
+
+                    # create a list to store the donations temporarily
                     donations = record['donations']
                     log.info(f'donations are {donations}')
+
                     # append new donation to list
                     donations.append(contribution)
                     log.info('Just added a donation')
                     log.info(f' Donor is {record["donor"]}, Donations are {donations}')
 
+                    # Set the new list of donations back into database
                     cyph = """MATCH (p:Person {donor: '%s'})
                               SET p.donations= %s
                               """ % (person, donations )
@@ -219,11 +223,15 @@ class Individual:
 
         try:
             logger.debug('Trying to count number of donations.')
-            result = self.driver.find_one({'donor': name})
-            if result is None:
-                return None
-            donations = result['donations']
-            return int(len(donations))
+            with self.driver.session() as session:
+                cyph = """MATCH (p:Person {donor: '%s'})
+                    RETURN p.donor as donor, p.donations as donations""" % (name)
+                result = session.run(cyph)
+                record = result.single()
+                if record is None:
+                    return None
+                donations = record['donations']
+                return int(len(donations))
 
         except Exception as e:
             logger.debug(f'Error counting # of donations.')
@@ -236,11 +244,15 @@ class Individual:
 
         try:
             logger.debug(f'Summing all the donations by {name}.')
-            result = self.driver.find_one({'donor': name})
-            if result is None:
-                return None
-            sum_donations = sum(result['donations'])
-            return sum_donations
+            with self.driver.session() as session:
+                cyph = """MATCH (p:Person {donor: '%s'})
+                    RETURN p.donor as donor, p.donations as donations""" % (name)
+                result = session.run(cyph)
+                record = result.single()
+                if record is None:
+                    return None
+                sum_donations = sum(record['donations'])
+                return sum_donations
 
         except Exception as e:
             logger.debug(f'Error counting # of donations.')
@@ -257,12 +269,16 @@ class Individual:
     def last_donation(self, name):
         try:
             logger.debug(f'Trying to find the last record of {name}.')
-            result = self.driver.find_one({'donor': name})
-            if result is None:
-                return None
-            logger.debug(f'Finding the last donation made by {name}')
-            donation_list = result['donations']
-            return donation_list[-1]
+            with self.driver.session() as session:
+                cyph = """MATCH (p:Person {donor: '%s'})
+                    RETURN p.donor as donor, p.donations as donations""" % (name)
+                result = session.run(cyph)
+                record = result.single()
+                if record is None:
+                    return None
+                logger.debug(f'Finding the last donation made by {name}')
+                donation_list = record['donations']
+                return donation_list[-1]
 
         except Exception as e:
             logger.debug(f'Error finding last donation.')
@@ -277,20 +293,22 @@ class Individual:
         return ('Thank you so much for the generous gift of ${0:.2f}, {1}!'
                 .format(contribution, person))
 
-    def delete_donor(self, person):
+    def delete_donor(self, name):
         try:
-            logger.debug(f'Trying to delete {person}.')
-            result = self.driver.delete_one({'donor': person})
-            if result is None:
-                return None
+            logger.debug(f'Trying to delete {name}.')
+            with self.driver.session() as session:
+                cyph = """MATCH (p:Person {donor: '%s'})
+                        DELETE p
+                        """ % name
+                session.run(cyph)
 
         except Exception as e:
-            logger.debug(f'Error deleting {person}')
+            logger.debug(f'Error deleting {name}')
             logger.debug(e)
             logger.debug('Failed to delete donor.')
         finally:
 
-            logger.debug(f'Deletion of {person} successful.')
+            logger.debug(f'Deletion of {name} successful.')
 
     @staticmethod
     def donor_verification(path, name):
