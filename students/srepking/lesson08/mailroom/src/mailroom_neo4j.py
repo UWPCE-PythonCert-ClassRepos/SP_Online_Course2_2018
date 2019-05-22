@@ -1,42 +1,35 @@
 import os
-import donors_mongoDB as d
+import donors_neo4j as d
 import utilities
 import login_database
 import Load_Tables
-log = utilities.configure_logger('default', '../logs/mailroom_8.log')
+log = utilities.configure_logger('default', '../logs/mailroom_ne04j.log')
 
 
 def load_mailroom():
-    client = login_database.login_mongodb_cloud()
-    db = client['mailroom']
+    driver = login_database.login_neo4j_cloud()
+    log.debug('Step 1: We are going to use a neo4j database"')
 
-    file_name = input('\nYou are working with database "mailroom"'
-                      'on MongoDB.\n'
+    file_name = input('\nYou are working with a database'
+                      'on Neo4j.\n'
                       'Would you like to delete existing people and start over?'
                       'e - to exit\n')
     if file_name == 'e':
         return
 
-    # Delete 'people' from 'mailroom'.
-    db.drop_collection('people')
-
-    # Populate the database with 'Load_Tables.py' document file.
-    people = Load_Tables.get_people_data()
-    people_collection = db['people']
-    people_collection.insert_many(people)
+    # Delete 'people' from ne04j database and start over with default people.
+    Load_Tables.load_neo4j(driver)
 
     # load the Redis database
     r = login_database.login_redis_cloud()
     Load_Tables.populate_redis(r)
-    log.info('Database has been created and is closed.')
+    log.debug('Database has been created and is closed.')
 
 
 def more_choices():
-    client = login_database.login_mongodb_cloud()
-    db = client['mailroom']
-    people_collection = db['people']
-    mail = d.Group(people_collection)
-    individual = d.Individual(people_collection)
+    driver = login_database.login_neo4j_cloud()
+    mail = d.Group(driver)
+    individual = d.Individual(driver)
     r = login_database.login_redis_cloud()
 
     while True:
@@ -91,18 +84,14 @@ def more_choices():
 
 
 def print_report():
-    client = login_database.login_mongodb_cloud()
-    db = client['mailroom']
-    people_collection = db['people']
-    mail = d.Group(people_collection)
+    driver = login_database.login_neo4j_cloud()
+    mail = d.Group(driver)
     print(mail.report())
 
 
 def letters_for_all():
-    client = login_database.login_mongodb_cloud()
-    db = client['mailroom']
-    people_collection = db['people']
-    mail = d.Group(people_collection)
+    driver = login_database.login_neo4j_cloud()
+    mail = d.Group(driver)
     path_letters = os.getcwd()
     print(f"You chose to send letters for everyone. "
           f"The letters have been completed and you "
@@ -111,11 +100,9 @@ def letters_for_all():
 
 
 def delete_donor():
-    client = login_database.login_mongodb_cloud()
-    db = client['mailroom']
-    people_collection = db['people']
-    mail = d.Group(people_collection)
-    individual = d.Individual(people_collection)
+    driver = login_database.login_neo4j_cloud()
+    mail = d.Group(driver)
+    individual = d.Individual(driver)
     while True:
         name = input('\nWhich donor would you like to delete? \n'
                      'e - to exit\n'
@@ -146,10 +133,10 @@ def update_redis(path, name):
         last_name = input(f"What is {name}'s last name?\n")
         d.Individual.update_last_name(path, name, last_name)
     if update == '2':
-        telephone = input(f"What is {name}'s telephon #?\n")
+        telephone = input(f"What is {name}'s telephone #?\n")
         d.Individual.update_telephone(path, name, telephone)
     if update == '3':
-        email = input(f"What is {name}'s telephon #?\n")
+        email = input(f"What is {name}'s email?\n")
         d.Individual.update_email(path, name, email)
 
 def wrong_choice():

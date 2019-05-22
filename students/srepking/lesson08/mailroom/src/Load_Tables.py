@@ -38,7 +38,7 @@ def populate_redis(r):
 
     try:
         # login_database.login_redis_cloud()
-        log.info('For Lesson 08 Assignment, add name, tele, and email.')
+        log.debug('For Lesson 08 Assignment, add name, tele, and email.')
         # first delete the key if it exists already
         r.delete('Shane')
         # then create a new entry
@@ -86,13 +86,13 @@ def load_neo4j(driver):
 
     log = utilities.configure_logger('default', '../logs/neo4j_LoadTables.log')
 
-    log.info('Step 1: First, clear the entire database, so we can start over')
-    log.info("Running clear_all")
+    log.debug('Step 1: First, clear the entire database, so we can start over')
+    log.debug("Running clear_all")
 
     # driver = login_database.login_neo4j_cloud()
     with driver.session() as session:
         session.run("MATCH (n) DETACH DELETE n")
-        log.info("Step 2: Add a few people")
+        log.debug("Step 2: Add a few people")
         cyph = "CREATE (n:Person {donor:'Zach', donations:[10]})"
         session.run(cyph)
         cyph = "CREATE (n:Person {donor:'Shane', donations:[6, 5, 10]})"

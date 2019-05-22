@@ -1,7 +1,6 @@
 import logging
 import utilities
-from pymongo import ReturnDocument
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 log = utilities.configure_logger('default', '../logs/donors_neo4j.log')
 
@@ -10,21 +9,25 @@ class Group:
     """This Class will be used to query the database and return the results
     of the required queries."""
 
-    def __init__(self, client_path):
-        self.db = client_path
+    def __init__(self, driver):
+        self.driver = driver
 
     def search(self, person):
         """Return None if donor is not in database."""
-        try:
-            logger.debug('Search for donor.')
-            result = self.db.find_one({'donor': person})
-            if result is None:
-                logger.debug('Could not find the donor.')
-                return result
-            else:
-                logger.debug(f'Found {result["donor"]}')
-                return result['donor']
 
+        try:
+            logger.debug('Trying to count number of donations.')
+            with self.driver.session() as session:
+                cyph = """MATCH (p:Person {donor: '%s'})
+                    RETURN p.donor as donor, p.donations as donations""" % person
+                result = session.run(cyph)
+                record = result.single()
+                if record is None:
+                    logger.debug('Could not find the donor.')
+                    return None
+                else:
+                    log.debug(f'Found {record["donor"]}')
+                    return record['donor']
         except Exception as e:
             logger.debug(f'Error searching for = {person}')
             logger.debug(e)
@@ -36,9 +39,13 @@ class Group:
 
         try:
             donor_list = []
-            for doc in self.db.find():
-                donor_list.append(doc['donor'])
-                print(doc['donor'])
+            with self.driver.session() as session:
+                cyph = """MATCH (p:Person)
+                    RETURN p.donor as donor, p.donations as donations"""
+                result = session.run(cyph)
+                for record in result:
+                    donor_list.append(record['donor'])
+                    print(record['donor'])
 
         except Exception as e:
             logger.debug(f'Error printing donors.')
@@ -52,14 +59,18 @@ class Group:
         """Create a new dictionary with Total, number of donations,
         and average donation amount"""
         donor_summary = {}
-        individual = Individual(self.db)
+        individual = Individual(self.driver)
 
         try:
-            for doc in self.db.find():
-                donor_summary[doc['donor']] = \
-                    [individual.sum_donations(doc['donor']),
-                     individual.number_donations(doc['donor']),
-                     individual.avg_donations(doc['donor'])]
+            with self.driver.session() as session:
+                cyph = """MATCH (p:Person)
+                    RETURN p.donor as donor, p.donations as donations"""
+                result = session.run(cyph)
+                for record in result:
+                    donor_summary[record['donor']] = \
+                        [individual.sum_donations(record['donor']),
+                         individual.number_donations(record['donor']),
+                         individual.avg_donations(record['donor'])]
 
         except Exception as e:
             logger.debug(f'Error creating database summary.')
@@ -140,21 +151,24 @@ class Group:
 
     def letters(self):
         """Send letters to everyone base on their last donation amount."""
-        individual = Individual(self.db)
-
+        individual = Individual(self.driver)
         try:
-            for doc in self.db.find():
-                logger.debug(f'{doc["donor"]}')
-                letter = f'Dear {doc["donor"]}, ' \
+            with self.driver.session() as session:
+                cyph = """MATCH (p:Person)
+                    RETURN p.donor as donor, p.donations as donations"""
+                result = session.run(cyph)
+                for record in result:
+                    logger.debug(f'{record["donor"]}')
+                    letter = f'Dear {record["donor"]}, ' \
                             f'thank you so much for your ' \
                             f'last contribution of ' \
-                            f'${individual.last_donation(doc["donor"]):.2f}! ' \
+                            f'${individual.last_donation(record["donor"]):.2f}! ' \
                             f'You have contributed a total of $' \
-                            f'{individual.sum_donations(doc["donor"]):.2f}, ' \
+                            f'{individual.sum_donations(record["donor"]):.2f}, ' \
                             f'and we appreciate your support!'
                 # Write the letter to a destination
-                with open(doc["donor"] + '.txt', 'w') as to_file:
-                    to_file.write(letter)
+                    with open(record["donor"] + '.txt', 'w') as to_file:
+                        to_file.write(letter)
         except Exception as e:
             logger.debug(f'Error writing letters to everyone.')
             logger.debug(e)
@@ -173,38 +187,38 @@ class Individual:
 
     def add_donation(self, person, contribution):
 
-        log.info('In add_donation')
+        log.debug('In add_donation')
         try:
             # first look to see if the donor exists
-            log.info('Search for donor.')
+            log.debug('Search for donor.')
             with self.driver.session() as session:
                 cyph = """MATCH (p:Person {donor: '%s'})
                     RETURN p.donor as donor, p.donations as donations""" % (person)
                 result = session.run(cyph)
                 record = result.single()
                 # if person does not exist in the database, create a new entry
-                log.info(f'{record} is record.')
+                log.debug(f'{record} is record.')
                 if record is None:
-                    log.info('Inserting a new donor')
+                    log.debug('Inserting a new donor')
                     cyph = "CREATE (n:Person {donor:'%s', donations:[%s]})" \
                         % (person, contribution)
                     session.run(cyph)
 
                 else:
                     # if person does exist, update the donation
-                    log.info('in else......')
-                    log.info(f'{result} is result')
-                    log.info(f'{record} is record')
-                    log.info(f'{record["donor"]} is record["donor"].')
+                    log.debug('in else......')
+                    log.debug(f'{result} is result')
+                    log.debug(f'{record} is record')
+                    log.debug(f'{record["donor"]} is record["donor"].')
 
                     # create a list to store the donations temporarily
                     donations = record['donations']
-                    log.info(f'donations are {donations}')
+                    log.debug(f'donations are {donations}')
 
                     # append new donation to list
                     donations.append(contribution)
-                    log.info('Just added a donation')
-                    log.info(f' Donor is {record["donor"]}, Donations are {donations}')
+                    log.debug('Just added a donation')
+                    log.debug(f' Donor is {record["donor"]}, Donations are {donations}')
 
                     # Set the new list of donations back into database
                     cyph = """MATCH (p:Person {donor: '%s'})
