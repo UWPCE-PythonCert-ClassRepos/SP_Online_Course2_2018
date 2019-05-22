@@ -19,7 +19,9 @@ class Group:
             logger.debug('Trying to count number of donations.')
             with self.driver.session() as session:
                 cyph = """MATCH (p:Person {donor: '%s'})
-                    RETURN p.donor as donor, p.donations as donations""" % person
+                    RETURN p.donor as donor,
+                    p.donations as donations
+                    """ % person
                 result = session.run(cyph)
                 record = result.single()
                 if record is None:
@@ -41,7 +43,8 @@ class Group:
             donor_list = []
             with self.driver.session() as session:
                 cyph = """MATCH (p:Person)
-                    RETURN p.donor as donor, p.donations as donations"""
+                    RETURN p.donor as donor,
+                    p.donations as donations"""
                 result = session.run(cyph)
                 for record in result:
                     donor_list.append(record['donor'])
@@ -64,7 +67,8 @@ class Group:
         try:
             with self.driver.session() as session:
                 cyph = """MATCH (p:Person)
-                    RETURN p.donor as donor, p.donations as donations"""
+                    RETURN p.donor as donor,
+                    p.donations as donations"""
                 result = session.run(cyph)
                 for record in result:
                     donor_summary[record['donor']] = \
@@ -124,7 +128,8 @@ class Group:
     @staticmethod
     def sort_list(donor_summary):
         list_sorted = sorted(donor_summary,
-                             key=donor_summary.__getitem__, reverse=True)
+                             key=donor_summary.__getitem__,
+                             reverse=True)
         return list_sorted
 
     def report(self):
@@ -160,12 +165,12 @@ class Group:
                 for record in result:
                     logger.debug(f'{record["donor"]}')
                     letter = f'Dear {record["donor"]}, ' \
-                            f'thank you so much for your ' \
-                            f'last contribution of ' \
-                            f'${individual.last_donation(record["donor"]):.2f}! ' \
-                            f'You have contributed a total of $' \
-                            f'{individual.sum_donations(record["donor"]):.2f}, ' \
-                            f'and we appreciate your support!'
+                             f'thank you so much for your ' \
+                             f'last contribution of ' \
+                             f'${individual.last_donation(record["donor"]):.2f}! ' \
+                             f'You have contributed a total of $' \
+                             f'{individual.sum_donations(record["donor"]):.2f}, ' \
+                             f'and we appreciate your support!'
                 # Write the letter to a destination
                     with open(record["donor"] + '.txt', 'w') as to_file:
                         to_file.write(letter)
@@ -181,26 +186,27 @@ class Individual:
      a list of 'donations'.
      """
     def __init__(self, driver):
-        #self.db = client_path
+        # self.db = client_path
         self.driver = driver
 
-
     def add_donation(self, person, contribution):
-
         log.debug('In add_donation')
         try:
             # first look to see if the donor exists
             log.debug('Search for donor.')
             with self.driver.session() as session:
                 cyph = """MATCH (p:Person {donor: '%s'})
-                    RETURN p.donor as donor, p.donations as donations""" % (person)
+                    RETURN p.donor as donor,
+                    p.donations as donations
+                    """ % person
                 result = session.run(cyph)
                 record = result.single()
                 # if person does not exist in the database, create a new entry
                 log.debug(f'{record} is record.')
                 if record is None:
                     log.debug('Inserting a new donor')
-                    cyph = "CREATE (n:Person {donor:'%s', donations:[%s]})" \
+                    cyph = "CREATE (n:Person {donor:'%s'," \
+                           "donations:[%s]})" \
                         % (person, contribution)
                     session.run(cyph)
 
@@ -218,12 +224,13 @@ class Individual:
                     # append new donation to list
                     donations.append(contribution)
                     log.debug('Just added a donation')
-                    log.debug(f' Donor is {record["donor"]}, Donations are {donations}')
+                    log.debug(f' Donor is {record["donor"]},'
+                              f'Donations are {donations}')
 
                     # Set the new list of donations back into database
                     cyph = """MATCH (p:Person {donor: '%s'})
                               SET p.donations= %s
-                              """ % (person, donations )
+                              """ % (person, donations)
                     session.run(cyph)
 
         except Exception as e:
@@ -239,7 +246,9 @@ class Individual:
             logger.debug('Trying to count number of donations.')
             with self.driver.session() as session:
                 cyph = """MATCH (p:Person {donor: '%s'})
-                    RETURN p.donor as donor, p.donations as donations""" % (name)
+                    RETURN p.donor as donor,
+                    p.donations as donations
+                    """ % name
                 result = session.run(cyph)
                 record = result.single()
                 if record is None:
@@ -253,14 +262,14 @@ class Individual:
         finally:
             logger.debug(f'Returning the # of donations made by {name}')
 
-
     def sum_donations(self, name):
 
         try:
             logger.debug(f'Summing all the donations by {name}.')
             with self.driver.session() as session:
                 cyph = """MATCH (p:Person {donor: '%s'})
-                    RETURN p.donor as donor, p.donations as donations""" % (name)
+                    RETURN p.donor as donor,
+                    p.donations as donations""" % name
                 result = session.run(cyph)
                 record = result.single()
                 if record is None:
@@ -274,18 +283,16 @@ class Individual:
         finally:
             logger.debug(f'Returning the # of donations made by {name}')
 
-
-
     def avg_donations(self, name):
         return self.sum_donations(name)/self.number_donations(name)
-
 
     def last_donation(self, name):
         try:
             logger.debug(f'Trying to find the last record of {name}.')
             with self.driver.session() as session:
                 cyph = """MATCH (p:Person {donor: '%s'})
-                    RETURN p.donor as donor, p.donations as donations""" % (name)
+                    RETURN p.donor as donor,
+                    p.donations as donations""" % name
                 result = session.run(cyph)
                 record = result.single()
                 if record is None:
@@ -299,7 +306,6 @@ class Individual:
             logger.debug(e)
         finally:
             logger.debug(f'Returning the last donation made by {name}.')
-
 
     @staticmethod
     def thank_you(person, contribution):

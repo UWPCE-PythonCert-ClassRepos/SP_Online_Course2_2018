@@ -12,7 +12,8 @@ def load_mailroom():
 
     file_name = input('\nYou are working with database "mailroom"'
                       'on MongoDB.\n'
-                      'Would you like to delete existing people and start over?'
+                      'Would you like to delete existing people '
+                      'and start over?'
                       'e - to exit\n')
     if file_name == 'e':
         return
@@ -138,19 +139,19 @@ def delete_donor():
 
 def update_redis(path, name):
     update = input('Which entry would you like to update?\n'
-                                     '1 - Last Name\n'
-                                     '2 - Telephone\n'
-                                     '3 - email\n'
-                                     '>>>')
+                   '1 - Last Name\n'
+                   '2 - Telephone\n'
+                   '3 - email\n''>>>')
     if update == '1':
         last_name = input(f"What is {name}'s last name?\n")
         d.Individual.update_last_name(path, name, last_name)
     if update == '2':
-        telephone = input(f"What is {name}'s telephon #?\n")
+        telephone = input(f"What is {name}'s telephone #?\n")
         d.Individual.update_telephone(path, name, telephone)
     if update == '3':
-        email = input(f"What is {name}'s telephon #?\n")
+        email = input(f"What is {name}'s telephone #?\n")
         d.Individual.update_email(path, name, email)
+
 
 def wrong_choice():
     pass

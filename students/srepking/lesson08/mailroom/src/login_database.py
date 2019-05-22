@@ -11,13 +11,8 @@ import utilities
 
 log = utilities.configure_logger('default', '../logs/login_database.log')
 config_file = Path(__file__).parent.parent / '.config/config.ini'
-#config_file = 'config.ini'
-#log.info('Print config_file to make sure it is found.')
-#log.info(f'{config_file}')
 config = configparser.ConfigParser()
 config.read(config_file)
-#log.info(f'Print config.read.{config.read(config_file)}')
-#log.info(f'Print user name in mongodb config file.{config["mongodb_cloud"]["user"]}')
 
 
 def login_mongodb_cloud():
@@ -26,7 +21,8 @@ def login_mongodb_cloud():
     """
 
     # log.info('Here is where we use the connect to mongodb.')
-    # log.info('Note use of f string to embed the user & password (from the tuple).')
+    # log.info('Note use of f string to embed the user &
+    # password (from the tuple).')
     try:
         config.read(config_file)
         user = config["mongodb_cloud"]["user"]
@@ -37,18 +33,19 @@ def login_mongodb_cloud():
         print(f'error: {e}')
 
     try:
-        client = pymongo.MongoClient(f'mongodb://{user}:{pw}@'
-                                 f'cluster0-shard-00-00-yorqy.mongodb.'
-                                 f'net:27017,cluster0-shard-00-01-yorqy.'
-                                 f'mongodb.net:27017,cluster0-shard-00-02-'
-                                 f'yorqy.mongodb.net:27017/test?ssl=true&'
-                                 f'replicaSet=Cluster0-shard-0&authSource='
-                                 f'admin&retryWrites=true')
+        client = pymongo.MongoClient(
+            f'mongodb://{user}:{pw}@'
+            f'cluster0-shard-00-00-yorqy.mongodb.'
+            f'net:27017,cluster0-shard-00-01-yorqy.'
+            f'mongodb.net:27017,cluster0-shard-00-02-'
+            f'yorqy.mongodb.net:27017/test?ssl=true&'
+            f'replicaSet=Cluster0-shard-0&authSource='
+            f'admin&retryWrites=true')
 
         return client
 
     except Exception as e:
-        log.info('Error connecting to MongoClient')
+        print(f'error: {e}')
 
 
 def login_redis_cloud():
@@ -61,14 +58,16 @@ def login_redis_cloud():
         port = config["redis_cloud"]["port"]
         pw = config["redis_cloud"]["pw"]
 
-
     except Exception as e:
         print(f'error: {e}')
 
     # log.info('Here is where we use the connect to redis.')
 
     try:
-        r = redis.StrictRedis(host=host, port=port, password=pw, decode_responses=True)
+        r = redis.StrictRedis(host=host,
+                              port=port,
+                              password=pw,
+                              decode_responses=True)
 
     except Exception as e:
         print(f'error: {e}')
@@ -89,8 +88,10 @@ def login_neo4j_cloud():
 
     graphenedb_user = config["neo4j_cloud"]["user"]
     graphenedb_pass = config["neo4j_cloud"]["pw"]
-    graphenedb_url = 'bolt://hobby-fpbonjmgjfpbgbkebmjlndcl.dbs.graphenedb.com:24787'
+    graphenedb_url = 'bolt://hobby-fpbonjmgjfpbgbkebmjlndcl.' \
+                     'dbs.graphenedb.com:24787'
     driver = GraphDatabase.driver(graphenedb_url,
-                                  auth=basic_auth(graphenedb_user, graphenedb_pass))
+                                  auth=basic_auth(graphenedb_user,
+                                                  graphenedb_pass))
 
     return driver

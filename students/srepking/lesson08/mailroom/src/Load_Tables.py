@@ -1,5 +1,5 @@
-import login_database as login_database
 import utilities as utilities
+
 
 def get_people_data():
     """
@@ -13,7 +13,7 @@ def get_people_data():
         },
         {
             'donor': 'Pete',
-            'donations': [7,8],
+            'donations': [7, 8],
         },
         {
             'donor': 'Zach',
@@ -73,6 +73,7 @@ def populate_redis(r):
     except Exception as e:
         print(f'Redis error: {e}')
 
+
 def load_neo4j(driver):
     """Load our mailroom rdbms into a graph database. Each row in an entity
     table is a node. Columns on those tables become a node property.
@@ -82,7 +83,6 @@ def load_neo4j(driver):
     node property along with the name of donor. If we were storing email,
     address, and telephone, it would also make sense to store these as node
     properties since they are unique to the donor.."""
-
 
     log = utilities.configure_logger('default', '../logs/neo4j_LoadTables.log')
 

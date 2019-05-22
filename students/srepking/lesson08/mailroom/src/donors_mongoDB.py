@@ -144,12 +144,12 @@ class Group:
             for doc in self.db.find():
                 logger.debug(f'{doc["donor"]}')
                 letter = f'Dear {doc["donor"]}, ' \
-                            f'thank you so much for your ' \
-                            f'last contribution of ' \
-                            f'${individual.last_donation(doc["donor"]):.2f}! ' \
-                            f'You have contributed a total of $' \
-                            f'{individual.sum_donations(doc["donor"]):.2f}, ' \
-                            f'and we appreciate your support!'
+                         f'thank you so much for your ' \
+                         f'last contribution of ' \
+                         f'${individual.last_donation(doc["donor"]):.2f}! ' \
+                         f'You have contributed a total of $' \
+                         f'{individual.sum_donations(doc["donor"]):.2f}, ' \
+                         f'and we appreciate your support!'
                 # Write the letter to a destination
                 with open(doc["donor"] + '.txt', 'w') as to_file:
                     to_file.write(letter)
@@ -174,11 +174,16 @@ class Individual:
             result = self.db.find_one({'donor': person})
             if result is None:
                 logger.debug('Inserting a new donor')
-                self.db.insert_one({'donor': person, 'donations': [contribution]})
+                self.db.insert_one(
+                    {'donor': person,
+                     'donations': [contribution]})
             else:
                 logger.debug(f'Found {result["donor"]}')
                 logger.debug('Adding a new donation to record of donations')
-                self.db.find_one_and_update({'donor': person}, {'$push': {'donations': contribution}}, return_document= ReturnDocument.AFTER)
+                self.db.find_one_and_update(
+                    {'donor': person},
+                    {'$push': {'donations': contribution}},
+                    return_document=ReturnDocument.AFTER)
 
         except Exception as e:
             logger.debug(f'Error creating = {person}')
@@ -203,7 +208,6 @@ class Individual:
         finally:
             logger.debug(f'Returning the # of donations made by {name}')
 
-
     def sum_donations(self, name):
 
         try:
@@ -220,11 +224,8 @@ class Individual:
         finally:
             logger.debug(f'Returning the # of donations made by {name}')
 
-
-
     def avg_donations(self, name):
         return self.sum_donations(name)/self.number_donations(name)
-
 
     def last_donation(self, name):
         try:
@@ -241,7 +242,6 @@ class Individual:
             logger.debug(e)
         finally:
             logger.debug(f'Returning the last donation made by {name}.')
-
 
     @staticmethod
     def thank_you(person, contribution):
