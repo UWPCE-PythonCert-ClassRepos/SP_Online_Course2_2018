@@ -12,7 +12,7 @@ log = utilities.configure_logger('default', '../logs/mongodb_script.log')
 def run_example(furniture_items):
     """
     Modified for Lesson 8 part 1. In the data, we changed the
-    decription from product to product_type and color. Step 5 and 6
+    description from product to product_type and color. Step 5 and 6
     are modified to search for 'product_type'. Added a query to
     search for just red items and just couches.
     """
