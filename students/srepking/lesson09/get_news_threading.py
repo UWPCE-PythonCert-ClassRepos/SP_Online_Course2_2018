@@ -17,8 +17,8 @@ from multiprocessing.pool import ThreadPool
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-#NEWS_API_KEY = "d10950f416a940afa5f7f7ef103207d9"  # Shane's key
-NEWS_API_KEY = "84d0483394c44f288965d7b366e54a74"
+NEWS_API_KEY = "d10950f416a940afa5f7f7ef103207d9"  # Shane's key
+#NEWS_API_KEY = "84d0483394c44f288965d7b366e54a74"
 
 WORD = "war"
 base_url = 'https://newsapi.org/v1/'
@@ -78,7 +78,6 @@ def get_articles(source):
                    for art in data['articles']])
 
 
-
 def count_word(word, titles):
     word = word.lower()
     count = 0
@@ -90,14 +89,9 @@ def count_word(word, titles):
 
 if __name__ == '__main__':
     start = time.time()
-    num_threads = 10
+    num_threads = 1
     API_sources = get_sources()
     titles = []
-    # We do not want a request for each source, so we find a way to lump a
-    # a bunch or requests into a queue. We will create the number in the queue
-    # based on the number of threads we want to create.
-    #list_length = int(len(API_sources)/num_threads)
-    # Create a Pool to run all the threads in the queue
     q = queue.Queue() #this queue will hold a set of sources
 
 
@@ -105,7 +99,8 @@ if __name__ == '__main__':
     for source in API_sources:
         q.put(source)
 
-    pool = ThreadPool(num_threads) # start threads
+    # use Threadpool to create and manage threads
+    pool = ThreadPool(num_threads)
 
     while q.empty() is False:
         try:
@@ -124,9 +119,5 @@ if __name__ == '__main__':
     word_count = count_word(WORD, titles)
 
     print(f'found {WORD}, {word_count} times in {art_count} articles')
-    print(f'Process took {(time.time() - start):.0f} sec.')
+    print(f'Process took {(time.time() - start):.2f} sec.')
 
-
-#    get_articles('abc-news-au')
-#    logger.debug('Print titles after get_articles')
-#    logger.debug(titles)
