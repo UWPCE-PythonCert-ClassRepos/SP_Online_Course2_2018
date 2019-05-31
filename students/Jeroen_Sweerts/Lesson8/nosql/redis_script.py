@@ -56,3 +56,42 @@ def run_example():
 
     except Exception as e:
         print(f'Redis error: {e}')
+        
+        
+
+def redis_assignment_create():
+    log = utilities.configure_logger('default', 'logs/redis_script.log')
+
+    try:
+        log.info('Step 1: connect to Redis')
+        r = login_database.login_redis_cloud()
+        phoneidx = 0
+        zipidx = 1
+
+        r.rpush('Jeroen', 15555222)
+        r.rpush('Jeroen', 2800)
+
+        r.rpush('Heinz', 2001589)
+        r.rpush('Heinz', 1000)
+
+        r.rpush('Knudde', 3658714)
+        r.rpush('Knudde', 6900)
+
+        r.rpush('Gaston', 22222221111)
+        r.rpush('Gaston', 98139)
+
+        r.rpush('Neintje', 121212129)
+        r.rpush('Neintje', 7000)
+
+        r.rpush('Bumbalu', 31346546)
+        r.rpush('Bumbalu', 9999)
+        phone = r.lindex('Jeroen', phoneidx)
+        log.info(f'Jeroen Phone Number = {phone}')
+        zipcode = r.lindex('Jeroen', zipidx)
+        log.info(f'Jeroen Zip Code = {zipcode}')
+    except Exception as e:
+        print(f'Redis error: {e}')
+
+
+
+
