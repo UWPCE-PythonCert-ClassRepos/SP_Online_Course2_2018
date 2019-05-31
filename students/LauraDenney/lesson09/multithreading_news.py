@@ -33,7 +33,7 @@ def get_articles(source):
         }
     print('requesting:', source)
     resp = requests.get(url, params=params)
-    if resp.status != 200:
+    if resp.status_code != 200:
         print('something went wrong with {}'.format(source))
         logger.info(resp, resp.text)
         return []
@@ -43,11 +43,21 @@ def get_articles(source):
     return titles
     # titles.put([str(art['title']) + str(art['description']) for art in data['articles']])
 
+def worker(sources, start, end):
+    for source in sources[start:end]:
+        try:
+            titles.put(get_articles(source))
+        except Exception as e:
+            logger.info(e)
+
 def thread_the_articles(thread_count):
-    for source in sources:
-        thread = threading.Thread(target=get_articles, args=(source,))
+    split_size = len(sources) // thread_count
+    for i in range(thread_count):
+        start = i * split_size
+        end = None if i + 1 == thread_count else (i + 1) * split_size
+        thread = threading.Thread(target=worker, args=(sources, start, end))
         thread.start()
-        titles.put(thread)
+    return 'done threading?'
 
 def count_word(word, titles):
     word = word.lower()
@@ -64,6 +74,8 @@ if __name__ == '__main__':
     sources = get_sources()
     titles = Queue()
     thread_the_articles(thread_count)
+    while len(titles) < len(sources):
+        time.sleep(1)
     titles_list = list(titles.queue)
 
     logger.info(titles)
