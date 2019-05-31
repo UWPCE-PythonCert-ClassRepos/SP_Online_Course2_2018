@@ -1,0 +1,11 @@
+2019-05-31 00:16:00 - INFO - Here is where we use the connect to mongodb.
+2019-05-31 00:16:00 - INFO - Note use of f string to embed the user & password (from the tuple).
+2019-05-31 00:17:27 - INFO - Here is where we use the connect to mongodb.
+2019-05-31 00:17:27 - INFO - Note use of f string to embed the user & password (from the tuple).
+2019-05-31 00:32:22 - INFO - Here is where we use the connect to mongodb.
+2019-05-31 00:32:22 - INFO - Note use of f string to embed the user & password (from the tuple).
+2019-05-31 00:34:32 - INFO - Here is where we use the connect to mongodb.
+2019-05-31 00:34:32 - INFO - Note use of f string to embed the user & password (from the tuple).
+2019-05-31 00:36:54 - INFO - Here is where we use the connect to mongodb.
+2019-05-31 00:36:54 - INFO - Note use of f string to embed the user & password (from the tuple).
+2019-05-31 00:39:47 - INFO - Here is where we use the connect to mongodb.
