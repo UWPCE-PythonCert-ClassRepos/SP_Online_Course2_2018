@@ -111,3 +111,27 @@ def run_example(furniture_items):
     run_json()
 
     return
+
+def Asignment_csv():
+    """
+    write and read a csv
+    """
+    log.info("\n\n====")
+    sportscardata = [
+        ('Nissan', 'GTR', 90000),
+        ('Porsche', 'GT2RS', 300000),
+        ('BMW', 'M4', 80000),
+        ('McLaren', 'Senna', 320000),
+        ('Mercedes', 'A45 AMG', 60000),
+        ('Audi', 'RS4', 82000)
+    ]
+    log.info("Write csv file")
+    with open('../data/racecars.csv', 'w') as cars:
+        carswriter = csv.writer(cars)
+        carswriter.writerow(sportscardata)
+
+    log.info("Read csv file back")
+    with open('../data/racecars.csv', 'r') as cars:
+        cars_reader = csv.reader(cars, delimiter=',', quotechar='"')
+        for row in cars_reader:
+            pprint.pprint(row)
