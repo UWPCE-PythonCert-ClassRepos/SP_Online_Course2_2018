@@ -20,7 +20,7 @@ def get_sources():
     # logger.info(url)
     resp = requests.get(url, params=params)
     data = resp.json()
-    logger.info(data)
+    # logger.info(data)
     print('Got the sources.')
     sources = [src['id'].strip() for src in data['sources']]
     return sources
@@ -31,33 +31,34 @@ def get_articles(source):
     params = {'source': source, 'apiKey': NEWS_API_KEY,
         'sortBy': 'top', 'language':'en',
         }
-    print('requesting:', source)
+    print('\nrequesting: {}'.format(source))
     resp = requests.get(url, params=params)
     if resp.status_code != 200:
         print('something went wrong with {}'.format(source))
         logger.info(resp, resp.text)
         return []
     data = resp.json()
-    print('got the articles from {}'.format(source))
+    print('\ngot the articles from {}'.format(source))
     titles = [str(art['title']) + str(art['description']) for art in data['articles']]
     return titles
-    # titles.put([str(art['title']) + str(art['description']) for art in data['articles']])
 
-def worker(sources, start, end):
-    for source in sources[start:end]:
-        try:
-            titles.put(get_articles(source))
-        except Exception as e:
-            logger.info(e)
+def worker(source):
+    try:
+        titles.put(get_articles(source))
+    except Exception as e:
+        logger.info(e)
 
-def thread_the_articles(thread_count):
-    split_size = len(sources) // thread_count
-    for i in range(thread_count):
-        start = i * split_size
-        end = None if i + 1 == thread_count else (i + 1) * split_size
-        thread = threading.Thread(target=worker, args=(sources, start, end))
+def thread_the_articles():
+
+    threads = []
+    for source in sources:
+        thread = threading.Thread(target=worker, args=(source,))
         thread.start()
-    return 'done threading?'
+        threads.append(thread)
+
+    for thread in threads:
+        thread.join()
+
 
 def count_word(word, titles):
     word = word.lower()
@@ -72,14 +73,14 @@ if __name__ == '__main__':
     start = time.time()
 
     sources = get_sources()
+    # sources = sources[:5]
     titles = Queue()
-    thread_the_articles(thread_count)
-    while len(titles) < len(sources):
-        time.sleep(1)
+    thread_the_articles()
+
     titles_list = list(titles.queue)
 
-    logger.info(titles)
-    logger.info(titles_list)
+    # logger.info(titles)
+    # logger.info(titles_list)
 
     art_count = 0
     word_count = 0
@@ -87,6 +88,5 @@ if __name__ == '__main__':
         art_count += len(titles)
         word_count += count_word(WORD, titles)
 
-    print('thread count = {}'.format(thread_count))
-    print(WORD, 'found {} times in {} articles'.format(word_count, art_count))
+    print(WORD + ' found {} times in {} articles'.format(word_count, art_count))
     print('process took {:.0f} seconds'.format(time.time() - start))
