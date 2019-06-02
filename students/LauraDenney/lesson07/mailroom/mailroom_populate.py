@@ -126,7 +126,7 @@ class Database_Handler():
             logger.info('closing database')
             return True
 
-    def update_donation(self, donor, donation):
+    def update_donation(self, donor, old_donation, new_donation):
         '''changes a donation amount in Donation'''
         try:
             database.connect()
@@ -135,8 +135,13 @@ class Database_Handler():
 
             adonation = Donation.get(
                             (Donation.donor_donated == donor) &
-                            (Donation.donation == donation))
-            adonation.donation = donation
+                            (Donation.donation == old_donation))
+            logger.info('original donation: ', adonation.donation)
+            logger.info(adonation.donation)
+            # for each_donation in adonation:
+            #     each_donation.donation = new_donation
+            #     each_donation.save()
+            adonation.donation = new_donation
             adonation.save()
         except Exception as e:
             logger.info(e)
