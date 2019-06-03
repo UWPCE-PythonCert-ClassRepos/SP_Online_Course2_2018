@@ -48,7 +48,7 @@ Please choose the number of your choice >> '''
 
 update_prompt = '''
 You have chosen to Update a Donation or Remove a Donor.
-1) Update Donation amount
+1) Update A Current Donor's Donation amounts
 2) Remove a Donor and all their Donations
 3) Quit this submenu
 Please choose the number of your choice >>'''
@@ -164,20 +164,20 @@ would like to update >> ").lower()
         else:
             print("\n{} is indeed a current donor.".format(name.title()))
             print("\nPlease enter the donation amount we will be adjusting below.")
-            donation = validate_update_donation()
-            if not dh.is_current_donation(name.lower(), donation):
+            old_donation = validate_update_donation()
+            if not dh.is_current_donation(name.lower(), old_donation):
                 print("${} is not an existing donation for {}, unable to make adjustment".format(
-                        donation, name.title()))
+                        old_donation, name.title()))
                 return
             else:
                 print("\nPlease enter the new donation amount below.")
                 new_donation = validate_update_donation()
-                dh.update_donation(name, new_donation)
+                dh.update_donation(name, old_donation, new_donation)
     except Exception as e:
         logger.info(e)
     else:
-        print("\n{}'s donation for ${} succesfully updated to ${}.".format(
-                name.title(), donation, new_donation))
+        print("\n All of {}'s donations in the amount of ${} succesfully updated to ${}.".format(
+                name.title(), old_donation, new_donation))
 
 def  validate_update_donation():
     while True:
