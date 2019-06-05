@@ -1,0 +1,17 @@
+Lesson 10 Explorations
+
+Use PyPy as the runtime interpreter for code developed by students during the curriculum.
+1. See if pypy improves the performance of any code written this class.Set up timers to meaures performance between pypy and python3.
+
+ 	a. pypy vs python for generators from Lesson 2.
+	b. pypy vs python for Factorial (recursion) in Lesson 03.
+
+
+
+
+
+2. Using the profiler, see how a recursive algorithm performs compared to a non-recursive algorithm. Use factorial equation.
+
+3. Compare the performance of the mailroom versions, ie MONGODB, REDIS, Neo4J, SQL, and normal class instances.
+
+4. Use a profiler to compare the Asynch vs threaded performances in Lesson 09.
