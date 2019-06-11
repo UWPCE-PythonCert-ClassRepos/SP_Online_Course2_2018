@@ -1,0 +1,223 @@
+Lesson 10 Explorations
+<<<<Part 1>>>>>
+For the first part, I am comparing the performance between some generators that we created in Lesson01. In the
+first part, we are comparing how they perform in Python3 vs PYPY.
+
+Run 'pypy_vs_python.py'.
+
+When run in python 3, the results are:
+
+shane@LAPTOP-LPMNJEP6 MINGW64 ~/UWPython/Python220/SP_Online_Course2_2018/students/srepking/lesson10 (master)
+$ python pypy_vs_python.py
+Doubler took: 0.31653829
+         2002004 function calls in 0.310 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  1001000    0.114    0.000    0.114    0.000 pypy_vs_python.py:24(doubler)
+     1000    0.095    0.000    0.310    0.000 pypy_vs_python.py:99(<listcomp>)
+  1000000    0.101    0.000    0.215    0.000 {built-in method builtins.next}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
+
+
+Fibonacci took: 0.288736637
+         2002004 function calls in 0.282 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  1001000    0.091    0.000    0.091    0.000 pypy_vs_python.py:32(fib)
+     1000    0.091    0.000    0.282    0.000 pypy_vs_python.py:114(<listcomp>)
+  1000000    0.100    0.000    0.191    0.000 {built-in method builtins.next}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
+
+
+Prime took: 190.763954031
+         17843004 function calls (9923004 primitive calls) in 190.751 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  7921000    0.607    0.000    0.607    0.000 pypy_vs_python.py:8(intsum)
+  1001000  188.998    0.000  190.460    0.000 pypy_vs_python.py:44(prime)
+     1000    0.134    0.000  190.750    0.191 pypy_vs_python.py:130(<listcomp>)
+8920000/1000000    1.012    0.000  190.616    0.000 {built-in method builtins.next}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
+
+
+Prime Search limited by Square Root took: 9.585135782999998
+         17843004 function calls (9923004 primitive calls) in 9.578 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  7921000    0.615    0.000    0.615    0.000 pypy_vs_python.py:8(intsum)
+  1001000    7.857    0.000    9.339    0.000 pypy_vs_python.py:64(prime_new)
+     1000    0.112    0.000    9.578    0.010 pypy_vs_python.py:146(<listcomp>)
+8920000/1000000    0.995    0.000    9.466    0.000 {built-in method builtins.next}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
+
+
+
+Next, we activate pypy by activating the virtual environment that has been configured
+to run pypy.
+
+$ source pypy_env/Scripts/activate
+
+When run in pypy, the results are:
+
+shane@LAPTOP-LPMNJEP6 MINGW64 ~/UWPython/Python220/SP_Online_Course2_2018/students/srepking/lesson10 (master)
+$ python pypy_vs_python.py
+Doubler took: 0.14927651857076177
+         2001153 function calls in 0.147 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     1000    0.044    0.000    0.147    0.000 pypy_vs_python.py:99(<listcomp>)
+  1000000    0.085    0.000    0.085    0.000 pypy_vs_python.py:24(doubler)
+       73    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:173(cb)
+        2    0.000    0.000    0.000    0.000 C:\Users\shane\UWPython\Python220\SP_Online_Course2_2018\students\srepking\lesson10\pypy_env\lib-python\3\encodings\cp437.py:18(encode)
+        2    0.000    0.000    0.000    0.000 {built-in function time.perf_counter}
+  1000000    0.018    0.000    0.104    0.000 {built-in function next}
+       73    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+        2    0.000    0.000    0.000    0.000 {built-in function _codecs.charmap_encode}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+Fibonacci took: 0.13458584620699154
+         2001007 function calls in 0.134 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     1000    0.042    0.000    0.134    0.000 pypy_vs_python.py:114(<listcomp>)
+  1000000    0.070    0.000    0.070    0.000 pypy_vs_python.py:32(fib)
+        2    0.000    0.000    0.000    0.000 C:\Users\shane\UWPython\Python220\SP_Online_Course2_2018\students\srepking\lesson10\pypy_env\lib-python\3\encodings\cp437.py:18(encode)
+        2    0.000    0.000    0.000    0.000 {built-in function time.perf_counter}
+  1000000    0.022    0.000    0.091    0.000 {built-in function next}
+        2    0.000    0.000    0.000    0.000 {built-in function _codecs.charmap_encode}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+Prime took: 15.77413746661211
+         17841007 function calls (9921007 primitive calls) in 15.770 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     1000    0.048    0.000   15.770    0.016 pypy_vs_python.py:130(<listcomp>)
+  1000000   15.506    0.000   15.700    0.000 pypy_vs_python.py:44(prime)
+  7920000    0.061    0.000    0.061    0.000 pypy_vs_python.py:8(intsum)
+        2    0.000    0.000    0.000    0.000 C:\Users\shane\UWPython\Python220\SP_Online_Course2_2018\students\srepking\lesson10\pypy_env\lib-python\3\encodings\cp437.py:18(encode)
+        2    0.000    0.000    0.000    0.000 {built-in function time.perf_counter}
+8920000/1000000    0.155    0.000   15.722    0.000 {built-in function next}
+        2    0.000    0.000    0.000    0.000 {built-in function _codecs.charmap_encode}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+Prime Search limited by Square Root took: 1.5557523816182055
+         17841007 function calls (9921007 primitive calls) in 1.554 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     1000    0.042    0.000    1.554    0.002 pypy_vs_python.py:146(<listcomp>)
+  1000000    1.277    0.000    1.486    0.000 pypy_vs_python.py:64(prime_new)
+  7920000    0.056    0.000    0.056    0.000 pypy_vs_python.py:8(intsum)
+        2    0.000    0.000    0.000    0.000 C:\Users\shane\UWPython\Python220\SP_Online_Course2_2018\students\srepking\lesson10\pypy_env\lib-python\3\encodings\cp437.py:18(encode)
+        2    0.000    0.000    0.000    0.000 {built-in function time.perf_counter}
+8920000/1000000    0.179    0.000    1.513    0.000 {built-in function next}
+        2    0.000    0.000    0.000    0.000 {built-in function _codecs.charmap_encode}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+(pypy_env)
+
+Some Observations:
+	1. Reducing the size of the range in the prime function(see function 'prime_new') by using the square root of the number being checked for prime drastically decreased the run time. Because there
+are the same number of calls to the number generator, the # of math calculations and searches were the same between these two prime functions. The only difference
+appears to be the need to make the range of numbers much smaller. This seems suprising and I am not sure this is the only reason for such a drastic time savings.
+	2. Pypy was over 10 times faster for calculating prime numbers, both 'prime' and 'prime_new' method, and about twice as fast for the other two methods.
+
+
+<<<<<<Part2>>>>
+I created a python file 'pypy_no_lists' to see if there would be a performance improvement if we got rid of the list comprehensions and instead used a while loop up to a maximum number.
+After running this in python3, no noticable time improvement was noticed.
+
+
+shane@LAPTOP-LPMNJEP6 MINGW64 ~/UWPython/Python220/SP_Online_Course2_2018/students/srepking/lesson10 (master)
+$ python pypy_no_lists.py
+Last Double # is:  5357543035931336604742125245300009052807024058527668037218751941851755255624680612465991894078479290637973364587
+76573412593572642846157021799228878734928740196728388741211549271053730253118557093897709107652323749179097063369938377958277197303
+8531457285598238843271083830214915826312193418602834034688
+Doubler took: 0.47611236500000004
+         3003004 function calls in 0.262 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  1001999    0.111    0.000    0.111    0.000 pypy_no_lists.py:32(doubler)
+  1000000    0.045    0.000    0.045    0.000 {method 'append' of 'list' objects}
+  1001000    0.106    0.000    0.217    0.000 {built-in method builtins.next}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
+
+
+Last Fibonacci # is:  4346655768693745643568852767504062580256466051737178040248172908953655541794905189040387984007925516929592259
+3080322634775209689623239873322471161642996440906533187938298969649928516003704476137795166849228875
+Fibonacci took: 0.46112765200000005
+         3003004 function calls in 0.244 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  1001999    0.093    0.000    0.093    0.000 pypy_no_lists.py:40(fib)
+  1000000    0.045    0.000    0.045    0.000 {method 'append' of 'list' objects}
+  1001000    0.107    0.000    0.199    0.000 {built-in method builtins.next}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
+
+
+Last prime # is:  7919
+Prime took: 191.35855717
+         18860004 function calls (10932004 primitive calls) in 191.063 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  7928999    0.616    0.000    0.616    0.000 pypy_no_lists.py:16(intsum)
+  1002000  189.329    0.000  190.825    0.000 pypy_no_lists.py:52(prime)
+  1000000    0.069    0.000    0.069    0.000 {method 'append' of 'list' objects}
+8929000/1001000    1.048    0.000  190.993    0.000 {built-in method builtins.next}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
+
+
+Last prime_new # is:  7919
+Prime Search limited by Square Root took: 9.781225261000003
+         18860004 function calls (10932004 primitive calls) in 9.515 seconds
+
+   Random listing order was used
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  7928999    0.615    0.000    0.615    0.000 pypy_no_lists.py:16(intsum)
+  1002000    7.811    0.000    9.317    0.000 pypy_no_lists.py:72(prime_new)
+  1000000    0.057    0.000    0.057    0.000 {method 'append' of 'list' objects}
+8929000/1001000    1.032    0.000    9.458    0.000 {built-in method builtins.next}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
+
