@@ -1,0 +1,96 @@
+What is wrong with our logic?
+there is no false condition. 'If n==2' is only reached if the input is a power of two. If the 
+input is not a power of two, it will never stop running.
+
+Why doesn't the function stop calling itself?
+because there is no false condition
+
+What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+'n' just keeps getting smaller and smaller (see below).
+
+
+Microsoft Windows [Version 10.0.17763.437]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Users\Jared>cd\
+
+C:\>cd C:\Users\Jared\Documents\jared_mulholland\lesson_5
+
+C:\Users\Jared\Documents\jared_mulholland\lesson_5>python -m pdb recursive.py
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(1)<module>()
+-> import sys
+(Pdb) exit
+
+C:\Users\Jared\Documents\jared_mulholland\lesson_5>python -m pdb recursive.py 21
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3     def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6
+  7         return my_fun(n/2)
+  8
+  9     if __name__ == '__main__':
+ 10         n = int(sys.argv[1])
+ 11         print(my_fun(n))
+(Pdb) b 4
+Breakpoint 1 at c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py:4
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+21
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+10.5
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+5.25
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+2.625
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.3125
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.65625
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.328125
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.1640625
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.08203125
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.041015625
+(Pdb) c
+> c:\users\jared\documents\jared_mulholland\lesson_5\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.0205078125
+(Pdb)
