@@ -4,12 +4,12 @@ from unittest.mock import MagicMock
 
 
 
-from adder import Adder
-from subtracter import Subtracter
-from divider import Divider
-from multiplier import Multiplier
-from calculator import Calculator
-from exceptions import InsufficientOperands
+from calculator.adder import Adder
+from calculator.subtracter import Subtracter
+from calculator.divider import Divider
+from calculator.multiplier import Multiplier
+from calculator.calculator import Calculator
+from calculator.exceptions import InsufficientOperands
 
 
 
