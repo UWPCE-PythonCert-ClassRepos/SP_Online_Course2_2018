@@ -191,6 +191,7 @@ def pretty_print_db():
 
     pp = pprint.PrettyPrinter()
 
+    logger.info("People, Job, Department List")
     for job in Job:
         job_qry = (job.person_employed.person_name,
                     job.job_name,
