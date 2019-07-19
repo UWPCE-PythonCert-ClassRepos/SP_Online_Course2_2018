@@ -1,5 +1,6 @@
 """divider class: divides operand_1 by operand_2"""
 
+
 class Divider():
     """divider class: divides operand_1 by operand_2"""
     @staticmethod

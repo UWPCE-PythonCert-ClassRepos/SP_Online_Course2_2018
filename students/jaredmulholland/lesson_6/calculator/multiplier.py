@@ -1,5 +1,6 @@
 """multiplier class: multiplies two operands"""
 
+
 class Multiplier():
     """multiplier class: multiplies two operands"""
 

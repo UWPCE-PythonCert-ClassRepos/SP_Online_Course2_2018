@@ -1,8 +1,11 @@
 """exception method used if insufficient operators are used"""
-from exceptions import InsufficientOperands
+
+
+from .exceptions import InsufficientOperands
+
 
 class Calculator():
-    """Calculator collects numbers and calculator methods to peform calc functions"""
+    """Calculator: compiles methods to perform calc functions"""
     def __init__(self, adder, subtracter, multiplier, divider):
         self.adder = adder
         self.subtracter = subtracter
@@ -17,7 +20,6 @@ class Calculator():
 
     def __do_calc(self, operator):
         """peforms calculation of called operator"""
-
         try:
             result = operator.calc(self.stack[0], self.stack[1])
         except IndexError:
