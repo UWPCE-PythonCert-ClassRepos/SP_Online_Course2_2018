@@ -14,6 +14,7 @@ from calculator.multiplier import Multiplier
 from calculator.calculator import Calculator
 from calculator.exceptions import InsufficientOperands
 
+
 class AdderTests(TestCase):
     """tests for adder method"""
 
@@ -23,7 +24,8 @@ class AdderTests(TestCase):
 
         for i in range(-10, 10):
             for j in range(-10, 10):
-                self.assertEqual(i+j, adder.calc(i,j))
+                self.assertEqual(i+j, adder.calc(i, j))
+
 
 class SubtracterTests(TestCase):
     """tests for subtractor method"""
@@ -33,7 +35,8 @@ class SubtracterTests(TestCase):
 
         for i in range(-10, 10):
             for j in range(-10, 10):
-                self.assertEqual(i-j, subtracter.calc(i,j))
+                self.assertEqual(i-j, subtracter.calc(i, j))
+
 
 class MultiplierTests(TestCase):
     """tests for multiplier method"""
@@ -43,7 +46,8 @@ class MultiplierTests(TestCase):
 
         for i in range(-10, 10):
             for j in range(-10, 10):
-                self.assertEqual(i*j, multiplier.calc(i,j))
+                self.assertEqual(i*j, multiplier.calc(i, j))
+
 
 class DividerTests(TestCase):
     """tests for divider method"""
@@ -53,7 +57,8 @@ class DividerTests(TestCase):
 
         for i in range(-10, 10):
             for j in range(1, 10):
-                self.assertEqual(i/j, divider.calc(i,j))
+                self.assertEqual(i/j, divider.calc(i, j))
+
 
 class CalculatorTests(TestCase):
     """Tests for calculator method"""
@@ -68,50 +73,48 @@ class CalculatorTests(TestCase):
         self.calculator = Calculator(self.adder, self.subtracter, self.multiplier, self.divider)
 
     def test_insufficient_operands(self):
-        """tests insuffucient operands is raised when only one number entered"""
+        """error raised when only one number entered"""
         self.calculator.enter_number(0)
 
         with self.assertRaises(InsufficientOperands):
             self.calculator.add()
-    
+
     def test_adder_call(self):
         """tests adder method is called correctly"""
-        self.adder.calc = MagicMock(return_value = 0)
+        self.adder.calc = MagicMock(return_value=0)
 
         self.calculator.enter_number(1)
         self.calculator.enter_number(2)
         self.calculator.add()
 
-        self.adder.calc.assert_called_with(1,2)
-
+        self.adder.calc.assert_called_with(1, 2)
 
     def test_subtracter_call(self):
         """tests subtracter method is called correctly"""
-        self.subtracter.calc = MagicMock(return_value = 0)
+        self.subtracter.calc = MagicMock(return_value=0)
 
         self.calculator.enter_number(1)
         self.calculator.enter_number(2)
         self.calculator.subtract()
 
-        self.subtracter.calc.assert_called_with(1,2)
-
+        self.subtracter.calc.assert_called_with(1, 2)
 
     def test_divider_call(self):
         """tests divider method is called correctly"""
-        self.divider.calc = MagicMock(return_value = 0)
+        self.divider.calc = MagicMock(return_value=0)
 
         self.calculator.enter_number(1)
         self.calculator.enter_number(2)
         self.calculator.divide()
 
-        self.divider.calc.assert_called_with(1,2)
+        self.divider.calc.assert_called_with(1, 2)
 
     def test_multiplier_call(self):
         """tests multiplier method is called correctly"""
-        self.multiplier.calc = MagicMock(return_value = 0)
+        self.multiplier.calc = MagicMock(return_value=0)
 
         self.calculator.enter_number(1)
         self.calculator.enter_number(2)
         self.calculator.multiply()
 
-        self.multiplier.calc.assert_called_with(1,2)
+        self.multiplier.calc.assert_called_with(1, 2)
