@@ -25,7 +25,7 @@ class DeciderTests(TestCase):
         self.decider = Decider(100, 0.05)
         self.controller = Controller(self.sensor, self.pump, self.decider)
 
-        self.act = {'PUMP_IN': 1, 'PUMP_OFF': 0, 'PUMP_OUT': -1}
+        self.action = {'PUMP_IN': 1, 'PUMP_OFF': 0, 'PUMP_OUT': -1}
 
     def test_decider_condition_1(self):
         """tests:
