@@ -25,15 +25,15 @@ class DeciderTests(TestCase):
         self.decider = Decider(100, 0.05)
         self.controller = Controller(self.sensor, self.pump, self.decider)
 
-        self.actions = {'PUMP_IN': 1, 'PUMP_OFF': 0, 'PUMP_OUT': -1}
+        self.act = {'PUMP_IN': 1, 'PUMP_OFF': 0, 'PUMP_OUT': -1}
 
     def test_decider_condition_1(self):
         """tests:
         If the pump is off and the height is below the margin region, then the
         pump should be turned to PUMP_IN.
         """
-        self.assertEqual(self.decider.decide(80, self.pump.PUMP_OFF, self.controller.actions),
-                         self.controller.actions['PUMP_IN'])
+        self.assertEqual(self.decider.decide(80, self.pump.PUMP_OFF, self.action),
+                         self.action['PUMP_IN'])
 
 
 class ControllerTests(TestCase):
