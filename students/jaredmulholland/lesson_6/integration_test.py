@@ -1,22 +1,23 @@
+"""
+Student: Jared Mulholland
+Assignment: Calculator Integrated Tests
+Date: 7/18/2019
+"""
+
 
 from unittest import TestCase
-from unittest.mock import MagicMock
-
-
 
 from calculator.adder import Adder
 from calculator.subtracter import Subtracter
 from calculator.divider import Divider
 from calculator.multiplier import Multiplier
 from calculator.calculator import Calculator
-from calculator.exceptions import InsufficientOperands
-
-
 
 
 class ModuleTest(TestCase):
-
+    """Tests for integrated functionality of classes"""
     def test_module(self):
+        """Test that calculator performs operations as expected"""
 
         calculator = Calculator(Adder(), Subtracter(), Multiplier(), Divider())
 

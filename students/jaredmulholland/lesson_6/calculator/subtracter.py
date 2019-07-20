@@ -1,5 +1,6 @@
 """subtractor class: subtracts operand_2 from operand_1"""
 
+
 class Subtracter():
     """subtractor class: subtracts operand_2 from operand_1"""
     @staticmethod
