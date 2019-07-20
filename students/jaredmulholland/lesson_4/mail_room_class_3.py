@@ -292,8 +292,30 @@ def create_projection():
     projection_text = f"""Projected total donations are: ${new_projection:,.2f}"""
 
     print(projection_text)
+
+"""
+Load JSON
+
+loads donor group JSON file
+"""
+
+def load_json():
+    donor_db_ = dg.load_donors_json()
+    print(donor_db_)    
+
+"""
+Save JSON
+
+saves donor group to JSON file
+
+"""
+
+def save_json():
+    dg.save_donors_json()
+
 """
 QUIT PROGRAM
+
 """
 
 def quit_mailroom():
@@ -325,10 +347,20 @@ main_dict = {
             "2": create_report,
             "3": send_letters, 
             "4": create_projection,
-            "5": quit_mailroom
+            "5": save_json,
+            "6": load_json,
+            "7": quit_mailroom
            }
     
-main_prompt = ("\nMain Menu  \n 1. Send a Thank You \n 2. Create a Report \n 3. Send Letters \n 4. Create Projection \n 5. Quit \n Please Choose an Option: ")
+main_prompt = ("""\nMain Menu:
+1. Send a Thank You
+2. Create a Report 
+3. Send Letters
+4. Create Projection 
+5. Save JSON
+6. Load JSON
+7. Quit
+Please Choose an Option: """)
 
 def mail_room_fun(main_prompt, main_dict):
     while True:        
@@ -337,7 +369,7 @@ def mail_room_fun(main_prompt, main_dict):
         try:
             main_dict.get(response)()
         except TypeError:
-            print("PLEASE ENTER NUMBER 1-5")
+            print("PLEASE ENTER NUMBER 1-7")
 
 if __name__ == "__main__":
     mail_room_fun(main_prompt, main_dict)
