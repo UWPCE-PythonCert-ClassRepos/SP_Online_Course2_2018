@@ -48,6 +48,7 @@ class Donor(js.JsonSaveable):
     @classmethod
     def add_donation(cls, new_donation):
         cls.donations_js.append(new_donation)
+        return cls.donations_js
 
     @property
     def sum_donations(self):
@@ -60,7 +61,7 @@ class Donor(js.JsonSaveable):
     @property
     def avg_donations(self):
         return sum(self.donations_js) / len(self.donations_js)
-    
+      
     def thank_you(self):
         """sends thank you for latest donation"""
         newest_donation = self.donations_js[len(self.donations_js)-1]        
@@ -100,12 +101,13 @@ class DonorGroup(js.JsonSaveable):
     def __init__(self, donor=None, file_path=None):
         self.donor_list_js = [donor.fullname_js]
         self.donor_dict_js = {donor.fullname_js: donor.donations_js}
-        self.file_path = file_path        
-   
+        self.file_path = file_path
+        
     @classmethod
     def add_donor(cls, new_donor):
-        cls.donor_list_js.append(new_donor.fullname_js)
-        cls.donor_dict_js[new_donor.fullname_js] = new_donor.donations_js   
+        cls.donor_list_js.append(new_donor)
+        cls.donor_dict_js[new_donor.fullname_js] = new_donor.donations_js
+        return cls.donor_list_js
 
     @property
     def create_report(self):
@@ -141,7 +143,7 @@ class DonorGroup(js.JsonSaveable):
                 donation_letter.write(letter_text)   
 
     def challenge(self, factor, min_donation=None, max_donation=None):
-        get_donations = [[globals()[d.split(" ")[0].lower()].fullname_js, globals()[d.split(" ")[0].lower()].donation] for d in self.donor_list_js]
+        get_donations = [[globals()[d.split(" ")[0].lower()].fullname, globals()[d.split(" ")[0].lower()].donation] for d in self.donor_list_js]
         
         if min_donation and max_donation:
             filtered_donations = [[d[0], list(filter(lambda x: x >= min_donation and x <= max_donation, d[1]))] for d in get_donations]
@@ -177,7 +179,7 @@ class DonorGroup(js.JsonSaveable):
 
     @classmethod
     #load donors from JSON file 
-    def load_donors_json(self):
+    def load_donors_json(cls):
         with open('donor_db.json','r') as donor_file:
             donor_db = json.load(donor_file)
             print('donor db loaded')
@@ -185,8 +187,8 @@ class DonorGroup(js.JsonSaveable):
 
     @classmethod
     #save donor dict to json file
-    def save_donors_json(self):
-        donors_json = json.dumps(self.donor_dict_js)
+    def save_donors_json(cls):
+        donors_json = json.dumps(cls.donor_dict_js)
         with open('donor_db.json', 'w') as donor_file:
             donor_file.write(donors_json)
             print('JSON file created')
@@ -362,6 +364,7 @@ if __name__ == "__main__":
     dg.add_donor = chris
     dg.add_donor = ben
     dg.add_donor = kim
+
 
     mail_room_fun(main_prompt, main_dict)
 
