@@ -41,17 +41,13 @@ class Donor(js.JsonSaveable):
         self.fullname_js = fullname
         
         if donations:
-            self.donations_js = [donations]
+            self.donations_js = donations
         else:
             self.donations_js = []
 
-    @property
-    def add_donation(self):
-        return self.donations_js
-    
-    @add_donation.setter
-    def add_donation(self, new_donation):
-        self.donations_js.append(new_donation)
+    @classmethod
+    def add_donation(cls, new_donation):
+        cls.donations_js.append(new_donation)
 
     @property
     def sum_donations(self):
@@ -65,7 +61,6 @@ class Donor(js.JsonSaveable):
     def avg_donations(self):
         return sum(self.donations_js) / len(self.donations_js)
     
-    @property    
     def thank_you(self):
         """sends thank you for latest donation"""
         newest_donation = self.donations_js[len(self.donations_js)-1]        
@@ -105,16 +100,12 @@ class DonorGroup(js.JsonSaveable):
     def __init__(self, donor=None, file_path=None):
         self.donor_list_js = [donor.fullname_js]
         self.donor_dict_js = {donor.fullname_js: donor.donations_js}
-        self.file_path = file_path
-        
-    @property
-    def add_donor(self):
-        return self.donor_list_js
-    
-    @add_donor.setter
-    def add_donor(self, new_donor):
-        self.donor_list_js.append(new_donor.fullname_js)
-        self.donor_dict_js[new_donor.fullname_js] = new_donor.donations_js   
+        self.file_path = file_path        
+   
+    @classmethod
+    def add_donor(cls, new_donor):
+        cls.donor_list_js.append(new_donor.fullname_js)
+        cls.donor_dict_js[new_donor.fullname_js] = new_donor.donations_js   
 
     @property
     def create_report(self):
@@ -150,7 +141,7 @@ class DonorGroup(js.JsonSaveable):
                 donation_letter.write(letter_text)   
 
     def challenge(self, factor, min_donation=None, max_donation=None):
-        get_donations = [[globals()[d.split(" ")[0].lower()].fullname, globals()[d.split(" ")[0].lower()].donation] for d in self.donor_list_js]
+        get_donations = [[globals()[d.split(" ")[0].lower()].fullname_js, globals()[d.split(" ")[0].lower()].donation] for d in self.donor_list_js]
         
         if min_donation and max_donation:
             filtered_donations = [[d[0], list(filter(lambda x: x >= min_donation and x <= max_donation, d[1]))] for d in get_donations]
@@ -331,17 +322,6 @@ Write a small command-line script called mailroom.py. This script should be exec
 
 """
 
-jared = Donor("Jared Mulholland", 10000)
-chris = Donor("Chris Cornell", [50000,65000])
-ben = Donor("Ben Shepard", [40000, 12000])
-kim = Donor("Kim Thayil", [34000, 37000, 12000])
-
-dg = DonorGroup(jared)
-dg.add_donor = chris
-dg.add_donor = ben
-dg.add_donor = kim
-
-
 main_dict = {
             "1": send_thankyou,
             "2": create_report,
@@ -372,6 +352,17 @@ def mail_room_fun(main_prompt, main_dict):
             print("PLEASE ENTER NUMBER 1-7")
 
 if __name__ == "__main__":
+
+    jared = Donor("Jared Mulholland", 10000)
+    chris = Donor("Chris Cornell", [50000,65000])
+    ben = Donor("Ben Shepard", [40000, 12000])
+    kim = Donor("Kim Thayil", [34000, 37000, 12000])
+
+    dg = DonorGroup(jared)
+    dg.add_donor = chris
+    dg.add_donor = ben
+    dg.add_donor = kim
+
     mail_room_fun(main_prompt, main_dict)
 
    
