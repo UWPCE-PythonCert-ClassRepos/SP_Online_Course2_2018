@@ -103,11 +103,10 @@ class DonorGroup(js.JsonSaveable):
         self.donor_dict_js = {donor.fullname_js: donor.donations_js}
         self.file_path = file_path
         
-    @classmethod
-    def add_donor(cls, new_donor):
-        cls.donor_list_js.append(new_donor)
-        cls.donor_dict_js[new_donor.fullname_js] = new_donor.donations_js
-        return cls.donor_list_js
+    def add_donor(self, new_donor):
+        self.donor_list_js.append(new_donor)
+        self.donor_dict_js[new_donor.fullname_js] = new_donor.donations_js
+        return self.donor_list_js
 
     @property
     def create_report(self):
@@ -177,22 +176,19 @@ class DonorGroup(js.JsonSaveable):
     def __repr__(self):
         return "Donor Group: {}".format(self.donor_list_js)
 
-    @classmethod
     #load donors from JSON file 
-    def load_donors_json(cls):
+    def load_donors_json(self):
         with open('donor_db.json','r') as donor_file:
             donor_db = json.load(donor_file)
             print('donor db loaded')
         return donor_db
 
-    @classmethod
     #save donor dict to json file
-    def save_donors_json(cls):
-        donors_json = json.dumps(cls.donor_dict_js)
+    def save_donors_json(self):
+        donors_json = json.dumps(self.donor_dict_js)
         with open('donor_db.json', 'w') as donor_file:
             donor_file.write(donors_json)
-            print('JSON file created')
-    
+            print('JSON file created')    
     
 """
 SENDING A THANKYOU
@@ -294,7 +290,13 @@ loads donor group JSON file
 
 def load_json():
     donor_db_ = dg.load_donors_json()
-    print(donor_db_)    
+    rows = [(donor, sum(donor_db_[donor]),len(donor_db_[donor]),np.mean(donor_db_[donor])) for donor in donor_db_]
+
+    print('{:<20s} |{:>15s}|{:>12s} |{:>15s}'.format('Donor Name','Total Given','Num Gifts','Average Gift'))
+    for i in ['{:<20s} ${:15,.2f} {:12d} ${:15,.2f}'.format(*row) for row in rows]:
+        print(i)
+
+    
 
 """
 Save JSON
@@ -355,15 +357,15 @@ def mail_room_fun(main_prompt, main_dict):
 
 if __name__ == "__main__":
 
-    jared = Donor("Jared Mulholland", 10000)
+    jared = Donor("Jared Mulholland", [10000])
     chris = Donor("Chris Cornell", [50000,65000])
     ben = Donor("Ben Shepard", [40000, 12000])
     kim = Donor("Kim Thayil", [34000, 37000, 12000])
 
     dg = DonorGroup(jared)
-    dg.add_donor = chris
-    dg.add_donor = ben
-    dg.add_donor = kim
+    dg.add_donor(chris)
+    dg.add_donor(ben)
+    dg.add_donor(kim)
 
 
     mail_room_fun(main_prompt, main_dict)
