@@ -3,7 +3,7 @@ alembic==0.9.3
 astroid==1.6.5
 Babel==2.5.3
 biopython==1.71
-bleach==2.0.0
+bleach==3.1.4
 blinker==1.4
 certifi==2018.1.18
 chardet==3.0.4
