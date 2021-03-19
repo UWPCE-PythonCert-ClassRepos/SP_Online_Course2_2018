@@ -41,7 +41,7 @@ itsdangerous==0.24
 iva==1.0.8
 jdcal==1.3
 jedi==0.11.1
-Jinja2==2.9.6
+Jinja2==2.11.3
 jsonschema==2.6.0
 jupyter-client==5.2.1
 jupyter-core==4.4.0
